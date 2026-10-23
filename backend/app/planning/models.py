@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from datetime import date
 
 
 @dataclass(frozen=True)
@@ -51,6 +52,23 @@ class ValidationReport:
 
 
 @dataclass(frozen=True)
+class DayInput:
+    travel_date: date
+    places: list[Place]
+    travel: dict[tuple[str, str], int]
+    data_context: dict | None = None
+
+
+@dataclass(frozen=True)
+class DayResult:
+    travel_date: str
+    visits: list[Visit]
+    total_cost: int
+    validation: ValidationReport
+    data_context: dict | None = None
+
+
+@dataclass(frozen=True)
 class Result:
     is_feasible: bool
     visits: list[Visit]
@@ -59,3 +77,4 @@ class Result:
     reasons: list[str]
     validation: ValidationReport | None = None
     data_context: dict | None = None
+    days: list[DayResult] | None = None

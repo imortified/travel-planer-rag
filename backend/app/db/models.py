@@ -36,12 +36,18 @@ class TripRequest(Base):
     __table_args__ = (
         CheckConstraint("budget >= 0"),
         CheckConstraint("start >= 0 AND start < end_time AND end_time <= 1440"),
+        CheckConstraint(
+            "end_date IS NULL OR (travel_date IS NOT NULL AND "
+            "end_date - travel_date BETWEEN 0 AND 13)",
+            name="ck_trip_period",
+        ),
     )
     id: Mapped[int] = mapped_column(primary_key=True)
     group_id: Mapped[int] = mapped_column(ForeignKey("groups.id"), index=True)
     destination: Mapped[str] = mapped_column(String(100), default="Demo City")
     currency: Mapped[str] = mapped_column(String(3), default="EUR")
     travel_date: Mapped[date | None]
+    end_date: Mapped[date | None]
     budget: Mapped[int]
     start: Mapped[int]
     end_time: Mapped[int]

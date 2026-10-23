@@ -3,7 +3,8 @@ param(
     [ValidateSet('greedy', 'beam')][string]$Algorithm = 'greedy',
     [ValidateRange(1, 128)][int]$BeamWidth = 32,
     [ValidateSet('Demo City', 'Lisbon')][string]$Destination = 'Demo City',
-    [string]$TravelDate
+    [string]$TravelDate,
+    [string]$EndDate
 )
 $ErrorActionPreference = 'Stop'
 if ($Destination -eq 'Lisbon' -and -not $TravelDate) {
@@ -26,6 +27,7 @@ $null = Send-Api 'Put' "/groups/$($group.id)/members/$($bob.id)/preferences" @{i
 $tripPayload = @{budget=10000;destination=$Destination}
 if ($Destination -eq 'Demo City') { $tripPayload.mandatory = @('museum') }
 if ($TravelDate) { $tripPayload.travel_date = $TravelDate }
+if ($EndDate) { $tripPayload.end_date = $EndDate }
 $trip = Send-Api 'Post' "/groups/$($group.id)/trips" $tripPayload
 $route = Send-Api 'Post' "/trips/$($trip.id)/routes?algorithm=$Algorithm&beam_width=$BeamWidth" @{}
 Invoke-RestMethod -Uri "$BaseUrl/api/v1/routes/$($route.id)" | ConvertTo-Json -Depth 10

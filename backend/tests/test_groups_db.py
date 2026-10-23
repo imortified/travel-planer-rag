@@ -203,3 +203,87 @@ def test_lisbon_snapshot_saved_and_source_failure_does_not_create_route(client, 
     monkeypatch.setattr("app.api.groups.CityProvider.dataset", fail)
     assert client.post(f"/api/v1/trips/{trip['id']}/routes").status_code == 503
     assert len(client.get(f"/api/v1/trips/{trip['id']}/routes").json()) == 1
+
+
+def test_multiday_trip_is_persisted_without_repeats(client):
+    gid, _ = create_group(client)
+    created = client.post(
+        f"/api/v1/groups/{gid}/trips",
+        json={
+            "travel_date": "2026-10-23",
+            "end_date": "2026-10-25",
+            "budget": 10000,
+            "start": 600,
+            "end": 720,
+            "mandatory": ["museum", "market", "park"],
+        },
+    )
+    assert created.status_code == 201
+    trip = created.json()
+    response = client.post(f"/api/v1/trips/{trip['id']}/routes?algorithm=beam")
+    assert response.status_code == 201
+    saved = response.json()
+    result = saved["result"]
+    assert result["is_feasible"]
+    assert len(result["days"]) == 3
+    assert [d["travel_date"] for d in result["days"]] == ["2026-10-23", "2026-10-24", "2026-10-25"]
+    assert result["total_cost"] == sum(d["total_cost"] for d in result["days"]) == 5400
+    assert len({v["place_id"] for v in result["visits"]}) == len(result["visits"]) == 3
+    assert client.get(f"/api/v1/routes/{saved['id']}").json() == saved
+    assert client.get(f"/api/v1/trips/{trip['id']}").json()["end_date"] == "2026-10-25"
+
+
+def test_real_period_uses_date_specific_data_and_saves_empty_day(client, monkeypatch):
+    from app.planning.models import Place
+
+    gid, _ = create_group(client)
+    trip = client.post(
+        f"/api/v1/groups/{gid}/trips",
+        json={
+            "destination": "Lisbon",
+            "travel_date": "2026-10-25",
+            "end_date": "2026-10-26",
+            "budget": 10000,
+            "mandatory": ["osm:node:1"],
+        },
+    ).json()
+    calls = []
+
+    def dataset(self, day, mandatory, allow_empty=False):
+        calls.append(str(day))
+        assert allow_empty
+        context = {"pois": [{"id": "osm:node:1", "name": "Date-specific museum"}]}
+        if day.day == 25:
+            return [], {}, context
+        return (
+            [Place("osm:node:1", "history", 0, 60, 600, 1080)],
+            {
+                ("start", "osm:node:1"): 10,
+            },
+            context,
+        )
+
+    monkeypatch.setattr("app.api.groups.CityProvider.dataset", dataset)
+    response = client.post(f"/api/v1/trips/{trip['id']}/routes?algorithm=beam")
+    assert response.status_code == 201
+    result = response.json()["result"]
+    assert result["is_feasible"]
+    assert calls == ["2026-10-25", "2026-10-26"]
+    assert not result["days"][0]["visits"]
+    assert result["days"][1]["visits"][0]["place_id"] == "osm:node:1"
+    assert result["days"][1]["data_context"]["pois"][0]["name"] == "Date-specific museum"
+
+
+def test_invalid_trip_period_returns_422(client):
+    gid, _ = create_group(client)
+    for payload in (
+        {"end_date": "2026-10-25"},
+        {"travel_date": "2026-10-25", "end_date": "2026-10-23"},
+        {"travel_date": "2026-10-01", "end_date": "2026-10-15"},
+    ):
+        assert (
+            client.post(
+                f"/api/v1/groups/{gid}/trips", json={"budget": 10000, **payload}
+            ).status_code
+            == 422
+        )

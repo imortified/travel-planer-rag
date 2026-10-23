@@ -39,6 +39,7 @@ class GroupOutput(NamedOutput):
 class TripInput(BaseModel):
     destination: Literal["Demo City", "Lisbon"] = "Demo City"
     travel_date: date | None = None
+    end_date: date | None = None
     currency: Literal["EUR"] = "EUR"
     budget: int = Field(ge=0, le=1_000_000_000)
     start: int = Field(default=540, ge=0, lt=1440)
@@ -48,6 +49,9 @@ class TripInput(BaseModel):
 
     @model_validator(mode="after")
     def check_interval(self):
+        if self.end_date is not None:
+            if self.travel_date is None or not 0 <= (self.end_date - self.travel_date).days <= 13:
+                raise ValueError("Period must have a start date and contain 1-14 days")
         if self.destination == "Lisbon" and self.travel_date is None:
             raise ValueError("travel_date is required for Lisbon")
         if self.start >= self.end:

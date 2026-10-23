@@ -92,3 +92,35 @@ def test_source_failure_never_falls_back_to_synthetic_data(tmp_path):
     client = httpx.Client(transport=httpx.MockTransport(lambda _: httpx.Response(503)))
     with pytest.raises(SourceUnavailable):
         CityProvider(client, tmp_path).catalog(DAY)
+
+
+def test_closed_date_is_empty_in_period_mode(tmp_path):
+    source, calls = provider(tmp_path)
+    places, travel, context = source.dataset(date(2026, 10, 26), allow_empty=True)
+    assert places == []
+    assert travel == {}
+    assert context["pois"] == []
+    assert len(calls) == 1  # No routing request for an empty day.
+
+
+def test_period_catalog_includes_poi_open_on_later_date(tmp_path, monkeypatch):
+    from fastapi.testclient import TestClient
+
+    from app.main import app
+
+    source, _ = provider(tmp_path)
+    monkeypatch.setattr("app.api.destinations.CityProvider", lambda: source)
+    client = TestClient(app)
+    response = client.get(
+        "/api/v1/destinations/Lisbon/pois?travel_date=2026-10-26&end_date=2026-10-27"
+    )
+    assert response.status_code == 200
+    first = response.json()["pois"][0]
+    assert first["eligible"]
+    assert first["available_dates"] == ["2026-10-27"]
+    assert (
+        client.get(
+            "/api/v1/destinations/Lisbon/pois?travel_date=2026-10-26&end_date=2026-10-25"
+        ).status_code
+        == 422
+    )

@@ -1,4 +1,5 @@
 from dataclasses import asdict, replace
+from datetime import timedelta
 from typing import Annotated, Literal
 
 from fastapi import APIRouter, Depends, HTTPException, Query
@@ -9,7 +10,8 @@ from app.db.models import Group, Membership, RouteOption, TripRequest, User
 from app.db.session import get_session
 from app.integrations.city import CityProvider, IncompleteData, SourceUnavailable
 from app.integrations.demo import load_demo
-from app.planning.models import Participant, Request
+from app.planning.models import DayInput, Participant, Request
+from app.planning.period import plan_period
 from app.planning.service import checked_plan
 from app.schemas.groups import (
     GroupOutput,
@@ -118,6 +120,7 @@ def trip_output(trip):
         destination=trip.destination,
         currency=trip.currency,
         travel_date=trip.travel_date,
+        end_date=trip.end_date,
         budget=trip.budget,
         start=trip.start,
         end=trip.end_time,
@@ -139,6 +142,7 @@ def create_trip(group_id: int, payload: TripInput, session: DB):
         destination=payload.destination,
         currency=payload.currency,
         travel_date=payload.travel_date,
+        end_date=payload.end_date,
         budget=payload.budget,
         start=payload.start,
         end_time=payload.end,
@@ -188,6 +192,43 @@ def calculate_route(
     )
     context = None
     source = "synthetic-demo-v1"
+    if trip.end_date and trip.travel_date and trip.end_date > trip.travel_date:
+        inputs = []
+        for offset in range((trip.end_date - trip.travel_date).days + 1):
+            day = trip.travel_date + timedelta(days=offset)
+            if trip.destination == "Lisbon":
+                try:
+                    places, travel, context = CityProvider().dataset(
+                        day, request.mandatory, allow_empty=True
+                    )
+                except IncompleteData as exc:
+                    raise HTTPException(422, str(exc)) from exc
+                except SourceUnavailable as exc:
+                    raise HTTPException(503, str(exc)) from exc
+                source = "osm-osrm-lisbon-v1"
+            else:
+                places, travel = load_demo()
+            inputs.append(DayInput(day, places, travel, context))
+        if trip.destination == "Lisbon" and request.mandatory - {
+            p.id for data in inputs for p in data.places
+        }:
+            raise HTTPException(422, "Mandatory POI lacks usable data throughout the period")
+        result = plan_period(request, inputs, algorithm, beam_width)
+        if trip.destination == "Lisbon":
+            pois = {p["id"]: p for data in inputs for p in data.data_context["pois"]}
+            result = replace(
+                result, data_context={**inputs[0].data_context, "pois": list(pois.values())}
+            )
+        route = RouteOption(
+            trip_request_id=trip.id,
+            algorithm=f"{algorithm}-period-v1:w{beam_width}",
+            data_source=source,
+            result=asdict(result),
+        )
+        session.add(route)
+        session.commit()
+        session.refresh(route)
+        return route
     if trip.destination == "Lisbon":
         try:
             places, travel, context = CityProvider().dataset(trip.travel_date, request.mandatory)

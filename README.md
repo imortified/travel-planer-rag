@@ -4,7 +4,14 @@ Backend для дипломного проекта: FastAPI, PostgreSQL/PostGIS,
 greedy и beam search с независимой валидацией. Доступны синтетический Demo City
 и реальные POI центра Лиссабона через OpenStreetMap с автомобильными переездами OSRM.
 
+Это рабочий прототип; полный MVP по ТЗ ещё не завершён.
+[Состояние требований 3.3](docs/mvp-status.md).
+
 ## Веб-интерфейс
+
+Добавлено планирование на 1–14 дней с общим бюджетом и без повторов POI.
+Нужны `travel_date` и `end_date`; без конца периода сохраняется однодневный режим.
+Миграция: `uv run alembic upgrade head`. Подробнее: [docs/multiday.md](docs/multiday.md).
 
 Из `frontend` запустить `npm.cmd ci`, затем `npm.cmd run dev` и открыть
 http://127.0.0.1:3000. Backend должен работать на порту 8001.

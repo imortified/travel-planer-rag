@@ -146,20 +146,34 @@ class CityProvider:
             "attribution": "© OpenStreetMap contributors, ODbL 1.0",
         }
 
-    def dataset(self, travel_date, mandatory=frozenset()):
+    def dataset(self, travel_date, mandatory=frozenset(), allow_empty=False):
         if self.client is None:
             with httpx.Client(
                 timeout=httpx.Timeout(40, connect=5), follow_redirects=True
             ) as client:
-                return CityProvider(client, self.cache_dir).dataset(travel_date, mandatory)
+                return CityProvider(client, self.cache_dir).dataset(
+                    travel_date, mandatory, allow_empty
+                )
         catalog = self.catalog(travel_date)
         usable = [p for p in catalog["pois"] if p["eligible"]]
-        if mandatory - {p["id"] for p in usable}:
+        if not allow_empty and mandatory - {p["id"] for p in usable}:
             raise IncompleteData(
                 "Mandatory POI absent or missing supported hours/price/access data"
             )
         usable.sort(key=lambda p: (p["id"] not in mandatory, p["id"]))
         selected = usable[:12]
+        if allow_empty and not selected:
+            return (
+                [],
+                {},
+                {
+                    **catalog,
+                    "pois": [],
+                    "transport": "driving",
+                    "places_snapshot": [],
+                    "travel_minutes": [],
+                },
+            )
         if len(mandatory) > 12 or not selected:
             raise IncompleteData("No eligible POI for this date, or more than 12 mandatory POI")
         points = [ORIGIN] + selected
