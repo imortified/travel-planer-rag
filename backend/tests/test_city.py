@@ -2,6 +2,7 @@ from datetime import date
 
 import httpx
 import pytest
+from cache_helpers import MemoryRedis
 
 from app.integrations.city import (
     CityProvider,
@@ -10,6 +11,7 @@ from app.integrations.city import (
     opening_window,
     parse_catalog,
 )
+from app.integrations.http_cache import RedisHttpCache
 from app.planning.models import Participant, Request
 from app.planning.service import checked_plan
 
@@ -71,7 +73,7 @@ def provider(tmp_path, matrix=None):
         return httpx.Response(200, json={"code": "Ok", "durations": matrix or [[0, 61], [None, 0]]})
 
     client = httpx.Client(transport=httpx.MockTransport(handler))
-    return CityProvider(client, tmp_path, curated_path), calls
+    return CityProvider(client, RedisHttpCache(MemoryRedis()), curated_path), calls
 
 
 def test_real_dataset_cache_rounding_and_null_routes(tmp_path):
@@ -96,17 +98,35 @@ def test_missing_mandatory_metadata_is_not_silently_ignored(tmp_path):
         source.dataset(DAY, frozenset({"osm:node:2"}))
 
 
-@pytest.mark.parametrize("matrix", [[[0]], [[0, -1], [0, 0]], [[0, "fast"], [0, 0]]])
+@pytest.mark.parametrize(
+    "matrix", [[[0]], [[0, -1], [0, 0]], [[0, "fast"], [0, 0]], [[0, True], [0, 0]]]
+)
 def test_malformed_matrix_is_rejected(tmp_path, matrix):
     source, _ = provider(tmp_path, matrix)
     with pytest.raises(SourceUnavailable, match="OSRM"):
         source.dataset(DAY)
+    assert not any(":osrm:" in key for key in source.cache.client.values)
 
 
 def test_source_failure_never_falls_back_to_synthetic_data(tmp_path):
     client = httpx.Client(transport=httpx.MockTransport(lambda _: httpx.Response(503)))
     with pytest.raises(SourceUnavailable):
-        CityProvider(client, tmp_path).catalog(DAY)
+        CityProvider(client, RedisHttpCache(MemoryRedis())).catalog(DAY)
+
+
+def test_malformed_osm_is_not_cached_and_fresh_response_can_repair_it():
+    bodies = iter([b"<invalid>", XML])
+    cache = RedisHttpCache(MemoryRedis())
+    with httpx.Client(
+        transport=httpx.MockTransport(lambda _: httpx.Response(200, content=next(bodies)))
+    ) as client:
+        source = CityProvider(client, cache)
+        with pytest.raises(SourceUnavailable, match="OSM"):
+            source.catalog(DAY)
+        assert not cache.client.values
+        catalog = source.catalog(DAY)
+    assert any(p["id"] == "osm:node:1" for p in catalog["pois"])
+    assert catalog["cache"]["osm"]["write"] == "stored"
 
 
 def test_closed_date_is_empty_in_period_mode(tmp_path):

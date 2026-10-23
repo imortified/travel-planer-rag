@@ -1,58 +1,26 @@
 """One-city OSM catalog and OSRM driving matrix. No invented prices or opening hours."""
 
-import hashlib
 import json
 import math
-import os
-import tempfile
-import time
 import xml.etree.ElementTree as ET
 from dataclasses import asdict
-from datetime import date, datetime, timedelta, timezone
+from datetime import date, datetime, timedelta
 from datetime import time as day_time
-from pathlib import Path
 
 import httpx
 from opening_hours import OpeningHours, ParserError
 
-from app.core.config import ROOT, settings
+from app.core.config import settings
 from app.integrations.curated import enrich
+from app.integrations.http_cache import RedisHttpCache, SourceUnavailable, cached_get
 from app.planning.models import Place
 
 BBOX = "-9.145,38.708,-9.130,38.720"
 ORIGIN = {"id": "start", "name": "Rossio", "longitude": -9.1395, "latitude": 38.7135}
 
 
-class SourceUnavailable(Exception):
-    pass
-
-
 class IncompleteData(Exception):
     pass
-
-
-def cached_get(client, url, params, ttl, cache_dir):
-    key = hashlib.sha256(json.dumps([url, params], sort_keys=True).encode()).hexdigest()
-    path = Path(cache_dir) / key
-    if path.exists() and time.time() - path.stat().st_mtime < ttl:
-        return path.read_bytes(), datetime.fromtimestamp(
-            path.stat().st_mtime, timezone.utc
-        ).isoformat()
-    for attempt in range(2):
-        try:
-            response = client.get(url, params=params)
-            response.raise_for_status()
-            body = response.content
-            path.parent.mkdir(parents=True, exist_ok=True)
-            with tempfile.NamedTemporaryFile(dir=path.parent, delete=False) as stream:
-                stream.write(body)
-                temporary = stream.name
-            os.replace(temporary, path)
-            return body, datetime.now(timezone.utc).isoformat()
-        except httpx.HTTPError:
-            if attempt == 0:
-                time.sleep(0.25)
-    raise SourceUnavailable("External data source unavailable; no synthetic fallback used")
 
 
 def opening_window(expression, travel_date):
@@ -117,10 +85,38 @@ def parse_catalog(body: bytes, travel_date: date):
     return sorted(pois, key=lambda p: p["id"])
 
 
+def parse_matrix(body, points):
+    try:
+        data = json.loads(body)
+        matrix = data["durations"]
+        if (
+            data["code"] != "Ok"
+            or not isinstance(matrix, list)
+            or len(matrix) != len(points)
+            or any(not isinstance(row, list) or len(row) != len(points) for row in matrix)
+        ):
+            raise ValueError("Invalid matrix dimensions")
+        travel = {}
+        for i, row in enumerate(matrix):
+            for j, seconds in enumerate(row):
+                if seconds is not None:
+                    if (
+                        type(seconds) not in (float, int)
+                        or not math.isfinite(seconds)
+                        or seconds < 0
+                    ):
+                        raise ValueError("Invalid duration")
+                    if i != j:
+                        travel[points[i]["id"], points[j]["id"]] = math.ceil(seconds / 60)
+        return data, travel
+    except (KeyError, TypeError, ValueError) as exc:
+        raise ValueError("Invalid OSRM matrix") from exc
+
+
 class CityProvider:
-    def __init__(self, client=None, cache_dir=None, curated_path=None):
+    def __init__(self, client=None, cache=None, curated_path=None):
         self.client = client
-        self.cache_dir = cache_dir or ROOT / "data" / ".cache"
+        self.cache = cache if cache is not None else RedisHttpCache()
         self.curated_path = curated_path
 
     def catalog(self, travel_date):
@@ -128,14 +124,25 @@ class CityProvider:
             with httpx.Client(
                 timeout=httpx.Timeout(40, connect=5), follow_redirects=True
             ) as client:
-                return CityProvider(client, self.cache_dir, self.curated_path).catalog(travel_date)
+                return CityProvider(client, self.cache, self.curated_path).catalog(travel_date)
         try:
-            body, fetched = cached_get(
-                self.client, settings.osm_map_url, {"bbox": BBOX}, 86400, self.cache_dir
+
+            def validate(body):
+                try:
+                    return parse_catalog(body, travel_date)
+                except (ET.ParseError, KeyError, TypeError, ValueError) as exc:
+                    raise ValueError("Invalid OSM response") from exc
+
+            parsed, fetched, cache_info = cached_get(
+                self.client,
+                settings.osm_map_url,
+                {"bbox": BBOX},
+                settings.osm_cache_ttl_seconds,
+                self.cache,
+                "osm",
+                validate,
             )
-            pois, version = enrich(
-                parse_catalog(body, travel_date), travel_date, opening_window, self.curated_path
-            )
+            pois, version = enrich(parsed, travel_date, opening_window, self.curated_path)
         except (ET.ParseError, KeyError, ValueError) as exc:
             raise SourceUnavailable("Invalid OSM response") from exc
         return {
@@ -148,6 +155,7 @@ class CityProvider:
             "fetched_at": fetched,
             "source": settings.osm_map_url,
             "catalog_version": version,
+            "cache": {"osm": cache_info},
             "attribution": "© OpenStreetMap contributors, ODbL 1.0",
         }
 
@@ -163,7 +171,7 @@ class CityProvider:
             with httpx.Client(
                 timeout=httpx.Timeout(40, connect=5), follow_redirects=True
             ) as client:
-                return CityProvider(client, self.cache_dir, self.curated_path).dataset(
+                return CityProvider(client, self.cache, self.curated_path).dataset(
                     travel_date, mandatory, allow_empty, semantic_query, excluded
                 )
         catalog = self.catalog(travel_date)
@@ -200,32 +208,15 @@ class CityProvider:
         points = [ORIGIN] + selected
         coordinates = ";".join(f"{p['longitude']},{p['latitude']}" for p in points)
         url = f"{settings.osrm_url.rstrip('/')}/table/v1/driving/{coordinates}"
-        try:
-            body, fetched = cached_get(
-                self.client, url, {"annotations": "duration"}, 3600, self.cache_dir
-            )
-            data = json.loads(body)
-            matrix = data["durations"]
-            if (
-                data["code"] != "Ok"
-                or len(matrix) != len(points)
-                or any(len(row) != len(points) for row in matrix)
-            ):
-                raise ValueError("Invalid matrix dimensions")
-            travel = {}
-            for i, row in enumerate(matrix):
-                for j, seconds in enumerate(row):
-                    if seconds is not None:
-                        if (
-                            not isinstance(seconds, (float, int))
-                            or not math.isfinite(seconds)
-                            or seconds < 0
-                        ):
-                            raise ValueError("Invalid duration")
-                        if i != j:
-                            travel[points[i]["id"], points[j]["id"]] = math.ceil(seconds / 60)
-        except (KeyError, TypeError, ValueError) as exc:
-            raise SourceUnavailable("Invalid OSRM matrix") from exc
+        (data, travel), fetched, cache_info = cached_get(
+            self.client,
+            url,
+            {"annotations": "duration"},
+            settings.osrm_cache_ttl_seconds,
+            self.cache,
+            "osrm",
+            lambda body: parse_matrix(body, points),
+        )
         places = [
             Place(
                 p["id"],
@@ -244,6 +235,7 @@ class CityProvider:
             "eligible_count": len(usable),
             "routing_fetched_at": fetched,
             "routing_source": settings.osrm_url,
+            "cache": {**catalog.get("cache", {}), "osrm": cache_info},
             "routing_waypoints": data.get("sources"),
             "transport": "driving",
             "places_snapshot": [asdict(p) for p in places],

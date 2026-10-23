@@ -1,5 +1,6 @@
 from pathlib import Path
 
+from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -20,6 +21,11 @@ class Settings(BaseSettings):
     qdrant_api_key: str | None = None
     qdrant_timeout_seconds: float = 10
     qdrant_collection_prefix: str = "travel"
+    redis_url: str = "redis://127.0.0.1:6379/0"
+    redis_cache_prefix: str = "travel:http:v1"
+    redis_timeout_seconds: float = Field(default=1, gt=0, le=10)
+    osm_cache_ttl_seconds: int = Field(default=86400, ge=1, le=604800)
+    osrm_cache_ttl_seconds: int = Field(default=3600, ge=1, le=86400)
 
 
 settings = Settings()

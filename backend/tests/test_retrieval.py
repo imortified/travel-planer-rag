@@ -2,11 +2,13 @@ from datetime import date
 
 import httpx
 import pytest
+from cache_helpers import MemoryRedis
 from fastapi.testclient import TestClient
 from test_embeddings import vector
 
 from app.integrations.city import CityProvider
 from app.integrations.embeddings import EmbeddingUnavailable, normalize
+from app.integrations.http_cache import RedisHttpCache
 from app.integrations.qdrant import VectorStoreUnavailable
 from app.main import app
 from app.nlp.retrieval import Retrieval
@@ -123,7 +125,7 @@ def test_ranked_candidate_cap_keeps_mandatory_excludes_blocked_and_preserves_val
             )
         )
     ) as client:
-        places, travel, context = CityProvider(client, tmp_path).dataset(
+        places, travel, context = CityProvider(client, RedisHttpCache(MemoryRedis())).dataset(
             date(2026, 10, 23), frozenset({"0"}), semantic_query="history", excluded={"14"}
         )
     ids = [p.id for p in places]
