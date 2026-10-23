@@ -48,9 +48,12 @@ class TripInput(BaseModel):
     end: int = Field(default=1080, gt=0, le=1440)
     mandatory: set[str] = Field(default_factory=set)
     excluded: set[str] = Field(default_factory=set)
+    semantic_query: str | None = Field(default=None, min_length=1, max_length=300, pattern=r"\S")
 
     @model_validator(mode="after")
     def check_interval(self):
+        if self.semantic_query and self.destination != "Lisbon":
+            raise ValueError("Semantic retrieval is supported for Lisbon only")
         if self.end_date is not None:
             if self.travel_date is None or not 0 <= (self.end_date - self.travel_date).days <= 13:
                 raise ValueError("Period must have a start date and contain 1-14 days")

@@ -461,3 +461,101 @@ def test_unavailable_llm_saves_fallback_but_invalid_route_cannot_get_explanation
     ).json()
     route = client.post(f"/api/v1/trips/{invalid['id']}/routes").json()
     assert client.post(f"/api/v1/routes/{route['id']}/explanation").status_code == 409
+
+
+def test_semantic_snapshots_and_rag_citations_are_saved_without_changing_route(client, monkeypatch):
+    from dataclasses import asdict
+
+    from app.integrations.llama_cpp import LlmUnavailable
+    from app.planning.models import Place
+
+    place = Place("carmo", "history", 100, 60, 600, 1080)
+    document = {
+        "place_id": "carmo",
+        "name": "Carmo",
+        "description": "Сохранённое описание.",
+        "source_url": "https://www.museuarqueologicodocarmo.pt/index.html",
+        "checked_on": "2026-10-23",
+        "description_kind": "curated",
+        "score": 0.8,
+    }
+
+    def dataset(self, day, mandatory, allow_empty=False, semantic_query=None, excluded=frozenset()):
+        assert semantic_query == "археология"
+        return (
+            [place],
+            {("start", "carmo"): 1},
+            {
+                "pois": [{"id": "carmo", "name": "Carmo"}],
+                "places_snapshot": [asdict(place)],
+                "retrieval": {
+                    "query": semantic_query,
+                    "model": "test-model",
+                    "knowledge_version": "v1",
+                    "document_threshold": 0.4,
+                    "matches": [document, {**document, "place_id": "unvisited", "score": 0.99}],
+                },
+            },
+        )
+
+    monkeypatch.setattr("app.api.groups.CityProvider.dataset", dataset)
+    gid, _ = create_group(client, 1)
+    trip = client.post(
+        f"/api/v1/groups/{gid}/trips",
+        json={
+            "destination": "Lisbon",
+            "travel_date": "2026-10-23",
+            "budget": 100,
+            "mandatory": ["carmo"],
+            "semantic_query": "археология",
+        },
+    ).json()
+    assert trip["semantic_query"] == "археология"
+    route = client.post(f"/api/v1/trips/{trip['id']}/routes").json()
+    assert route["result"]["validation"]["is_valid"]
+    # Future source/model changes do not rewrite the snapshot or trigger embeddings on read.
+    document["description"] = "Новое описание"
+    assert client.get(f"/api/v1/routes/{route['id']}").json() == route
+
+    def fail(*args, **kwargs):
+        raise LlmUnavailable()
+
+    monkeypatch.setattr("app.integrations.llama_cpp.LlamaCpp.structured", fail)
+    explanation = client.post(f"/api/v1/routes/{route['id']}/explanation").json()
+    assert explanation["mode"] == "template" and explanation["verified"]
+    assert list(explanation["sources"]) == ["source_1"]
+    assert explanation["sources"]["source_1"]["place_id"] == "carmo"
+    assert explanation["facts"]["source_1"] == "Carmo: Сохранённое описание."
+    reopened = client.get(f"/api/v1/routes/{route['id']}").json()
+    assert reopened["result"] == route["result"] and reopened["explanation"] == explanation
+
+
+def test_semantic_model_outage_is_explicit_but_manual_planning_remains_available(
+    client, monkeypatch
+):
+    from app.integrations.embeddings import EmbeddingUnavailable
+
+    def fail(*args, **kwargs):
+        raise EmbeddingUnavailable()
+
+    monkeypatch.setattr("app.api.groups.CityProvider.dataset", fail)
+    gid, _ = create_group(client, 1)
+    trip = client.post(
+        f"/api/v1/groups/{gid}/trips",
+        json={
+            "destination": "Lisbon",
+            "travel_date": "2026-10-23",
+            "budget": 100,
+            "semantic_query": "археология",
+        },
+    ).json()
+    assert client.post(f"/api/v1/trips/{trip['id']}/routes").status_code == 503
+    manual = client.post(f"/api/v1/groups/{gid}/trips", json={"budget": 10000}).json()
+    assert client.post(f"/api/v1/trips/{manual['id']}/routes").status_code == 201
+    assert (
+        client.post(
+            f"/api/v1/groups/{gid}/trips",
+            json={"budget": 100, "semantic_query": "invalid for demo"},
+        ).status_code
+        == 422
+    )

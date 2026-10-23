@@ -50,6 +50,13 @@ class ParseInput(StrictModel):
     member_names: list[ShortText] = Field(default_factory=list, max_length=6)
 
 
+class SemanticInput(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    text: str = Field(min_length=1, max_length=300, pattern=r"\S")
+    travel_date: date
+    end_date: date | None = None
+
+
 class Question(StrictModel):
     field: str
     text: str
@@ -74,6 +81,7 @@ class ExplanationOutput(StrictModel):
     selected_ids: list[str]
     paragraphs: list[str]
     fallback_reason: str | None = None
+    sources: dict[str, dict] = Field(default_factory=dict)
 
 
 class ExplanationClaim(StrictModel):

@@ -225,3 +225,51 @@ def test_unsupported_categories_and_extra_data_fail_schema_validation():
         ExtractedTrip(common_interests={"invented": 1})
     with pytest.raises(ValidationError):
         ExtractedTrip(price_for_museum=1)
+
+
+@pytest.mark.parametrize("fault", [None, "modified", "omitted"])
+def test_rag_requires_exact_saved_description_and_server_attaches_citation(fault):
+    route, trip = fixture_route()
+    route.result["data_context"] = {
+        "retrieval": {
+            "document_threshold": 0.4,
+            "matches": [
+                {
+                    "place_id": "museum",
+                    "name": "Музей",
+                    "description": "Археологическая коллекция.",
+                    "description_kind": "curated",
+                    "score": 0.8,
+                    "source_url": "https://example.org/museum",
+                    "checked_on": "2026-10-23",
+                },
+                {
+                    "place_id": "park",
+                    "name": "Парк",
+                    "description": "Не посещается.",
+                    "description_kind": "curated",
+                    "score": 0.99,
+                    "source_url": "https://example.org/park",
+                },
+            ],
+        }
+    }
+
+    class Model:
+        def structured(self, system, data, schema, verify=None):
+            keys = ["summary", "budget", "limitations", "choice", "source_1"]
+            if fault == "omitted":
+                keys.remove("source_1")
+            draft = ExplanationDraft(
+                claims=[ExplanationClaim(fact_id=key, sentence=data["facts"][key]) for key in keys]
+            )
+            if fault == "modified":
+                draft.claims[-1].sentence += " Билет бесплатный."
+            return draft, "test-model"
+
+    output = explain(route, trip, route, 3, Model())
+    assert output.mode == ("llm" if fault is None else "template")
+    assert output.sources["source_1"]["place_id"] == "museum"
+    assert output.facts["source_1"] == "Музей: Археологическая коллекция."
+    assert "source_2" not in output.facts
+    assert not any("Билет бесплатный" in text for text in output.paragraphs)

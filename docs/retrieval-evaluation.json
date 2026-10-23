@@ -1,0 +1,302 @@
+{
+  "evaluated_on": "2026-10-23",
+  "model": "Qwen3-Embedding-0.6B-Q8_0:370f27d7550e0def9b39c1f16d3fbaa13aa67728:1024:qwen3-last-instruct-v1",
+  "knowledge_version": "lisbon-semantics-2026-10-23-v1",
+  "eligible_poi_count": 9,
+  "cases": [
+    {
+      "query": "археология и древние цивилизации",
+      "expected_category": "history",
+      "category": "history",
+      "category_scores": {
+        "history": 0.680531,
+        "art": 0.389651,
+        "nature": 0.275563,
+        "food": 0.242078
+      },
+      "top_three": [
+        {
+          "place_id": "osm:node:5068486965",
+          "name": "Museu Arqueológico do Carmo",
+          "description": "Археологический музей Карму расположен среди руин монастыря. Его коллекция включает археологические и исторические предметы разных эпох.",
+          "source_url": "https://www.museuarqueologicodocarmo.pt/index.html",
+          "checked_on": "2026-10-23",
+          "description_kind": "curated",
+          "score": 0.422582
+        },
+        {
+          "place_id": "osm:node:12926040967",
+          "name": "Casa dos Bicos - núcleo arqueológico (piso 0)",
+          "description": "Casa dos Bicos - núcleo arqueológico (piso 0). Категория каталога: история.",
+          "source_url": "https://www.openstreetmap.org/node/12926040967",
+          "checked_on": null,
+          "description_kind": "catalog_category",
+          "score": 0.351105
+        },
+        {
+          "place_id": "osm:node:5068486966",
+          "name": "Museu Nacional do Desporto",
+          "description": "Museu Nacional do Desporto. Категория каталога: история.",
+          "source_url": "https://www.openstreetmap.org/node/5068486966",
+          "checked_on": null,
+          "description_kind": "catalog_category",
+          "score": 0.319873
+        }
+      ],
+      "passed": true,
+      "seconds": 2.576
+    },
+    {
+      "query": "живопись и скульптура",
+      "expected_category": "art",
+      "category": "art",
+      "category_scores": {
+        "art": 0.630962,
+        "history": 0.301592,
+        "nature": 0.273055,
+        "food": 0.260197
+      },
+      "top_three": [
+        {
+          "place_id": "osm:node:13174527080",
+          "name": "Museu de São Roque",
+          "description": "Музей Сан-Роке хранит коллекцию религиозного искусства: живопись, скульптуру, реликварии и ткани.",
+          "source_url": "https://museusaoroque.scml.pt/",
+          "checked_on": "2026-10-23",
+          "description_kind": "curated",
+          "score": 0.472337
+        },
+        {
+          "place_id": "osm:node:11047643391",
+          "name": "Museu Nacional de Arte Contemporânea (MNAC)",
+          "description": "Национальный музей современного искусства представляет португальское искусство с середины XIX века до современности, в том числе живопись и скульптуру.",
+          "source_url": "https://museuartecontemporanea.gov.pt/",
+          "checked_on": "2026-10-23",
+          "description_kind": "curated",
+          "score": 0.459267
+        },
+        {
+          "place_id": "osm:node:5068486966",
+          "name": "Museu Nacional do Desporto",
+          "description": "Museu Nacional do Desporto. Категория каталога: история.",
+          "source_url": "https://www.openstreetmap.org/node/5068486966",
+          "checked_on": null,
+          "description_kind": "catalog_category",
+          "score": 0.304097
+        }
+      ],
+      "passed": true,
+      "seconds": 0.364
+    },
+    {
+      "query": "ботанический сад и коллекция растений",
+      "expected_category": "nature",
+      "category": "nature",
+      "category_scores": {
+        "nature": 0.575302,
+        "art": 0.20323,
+        "history": 0.198655,
+        "food": 0.162936
+      },
+      "top_three": [
+        {
+          "place_id": "curated:lisbon:ajuda-botanical-garden",
+          "name": "Jardim Botânico da Ajuda",
+          "description": "Ботанический сад Ажуда знакомит с коллекцией растений. Террасы, фонтаны и зелёные пространства подходят для прогулки среди природы.",
+          "source_url": "https://jba.isa.ulisboa.pt/",
+          "checked_on": "2026-10-23",
+          "description_kind": "curated",
+          "score": 0.701927
+        },
+        {
+          "place_id": "osm:node:13174527080",
+          "name": "Museu de São Roque",
+          "description": "Музей Сан-Роке хранит коллекцию религиозного искусства: живопись, скульптуру, реликварии и ткани.",
+          "source_url": "https://museusaoroque.scml.pt/",
+          "checked_on": "2026-10-23",
+          "description_kind": "curated",
+          "score": 0.320043
+        },
+        {
+          "place_id": "osm:node:5068486965",
+          "name": "Museu Arqueológico do Carmo",
+          "description": "Археологический музей Карму расположен среди руин монастыря. Его коллекция включает археологические и исторические предметы разных эпох.",
+          "source_url": "https://www.museuarqueologicodocarmo.pt/index.html",
+          "checked_on": "2026-10-23",
+          "description_kind": "curated",
+          "score": 0.314737
+        }
+      ],
+      "passed": true,
+      "seconds": 0.331
+    },
+    {
+      "query": "гастрономия и местная кухня",
+      "expected_category": "food",
+      "category": "food",
+      "category_scores": {
+        "food": 0.691037,
+        "nature": 0.208762,
+        "art": 0.206822,
+        "history": 0.156885
+      },
+      "top_three": [
+        {
+          "place_id": "osm:node:11047643391",
+          "name": "Museu Nacional de Arte Contemporânea (MNAC)",
+          "description": "Национальный музей современного искусства представляет португальское искусство с середины XIX века до современности, в том числе живопись и скульптуру.",
+          "source_url": "https://museuartecontemporanea.gov.pt/",
+          "checked_on": "2026-10-23",
+          "description_kind": "curated",
+          "score": 0.196444
+        },
+        {
+          "place_id": "curated:lisbon:ajuda-botanical-garden",
+          "name": "Jardim Botânico da Ajuda",
+          "description": "Ботанический сад Ажуда знакомит с коллекцией растений. Террасы, фонтаны и зелёные пространства подходят для прогулки среди природы.",
+          "source_url": "https://jba.isa.ulisboa.pt/",
+          "checked_on": "2026-10-23",
+          "description_kind": "curated",
+          "score": 0.190359
+        },
+        {
+          "place_id": "osm:node:5068486965",
+          "name": "Museu Arqueológico do Carmo",
+          "description": "Археологический музей Карму расположен среди руин монастыря. Его коллекция включает археологические и исторические предметы разных эпох.",
+          "source_url": "https://www.museuarqueologicodocarmo.pt/index.html",
+          "checked_on": "2026-10-23",
+          "description_kind": "curated",
+          "score": 0.179518
+        }
+      ],
+      "passed": true,
+      "seconds": 0.362
+    },
+    {
+      "query": "не люблю музеи",
+      "expected_category": null,
+      "category": null,
+      "category_scores": {
+        "art": 0.333291,
+        "history": 0.266986,
+        "nature": 0.2285,
+        "food": 0.181231
+      },
+      "top_three": [
+        {
+          "place_id": "osm:node:13174527080",
+          "name": "Museu de São Roque",
+          "description": "Музей Сан-Роке хранит коллекцию религиозного искусства: живопись, скульптуру, реликварии и ткани.",
+          "source_url": "https://museusaoroque.scml.pt/",
+          "checked_on": "2026-10-23",
+          "description_kind": "curated",
+          "score": 0.330655
+        },
+        {
+          "place_id": "osm:node:4419041593",
+          "name": "Museu do Aljube - Resistência e Liberdade",
+          "description": "Музей Алжубе посвящён сопротивлению диктатуре, борьбе за свободу и памяти политических заключённых в Португалии.",
+          "source_url": "https://www.museudoaljube.pt/",
+          "checked_on": "2026-10-23",
+          "description_kind": "curated",
+          "score": 0.309172
+        },
+        {
+          "place_id": "osm:node:5068486966",
+          "name": "Museu Nacional do Desporto",
+          "description": "Museu Nacional do Desporto. Категория каталога: история.",
+          "source_url": "https://www.openstreetmap.org/node/5068486966",
+          "checked_on": null,
+          "description_kind": "catalog_category",
+          "score": 0.308065
+        }
+      ],
+      "passed": true,
+      "seconds": 0.345
+    },
+    {
+      "query": "квантовые вычисления",
+      "expected_category": null,
+      "category": null,
+      "category_scores": {
+        "art": 0.173584,
+        "history": 0.150738,
+        "nature": 0.104351,
+        "food": 0.095282
+      },
+      "top_three": [
+        {
+          "place_id": "osm:node:12926040967",
+          "name": "Casa dos Bicos - núcleo arqueológico (piso 0)",
+          "description": "Casa dos Bicos - núcleo arqueológico (piso 0). Категория каталога: история.",
+          "source_url": "https://www.openstreetmap.org/node/12926040967",
+          "checked_on": null,
+          "description_kind": "catalog_category",
+          "score": 0.213088
+        },
+        {
+          "place_id": "osm:node:5068486966",
+          "name": "Museu Nacional do Desporto",
+          "description": "Museu Nacional do Desporto. Категория каталога: история.",
+          "source_url": "https://www.openstreetmap.org/node/5068486966",
+          "checked_on": null,
+          "description_kind": "catalog_category",
+          "score": 0.193496
+        },
+        {
+          "place_id": "osm:node:4804718021",
+          "name": "Museu do Dinheiro",
+          "description": "Museu do Dinheiro. Категория каталога: история.",
+          "source_url": "https://www.openstreetmap.org/node/4804718021",
+          "checked_on": null,
+          "description_kind": "catalog_category",
+          "score": 0.176101
+        }
+      ],
+      "passed": true,
+      "seconds": 0.342
+    },
+    {
+      "query": "хорошо провести время",
+      "expected_category": null,
+      "category": null,
+      "category_scores": {
+        "nature": 0.356485,
+        "food": 0.324004,
+        "art": 0.316901,
+        "history": 0.216054
+      },
+      "top_three": [
+        {
+          "place_id": "curated:lisbon:ajuda-botanical-garden",
+          "name": "Jardim Botânico da Ajuda",
+          "description": "Ботанический сад Ажуда знакомит с коллекцией растений. Террасы, фонтаны и зелёные пространства подходят для прогулки среди природы.",
+          "source_url": "https://jba.isa.ulisboa.pt/",
+          "checked_on": "2026-10-23",
+          "description_kind": "curated",
+          "score": 0.347131
+        },
+        {
+          "place_id": "osm:node:5068486966",
+          "name": "Museu Nacional do Desporto",
+          "description": "Museu Nacional do Desporto. Категория каталога: история.",
+          "source_url": "https://www.openstreetmap.org/node/5068486966",
+          "checked_on": null,
+          "description_kind": "catalog_category",
+          "score": 0.299701
+        },
+        {
+          "place_id": "osm:node:13174527080",
+          "name": "Museu de São Roque",
+          "description": "Музей Сан-Роке хранит коллекцию религиозного искусства: живопись, скульптуру, реликварии и ткани.",
+          "source_url": "https://museusaoroque.scml.pt/",
+          "checked_on": "2026-10-23",
+          "description_kind": "curated",
+          "score": 0.249245
+        }
+      ],
+      "passed": true,
+      "seconds": 0.348
+    }
+  ]
+}

@@ -48,6 +48,7 @@ class TripRequest(Base):
     currency: Mapped[str] = mapped_column(String(3), default="EUR")
     travel_date: Mapped[date | None]
     end_date: Mapped[date | None]
+    semantic_query: Mapped[str | None] = mapped_column(String(300), nullable=True)
     budget: Mapped[int]
     start: Mapped[int]
     end_time: Mapped[int]

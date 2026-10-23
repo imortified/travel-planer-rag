@@ -151,13 +151,20 @@ class CityProvider:
             "attribution": "© OpenStreetMap contributors, ODbL 1.0",
         }
 
-    def dataset(self, travel_date, mandatory=frozenset(), allow_empty=False):
+    def dataset(
+        self,
+        travel_date,
+        mandatory=frozenset(),
+        allow_empty=False,
+        semantic_query=None,
+        excluded=frozenset(),
+    ):
         if self.client is None:
             with httpx.Client(
                 timeout=httpx.Timeout(40, connect=5), follow_redirects=True
             ) as client:
                 return CityProvider(client, self.cache_dir, self.curated_path).dataset(
-                    travel_date, mandatory, allow_empty
+                    travel_date, mandatory, allow_empty, semantic_query, excluded
                 )
         catalog = self.catalog(travel_date)
         usable = [p for p in catalog["pois"] if p["eligible"]]
@@ -165,7 +172,16 @@ class CityProvider:
             raise IncompleteData(
                 "Mandatory POI absent or missing supported hours/price/access data"
             )
-        usable.sort(key=lambda p: (p["id"] not in mandatory, p["id"]))
+        retrieval = None
+        if semantic_query:
+            from app.nlp.retrieval import Retrieval
+
+            usable = [p for p in usable if p["id"] not in excluded or p["id"] in mandatory]
+            retrieval = Retrieval().search(
+                semantic_query, [p for p in usable if p["id"] not in excluded]
+            )
+        relevance = {m["place_id"]: m["score"] for m in retrieval["matches"]} if retrieval else {}
+        usable.sort(key=lambda p: (p["id"] not in mandatory, -relevance.get(p["id"], -1), p["id"]))
         selected = usable[:12]
         if allow_empty and not selected:
             return (
@@ -244,4 +260,9 @@ class CityProvider:
                 "No return trip, visas or weather checks",
             ],
         }
+        if retrieval:
+            context["retrieval"] = {
+                **retrieval,
+                "candidate_policy": "mandatory_then_similarity_cap_12",
+            }
         return places, travel, context

@@ -1,14 +1,35 @@
 from fastapi import APIRouter, HTTPException
 from sqlalchemy import select
 
+from app.api.destinations import lisbon_pois
 from app.api.groups import DB, require
 from app.db.models import RouteOption, TripRequest
+from app.integrations.embeddings import EmbeddingUnavailable
 from app.integrations.llama_cpp import InvalidLlmOutput, LlmUnavailable
 from app.nlp.explanations import explain
 from app.nlp.parser import parse_request
-from app.schemas.assistant import ExplanationOutput, ParseInput, ParseOutput
+from app.nlp.retrieval import Retrieval
+from app.schemas.assistant import ExplanationOutput, ParseInput, ParseOutput, SemanticInput
 
 router = APIRouter(prefix="/api/v1", tags=["Local LLM assistant"])
+
+
+@router.post("/assistant/search")
+def semantic_search(payload: SemanticInput):
+    catalog = lisbon_pois(payload.travel_date, payload.end_date)
+    try:
+        result = Retrieval().search(payload.text, [p for p in catalog["pois"] if p["eligible"]])
+        return {
+            **result,
+            "travel_date": str(payload.travel_date),
+            "end_date": str(payload.end_date or payload.travel_date),
+        }
+    except EmbeddingUnavailable as exc:
+        raise HTTPException(
+            503,
+            "Эмбеддинги недоступны. Запустите scripts/start-embeddings.ps1; "
+            "предпочтения можно задать ползунками.",
+        ) from exc
 
 
 @router.post("/assistant/parse", response_model=ParseOutput)

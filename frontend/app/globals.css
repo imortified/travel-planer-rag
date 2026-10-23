@@ -9,3 +9,11 @@
 .poi-facts{margin-top:5px}.poi-facts small{display:block;font-size:10px;color:var(--muted);line-height:1.6}.poi-facts a{color:var(--green)}
 .text-request h2{font-size:18px;font-weight:600;margin:0}.text-request textarea{display:block;width:100%;margin:8px 0 14px;padding:12px;border:1px solid #dce1d7;border-radius:7px;background:#fffefb;color:var(--ink);font:inherit;resize:vertical;line-height:1.6}.text-request textarea:focus{outline:2px solid #aac0a4;outline-offset:2px}.draft-preview{border-top:1px solid var(--line);margin-top:18px;padding-top:10px;font-size:12px}.draft-preview h3{font-size:14px}.draft-preview dl{display:grid;grid-template-columns:1fr 1.5fr;gap:8px}.draft-preview dt{color:var(--muted)}.draft-preview dd{margin:0;overflow-wrap:anywhere}.draft-preview details{margin-bottom:16px}.draft-preview .message{margin-top:14px}.pending-place{border-top:1px solid var(--line);padding-top:10px;margin-top:12px}.route-explanation{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);font-size:12px}.route-explanation h3{font-size:14px}.route-explanation p{line-height:1.8}.text-request .message{margin-top:15px}
 @media(max-width:650px){.interests{grid-template-columns:repeat(2,minmax(0,1fr))}}
+ .semantic-search h3 {margin:0 0 10px;}
+ .semantic-search > button, .semantic-results > button {margin-top:12px;}
+ .semantic-matches {padding-left:22px; margin:18px 0;}
+ .semantic-matches li {padding:10px 0; border-bottom:1px solid var(--line, #deded3);}
+ .semantic-matches p {font-size:13px;line-height:1.65;margin:6px 0;}
+ .semantic-matches small, .source-date {display:block;font-size:11px;line-height:1.65;color:#68756a;}
+ .semantic-matches a, .route-explanation a {color:#28583f;text-decoration:underline;}
+ .semantic-selected .text-button {display:block;margin-top:8px;}

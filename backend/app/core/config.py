@@ -13,6 +13,9 @@ class Settings(BaseSettings):
     llm_base_url: str = "http://127.0.0.1:8081"
     llm_model: str = "Qwen3-4B-Q4_K_M"
     llm_timeout_seconds: float = 60
+    embedding_base_url: str = "http://127.0.0.1:8082"
+    embedding_model: str = "Qwen3-Embedding-0.6B-Q8_0"
+    embedding_timeout_seconds: float = 60
 
 
 settings = Settings()

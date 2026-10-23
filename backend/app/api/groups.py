@@ -10,6 +10,7 @@ from app.db.models import Group, Membership, RouteOption, RouteSet, TripRequest,
 from app.db.session import get_session
 from app.integrations.city import CityProvider, IncompleteData, SourceUnavailable
 from app.integrations.demo import load_demo
+from app.integrations.embeddings import EmbeddingUnavailable
 from app.planning.alternatives import alternatives
 from app.planning.models import DayInput, Participant, Request
 from app.planning.period import plan_period
@@ -128,6 +129,7 @@ def trip_output(trip):
         end=trip.end_time,
         mandatory=set(trip.mandatory),
         excluded=set(trip.excluded),
+        semantic_query=trip.semantic_query,
         participants_snapshot=trip.participants_snapshot,
         created_at=trip.created_at,
     )
@@ -150,6 +152,7 @@ def create_trip(group_id: int, payload: TripInput, session: DB):
         end_time=payload.end,
         mandatory=sorted(payload.mandatory),
         excluded=sorted(payload.excluded),
+        semantic_query=payload.semantic_query.strip() if payload.semantic_query else None,
         participants_snapshot=[p.model_dump() for p in participants],
     )
     session.add(trip)
@@ -199,16 +202,29 @@ def planning_inputs(trip, request):
         day, context = first + timedelta(days=offset), None
         if trip.destination == "Lisbon":
             try:
+                semantic = (
+                    {"semantic_query": trip.semantic_query, "excluded": request.excluded}
+                    if trip.semantic_query
+                    else {}
+                )
                 if multi_day:
                     places, travel, context = CityProvider().dataset(
-                        day, request.mandatory, allow_empty=True
+                        day, request.mandatory, allow_empty=True, **semantic
                     )
                 else:
-                    places, travel, context = CityProvider().dataset(day, request.mandatory)
+                    places, travel, context = CityProvider().dataset(
+                        day, request.mandatory, **semantic
+                    )
             except IncompleteData as exc:
                 raise HTTPException(422, str(exc)) from exc
             except SourceUnavailable as exc:
                 raise HTTPException(503, str(exc)) from exc
+            except EmbeddingUnavailable as exc:
+                raise HTTPException(
+                    503,
+                    "Запустите scripts/start-embeddings.ps1 "
+                    "или уберите поиск по интересам из запроса.",
+                ) from exc
             source = "osm-osrm-lisbon-v2"
         else:
             places, travel = load_demo()
@@ -228,7 +244,17 @@ def with_overview(result, inputs):
     if len(inputs) == 1:
         return replace(result, data_context=inputs[0].data_context)
     pois = {p["id"]: p for data in inputs for p in data.data_context["pois"]}
-    return replace(result, data_context={**inputs[0].data_context, "pois": list(pois.values())})
+    context = {**inputs[0].data_context, "pois": list(pois.values())}
+    retrievals = [
+        data.data_context.get("retrieval") for data in inputs if data.data_context.get("retrieval")
+    ]
+    if retrievals:
+        matches = {m["place_id"]: m for r in retrievals for m in r["matches"]}
+        context["retrieval"] = {
+            **retrievals[0],
+            "matches": sorted(matches.values(), key=lambda m: (-m["score"], m["place_id"])),
+        }
+    return replace(result, data_context=context)
 
 
 def algorithm_name(algorithm, beam_width, multi_day):

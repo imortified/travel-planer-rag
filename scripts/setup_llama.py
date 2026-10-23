@@ -1,5 +1,6 @@
 """Download the selected official runtime/model; weights never enter Git."""
 
+import argparse
 import hashlib
 import json
 import time
@@ -14,8 +15,10 @@ LOCAL = ROOT / ".local"
 
 def download(entry):
     folder = LOCAL / entry.get("directory", "downloads")
-    folder.mkdir(parents=True, exist_ok=True)
     target = folder / entry["name"]
+    if not target.resolve().is_relative_to(LOCAL.resolve()):
+        raise ValueError("Download target is outside .local")
+    folder.mkdir(parents=True, exist_ok=True)
     if not target.exists():
         partial = target.with_suffix(target.suffix + ".partial")
         print(f"Downloading {entry['name']}", flush=True)
@@ -70,7 +73,10 @@ def download(entry):
 
 
 def main():
-    manifest = json.loads((ROOT / "data" / "llm-runtime.json").read_text(encoding="utf-8"))
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--manifest", default="data/llm-runtime.json")
+    args = parser.parse_args()
+    manifest = json.loads((ROOT / args.manifest).read_text(encoding="utf-8"))
     with ThreadPoolExecutor(max_workers=3) as pool:
         files = list(pool.map(download, manifest["files"]))
     for entry, path in files:

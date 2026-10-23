@@ -19,7 +19,7 @@ export function RouteExplanation({route,disabled,onBusy,onGenerated}: {
   const value=route.explanation;
   return <section className="route-explanation" aria-label="Объяснение выбора маршрута"><h3>Почему этот маршрут</h3>
     {value && <div aria-live="polite"><span className="badge">{value.mode==="llm"?"llama.cpp · факты проверены":"Шаблон · факты проверены"}</span>
-      {value.paragraphs.map((paragraph,i)=><p key={i}>{paragraph}</p>)}
+      {value.paragraphs.map((paragraph,i)=>{const source=value.sources?.[value.selected_ids[i]];return <p key={i}>{paragraph}{source && <> <a href={source.source_url} target="_blank" rel="noreferrer">Источник</a><small className="source-date">Проверен {source.checked_on}; описание сохранено при расчёте.</small></>}</p>;})}
       {value.mode==="template" && <p className="hint">Модель недоступна или её ответ не прошёл проверку. Показано объяснение из вычисленных фактов.</p>}
       {value.model && <p className="hint">Модель: {value.model}</p>}
     </div>}

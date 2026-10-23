@@ -1,6 +1,10 @@
 export type Interests = Record<string, number>;
 export type Explanation = {mode:"llm"|"template";model:string|null;verified:boolean;prompt_version:string;
-  facts:Record<string,string>;selected_ids:string[];paragraphs:string[];fallback_reason:string|null};
+  facts:Record<string,string>;selected_ids:string[];paragraphs:string[];fallback_reason:string|null;
+  sources?:Record<string,SemanticMatch>};
+export type SemanticMatch = {place_id:string;name:string;description:string;score:number;source_url:string;checked_on:string|null;description_kind:string};
+export type SemanticSearch = {query:string;model:string;knowledge_version:string;category:string|null;document_threshold:number;
+  category_scores:Record<string,number>;needs_clarification:boolean;reason:string;matches:SemanticMatch[]};
 export type ParsedMember = {name:string;interests:Interests};
 export type ParseOutput = {model:string;prompt_version:string;reference_date:string;group_budget:number|null;
   questions:{field:string;text:string}[];warnings:string[];
@@ -10,7 +14,7 @@ export type ParseOutput = {model:string;prompt_version:string;reference_date:str
 export type Member = {user_id: number; name: string; interests: Interests};
 export type Group = {id: number; name: string; members: Member[]};
 export type Trip = {id: number; group_id: number; destination: string; travel_date: string | null; end_date?: string | null;
-  budget: number; start: number; end: number; participants_snapshot: Member[]};
+  budget: number; start: number; end: number; participants_snapshot: Member[];semantic_query?:string|null};
 export type Poi = {id: string; name: string; eligible: boolean; issues: string[]; source_url?: string; available_dates?: string[];
   cost_per_person?: number | null; category?: string; duration?: number;
   provenance?: {checked_on: string; valid_until: string; price_source: string; hours_source: string; notes: string}};

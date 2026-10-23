@@ -6,6 +6,7 @@ import { PoiFacts } from "./components/poi-facts";
 import { RouteComparison } from "./components/route-comparison";
 import { TextRequest } from "./components/text-request";
 import { RouteExplanation } from "./components/route-explanation";
+import { SemanticInterests } from "./components/semantic-search";
 import { api, clock, money, minutes, type Group, type Trip, type Route, type RouteSet, type Poi, type Interests, type ParseOutput } from "../lib/api";
 
 type Draft = {key: number; name: string; interests: Interests; userId?: number; joined?: boolean};
@@ -39,6 +40,7 @@ export default function Home() {
   const [busy,setBusy] = useState("");
   const [error,setError] = useState("");
   const [notice,setNotice] = useState("");
+  const [semanticQuery,setSemanticQuery] = useState("");
   const [trips,setTrips] = useState<Trip[]>([]);
   const [shown,setShown] = useState<{route: Route; trip: Trip}>();
   const [comparison,setComparison] = useState<{data: RouteSet; trip: Trip}>();
@@ -80,7 +82,7 @@ export default function Home() {
     const group = await api<Group>(`/groups/${id}`);
     const history = await api<Trip[]>(`/groups/${id}/trips`);
     setGid(id); setName(group.name); setMembers(group.members.map(m=>({key:key.current++,name:m.name,userId:m.user_id,joined:true,interests:m.interests})));
-    setTrips(history); setShown(undefined); setComparison(undefined); pendingTrip.current=undefined;
+    setTrips(history); setShown(undefined); setComparison(undefined); setSemanticQuery(""); pendingTrip.current=undefined;
     localStorage.setItem("travel-group-id",String(id)); setNotice(`Группа №${id} загружена`);
   }
   async function calculate() {
@@ -92,7 +94,7 @@ export default function Home() {
     if (!start || !end || minutes(start)>=minutes(end)) throw new Error("Окончание дня должно быть позже начала.");
     if (endDate && (!date || endDate<date || (Date.parse(endDate)-Date.parse(date))/86400000>13)) throw new Error("Период должен содержать от 1 до 14 дней.");
     const id = await saveGroup();
-    const payload={destination, travel_date:date || null, end_date:endDate || null, budget:Math.round(Number(budget)*100), start:minutes(start), end:minutes(end),
+    const payload={destination, travel_date:date || null, end_date:endDate || null, semantic_query:destination==="Lisbon" && semanticQuery?semanticQuery:null, budget:Math.round(Number(budget)*100), start:minutes(start), end:minutes(end),
       mandatory:Object.keys(choices).filter(k=>choices[k]==="mandatory"), excluded:Object.keys(choices).filter(k=>choices[k]==="excluded")};
     const signature=JSON.stringify({id,payload,interests:members.map(m=>m.interests)});
     let trip = pendingTrip.current?.signature===signature ? pendingTrip.current.trip : undefined;
@@ -110,6 +112,7 @@ export default function Home() {
     if (gid && d.participants.some(p=>!members.some(m=>normalized(m.name)===normalized(p.name)))) throw new Error("Имена в тексте отличаются от состава сохранённой группы. Укажите текущих участников или создайте новую группу.");
     let catalog=demoPois;
     if (d.destination==="Lisbon") catalog=(await api<{pois:Poi[]}>(`/destinations/Lisbon/pois?travel_date=${d.travel_date}${d.end_date?`&end_date=${d.end_date}`:""}`)).pois;
+    setSemanticQuery("");
     const nextChoices:Record<string,string>={}, unresolved:PendingConstraint[]=[];
     const aliases:Record<string,string>={"музей":"museum","парк":"park","рынок":"market"};
     for (const kind of ["mandatory","excluded"] as const) for (const [index,placeName] of (kind==="mandatory"?d.mandatory_names:d.excluded_names).entries()) {
@@ -170,6 +173,7 @@ export default function Home() {
           {!!pois.length && <details className="places"><summary>Места и ограничения <span>{pois.filter(p=>p.eligible).length} доступны</span></summary>{pois.map(p=><div className="poi" key={p.id}><div><b>{p.name}</b><PoiFacts poi={p} sources/>{p.eligible && p.available_dates && <small>Открыто: {p.available_dates.join(", ")}</small>}{!p.eligible && <small>{p.issues.map(x=>issueNames[x]||x).join(" · ")}</small>}</div><select aria-label={`Ограничение: ${p.name}`} value={choices[p.id]||"optional"} onChange={e=>setChoices(c=>({...c,[p.id]:e.target.value}))}><option value="optional">По желанию</option><option value="mandatory" disabled={!p.eligible}>Обязательно</option><option value="excluded">Исключить</option></select></div>)}</details>}
           {!!pendingConstraints.length && <div className="message"><b>Уточните места из текста</b>{pendingConstraints.map(item=><div className="pending-place" key={item.key}><label>{item.kind==="mandatory"?"Обязательно":"Исключить"}: {item.name}<select aria-label={`Сопоставить: ${item.name}`} value="" onChange={e=>{const id=e.target.value;if (!id) return;if(choices[id] && choices[id]!==item.kind){setError("Место уже имеет противоположное ограничение. Сначала измените его в каталоге.");return;}setChoices(c=>({...c,[id]:item.kind}));setPendingConstraints(old=>old.filter(p=>p.key!==item.key));}}><option value="">Выберите место из каталога</option>{pois.filter(p=>item.kind==="excluded" || p.eligible).map(p=><option key={p.id} value={p.id}>{p.name}</option>)}</select></label><button className="text-button" type="button" onClick={()=>setPendingConstraints(old=>old.filter(p=>p.key!==item.key))}>Убрать условие</button></div>)}</div>}
         </fieldset>
+        {destination==="Lisbon" && <SemanticInterests date={date} endDate={endDate} disabled={!!busy} members={members} selected={semanticQuery} onBusy={setBusy} onClear={()=>setSemanticQuery("")} onApply={(query,category,target)=>{setSemanticQuery(query);setMembers(ms=>ms.map(m=>target==="all" || String(m.key)===target?{...m,interests:{...m.interests,[category]:1}}:m));setNotice("Интерес применён. Проверьте веса участников перед расчётом.");}}/>}
         <div aria-live="polite">{error && <div role="alert" className="message error">{error}</div>}{notice && <div className="message">{notice}</div>}</div>
         <button className="primary" disabled={!!busy || !members.length} onClick={()=>task("Собираем маршрут…",calculate)}>{busy||"Построить маршрут"}<span aria-hidden="true">↗</span></button>
         <p className="under-button">До трёх разных вариантов. Запрос и все результаты сохраняются в группе.</p>
