@@ -249,7 +249,7 @@ class CityProvider:
                 "Standard adult entry prices; discounts, bundled tickets and booking fees excluded",
                 "Driving estimates exclude traffic, parking and transport costs",
                 "Travel is between OSRM-snapped road points, not door-to-door",
-                "No return trip, visas or weather checks",
+                "No return trip or weather checks; visa requirements are in a separate report",
             ],
         }
         if retrieval:

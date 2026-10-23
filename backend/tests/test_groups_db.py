@@ -48,6 +48,124 @@ def create_group(client, count=2):
     return gid, ids
 
 
+def test_travel_profiles_and_visa_reports_are_frozen(client, monkeypatch):
+    from datetime import date
+
+    from app.planning.models import Place
+
+    monkeypatch.setattr("app.visa.reference_date", lambda: date(2026, 10, 23))
+    monkeypatch.setattr(
+        "app.api.groups.CityProvider.dataset",
+        lambda *_: (
+            [Place("test", "history", 100, 60, 540, 1080)],
+            {("start", "test"): 2},
+            {"pois": [{"id": "test", "name": "Museum"}]},
+        ),
+    )
+    gid, ids = create_group(client)
+    path = f"/api/v1/groups/{gid}/members/{ids[0]}"
+    profile = {
+        "citizenship": "BY",
+        "passport_kind": "ordinary",
+        "biometric": None,
+        "special_entry_basis": False,
+        "visa_status": "not_held",
+    }
+    assert client.put(f"{path}/travel-profile", json=profile).status_code == 200
+    response = client.put(f"{path}/preferences", json={"interests": {"history": 1}})
+    assert response.json()["travel_profile"] == profile
+    assert client.get(f"/api/v1/groups/{gid}").json()["members"][0]["travel_profile"] == profile
+    assert client.put(f"{path}/travel-profile", json={"passport_number": "no"}).status_code == 422
+    assert client.put(f"{path}/travel-profile", json={"citizenship": "INVALID"}).status_code == 422
+    assert (
+        client.put(f"/api/v1/groups/{gid}/members/2147483647/travel-profile", json={}).status_code
+        == 404
+    )
+    trip = client.post(
+        f"/api/v1/groups/{gid}/trips",
+        json={
+            "destination": "Lisbon",
+            "travel_date": "2026-10-25",
+            "budget": 10000,
+            "purpose": "tourism",
+        },
+    ).json()
+    tid = trip["id"]
+    assert trip["participants_snapshot"][0]["travel_profile"] == profile
+    client.put(f"{path}/travel-profile", json={"citizenship": "DE"})
+    assert (
+        client.get(f"/api/v1/trips/{tid}").json()["participants_snapshot"][0]["travel_profile"]
+        == profile
+    )
+    single = client.post(f"/api/v1/trips/{tid}/routes").json()
+    data = client.post(f"/api/v1/trips/{tid}/route-sets").json()
+    report = data["visa_report"]
+    assert report["participants"][0]["requirement"] == "required"
+    assert "short_application_notice" in report["participants"][0]["reasons"]
+    assert report["participants"][1]["requirement"] == "unknown"
+    assert single["result"]["is_feasible"]  # Visa risk is a separate warning per MVP policy.
+    assert single["visa_report"] == report
+    assert data["options"] and all(o["visa_report"] == report for o in data["options"])
+    monkeypatch.setattr(
+        "app.visa.rules_catalog",
+        lambda *a: (_ for _ in ()).throw(AssertionError("Saved reports must not be recomputed")),
+    )
+    assert client.get(f"/api/v1/route-sets/{data['id']}").json() == data
+    assert client.get(f"/api/v1/routes/{single['id']}").json() == single
+
+
+@pytest.mark.parametrize("destination", ["Demo City", "Lisbon"])
+def test_empty_comparison_keeps_visa_report_and_old_routes_are_compatible(
+    client, monkeypatch, destination
+):
+    from datetime import date
+
+    from sqlalchemy import select
+
+    from app.db.models import RouteOption, TripRequest
+    from app.integrations.demo import load_demo
+
+    monkeypatch.setattr("app.visa.reference_date", lambda: date(2026, 10, 23))
+    monkeypatch.setattr("app.api.groups.CityProvider.dataset", lambda *_: (*load_demo(), None))
+    gid, _ = create_group(client)
+    trip = client.post(
+        f"/api/v1/groups/{gid}/trips",
+        json={
+            "destination": destination,
+            "travel_date": "2026-10-25",
+            "budget": 100,
+            "mandatory": ["museum"],
+            "excluded": ["museum"],
+        },
+    ).json()
+    tid = trip["id"]
+    data = client.post(f"/api/v1/trips/{tid}/route-sets").json()
+    assert not data["options"]
+    assert data["visa_report"]["status"] == (
+        "not_applicable" if destination == "Demo City" else "needs_review"
+    )
+    single = client.post(f"/api/v1/trips/{tid}/routes").json()
+    # Simulate a pre-migration saved route: JSON snapshots and visa_report can be absent.
+    sessions = app.dependency_overrides[get_session]()
+    session = next(sessions)
+    try:
+        route = session.scalar(select(RouteOption).where(RouteOption.id == single["id"]))
+        route.visa_report = None
+        saved_trip = session.get(TripRequest, tid)
+        saved_trip.purpose = "unknown"
+        saved_trip.participants_snapshot = [
+            {k: v for k, v in p.items() if k != "travel_profile"}
+            for p in saved_trip.participants_snapshot
+        ]
+        session.commit()
+    finally:
+        sessions.close()
+    assert client.get(f"/api/v1/routes/{single['id']}").json()["visa_report"] is None
+    old_trip = client.get(f"/api/v1/trips/{tid}").json()
+    assert old_trip["purpose"] == "unknown"
+    assert old_trip["participants_snapshot"][0]["travel_profile"]["citizenship"] is None
+
+
 def test_saved_trip_and_route_with_preference_snapshot(client):
     gid, ids = create_group(client)
     for uid, category in zip(ids, ["history", "nature"], strict=True):

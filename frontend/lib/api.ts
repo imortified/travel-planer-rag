@@ -11,10 +11,12 @@ export type ParseOutput = {model:string;prompt_version:string;reference_date:str
   draft:{destination:"Lisbon"|"Demo City"|null;travel_date:string|null;end_date:string|null;
     start:number|null;end:number|null;participant_count:number|null;participants:ParsedMember[];
     common_interests:Interests;mandatory_names:string[];excluded_names:string[]}};
-export type Member = {user_id: number; name: string; interests: Interests};
+export type TravelProfile = {citizenship:string|null;passport_kind:"unknown"|"ordinary"|"special";biometric:boolean|null;special_entry_basis:boolean|null;visa_status:"unknown"|"held"|"not_held"};
+export type VisaReport = {version:string;assessed_on:string;checked_on:string;review_by:string;status:string;travel_date:string|null;end_date:string|null;limitations:string[];participants:{name:string;citizenship_name:string|null;requirement:string;status:string;summary:string;reasons:string[];sources:{title:string;url:string}[];timing:null|{days_until_trip:number;application_notice_days:number;recommended_apply_by:string;processing_days:number|null;extended_processing_days:number|null;source_url:string}}[]};
+export type Member = {user_id: number; name: string; interests: Interests;travel_profile?:TravelProfile};
 export type Group = {id: number; name: string; members: Member[]};
 export type Trip = {id: number; group_id: number; destination: string; travel_date: string | null; end_date?: string | null;
-  budget: number; start: number; end: number; participants_snapshot: Member[];semantic_query?:string|null};
+  budget: number; start: number; end: number; participants_snapshot: Member[];semantic_query?:string|null;purpose?:string};
 export type Poi = {id: string; name: string; eligible: boolean; issues: string[]; source_url?: string; available_dates?: string[];
   cost_per_person?: number | null; category?: string; duration?: number;
   provenance?: {checked_on: string; valid_until: string; price_source: string; hours_source: string; notes: string}};
@@ -22,6 +24,7 @@ export type Day = {travel_date: string; total_cost: number; visits: {place_id: s
 export type Route = {id: number; trip_request_id: number; algorithm: string; data_source: string; created_at: string;
   route_set_id?: number | null;
   explanation?: Explanation | null;
+  visa_report?: VisaReport | null;
   comparison?: {visit_count: number; participant_utility: Record<string, number>; mean_utility: number; min_utility: number; utility_gap: number} | null;
   result: {is_feasible: boolean; total_cost: number; satisfaction: Record<string, number>;
     days?: Day[] | null;
@@ -31,6 +34,7 @@ export type Route = {id: number; trip_request_id: number; algorithm: string; dat
 
 export type RouteSet = {id: number; trip_request_id: number; algorithm: string; created_at: string;
   options: Route[]; diagnostic: Route["result"] | null;
+  visa_report?: VisaReport | null;
   search_info: {method: string; attempts: number; attempt_limit: number; min_jaccard_distance: number; note_codes: string[]}};
 
 export async function api<T>(path: string, method = "GET", body?: unknown): Promise<T> {

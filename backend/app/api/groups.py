@@ -28,6 +28,8 @@ from app.schemas.groups import (
     TripInput,
     TripOutput,
 )
+from app.schemas.visa import TravelProfile
+from app.visa import assess_visas
 
 router = APIRouter(prefix="/api/v1", tags=["Groups and trips"])
 DB = Annotated[Session, Depends(get_session)]
@@ -47,7 +49,15 @@ def members(session, group_id):
         .where(Membership.group_id == group_id)
         .order_by(User.id)
     )
-    return [MemberOutput(user_id=u.id, name=u.name, interests=m.interests) for m, u in rows]
+    return [
+        MemberOutput(
+            user_id=u.id,
+            name=u.name,
+            interests=m.interests,
+            travel_profile=TravelProfile.model_validate(m.travel_profile or {}),
+        )
+        for m, u in rows
+    ]
 
 
 @router.post("/users", response_model=NamedOutput, status_code=201)
@@ -114,7 +124,28 @@ def update_preferences(group_id: int, user_id: int, payload: PreferencesInput, s
     member.interests = payload.interests
     user = require(session, User, user_id)
     session.commit()
-    return MemberOutput(user_id=user.id, name=user.name, interests=member.interests)
+    return MemberOutput(
+        user_id=user.id,
+        name=user.name,
+        interests=member.interests,
+        travel_profile=TravelProfile.model_validate(member.travel_profile or {}),
+    )
+
+
+@router.put("/groups/{group_id}/members/{user_id}/travel-profile", response_model=MemberOutput)
+def update_travel_profile(group_id: int, user_id: int, payload: TravelProfile, session: DB):
+    lock_group(session, group_id)
+    member = session.scalar(
+        select(Membership).where(Membership.group_id == group_id, Membership.user_id == user_id)
+    )
+    if member is None:
+        raise HTTPException(404, "Membership not found")
+    member.travel_profile = payload.model_dump()
+    user = require(session, User, user_id)
+    session.commit()
+    return MemberOutput(
+        user_id=user_id, name=user.name, interests=member.interests, travel_profile=payload
+    )
 
 
 def trip_output(trip):
@@ -123,6 +154,7 @@ def trip_output(trip):
         group_id=trip.group_id,
         destination=trip.destination,
         currency=trip.currency,
+        purpose=trip.purpose,
         travel_date=trip.travel_date,
         end_date=trip.end_date,
         budget=trip.budget,
@@ -146,6 +178,7 @@ def create_trip(group_id: int, payload: TripInput, session: DB):
         group_id=group_id,
         destination=payload.destination,
         currency=payload.currency,
+        purpose=payload.purpose,
         travel_date=payload.travel_date,
         end_date=payload.end_date,
         budget=payload.budget,
@@ -292,6 +325,13 @@ def calculate_route(
         algorithm=algorithm_name(algorithm, beam_width, multi_day),
         data_source=source,
         result=asdict(with_overview(result, inputs)),
+        visa_report=assess_visas(
+            trip.destination,
+            trip.travel_date,
+            trip.end_date,
+            trip.participants_snapshot,
+            trip.purpose,
+        ),
     )
     session.add(route)
     session.commit()
@@ -309,6 +349,7 @@ def route_set_output(session, route_set):
         algorithm=route_set.algorithm,
         search_info=route_set.search_info,
         diagnostic=route_set.diagnostic,
+        visa_report=route_set.visa_report,
         created_at=route_set.created_at,
         options=list(options),
     )
@@ -325,10 +366,14 @@ def calculate_route_set(
     request = planning_request(trip)
     inputs, multi_day, source = planning_inputs(trip, request)
     outcome = alternatives(request, inputs, algorithm, beam_width, multi_day)
+    visa_report = assess_visas(
+        trip.destination, trip.travel_date, trip.end_date, trip.participants_snapshot, trip.purpose
+    )
     route_set = RouteSet(
         trip_request_id=trip.id,
         algorithm=f"diverse-v1:{algorithm}:w{beam_width}",
         search_info=outcome.search_info,
+        visa_report=visa_report,
         diagnostic=asdict(with_overview(outcome.diagnostic, inputs))
         if outcome.diagnostic
         else None,
@@ -341,6 +386,7 @@ def calculate_route_set(
                 trip_request_id=trip.id,
                 route_set_id=route_set.id,
                 comparison=asdict(candidate.comparison),
+                visa_report=visa_report,
                 algorithm=algorithm_name(algorithm, beam_width, multi_day),
                 data_source=source,
                 result=asdict(with_overview(candidate.result, inputs)),

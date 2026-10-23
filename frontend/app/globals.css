@@ -17,3 +17,20 @@
  .semantic-matches small, .source-date {display:block;font-size:11px;line-height:1.65;color:#68756a;}
  .semantic-matches a, .route-explanation a {color:#28583f;text-decoration:underline;}
  .semantic-selected .text-button {display:block;margin-top:8px;}
+/* Travel documents and versioned visa reports. */
+.travel-documents {margin-top:18px;border-top:1px solid var(--line, #deddd4);padding-top:12px;font-size:13px}
+.travel-documents summary,.visa-report summary {cursor:pointer;line-height:1.6}
+.travel-documents label {margin-top:12px}
+.visa-preview {margin:20px 0;padding:18px;background:#f5f3eb;border-radius:12px}
+.visa-preview>.secondary {margin-top:10px}
+.visa-report {margin:24px 0;padding-top:18px;border-top:1px solid #deddd4;font-size:13px;line-height:1.65;overflow-wrap:anywhere}
+.visa-report h3 {margin:0 0 10px;font-size:20px}
+.visa-meta {color:#696e63;font-size:12px}
+.visa-person {margin:14px 0;padding:15px;background:#f5f3eb;border-left:3px solid #b99b53;border-radius:0 8px 8px 0}
+.visa-person.requirements_listed {border-left-color:#738b6b}
+.visa-person p {margin:8px 0}
+.visa-person ul,.visa-report details ul {padding-left:19px}
+.visa-status {font-weight:600}
+.visa-timing {border-top:1px solid #deddd4;margin-top:12px;padding-top:8px}
+.visa-report a {color:#3d6349;text-underline-offset:3px}
+.visa-sources {display:flex;flex-direction:column;gap:6px;margin-top:12px;font-size:12px}

@@ -1,0 +1,81 @@
+{
+  "version": "portugal-tourism-2026-10-23-v1",
+  "checked_on": "2026-10-23",
+  "review_by": "2026-11-22",
+  "destination": "Lisbon",
+  "destination_country": "PT",
+  "purpose": "tourism",
+  "application_notice_days": 15,
+  "application_source": "https://www.gov.pt/servicos/pedir-um-visto-schengen-de-curta-duracao",
+  "limitations": [
+    "Справочник определяет визовое требование для краткой туристической поездки, а не разрешение на въезд.",
+    "Действительность паспорта и визы, число въездов, предыдущие пребывания и лимит 90/180 не проверяются.",
+    "ВНЖ, долгосрочные визы, особые основания, транзит, работа и специальные паспорта требуют ручной проверки.",
+    "Запись в консульство, доставка документов, визовые сборы, EES/ETIAS и прочие условия въезда не включены в расчёт."
+  ],
+  "rules": [
+    {
+      "citizenship": "BY", "name": "Беларусь", "requirement": "required",
+      "biometric_exemption": false, "eu_citizen": false,
+      "processing_days": 10, "extended_processing_days": 30,
+      "summary": "Для обычного туристического въезда без специальных оснований требуется шенгенская виза.",
+      "sources": [
+        {"title": "ЕС: визовые списки, приложение I", "url": "https://eur-lex.europa.eu/eli/reg/2018/1806/2025-12-30/eng"},
+        {"title": "ЕС — Беларусь: статья 7 о сроках рассмотрения", "url": "https://eur-lex.europa.eu/eli/agree_internation/2020/752/oj/eng"},
+        {"title": "Еврокомиссия: статус визовых соглашений", "url": "https://home-affairs.ec.europa.eu/policies/schengen/visa-policy_en"}
+      ]
+    },
+    {
+      "citizenship": "RU", "name": "Россия", "requirement": "required",
+      "biometric_exemption": false, "eu_citizen": false,
+      "processing_days": 15, "extended_processing_days": 45,
+      "summary": "Для обычного туристического въезда без специальных оснований требуется шенгенская виза.",
+      "sources": [
+        {"title": "ЕС: визовые списки, приложение I", "url": "https://eur-lex.europa.eu/eli/reg/2018/1806/2025-12-30/eng"},
+        {"title": "Еврокомиссия: полная приостановка упрощённого режима с Россией", "url": "https://home-affairs.ec.europa.eu/policies/schengen/visa-policy_en"},
+        {"title": "Еврокомиссия: общие сроки рассмотрения", "url": "https://home-affairs.ec.europa.eu/policies/schengen/visa-policy/applying-schengen-visa_en"}
+      ]
+    },
+    {
+      "citizenship": "UA", "name": "Украина", "requirement": "not_required",
+      "biometric_exemption": true, "eu_citizen": false,
+      "processing_days": null, "extended_processing_days": null,
+      "summary": "Для обычного биометрического паспорта предусмотрено освобождение от визы на краткое пребывание в пределах 90 дней за 180 дней.",
+      "sources": [
+        {"title": "ЕС: приложение II и условие биометрического паспорта Украины", "url": "https://eur-lex.europa.eu/eli/reg/2018/1806/2025-12-30/eng"},
+        {"title": "Еврокомиссия: визовая либерализация", "url": "https://home-affairs.ec.europa.eu/policies/international-affairs/engagement-partner-countries/eastern-partnership/visa-liberalisation-moldova-ukraine-georgia-and-armenia_en"}
+      ]
+    },
+    {
+      "citizenship": "GE", "name": "Грузия", "requirement": "not_required",
+      "biometric_exemption": true, "eu_citizen": false,
+      "processing_days": null, "extended_processing_days": null,
+      "summary": "Освобождение от визы действует для обычного биометрического паспорта в пределах 90 дней за 180 дней. Специальные паспорта здесь не оцениваются.",
+      "sources": [
+        {"title": "ЕС: приложение II и условие биометрического паспорта Грузии", "url": "https://eur-lex.europa.eu/eli/reg/2018/1806/2025-12-30/eng"},
+        {"title": "EEAS: обычные паспорта и изменения для специальных паспортов в 2026 году", "url": "https://www.eeas.europa.eu/georgia/european-union-and-georgia_en"}
+      ]
+    },
+    {
+      "citizenship": "DE", "name": "Германия", "requirement": "not_required",
+      "biometric_exemption": false, "eu_citizen": true,
+      "processing_days": null, "extended_processing_days": null,
+      "summary": "Гражданин ЕС может путешествовать в Португалию с действительным паспортом или национальной ID-картой; виза не требуется.",
+      "sources": [{"title": "Your Europe: документы граждан ЕС", "url": "https://europa.eu/youreurope/citizens/travel/entry-exit/eu-citizen/index_en.htm"}]
+    },
+    {
+      "citizenship": "GB", "name": "Великобритания · British citizen", "requirement": "not_required",
+      "biometric_exemption": false, "eu_citizen": false,
+      "processing_days": null, "extended_processing_days": null,
+      "summary": "Для полного паспорта British citizen туристическая поездка допускает освобождение от визы в пределах 90 дней за 180 дней.",
+      "sources": [{"title": "GOV.UK: въезд в Португалию с паспортом British citizen", "url": "https://www.gov.uk/foreign-travel-advice/portugal/entry-requirements"}]
+    },
+    {
+      "citizenship": "US", "name": "США", "requirement": "not_required",
+      "biometric_exemption": false, "eu_citizen": false,
+      "processing_days": null, "extended_processing_days": null,
+      "summary": "Обычный паспорт гражданина США подпадает под освобождение от визы для краткого пребывания в пределах 90 дней за 180 дней.",
+      "sources": [{"title": "ЕС: приложение II, United States", "url": "https://eur-lex.europa.eu/eli/reg/2018/1806/2025-12-30/eng"}]
+    }
+  ]
+}

@@ -7,9 +7,10 @@ import { RouteComparison } from "./components/route-comparison";
 import { TextRequest } from "./components/text-request";
 import { RouteExplanation } from "./components/route-explanation";
 import { SemanticInterests } from "./components/semantic-search";
-import { api, clock, money, minutes, type Group, type Trip, type Route, type RouteSet, type Poi, type Interests, type ParseOutput } from "../lib/api";
+import { TravelDocuments, VisaReport, emptyProfile } from "./components/visa-report";
+import { api, clock, money, minutes, type Group, type Trip, type Route, type RouteSet, type Poi, type Interests, type ParseOutput, type TravelProfile, type VisaReport as VisaData } from "../lib/api";
 
-type Draft = {key: number; name: string; interests: Interests; userId?: number; joined?: boolean};
+type Draft = {key: number; name: string; interests: Interests; userId?: number; joined?: boolean; travel_profile?:TravelProfile};
 type PendingConstraint = {key:string;name:string;kind:"mandatory"|"excluded"};
 const normalized=(text:string)=>text.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLocaleLowerCase().trim();
 const categories = [["history", "История"], ["nature", "Природа"], ["food", "Еда"], ["art", "Искусство"]];
@@ -29,6 +30,10 @@ export default function Home() {
   const [destination,setDestination] = useState("Demo City");
   const [date,setDate] = useState("");
   const [endDate,setEndDate] = useState("");
+  const [purpose,setPurpose] = useState("tourism");
+  const [visaPreview,setVisaPreview] = useState<{signature:string;report:VisaData}>();
+  const visaInput={destination,travel_date:date || null,end_date:endDate || null,purpose,travellers:members.map(m=>({name:m.name.trim(),profile:m.travel_profile || emptyProfile}))};
+  const visaSignature=JSON.stringify(visaInput);
   const [budget,setBudget] = useState("100");
   const [start,setStart] = useState("09:00");
   const [end,setEnd] = useState("18:00");
@@ -74,6 +79,7 @@ export default function Home() {
       if (!m.userId) {const user = await api<{id:number}>("/users","POST",{name:m.name.trim()}); m.userId=user.id; changeMember(i,{userId:user.id});}
       if (!m.joined) {await api(`/groups/${id}/members`,"POST",{user_id:m.userId}); m.joined=true; changeMember(i,{joined:true});}
       await api(`/groups/${id}/members/${m.userId}/preferences`,"PUT",{interests:m.interests});
+      await api(`/groups/${id}/members/${m.userId}/travel-profile`,"PUT",m.travel_profile || emptyProfile);
     }
     return id;
   }
@@ -81,7 +87,7 @@ export default function Home() {
     const id=Number(loadId); if (!Number.isInteger(id) || id<=0) throw new Error("Укажите положительный ID группы.");
     const group = await api<Group>(`/groups/${id}`);
     const history = await api<Trip[]>(`/groups/${id}/trips`);
-    setGid(id); setName(group.name); setMembers(group.members.map(m=>({key:key.current++,name:m.name,userId:m.user_id,joined:true,interests:m.interests})));
+    setGid(id); setName(group.name); setMembers(group.members.map(m=>({key:key.current++,name:m.name,userId:m.user_id,joined:true,interests:m.interests,travel_profile:m.travel_profile})));
     setTrips(history); setShown(undefined); setComparison(undefined); setSemanticQuery(""); pendingTrip.current=undefined;
     localStorage.setItem("travel-group-id",String(id)); setNotice(`Группа №${id} загружена`);
   }
@@ -94,9 +100,9 @@ export default function Home() {
     if (!start || !end || minutes(start)>=minutes(end)) throw new Error("Окончание дня должно быть позже начала.");
     if (endDate && (!date || endDate<date || (Date.parse(endDate)-Date.parse(date))/86400000>13)) throw new Error("Период должен содержать от 1 до 14 дней.");
     const id = await saveGroup();
-    const payload={destination, travel_date:date || null, end_date:endDate || null, semantic_query:destination==="Lisbon" && semanticQuery?semanticQuery:null, budget:Math.round(Number(budget)*100), start:minutes(start), end:minutes(end),
+    const payload={destination, purpose, travel_date:date || null, end_date:endDate || null, semantic_query:destination==="Lisbon" && semanticQuery?semanticQuery:null, budget:Math.round(Number(budget)*100), start:minutes(start), end:minutes(end),
       mandatory:Object.keys(choices).filter(k=>choices[k]==="mandatory"), excluded:Object.keys(choices).filter(k=>choices[k]==="excluded")};
-    const signature=JSON.stringify({id,payload,interests:members.map(m=>m.interests)});
+    const signature=JSON.stringify({id,payload,members:members.map(m=>({interests:m.interests,profile:m.travel_profile || emptyProfile}))});
     let trip = pendingTrip.current?.signature===signature ? pendingTrip.current.trip : undefined;
     if (!trip) {trip = await api<Trip>(`/groups/${id}/trips`,"POST",payload); pendingTrip.current={signature,trip}; setTrips(old=>[...old,trip!]);}
     const data = await api<RouteSet>(`/trips/${trip.id}/route-sets?algorithm=${algorithm}`,"POST");
@@ -159,6 +165,7 @@ export default function Home() {
           {members.map((m,i)=><div className="member" key={m.key}>
             <div className="member-heading"><span className="avatar">{i+1}</span><label className="member-name"><span className="sr-only">Имя участника {i+1}</span><input placeholder={`Имя участника ${i+1}`} value={m.name} disabled={!!m.userId} maxLength={100} onChange={e=>changeMember(i,{name:e.target.value})}/></label>{!m.userId && <button type="button" className="text-button" aria-label={`Удалить участника ${i+1}`} onClick={()=>setMembers(ms=>ms.filter(x=>x.key!==m.key))}>×</button>}</div>
             <div className="interests">{categories.map(([id,label])=><label key={id}>{label}<output>{Math.round((m.interests[id] || 0)*100)}%</output><input type="range" aria-label={`${label}, участник ${i+1}`} min="0" max="1" step="0.1" value={m.interests[id] || 0} onChange={e=>changeMember(i,{interests:{...m.interests,[id]:Number(e.target.value)}})} /></label>)}</div>
+            <TravelDocuments profile={m.travel_profile} index={i} onChange={travel_profile=>changeMember(i,{travel_profile})}/>
           </div>)}
           <div className="actions"><button type="button" className="secondary" disabled={members.length>=6} onClick={()=>setMembers(ms=>[...ms,{key:key.current++,name:"",interests:{history:0.5,nature:0.5,food:0.5,art:0.5}}])}>＋ Участник</button><button className="text-button" onClick={()=>task("Сохраняем группу…",async()=>{const id=await saveGroup();setNotice(`Группа №${id} и предпочтения сохранены`);})}>Сохранить группу</button><small>{members.length} / 6</small></div>
           <details className="load"><summary>Продолжить с существующей группой</summary><div className="actions"><label>ID группы<input type="number" min="1" value={loadId} onChange={e=>setLoadId(e.target.value)}/></label><button className="secondary" onClick={()=>task("Загружаем группу…",loadGroup)}>Загрузить</button></div></details>
@@ -168,6 +175,7 @@ export default function Home() {
           <div className="two"><label>Конец поездки<input type="date" value={endDate} min={date || undefined} onChange={e=>changeEndDate(e.target.value)} onInput={e=>changeEndDate(e.currentTarget.value)}/></label><p className="hint">До 14 дней включительно. Без даты окончания — один день. Бюджет общий на весь период.</p></div>
           <div className="two"><label>Бюджет на всю группу, EUR<input type="number" min="0" max="10000000" step="0.01" value={budget} onChange={e=>setBudget(e.target.value)}/></label><label>Алгоритм<select value={algorithm} onChange={e=>setAlgorithm(e.target.value)}><option value="beam">Beam search</option><option value="greedy">Greedy</option></select></label></div>
           <div className="two"><label>Начало дня<input type="time" value={start} onChange={e=>setStart(e.target.value)}/></label><label>Окончание дня<input type="time" value={end} onChange={e=>setEnd(e.target.value)}/></label></div>
+          {destination==="Lisbon" && <div className="visa-preview"><label>Цель въезда<select value={purpose} onChange={e=>setPurpose(e.target.value)}><option value="tourism">Туризм</option><option value="other">Иная цель</option><option value="unknown">Не уточнена</option></select></label><p className="hint">Визовый справочник: семь гражданств, краткосрочный туризм в Португалии. Документы заполняются у каждого участника.</p><button className="secondary" disabled={!members.length} onClick={()=>task("Проверяем визовые условия…",async()=>{if(members.some(m=>!m.name.trim())) throw new Error("Введите имена участников.");const report=await api<VisaData>("/visa-check","POST",visaInput);setVisaPreview({signature:visaSignature,report});})}>Проверить визовые условия</button>{visaPreview?.signature===visaSignature && <VisaReport report={visaPreview.report}/>}</div>}
           <p className="hint">{destination==="Lisbon"?"Лиссабон и Ажуда, старт — Rossio. Автомобильные переезды. Учитываются обычные взрослые билеты; скидки и транспортные расходы не включены. Гастрономические точки пока не представлены. Время — местное.":"Синтетические музей, рынок и парк для проверки сценария. Бюджет учитывает входные билеты на всех участников."}</p>
           {destination==="Lisbon" && <button className="secondary" disabled={!date} onClick={()=>task("Загружаем каталог…",async()=>{const c=await api<{pois:Poi[]}>(`/destinations/Lisbon/pois?travel_date=${date}${endDate?`&end_date=${endDate}`:""}`);setPois(c.pois);setCatalogKey(`Lisbon:${date}:${endDate || date}`);setNotice(`Найдено ${c.pois.length} мест, подходят для расчёта: ${c.pois.filter(p=>p.eligible).length}`);})}>Загрузить места на период</button>}
           {!!pois.length && <details className="places"><summary>Места и ограничения <span>{pois.filter(p=>p.eligible).length} доступны</span></summary>{pois.map(p=><div className="poi" key={p.id}><div><b>{p.name}</b><PoiFacts poi={p} sources/>{p.eligible && p.available_dates && <small>Открыто: {p.available_dates.join(", ")}</small>}{!p.eligible && <small>{p.issues.map(x=>issueNames[x]||x).join(" · ")}</small>}</div><select aria-label={`Ограничение: ${p.name}`} value={choices[p.id]||"optional"} onChange={e=>setChoices(c=>({...c,[p.id]:e.target.value}))}><option value="optional">По желанию</option><option value="mandatory" disabled={!p.eligible}>Обязательно</option><option value="excluded">Исключить</option></select></div>)}</details>}
@@ -182,12 +190,13 @@ export default function Home() {
       {(!comparison || !!shown) && <section className="result card" aria-live="polite"><div className="result-header"><span className="eyebrow">ВАШ ПЛАН</span><span className="badge">{shown?`Маршрут №${shown.route.id}`:"Всё впереди"}</span></div>
         {!shown ? <div className="empty"><div className="journey-art" aria-hidden="true"><span>А</span><i/><span>Б</span><i/><span>В</span></div><h2>Место для новых<br/>впечатлений</h2><p>Здесь появится маршрут с временем<br/>посещений, переездами и стоимостью.</p><div className="empty-note">Сначала — ваша компания и пожелания.<br/>Затем — план, который можно проверить.</div></div> : <>
           <h2>{shown.trip.destination==="Lisbon"?"Поездка в Лиссабон":"Поездка в демо-город"}</h2><p className="muted">{shown.trip.travel_date || "Дата не задана"}{shown.trip.end_date && shown.trip.end_date!==shown.trip.travel_date ? ` — ${shown.trip.end_date}` : ""} · {shown.route.algorithm}</p>
-          <div className={`verdict ${result!.is_feasible?"valid":"invalid"}`}>{result!.is_feasible?"✓ Маршрут прошёл проверку":"! Найдены ограничения — маршрут не выполним"}</div>
+          <div className={`verdict ${result!.is_feasible?"valid":"invalid"}`}>{result!.is_feasible?"✓ Бюджет и расписание проверены":"! Найдены ограничения — маршрут не выполним"}</div>
           <div className="stats"><div><small>Входные билеты</small><strong>{money(result!.total_cost)}</strong></div><div><small>Бюджет группы</small><strong>{money(shown.trip.budget)}</strong></div><div><small>Мест в плане</small><strong>{result!.visits.length}</strong></div></div>
           <RouteDays route={shown.route} trip={shown.trip} names={resultPois}/>
           {!!result!.reasons.length && <div className="message error">{result!.reasons.map(r=><p key={r}>{reasonNames[r.split(":")[0]] || r}</p>)}</div>}
           <h3 className="subheading">Интересы участников</h3>{shown.trip.participants_snapshot.map(m=><div className="satisfaction" key={m.user_id}><span>{m.name}</span><meter min="0" max="1" value={result!.satisfaction[String(m.user_id)]||0}/><b>{Math.round((result!.satisfaction[String(m.user_id)]||0)*100)}%</b></div>)}
           <p className="hint">Средний интерес к категориям посещённых мест. Это оценка предпочтений, а не гарантия впечатлений.</p>
+          {shown.trip.destination==="Lisbon" && <VisaReport report={shown.route.visa_report}/>}
           {result!.is_feasible && result!.validation?.is_valid && <RouteExplanation route={shown.route} disabled={!!busy} onBusy={setBusy} onGenerated={value=>{setShown(old=>old?{...old,route:{...old.route,explanation:value}}:old);setComparison(old=>old?{...old,data:{...old.data,options:old.data.options.map(r=>r.id===shown.route.id?{...r,explanation:value}:r)}}:old);}}/>}
           <details className="checks"><summary>Проверки и происхождение данных</summary><p>{result!.validation?`${result!.validation.is_valid?"Пройдены":"Есть нарушения"} · пересчитанная стоимость ${money(result!.validation.computed_cost)}`:"Для старого результата отчёт отсутствует"}</p>{result!.validation?.violations.map((v,i)=><p key={i}>{reasonNames[v.code] || v.message}{v.place_id?` · ${resultPois[v.place_id]||v.place_id}`:""}</p>)}<p>{shown.route.data_source}</p><p>{result!.data_context?"Автомобильные переезды OSRM. Данные OSM могут быть неполными. Длительность посещений — правило планирования. Цены — обычные взрослые билеты без скидок и сборов. Транспорт, парковка, жильё и обратный путь не включены.":"Демонстрационные места и время переездов."}</p>{result!.data_context && <p>{result!.data_context.attribution} · Данные получены {new Date(result!.data_context.fetched_at).toLocaleString("ru-RU")}</p>}{result!.data_context?.pois.filter(p=>p.provenance).map(p=><div key={p.id}><b>{p.name}</b><PoiFacts poi={p} sources/></div>)}</details>
         </>}

@@ -29,6 +29,7 @@ class Membership(Base):
     group_id: Mapped[int] = mapped_column(ForeignKey("groups.id"), index=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
     interests: Mapped[dict] = mapped_column(JSON, default=dict)
+    travel_profile: Mapped[dict | None] = mapped_column(JSON, nullable=True)
 
 
 class TripRequest(Base):
@@ -49,6 +50,7 @@ class TripRequest(Base):
     travel_date: Mapped[date | None]
     end_date: Mapped[date | None]
     semantic_query: Mapped[str | None] = mapped_column(String(300), nullable=True)
+    purpose: Mapped[str] = mapped_column(String(20), default="tourism", server_default="unknown")
     budget: Mapped[int]
     start: Mapped[int]
     end_time: Mapped[int]
@@ -65,6 +67,7 @@ class RouteSet(Base):
     algorithm: Mapped[str] = mapped_column(String(50))
     search_info: Mapped[dict] = mapped_column(JSON)
     diagnostic: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    visa_report: Mapped[dict | None] = mapped_column(JSON, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
 
@@ -75,6 +78,7 @@ class RouteOption(Base):
     route_set_id: Mapped[int | None] = mapped_column(ForeignKey("route_sets.id"), index=True)
     comparison: Mapped[dict | None] = mapped_column(JSON, nullable=True)
     explanation: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    visa_report: Mapped[dict | None] = mapped_column(JSON, nullable=True)
     algorithm: Mapped[str] = mapped_column(String(50), default="greedy-v1")
     data_source: Mapped[str] = mapped_column(String(50), default="synthetic-demo-v1")
     result: Mapped[dict] = mapped_column(JSON)
