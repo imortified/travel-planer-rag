@@ -7,12 +7,18 @@ export type Poi = {id: string; name: string; eligible: boolean; issues: string[]
   cost_per_person?: number | null; category?: string; duration?: number;
   provenance?: {checked_on: string; valid_until: string; price_source: string; hours_source: string; notes: string}};
 export type Day = {travel_date: string; total_cost: number; visits: {place_id: string; arrival: number; start: number; end: number}[]};
-export type Route = {id: number; trip_request_id: number; algorithm: string; data_source: string;
+export type Route = {id: number; trip_request_id: number; algorithm: string; data_source: string; created_at: string;
+  route_set_id?: number | null;
+  comparison?: {visit_count: number; participant_utility: Record<string, number>; mean_utility: number; min_utility: number; utility_gap: number} | null;
   result: {is_feasible: boolean; total_cost: number; satisfaction: Record<string, number>;
     days?: Day[] | null;
     reasons: string[]; visits: {place_id: string; arrival: number; start: number; end: number}[];
     validation: {is_valid: boolean; computed_cost: number; violations: {code: string; message: string; place_id: string | null}[]} | null;
     data_context: {pois: Poi[]; transport: string; fetched_at: string; attribution: string} | null}};
+
+export type RouteSet = {id: number; trip_request_id: number; algorithm: string; created_at: string;
+  options: Route[]; diagnostic: Route["result"] | null;
+  search_info: {method: string; attempts: number; attempt_limit: number; min_jaccard_distance: number; note_codes: string[]}};
 
 export async function api<T>(path: string, method = "GET", body?: unknown): Promise<T> {
   const response = await fetch(`/api/v1${path}`, {method, headers: {"Content-Type": "application/json"},

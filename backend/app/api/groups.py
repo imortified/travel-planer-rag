@@ -6,10 +6,11 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from app.db.models import Group, Membership, RouteOption, TripRequest, User
+from app.db.models import Group, Membership, RouteOption, RouteSet, TripRequest, User
 from app.db.session import get_session
 from app.integrations.city import CityProvider, IncompleteData, SourceUnavailable
 from app.integrations.demo import load_demo
+from app.planning.alternatives import alternatives
 from app.planning.models import DayInput, Participant, Request
 from app.planning.period import plan_period
 from app.planning.service import checked_plan
@@ -21,6 +22,7 @@ from app.schemas.groups import (
     NamedOutput,
     PreferencesInput,
     RouteOutput,
+    RouteSetOutput,
     TripInput,
     TripOutput,
 )
@@ -172,15 +174,8 @@ def get_trip(trip_id: int, session: DB):
     return trip_output(require(session, TripRequest, trip_id))
 
 
-@router.post("/trips/{trip_id}/routes", response_model=RouteOutput, status_code=201)
-def calculate_route(
-    trip_id: int,
-    session: DB,
-    algorithm: Literal["greedy", "beam"] = "greedy",
-    beam_width: Annotated[int, Query(ge=1, le=128)] = 32,
-):
-    trip = require(session, TripRequest, trip_id)
-    request = Request(
+def planning_request(trip):
+    return Request(
         participants=[
             Participant(str(p["user_id"]), p["interests"]) for p in trip.participants_snapshot
         ],
@@ -190,68 +185,153 @@ def calculate_route(
         mandatory=frozenset(trip.mandatory),
         excluded=frozenset(trip.excluded),
     )
-    context = None
+
+
+def planning_inputs(trip, request):
+    """Load one shared reference snapshot for every option in this calculation."""
     source = "synthetic-demo-v1"
-    if trip.end_date and trip.travel_date and trip.end_date > trip.travel_date:
-        inputs = []
-        for offset in range((trip.end_date - trip.travel_date).days + 1):
-            day = trip.travel_date + timedelta(days=offset)
-            if trip.destination == "Lisbon":
-                try:
+    multi_day = bool(trip.end_date and trip.travel_date and trip.end_date > trip.travel_date)
+    # Undated demo trips use the creation date internally; it is not displayed as a travel date.
+    first = trip.travel_date or trip.created_at.date()
+    count = (trip.end_date - first).days + 1 if multi_day else 1
+    inputs = []
+    for offset in range(count):
+        day, context = first + timedelta(days=offset), None
+        if trip.destination == "Lisbon":
+            try:
+                if multi_day:
                     places, travel, context = CityProvider().dataset(
                         day, request.mandatory, allow_empty=True
                     )
-                except IncompleteData as exc:
-                    raise HTTPException(422, str(exc)) from exc
-                except SourceUnavailable as exc:
-                    raise HTTPException(503, str(exc)) from exc
-                source = "osm-osrm-lisbon-v2"
-            else:
-                places, travel = load_demo()
-            inputs.append(DayInput(day, places, travel, context))
-        if trip.destination == "Lisbon" and request.mandatory - {
-            p.id for data in inputs for p in data.places
-        }:
-            raise HTTPException(422, "Mandatory POI lacks usable data throughout the period")
-        result = plan_period(request, inputs, algorithm, beam_width)
-        if trip.destination == "Lisbon":
-            pois = {p["id"]: p for data in inputs for p in data.data_context["pois"]}
-            result = replace(
-                result, data_context={**inputs[0].data_context, "pois": list(pois.values())}
-            )
-        route = RouteOption(
-            trip_request_id=trip.id,
-            algorithm=f"{algorithm}-period-v1:w{beam_width}",
-            data_source=source,
-            result=asdict(result),
-        )
-        session.add(route)
-        session.commit()
-        session.refresh(route)
-        return route
-    if trip.destination == "Lisbon":
-        try:
-            places, travel, context = CityProvider().dataset(trip.travel_date, request.mandatory)
-        except IncompleteData as exc:
-            raise HTTPException(422, str(exc)) from exc
-        except SourceUnavailable as exc:
-            raise HTTPException(503, str(exc)) from exc
-        source = "osm-osrm-lisbon-v2"
-    else:
-        places, travel = load_demo()
-    result = replace(
-        checked_plan(request, places, travel, algorithm, beam_width), data_context=context
+                else:
+                    places, travel, context = CityProvider().dataset(day, request.mandatory)
+            except IncompleteData as exc:
+                raise HTTPException(422, str(exc)) from exc
+            except SourceUnavailable as exc:
+                raise HTTPException(503, str(exc)) from exc
+            source = "osm-osrm-lisbon-v2"
+        else:
+            places, travel = load_demo()
+        inputs.append(DayInput(day, places, travel, context))
+    if (
+        multi_day
+        and trip.destination == "Lisbon"
+        and request.mandatory - {p.id for data in inputs for p in data.places}
+    ):
+        raise HTTPException(422, "Mandatory POI lacks usable data throughout the period")
+    return inputs, multi_day, source
+
+
+def with_overview(result, inputs):
+    if inputs[0].data_context is None:
+        return result
+    if len(inputs) == 1:
+        return replace(result, data_context=inputs[0].data_context)
+    pois = {p["id"]: p for data in inputs for p in data.data_context["pois"]}
+    return replace(result, data_context={**inputs[0].data_context, "pois": list(pois.values())})
+
+
+def algorithm_name(algorithm, beam_width, multi_day):
+    if multi_day:
+        return f"{algorithm}-period-v1:w{beam_width}"
+    return "greedy-v1" if algorithm == "greedy" else f"beam-v1:w{beam_width}"
+
+
+@router.post("/trips/{trip_id}/routes", response_model=RouteOutput, status_code=201)
+def calculate_route(
+    trip_id: int,
+    session: DB,
+    algorithm: Literal["greedy", "beam"] = "greedy",
+    beam_width: Annotated[int, Query(ge=1, le=128)] = 32,
+):
+    trip = require(session, TripRequest, trip_id)
+    request = planning_request(trip)
+    inputs, multi_day, source = planning_inputs(trip, request)
+    data = inputs[0]
+    result = (
+        plan_period(request, inputs, algorithm, beam_width)
+        if multi_day
+        else checked_plan(request, data.places, data.travel, algorithm, beam_width)
     )
     route = RouteOption(
         trip_request_id=trip.id,
-        algorithm="greedy-v1" if algorithm == "greedy" else f"beam-v1:w{beam_width}",
+        algorithm=algorithm_name(algorithm, beam_width, multi_day),
         data_source=source,
-        result=asdict(result),
+        result=asdict(with_overview(result, inputs)),
     )
     session.add(route)
     session.commit()
     session.refresh(route)
     return route
+
+
+def route_set_output(session, route_set):
+    options = session.scalars(
+        select(RouteOption).where(RouteOption.route_set_id == route_set.id).order_by(RouteOption.id)
+    )
+    return RouteSetOutput(
+        id=route_set.id,
+        trip_request_id=route_set.trip_request_id,
+        algorithm=route_set.algorithm,
+        search_info=route_set.search_info,
+        diagnostic=route_set.diagnostic,
+        created_at=route_set.created_at,
+        options=list(options),
+    )
+
+
+@router.post("/trips/{trip_id}/route-sets", response_model=RouteSetOutput, status_code=201)
+def calculate_route_set(
+    trip_id: int,
+    session: DB,
+    algorithm: Literal["greedy", "beam"] = "beam",
+    beam_width: Annotated[int, Query(ge=1, le=128)] = 32,
+):
+    trip = require(session, TripRequest, trip_id)
+    request = planning_request(trip)
+    inputs, multi_day, source = planning_inputs(trip, request)
+    outcome = alternatives(request, inputs, algorithm, beam_width, multi_day)
+    route_set = RouteSet(
+        trip_request_id=trip.id,
+        algorithm=f"diverse-v1:{algorithm}:w{beam_width}",
+        search_info=outcome.search_info,
+        diagnostic=asdict(with_overview(outcome.diagnostic, inputs))
+        if outcome.diagnostic
+        else None,
+    )
+    session.add(route_set)
+    session.flush()
+    for candidate in outcome.options:
+        session.add(
+            RouteOption(
+                trip_request_id=trip.id,
+                route_set_id=route_set.id,
+                comparison=asdict(candidate.comparison),
+                algorithm=algorithm_name(algorithm, beam_width, multi_day),
+                data_source=source,
+                result=asdict(with_overview(candidate.result, inputs)),
+            )
+        )
+    # One transaction: a comparison cannot be persisted only partially.
+    session.commit()
+    session.refresh(route_set)
+    return route_set_output(session, route_set)
+
+
+@router.get("/route-sets/{route_set_id}", response_model=RouteSetOutput)
+def get_route_set(route_set_id: int, session: DB):
+    return route_set_output(session, require(session, RouteSet, route_set_id))
+
+
+@router.get("/trips/{trip_id}/route-sets", response_model=list[RouteSetOutput])
+def list_route_sets(trip_id: int, session: DB):
+    require(session, TripRequest, trip_id)
+    return [
+        route_set_output(session, route_set)
+        for route_set in session.scalars(
+            select(RouteSet).where(RouteSet.trip_request_id == trip_id).order_by(RouteSet.id)
+        )
+    ]
 
 
 @router.get("/trips/{trip_id}/routes", response_model=list[RouteOutput])

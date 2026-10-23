@@ -3,6 +3,7 @@ from typing import Annotated, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
+from app.planning.alternatives import ComparisonMetrics
 from app.planning.models import Result
 
 Name = Annotated[str, Field(min_length=1, max_length=100, pattern=r"\S")]
@@ -70,7 +71,27 @@ class RouteOutput(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     id: int
     trip_request_id: int
+    route_set_id: int | None = None
+    comparison: ComparisonMetrics | None = None
     algorithm: str
     data_source: str
     result: Result
     created_at: datetime
+
+
+class SearchInfo(BaseModel):
+    method: str
+    attempts: int
+    attempt_limit: int
+    min_jaccard_distance: float
+    note_codes: list[str]
+
+
+class RouteSetOutput(BaseModel):
+    id: int
+    trip_request_id: int
+    algorithm: str
+    search_info: SearchInfo
+    diagnostic: Result | None
+    created_at: datetime
+    options: list[RouteOutput]

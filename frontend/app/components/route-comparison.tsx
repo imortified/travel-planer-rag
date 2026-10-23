@@ -1,0 +1,45 @@
+import { money, type Route, type RouteSet, type Trip } from "../../lib/api";
+
+const points = (value: number) => value.toLocaleString("ru-RU", {maximumFractionDigits:2});
+
+export function RouteComparison({data, trip, selectedId, names, reasonLabels, disabled, onSelect}: {
+  data: RouteSet; trip: Trip; selectedId?: number; names: Record<string,string>;
+  reasonLabels: Record<string,string>;
+  disabled: boolean; onSelect: (route: Route) => void;
+}) {
+  const allNames = {...names};
+  data.options.forEach(r=>r.result.data_context?.pois.forEach(p=>{allNames[p.id]=p.name;}));
+  const mainIds = new Set(data.options[0]?.result.visits.map(v=>v.place_id) || []);
+  const rows: {label: string; value: (route: Route)=>string}[] = [
+    {label:"Билеты на всю группу",value:r=>money(r.result.total_cost)},
+    {label:"Посещения",value:r=>String(r.comparison!.visit_count)},
+    {label:"Средняя полезность, баллы",value:r=>points(r.comparison!.mean_utility)},
+    {label:"Минимум у участника, баллы",value:r=>points(r.comparison!.min_utility)},
+    {label:"Разрыв интересов, баллы ↓",value:r=>points(r.comparison!.utility_gap)},
+    ...trip.participants_snapshot.map(m=>({label:`${m.name}, баллы`,value:(r: Route)=>points(r.comparison!.participant_utility[String(m.user_id)] || 0)})),
+  ];
+  return <section className="card comparison" aria-label="Сравнение маршрутов">
+    <div className="comparison-heading"><h3>Сравнение маршрутов</h3><span className="badge">Расчёт №{data.id}</span></div>
+    <p className="hint">{trip.destination==="Lisbon"?"Лиссабон":"Демо-город"} · {trip.travel_date || "Без даты"}{trip.end_date && trip.end_date!==trip.travel_date ? ` — ${trip.end_date}` : ""} · бюджет {money(trip.budget)}</p>
+    {!data.options.length ? <div role="status" className="message error">Допустимых маршрутов не найдено. Проверьте бюджет, время и обязательные места. Ограниченный поиск может пропустить существующий вариант.
+      {data.diagnostic && <ul>{[...new Set(data.diagnostic.reasons.map(r=>r.split(":")[0]))].map(code=><li key={code}>{reasonLabels[code] || code}</li>)}</ul>}
+    </div> : <>
+      <p className="hint">Выберите вариант, чтобы увидеть расписание ниже. Все показанные варианты прошли проверку ограничений.</p>
+      <div className="comparison-scroll" role="region" aria-label="Таблица сравнения вариантов" tabIndex={0}><table>
+        <caption className="sr-only">Стоимость, полезность и баланс интересов для одного запроса</caption>
+        <thead><tr><th scope="col">Показатель</th>{data.options.map((r,i)=><th scope="col" key={r.id}><button className="option-button" disabled={disabled} aria-label={i===0?"Основной маршрут":`Альтернатива ${i}`} aria-pressed={r.id===selectedId} onClick={()=>onSelect(r)}>{i===0?"Основной":`Вариант ${i+1}`}<small>{r.id===selectedId?"Выбран ✓":"Показать →"}</small></button></th>)}</tr></thead>
+        <tbody>{rows.map(row=><tr key={row.label}><th scope="row">{row.label}</th>{data.options.map(r=><td key={r.id}>{row.value(r)}</td>)}</tr>)}
+          <tr><th scope="row">Отличия по местам</th>{data.options.map((r,i)=>{
+            if (i===0) return <td key={r.id}>Исходный вариант</td>;
+            const ids=new Set(r.result.visits.map(v=>v.place_id));
+            const added=[...ids].filter(id=>!mainIds.has(id));
+            const removed=[...mainIds].filter(id=>!ids.has(id));
+            return <td key={r.id}><details><summary>Посмотреть отличия</summary>{!!added.length && <p>Добавлены: {added.map(id=>allNames[id]||id).join(", ")}</p>}{!!removed.length && <p>Не включены: {removed.map(id=>allNames[id]||id).join(", ")}</p>}</details></td>;
+          })}</tr>
+        </tbody>
+      </table></div>
+      <p className="hint">Полезность — сумма интересов к посещениям, в среднем по участникам. Разрыв — разница между наибольшей и наименьшей суммой; меньше означает более равный баланс. Основной вариант выбран по полезности среди найденных. Оптимальность не гарантируется.</p>
+    </>}
+    {data.search_info.note_codes.includes("fewer_distinct_options_found") && <p className="hint" role="status">Найдено вариантов: {data.options.length} из 3. Поиск ограничен; при текущих условиях больше содержательно разных вариантов не найдено. Перестановки тех же мест не считаются альтернативой.</p>}
+  </section>;
+}

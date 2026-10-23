@@ -3,7 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import { RouteDays } from "./components/route-days";
 import { PoiFacts } from "./components/poi-facts";
-import { api, clock, money, minutes, type Group, type Trip, type Route, type Poi, type Interests } from "../lib/api";
+import { RouteComparison } from "./components/route-comparison";
+import { api, clock, money, minutes, type Group, type Trip, type Route, type RouteSet, type Poi, type Interests } from "../lib/api";
 
 type Draft = {key: number; name: string; interests: Interests; userId?: number; joined?: boolean};
 const categories = [["history", "История"], ["nature", "Природа"], ["food", "Еда"], ["art", "Искусство"]];
@@ -35,6 +36,7 @@ export default function Home() {
   const [notice,setNotice] = useState("");
   const [trips,setTrips] = useState<Trip[]>([]);
   const [shown,setShown] = useState<{route: Route; trip: Trip}>();
+  const [comparison,setComparison] = useState<{data: RouteSet; trip: Trip}>();
   const pendingTrip = useRef<{signature: string; trip: Trip} | undefined>(undefined);
 
   useEffect(() => { const stored = localStorage.getItem("travel-group-id"); if (stored) setLoadId(stored); }, []);
@@ -73,7 +75,7 @@ export default function Home() {
     const group = await api<Group>(`/groups/${id}`);
     const history = await api<Trip[]>(`/groups/${id}/trips`);
     setGid(id); setName(group.name); setMembers(group.members.map(m=>({key:key.current++,name:m.name,userId:m.user_id,joined:true,interests:m.interests})));
-    setTrips(history); setShown(undefined); pendingTrip.current=undefined;
+    setTrips(history); setShown(undefined); setComparison(undefined); pendingTrip.current=undefined;
     localStorage.setItem("travel-group-id",String(id)); setNotice(`Группа №${id} загружена`);
   }
   async function calculate() {
@@ -89,13 +91,21 @@ export default function Home() {
     const signature=JSON.stringify({id,payload,interests:members.map(m=>m.interests)});
     let trip = pendingTrip.current?.signature===signature ? pendingTrip.current.trip : undefined;
     if (!trip) {trip = await api<Trip>(`/groups/${id}/trips`,"POST",payload); pendingTrip.current={signature,trip}; setTrips(old=>[...old,trip!]);}
-    const route = await api<Route>(`/trips/${trip.id}/routes?algorithm=${algorithm}`,"POST");
-    setShown({route,trip}); pendingTrip.current=undefined;
+    const data = await api<RouteSet>(`/trips/${trip.id}/route-sets?algorithm=${algorithm}`,"POST");
+    openComparison(data,trip); pendingTrip.current=undefined;
+  }
+  function openComparison(data: RouteSet, trip: Trip) {
+    setComparison({data,trip});
+    setShown(data.options.length ? {route:data.options[0],trip} : undefined);
   }
   async function showTrip(trip: Trip) {
-    const routes=await api<Route[]>(`/trips/${trip.id}/routes`);
+    const [routes,sets]=await Promise.all([api<Route[]>(`/trips/${trip.id}/routes`),api<RouteSet[]>(`/trips/${trip.id}/route-sets`)]);
+    const lastSet=sets[sets.length-1], lastRoute=routes[routes.length-1];
+    if (lastSet && (!lastRoute || lastRoute.route_set_id===lastSet.id || new Date(lastSet.created_at)>=new Date(lastRoute.created_at))) {
+      openComparison(lastSet,trip); return;
+    }
     if (!routes.length) {setNotice("В запросе ещё нет сохранённых маршрутов. Повторите расчёт с нужными параметрами."); return;}
-    setShown({route:routes[routes.length-1],trip});
+    setComparison(undefined); setShown({route:lastRoute,trip});
   }
   const result=shown?.route.result;
   const resultPois=Object.fromEntries((result?.data_context?.pois || demoPois).map(p=>[p.id,p.name]));
@@ -128,9 +138,10 @@ export default function Home() {
         </fieldset>
         <div aria-live="polite">{error && <div role="alert" className="message error">{error}</div>}{notice && <div className="message">{notice}</div>}</div>
         <button className="primary" disabled={!!busy || !members.length} onClick={()=>task("Собираем маршрут…",calculate)}>{busy||"Построить маршрут"}<span aria-hidden="true">↗</span></button>
-        <p className="under-button">Запрос и результат сохраняются в вашей группе.</p>
+        <p className="under-button">До трёх разных вариантов. Запрос и все результаты сохраняются в группе.</p>
       </div>
-      <div className="result-column"><section className="result card" aria-live="polite"><div className="result-header"><span className="eyebrow">ВАШ ПЛАН</span><span className="badge">{shown?`Маршрут №${shown.route.id}`:"Всё впереди"}</span></div>
+      <div className="result-column">{comparison && <RouteComparison data={comparison.data} trip={comparison.trip} selectedId={shown?.route.id} names={Object.fromEntries(demoPois.map(p=>[p.id,p.name]))} reasonLabels={reasonNames} disabled={!!busy} onSelect={route=>setShown({route,trip:comparison.trip})}/>}
+      {(!comparison || !!shown) && <section className="result card" aria-live="polite"><div className="result-header"><span className="eyebrow">ВАШ ПЛАН</span><span className="badge">{shown?`Маршрут №${shown.route.id}`:"Всё впереди"}</span></div>
         {!shown ? <div className="empty"><div className="journey-art" aria-hidden="true"><span>А</span><i/><span>Б</span><i/><span>В</span></div><h2>Место для новых<br/>впечатлений</h2><p>Здесь появится маршрут с временем<br/>посещений, переездами и стоимостью.</p><div className="empty-note">Сначала — ваша компания и пожелания.<br/>Затем — план, который можно проверить.</div></div> : <>
           <h2>{shown.trip.destination==="Lisbon"?"Поездка в Лиссабон":"Поездка в демо-город"}</h2><p className="muted">{shown.trip.travel_date || "Дата не задана"}{shown.trip.end_date && shown.trip.end_date!==shown.trip.travel_date ? ` — ${shown.trip.end_date}` : ""} · {shown.route.algorithm}</p>
           <div className={`verdict ${result!.is_feasible?"valid":"invalid"}`}>{result!.is_feasible?"✓ Маршрут прошёл проверку":"! Найдены ограничения — маршрут не выполним"}</div>
@@ -141,8 +152,8 @@ export default function Home() {
           <p className="hint">Средний интерес к категориям посещённых мест. Это оценка предпочтений, а не гарантия впечатлений.</p>
           <details className="checks"><summary>Проверки и происхождение данных</summary><p>{result!.validation?`${result!.validation.is_valid?"Пройдены":"Есть нарушения"} · пересчитанная стоимость ${money(result!.validation.computed_cost)}`:"Для старого результата отчёт отсутствует"}</p>{result!.validation?.violations.map((v,i)=><p key={i}>{reasonNames[v.code] || v.message}{v.place_id?` · ${resultPois[v.place_id]||v.place_id}`:""}</p>)}<p>{shown.route.data_source}</p><p>{result!.data_context?"Автомобильные переезды OSRM. Данные OSM могут быть неполными. Длительность посещений — правило планирования. Цены — обычные взрослые билеты без скидок и сборов. Транспорт, парковка, жильё и обратный путь не включены.":"Демонстрационные места и время переездов."}</p>{result!.data_context && <p>{result!.data_context.attribution} · Данные получены {new Date(result!.data_context.fetched_at).toLocaleString("ru-RU")}</p>}{result!.data_context?.pois.filter(p=>p.provenance).map(p=><div key={p.id}><b>{p.name}</b><PoiFacts poi={p} sources/></div>)}</details>
         </>}
-      </section>
-      {!!trips.length && <section className="card history"><h3>Сохранённые запросы</h3><p className="hint">Открывается последний расчёт выбранного запроса.</p>{[...trips].reverse().map(t=><button key={t.id} disabled={!!busy} onClick={()=>task("Открываем маршрут…",()=>showTrip(t))}><span>№{t.id} · {t.destination==="Lisbon"?"Лиссабон":"Демо-город"}<small>{t.travel_date||"Без даты"}{t.end_date && t.end_date!==t.travel_date ? ` — ${t.end_date}` : ""} · {money(t.budget)}</small></span><span>↗</span></button>)}</section>}
+      </section>}
+      {!!trips.length && <section className="card history"><h3>Сохранённые запросы</h3><p className="hint">Открывается последний расчёт со всеми вариантами. Для старых запросов — одиночный маршрут.</p>{[...trips].reverse().map(t=><button key={t.id} disabled={!!busy} onClick={()=>task("Открываем маршрут…",()=>showTrip(t))}><span>№{t.id} · {t.destination==="Lisbon"?"Лиссабон":"Демо-город"}<small>{t.travel_date||"Без даты"}{t.end_date && t.end_date!==t.travel_date ? ` — ${t.end_date}` : ""} · {money(t.budget)}</small></span><span>↗</span></button>)}</section>}
       </div></div><footer>попутно · Система группового планирования путешествий</footer>
     </section>
   </main>;

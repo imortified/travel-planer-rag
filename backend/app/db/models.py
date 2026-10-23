@@ -57,10 +57,22 @@ class TripRequest(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
 
+class RouteSet(Base):
+    __tablename__ = "route_sets"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    trip_request_id: Mapped[int] = mapped_column(ForeignKey("trip_requests.id"), index=True)
+    algorithm: Mapped[str] = mapped_column(String(50))
+    search_info: Mapped[dict] = mapped_column(JSON)
+    diagnostic: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
 class RouteOption(Base):
     __tablename__ = "route_options"
     id: Mapped[int] = mapped_column(primary_key=True)
     trip_request_id: Mapped[int] = mapped_column(ForeignKey("trip_requests.id"), index=True)
+    route_set_id: Mapped[int | None] = mapped_column(ForeignKey("route_sets.id"), index=True)
+    comparison: Mapped[dict | None] = mapped_column(JSON, nullable=True)
     algorithm: Mapped[str] = mapped_column(String(50), default="greedy-v1")
     data_source: Mapped[str] = mapped_column(String(50), default="synthetic-demo-v1")
     result: Mapped[dict] = mapped_column(JSON)

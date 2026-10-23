@@ -287,3 +287,118 @@ def test_invalid_trip_period_returns_422(client):
             ).status_code
             == 422
         )
+
+
+def test_route_comparison_is_saved_together_and_reopened_without_recalculation(client):
+    gid, ids = create_group(client)
+    for uid, category in zip(ids, ["history", "nature"], strict=True):
+        client.put(
+            f"/api/v1/groups/{gid}/members/{uid}/preferences",
+            json={"interests": {category: 1}},
+        )
+    trip = client.post(f"/api/v1/groups/{gid}/trips", json={"budget": 10000}).json()
+    # Later preference edits must not change comparison metrics for this trip.
+    client.put(
+        f"/api/v1/groups/{gid}/members/{ids[0]}/preferences", json={"interests": {"food": 1}}
+    )
+    response = client.post(f"/api/v1/trips/{trip['id']}/route-sets?beam_width=8")
+    assert response.status_code == 201
+    saved = response.json()
+    assert len(saved["options"]) == 3
+    assert saved["diagnostic"] is None
+    assert saved["algorithm"] == "diverse-v1:beam:w8"
+    assert saved["options"][0]["comparison"]["participant_utility"] == {str(uid): 1 for uid in ids}
+    for option in saved["options"]:
+        assert option["route_set_id"] == saved["id"]
+        assert option["result"]["is_feasible"] and option["result"]["validation"]["is_valid"]
+        assert client.get(f"/api/v1/routes/{option['id']}").json() == option
+    assert client.get(f"/api/v1/route-sets/{saved['id']}").json() == saved
+    assert client.get(f"/api/v1/trips/{trip['id']}/route-sets").json() == [saved]
+    assert client.get(f"/api/v1/trips/{trip['id']}/routes").json() == saved["options"]
+    second = client.post(f"/api/v1/trips/{trip['id']}/route-sets?beam_width=8").json()
+    assert second["id"] != saved["id"]
+    assert len(client.get(f"/api/v1/trips/{trip['id']}/route-sets").json()) == 2
+    assert client.get(f"/api/v1/route-sets/{saved['id']}").json() == saved
+
+
+def test_multiday_comparison_with_only_one_distinct_option(client):
+    gid, _ = create_group(client)
+    trip = client.post(
+        f"/api/v1/groups/{gid}/trips",
+        json={
+            "travel_date": "2026-10-23",
+            "end_date": "2026-10-25",
+            "budget": 10000,
+            "start": 600,
+            "end": 720,
+            "mandatory": ["museum", "market", "park"],
+        },
+    ).json()
+    response = client.post(f"/api/v1/trips/{trip['id']}/route-sets")
+    assert response.status_code == 201
+    saved = response.json()
+    assert len(saved["options"]) == 1
+    assert len(saved["options"][0]["result"]["days"]) == 3
+    assert saved["search_info"]["note_codes"] == ["fewer_distinct_options_found"]
+    assert client.get(f"/api/v1/route-sets/{saved['id']}").json() == saved
+
+
+def test_empty_comparison_preserves_diagnostic_without_claiming_invalid_alternatives(client):
+    gid, _ = create_group(client)
+    trip = client.post(
+        f"/api/v1/groups/{gid}/trips",
+        json={"budget": 0, "mandatory": ["museum"]},
+    ).json()
+    response = client.post(f"/api/v1/trips/{trip['id']}/route-sets")
+    assert response.status_code == 201
+    saved = response.json()
+    assert not saved["options"]
+    assert not saved["diagnostic"]["is_feasible"]
+    assert "mandatory_not_scheduled" in saved["diagnostic"]["reasons"]
+    assert not client.get(f"/api/v1/trips/{trip['id']}/routes").json()
+    assert client.get(f"/api/v1/route-sets/{saved['id']}").json() == saved
+
+
+def test_comparison_uses_one_source_snapshot_per_day_and_keeps_sets_on_source_failure(
+    client, monkeypatch
+):
+    from app.integrations.city import SourceUnavailable
+    from app.integrations.demo import load_demo
+
+    gid, _ = create_group(client)
+    trip = client.post(
+        f"/api/v1/groups/{gid}/trips",
+        json={
+            "destination": "Lisbon",
+            "travel_date": "2026-10-23",
+            "end_date": "2026-10-24",
+            "budget": 10000,
+        },
+    ).json()
+    calls = []
+
+    def dataset(self, day, mandatory, allow_empty=False):
+        calls.append(str(day))
+        places, travel = load_demo()
+        return (
+            places,
+            travel,
+            {"pois": [{"id": p.id, "name": p.id} for p in places], "day": str(day)},
+        )
+
+    monkeypatch.setattr("app.api.groups.CityProvider.dataset", dataset)
+    saved = client.post(f"/api/v1/trips/{trip['id']}/route-sets").json()
+    assert calls == ["2026-10-23", "2026-10-24"]
+    assert len(saved["options"]) == 3
+    for option in saved["options"]:
+        assert option["data_source"] == "osm-osrm-lisbon-v2"
+        assert [d["data_context"]["day"] for d in option["result"]["days"]] == calls
+
+    def fail(*args, **kwargs):
+        raise SourceUnavailable("OSRM unavailable")
+
+    monkeypatch.setattr("app.api.groups.CityProvider.dataset", fail)
+    assert client.post(f"/api/v1/trips/{trip['id']}/route-sets").status_code == 503
+    assert client.get(f"/api/v1/trips/{trip['id']}/route-sets").json() == [saved]
+    assert client.get("/api/v1/route-sets/2147483647").status_code == 404
+    assert client.post(f"/api/v1/trips/{trip['id']}/route-sets?beam_width=129").status_code == 422
