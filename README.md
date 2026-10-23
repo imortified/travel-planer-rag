@@ -2,6 +2,8 @@
 
 Эмбеддинги и поиск по интересам: [запуск и устройство](docs/semantic-retrieval.md).
 Выбранная модель — Qwen3-Embedding-0.6B Q8_0, отдельный сервер llama.cpp на 8082.
+Векторное хранилище — **Qdrant** на 6333, две коллекции, постоянный Docker volume.
+[Запуск, индексация и проверки](docs/qdrant.md).
 
 Backend для дипломного проекта: FastAPI, PostgreSQL/PostGIS, Alembic,
 greedy и beam search с независимой валидацией. Доступны синтетический Demo City
@@ -267,4 +269,6 @@ uv run alembic upgrade head
 Данные БД сохраняются в Docker volume. Остановка без удаления данных:
 `docker compose down`. Backend пока запускается локально для удобства разработки.
 PostgreSQL доступен по `127.0.0.1:55432`, внутри контейнера используется порт 5432.
+Qdrant доступен по `127.0.0.1:6333`, данные сохраняются в отдельном `qdrant_data` volume.
+Запуск только векторного хранилища: `docker compose up -d --wait qdrant`.
 Redis, Celery, nginx и контейнер backend добавляются после первого сквозного сценария.

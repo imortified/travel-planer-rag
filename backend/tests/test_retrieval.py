@@ -7,6 +7,7 @@ from test_embeddings import vector
 
 from app.integrations.city import CityProvider
 from app.integrations.embeddings import EmbeddingUnavailable, normalize
+from app.integrations.qdrant import VectorStoreUnavailable
 from app.main import app
 from app.nlp.retrieval import Retrieval
 from app.planning.models import Participant, Request
@@ -51,34 +52,27 @@ class FakeEmbeddings:
         ("without museums", None),
     ],
 )
-def test_threshold_margin_and_negation_require_clarification(tmp_path, query, category):
-    result = Retrieval(FakeEmbeddings(), tmp_path).search(query, [])
+def test_threshold_margin_and_negation_require_clarification(query, category):
+    result = Retrieval(FakeEmbeddings(), MemoryStore()).search(query, [])
     assert result["category"] == category
     assert result["needs_clarification"] == (category is None)
 
 
-def test_document_cache_invalidates_by_text_model_and_knowledge_and_repairs_corruption(tmp_path):
-    embedding = FakeEmbeddings()
-    index = Retrieval(embedding, tmp_path)
-    index.search("first private query", [])
-    index.search("another private query", [])
-    assert (embedding.document_calls, embedding.query_calls) == (1, 2)
-    assert "private" not in next(tmp_path.iterdir()).read_text()
-    index.knowledge["categories"]["history"] += " New text"
-    index.search("first", [])
-    embedding.identity = "test-1024-v2"
-    index.search("first", [])
-    index.knowledge["version"] = "new-knowledge"
-    index.search("first", [])
-    assert embedding.document_calls == 4
-    for path in tmp_path.iterdir():
-        path.write_text("broken")
-    index.search("first", [])
-    assert embedding.document_calls == 5
+class MemoryStore:
+    """Unit-test double only; production retrieval always requires Qdrant."""
+
+    def collection(self, kind):
+        return f"test_{kind}"
+
+    def search(self, kind, records, embedder, query):
+        return [
+            sum(x * y for x, y in zip(query, vector, strict=True))
+            for vector in embedder.encode([r["text"] for r in records])
+        ]
 
 
-def test_unenriched_place_does_not_inherit_detailed_category_claims(tmp_path):
-    index = Retrieval(FakeEmbeddings(), tmp_path)
+def test_unenriched_place_does_not_inherit_detailed_category_claims():
+    index = Retrieval(FakeEmbeddings(), MemoryStore())
     document = index.documents(
         [
             {
@@ -144,7 +138,10 @@ def test_ranked_candidate_cap_keeps_mandatory_excludes_blocked_and_preserves_val
     assert context["retrieval"]["candidate_policy"] == "mandatory_then_similarity_cap_12"
 
 
-def test_search_api_uses_period_eligibility_and_returns_explicit_unavailability(monkeypatch):
+@pytest.mark.parametrize("failure", [EmbeddingUnavailable, VectorStoreUnavailable])
+def test_search_api_uses_period_eligibility_and_returns_explicit_unavailability(
+    monkeypatch, failure
+):
     monkeypatch.setattr(
         "app.api.assistant.lisbon_pois",
         lambda first, last: {
@@ -161,9 +158,7 @@ def test_search_api_uses_period_eligibility_and_returns_explicit_unavailability(
     with TestClient(app) as client:
         response = client.post("/api/v1/assistant/search", json=payload)
         assert response.status_code == 200 and response.json()["end_date"] == "2026-10-25"
-        monkeypatch.setattr(
-            Retrieval, "search", lambda *args: (_ for _ in ()).throw(EmbeddingUnavailable())
-        )
+        monkeypatch.setattr(Retrieval, "search", lambda *args: (_ for _ in ()).throw(failure()))
         assert client.post("/api/v1/assistant/search", json=payload).status_code == 503
         assert (
             client.post("/api/v1/assistant/search", json={**payload, "text": " "}).status_code

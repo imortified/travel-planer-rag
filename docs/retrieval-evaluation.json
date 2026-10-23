@@ -2,6 +2,14 @@
   "evaluated_on": "2026-10-23",
   "model": "Qwen3-Embedding-0.6B-Q8_0:370f27d7550e0def9b39c1f16d3fbaa13aa67728:1024:qwen3-last-instruct-v1",
   "knowledge_version": "lisbon-semantics-2026-10-23-v1",
+  "vector_store": {
+    "engine": "qdrant",
+    "exact": true,
+    "collections": {
+      "interests": "travel_interests_v1",
+      "places": "travel_places_v1"
+    }
+  },
   "eligible_poi_count": 9,
   "cases": [
     {
@@ -44,7 +52,7 @@
         }
       ],
       "passed": true,
-      "seconds": 2.576
+      "seconds": 0.894
     },
     {
       "query": "живопись и скульптура",
@@ -86,7 +94,7 @@
         }
       ],
       "passed": true,
-      "seconds": 0.364
+      "seconds": 0.687
     },
     {
       "query": "ботанический сад и коллекция растений",
@@ -128,7 +136,7 @@
         }
       ],
       "passed": true,
-      "seconds": 0.331
+      "seconds": 0.653
     },
     {
       "query": "гастрономия и местная кухня",
@@ -170,7 +178,7 @@
         }
       ],
       "passed": true,
-      "seconds": 0.362
+      "seconds": 0.699
     },
     {
       "query": "не люблю музеи",
@@ -212,7 +220,7 @@
         }
       ],
       "passed": true,
-      "seconds": 0.345
+      "seconds": 0.702
     },
     {
       "query": "квантовые вычисления",
@@ -254,7 +262,7 @@
         }
       ],
       "passed": true,
-      "seconds": 0.342
+      "seconds": 0.708
     },
     {
       "query": "хорошо провести время",
@@ -296,7 +304,7 @@
         }
       ],
       "passed": true,
-      "seconds": 0.348
+      "seconds": 0.748
     }
   ]
 }

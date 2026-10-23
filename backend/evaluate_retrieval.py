@@ -49,6 +49,7 @@ def main():
         "evaluated_on": "2026-10-23",
         "model": index.embedder.identity,
         "knowledge_version": index.knowledge["version"],
+        "vector_store": output["vector_store"],
         "eligible_poi_count": len(pois),
         "cases": results,
     }

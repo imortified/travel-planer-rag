@@ -530,13 +530,15 @@ def test_semantic_snapshots_and_rag_citations_are_saved_without_changing_route(c
     assert reopened["result"] == route["result"] and reopened["explanation"] == explanation
 
 
+@pytest.mark.parametrize("failure_kind", ["embedding", "qdrant"])
 def test_semantic_model_outage_is_explicit_but_manual_planning_remains_available(
-    client, monkeypatch
+    client, monkeypatch, failure_kind
 ):
     from app.integrations.embeddings import EmbeddingUnavailable
+    from app.integrations.qdrant import VectorStoreUnavailable
 
     def fail(*args, **kwargs):
-        raise EmbeddingUnavailable()
+        raise (EmbeddingUnavailable if failure_kind == "embedding" else VectorStoreUnavailable)()
 
     monkeypatch.setattr("app.api.groups.CityProvider.dataset", fail)
     gid, _ = create_group(client, 1)

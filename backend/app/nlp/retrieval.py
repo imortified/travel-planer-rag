@@ -1,14 +1,12 @@
-"""Small exact cosine index. Only public document vectors are cached, never user queries."""
+"""Semantic retrieval via Qdrant; every search is restricted to current candidate IDs."""
 
-import hashlib
 import json
-import os
 import re
-import tempfile
 from pathlib import Path
 
 from app.core.config import ROOT
-from app.integrations.embeddings import Embeddings, normalize
+from app.integrations.embeddings import Embeddings
+from app.integrations.qdrant import QdrantStore
 
 THRESHOLD = 0.55
 MARGIN = 0.05
@@ -16,14 +14,10 @@ DOCUMENT_THRESHOLD = 0.40
 CATEGORY_NAMES = {"history": "история", "nature": "природа", "food": "еда", "art": "искусство"}
 
 
-def cosine(a, b):
-    return max(-1.0, min(1.0, sum(x * y for x, y in zip(a, b, strict=True))))
-
-
 class Retrieval:
-    def __init__(self, embedder=None, cache_dir=None, knowledge_path=None):
+    def __init__(self, embedder=None, store=None, knowledge_path=None):
         self.embedder = embedder or Embeddings()
-        self.cache_dir = Path(cache_dir or ROOT / ".local" / "semantic-cache")
+        self.store = store or QdrantStore()
         self.knowledge = json.loads(
             Path(knowledge_path or ROOT / "data" / "semantic-knowledge.json").read_text("utf-8")
         )
@@ -49,37 +43,49 @@ class Retrieval:
             )
         return documents
 
-    def document_vectors(self, texts):
-        key = hashlib.sha256(
-            json.dumps(
-                [self.embedder.identity, self.knowledge["version"], texts], ensure_ascii=False
-            ).encode()
-        ).hexdigest()
-        path = self.cache_dir / f"{key}.json"
-        try:
-            saved = json.loads(path.read_text("utf-8"))
-            if len(saved) == len(texts):
-                return [normalize(v) for v in saved]
-        except (OSError, TypeError, ValueError):
-            pass
-        vectors = self.embedder.encode(texts)
-        self.cache_dir.mkdir(parents=True, exist_ok=True)
-        with tempfile.NamedTemporaryFile(mode="w", dir=self.cache_dir, delete=False) as file:
-            json.dump(vectors, file)
-            temporary = file.name
-        os.replace(temporary, path)
-        return vectors
+    def records(self, pois):
+        version = self.knowledge["version"]
+        profiles = [
+            {
+                "key": f"category:{category}",
+                "text": text,
+                "metadata": {"category": category, "knowledge_version": version},
+            }
+            for category, text in self.knowledge["categories"].items()
+        ]
+        documents = self.documents(pois)
+        categories = {p["id"]: p["category"] for p in pois}
+        places = [
+            {
+                "key": f"Lisbon:{doc['place_id']}",
+                "text": doc["description"],
+                "metadata": {
+                    **doc,
+                    "city": "Lisbon",
+                    "category": categories[doc["place_id"]],
+                    "knowledge_version": version,
+                },
+            }
+            for doc in documents
+        ]
+        return profiles, places, documents
+
+    def index(self, pois):
+        profiles, places, _ = self.records(pois)
+        return {
+            kind: len(self.store.index(kind, records, self.embedder))
+            for kind, records in [("interests", profiles), ("places", places)]
+        }
 
     def search(self, text, pois):
         text = text.strip()
-        documents = self.documents(pois)
+        profiles, places, documents = self.records(pois)
         categories = list(self.knowledge["categories"])
-        profiles = list(self.knowledge["categories"].values())
-        vectors = self.document_vectors(profiles + [d["description"] for d in documents])
         query = self.embedder.encode([text], query=True)[0]
-        scores = [cosine(query, vector) for vector in vectors]
+        category_scores = self.store.search("interests", profiles, self.embedder, query)
+        place_scores = self.store.search("places", places, self.embedder, query) if places else []
         ranking = sorted(
-            zip(categories, scores[: len(categories)], strict=True),
+            zip(categories, category_scores, strict=True),
             key=lambda row: (-row[1], row[0]),
         )
         # A vector does not reliably encode negation, mixed preferences or commands.
@@ -97,7 +103,7 @@ class Retrieval:
         matches = sorted(
             [
                 {**doc, "score": round(score, 6)}
-                for doc, score in zip(documents, scores[len(categories) :], strict=True)
+                for doc, score in zip(documents, place_scores, strict=True)
             ],
             key=lambda item: (-item["score"], item["place_id"]),
         )
@@ -105,6 +111,13 @@ class Retrieval:
             "query": text,
             "model": self.embedder.identity,
             "knowledge_version": self.knowledge["version"],
+            "vector_store": {
+                "engine": "qdrant",
+                "exact": True,
+                "collections": {
+                    kind: self.store.collection(kind) for kind in ("interests", "places")
+                },
+            },
             "threshold": THRESHOLD,
             "document_threshold": DOCUMENT_THRESHOLD,
             "margin": MARGIN,

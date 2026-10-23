@@ -6,6 +6,7 @@ from app.api.groups import DB, require
 from app.db.models import RouteOption, TripRequest
 from app.integrations.embeddings import EmbeddingUnavailable
 from app.integrations.llama_cpp import InvalidLlmOutput, LlmUnavailable
+from app.integrations.qdrant import VectorStoreUnavailable
 from app.nlp.explanations import explain
 from app.nlp.parser import parse_request
 from app.nlp.retrieval import Retrieval
@@ -28,6 +29,13 @@ def semantic_search(payload: SemanticInput):
         raise HTTPException(
             503,
             "Эмбеддинги недоступны. Запустите scripts/start-embeddings.ps1; "
+            "предпочтения можно задать ползунками.",
+        ) from exc
+    except VectorStoreUnavailable as exc:
+        raise HTTPException(
+            503,
+            "Qdrant недоступен или индекс несовместим. "
+            "Запустите docker compose up -d qdrant; "
             "предпочтения можно задать ползунками.",
         ) from exc
 

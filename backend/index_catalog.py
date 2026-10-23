@@ -1,0 +1,28 @@
+"""Idempotently index public descriptions for a selected catalog period in Qdrant."""
+
+import argparse
+import json
+from datetime import date, timedelta
+
+from app.integrations.city import CityProvider
+from app.nlp.retrieval import Retrieval
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--travel-date", type=date.fromisoformat, required=True)
+    parser.add_argument("--end-date", type=date.fromisoformat)
+    args = parser.parse_args()
+    last = args.end_date or args.travel_date
+    if not 0 <= (last - args.travel_date).days <= 13:
+        parser.error("Period must contain 1-14 days")
+    pois = {}
+    for offset in range((last - args.travel_date).days + 1):
+        catalog = CityProvider().catalog(args.travel_date + timedelta(days=offset))
+        pois.update({p["id"]: p for p in catalog["pois"] if p["eligible"]})
+    result = Retrieval().index([pois[key] for key in sorted(pois)])
+    print(json.dumps({"ensured_documents": result}))
+
+
+if __name__ == "__main__":
+    main()

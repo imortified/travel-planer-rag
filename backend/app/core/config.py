@@ -16,6 +16,10 @@ class Settings(BaseSettings):
     embedding_base_url: str = "http://127.0.0.1:8082"
     embedding_model: str = "Qwen3-Embedding-0.6B-Q8_0"
     embedding_timeout_seconds: float = 60
+    qdrant_url: str = "http://127.0.0.1:6333"
+    qdrant_api_key: str | None = None
+    qdrant_timeout_seconds: float = 10
+    qdrant_collection_prefix: str = "travel"
 
 
 settings = Settings()

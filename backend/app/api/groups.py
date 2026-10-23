@@ -11,6 +11,7 @@ from app.db.session import get_session
 from app.integrations.city import CityProvider, IncompleteData, SourceUnavailable
 from app.integrations.demo import load_demo
 from app.integrations.embeddings import EmbeddingUnavailable
+from app.integrations.qdrant import VectorStoreUnavailable
 from app.planning.alternatives import alternatives
 from app.planning.models import DayInput, Participant, Request
 from app.planning.period import plan_period
@@ -224,6 +225,13 @@ def planning_inputs(trip, request):
                     503,
                     "Запустите scripts/start-embeddings.ps1 "
                     "или уберите поиск по интересам из запроса.",
+                ) from exc
+            except VectorStoreUnavailable as exc:
+                raise HTTPException(
+                    503,
+                    "Qdrant недоступен или индекс несовместим. "
+                    "Запустите docker compose up -d qdrant "
+                    "или уберите тему поиска из запроса.",
                 ) from exc
             source = "osm-osrm-lisbon-v2"
         else:
