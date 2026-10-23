@@ -193,7 +193,7 @@ def test_lisbon_snapshot_saved_and_source_failure_does_not_create_route(client, 
         ),
     )
     saved = client.post(f"/api/v1/trips/{trip['id']}/routes?algorithm=beam").json()
-    assert saved["data_source"] == "osm-osrm-lisbon-v1"
+    assert saved["data_source"] == "osm-osrm-lisbon-v2"
     assert saved["result"]["data_context"] == context
     assert client.get(f"/api/v1/routes/{saved['id']}").json() == saved
 

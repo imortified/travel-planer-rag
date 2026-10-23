@@ -148,7 +148,20 @@ def plan_period(request: Request, inputs: list[DayInput], algorithm="beam", beam
             if not expanded:
                 break
             unique = {(s.day, s.visits, s.cost): s for s in expanded}
-            frontier = sorted(unique.values(), key=rank)[:beam_width]
+            ordered = sorted(unique.values(), key=rank)
+            # A transition to a later day consumes a search step but adds no utility.
+            # Reserve slots per day so early-day high-utility prefixes do not erase
+            # every postponed schedule before it can acquire further visits.
+            quota = max(1, beam_width // len(inputs))
+            counts = {}
+            frontier = []
+            for candidate in ordered:
+                if counts.get(candidate.day, 0) < quota and len(frontier) < beam_width:
+                    frontier.append(candidate)
+                    counts[candidate.day] = counts.get(candidate.day, 0) + 1
+            selected = set(frontier)
+            frontier.extend(s for s in ordered if s not in selected)
+            frontier = frontier[:beam_width]
             best = min([best, *frontier], key=rank)
     visits = [list(day) for day in best.visits]
     report, days = validate_period(request, visits, inputs, best.cost)

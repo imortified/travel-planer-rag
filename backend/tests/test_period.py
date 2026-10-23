@@ -109,3 +109,15 @@ def test_period_rejects_nonconsecutive_days():
         plan_period(
             req, [days[0], replace(days[1], travel_date=days[1].travel_date + timedelta(days=1))]
         )
+
+
+def test_larger_catalog_keeps_later_days_in_search():
+    first = date(2026, 10, 23)
+    places = [Place(f"p{i}", "history", 100, 45, 540, 1080) for i in range(9)]
+    travel = {(a, b.id): 1 for a in ["start"] + [p.id for p in places] for b in places if a != b.id}
+    inputs = [DayInput(first + timedelta(days=i), places, travel) for i in range(3)]
+    req = Request([Participant("a", {"history": 1})], 10000, 540, 1080)
+    result = plan_period(req, inputs)
+    assert result.is_feasible
+    assert len(result.visits) == 9
+    assert all(day.visits for day in result.days)

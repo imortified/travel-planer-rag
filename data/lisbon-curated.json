@@ -1,0 +1,66 @@
+{
+  "version": "lisbon-curated-2026-10-23",
+  "checked_on": "2026-10-23",
+  "valid_until": "2026-11-22",
+  "price_policy": "Standard adult admission per participant; no concessions, bundles or online service fees",
+  "pois": [
+    {
+      "id": "osm:node:4419041593", "name": "Museu do Aljube - Resistência e Liberdade", "category": "history",
+      "cost_per_person": 400, "duration": 90,
+      "opening_hours": "Tu-Su 10:00-18:00; Jan 01,May 01,Dec 25 off",
+      "price_source": "https://www.museudoaljube.pt/precario/",
+      "hours_source": "https://egeac.pt/espacos/museu-do-aljube-resistencia-e-liberdade/",
+      "notes": "Permanent exhibition; standard adult ticket. Duration is planning policy."
+    },
+    {
+      "id": "osm:node:5068486965", "name": "Museu Arqueológico do Carmo", "category": "history",
+      "cost_per_person": 700, "duration": 60,
+      "opening_hours": "Nov-Apr Mo-Sa 10:00-18:00; May-Oct Mo-Sa 10:00-19:00; Jan 01,May 01,Dec 25 off",
+      "price_source": "https://www.museuarqueologicodocarmo.pt/info_en.html",
+      "hours_source": "https://www.museuarqueologicodocarmo.pt/index.html",
+      "notes": "Conservative seasonal schedule; special extended opening periods not applied."
+    },
+    {
+      "id": "osm:node:11047643391", "name": "Museu Nacional de Arte Contemporânea (MNAC)", "category": "art",
+      "cost_per_person": 1000, "duration": 90,
+      "opening_hours": "Tu-Su 10:00-18:00; Jan 01,May 01,Jun 13,Dec 24-25,Dec 31 off; easter off",
+      "price_source": "https://museuartecontemporanea.gov.pt/pt/informacao/horarios-e-ingresso",
+      "hours_source": "https://museuartecontemporanea.gov.pt/pt/informacao/horarios-e-ingresso",
+      "notes": "Standard museum admission; online fees, concessions and special exhibitions excluded."
+    },
+    {
+      "id": "osm:node:13174527080", "name": "Museu de São Roque", "category": "art",
+      "cost_per_person": 800, "duration": 90,
+      "opening_hours": "Oct-Mar Tu-Su 10:00-18:00; Apr-Sep Tu-Su 10:00-19:00; Jan 01,May 01,Dec 25 off; easter off",
+      "price_source": "https://lojadacultura.scml.pt/products/bilhete-museu-de-sao-roque",
+      "hours_source": "https://lojadacultura.scml.pt/products/bilhete-museu-de-sao-roque",
+      "notes": "Museum ticket; not the adjacent church."
+    },
+    {
+      "id": "osm:node:13096661171", "name": "Casa Ásia - Coleção Francisco Capelo", "category": "art",
+      "cost_per_person": 800, "duration": 90,
+      "opening_hours": "Tu-Su 10:00-18:00; Jan 01,May 01,Dec 25 off; easter off",
+      "price_source": "https://casaasia-cfc.scml.pt/admissao-e-horario/",
+      "hours_source": "https://casaasia-cfc.scml.pt/admissao-e-horario/",
+      "notes": "Last admission one hour before closing; planned 90-minute visit satisfies this cutoff."
+    },
+    {
+      "id": "osm:node:12926040967", "name": "Casa dos Bicos - núcleo arqueológico (piso 0)", "category": "history",
+      "cost_per_person": 0, "duration": 60,
+      "opening_hours": "Mo-Sa 10:00-18:00; Jan 01,May 01,Dec 24-25,Dec 31 off",
+      "price_source": "https://scml.pt/wp-content/uploads/2025/03/AF_Agenda_Sociocultural_MAR_ABR_2025.pdf",
+      "hours_source": "https://museudelisboa.pt/pt/about/venues/casa-bicos/",
+      "notes": "Free archaeological ground floor only; José Saramago exhibition upstairs is excluded."
+    },
+    {
+      "id": "curated:lisbon:ajuda-botanical-garden", "name": "Jardim Botânico da Ajuda", "category": "nature",
+      "latitude": 38.7062222, "longitude": -9.1991944,
+      "cost_per_person": 200, "duration": 60,
+      "opening_hours": "Jan-Apr,Oct-Dec 10:00-17:00; May-Sep 10:00-18:00; Jan 01,Dec 25 off",
+      "price_source": "https://jba.isa.ulisboa.pt/info/horario-jba",
+      "hours_source": "https://jba.isa.ulisboa.pt/info/horario-jba",
+      "coordinates_source": "https://jba.isa.ulisboa.pt/info/horario-jba",
+      "notes": "Coordinates converted from official DMS location. Conservative closing time: extended weekend/holiday opening is not used."
+    }
+  ]
+}

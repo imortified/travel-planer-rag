@@ -205,7 +205,7 @@ def calculate_route(
                     raise HTTPException(422, str(exc)) from exc
                 except SourceUnavailable as exc:
                     raise HTTPException(503, str(exc)) from exc
-                source = "osm-osrm-lisbon-v1"
+                source = "osm-osrm-lisbon-v2"
             else:
                 places, travel = load_demo()
             inputs.append(DayInput(day, places, travel, context))
@@ -236,7 +236,7 @@ def calculate_route(
             raise HTTPException(422, str(exc)) from exc
         except SourceUnavailable as exc:
             raise HTTPException(503, str(exc)) from exc
-        source = "osm-osrm-lisbon-v1"
+        source = "osm-osrm-lisbon-v2"
     else:
         places, travel = load_demo()
     result = replace(

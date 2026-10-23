@@ -47,6 +47,21 @@ def test_opening_hours_use_trip_date_and_preserve_breaks():
 
 
 def provider(tmp_path, matrix=None):
+    import json
+
+    curated_path = tmp_path / "curated.json"
+    curated_path.write_text(
+        json.dumps(
+            {
+                "version": "test-osm-only",
+                "checked_on": "2026-01-01",
+                "valid_until": "2026-12-31",
+                "price_policy": "test",
+                "pois": [],
+            }
+        ),
+        encoding="utf-8",
+    )
     calls = []
 
     def handler(request):
@@ -56,7 +71,7 @@ def provider(tmp_path, matrix=None):
         return httpx.Response(200, json={"code": "Ok", "durations": matrix or [[0, 61], [None, 0]]})
 
     client = httpx.Client(transport=httpx.MockTransport(handler))
-    return CityProvider(client, tmp_path), calls
+    return CityProvider(client, tmp_path, curated_path), calls
 
 
 def test_real_dataset_cache_rounding_and_null_routes(tmp_path):

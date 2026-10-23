@@ -16,6 +16,7 @@ import httpx
 from opening_hours import OpeningHours, ParserError
 
 from app.core.config import ROOT, settings
+from app.integrations.curated import enrich
 from app.planning.models import Place
 
 BBOX = "-9.145,38.708,-9.130,38.720"
@@ -117,21 +118,24 @@ def parse_catalog(body: bytes, travel_date: date):
 
 
 class CityProvider:
-    def __init__(self, client=None, cache_dir=None):
+    def __init__(self, client=None, cache_dir=None, curated_path=None):
         self.client = client
         self.cache_dir = cache_dir or ROOT / "data" / ".cache"
+        self.curated_path = curated_path
 
     def catalog(self, travel_date):
         if self.client is None:
             with httpx.Client(
                 timeout=httpx.Timeout(40, connect=5), follow_redirects=True
             ) as client:
-                return CityProvider(client, self.cache_dir).catalog(travel_date)
+                return CityProvider(client, self.cache_dir, self.curated_path).catalog(travel_date)
         try:
             body, fetched = cached_get(
                 self.client, settings.osm_map_url, {"bbox": BBOX}, 86400, self.cache_dir
             )
-            pois = parse_catalog(body, travel_date)
+            pois, version = enrich(
+                parse_catalog(body, travel_date), travel_date, opening_window, self.curated_path
+            )
         except (ET.ParseError, KeyError, ValueError) as exc:
             raise SourceUnavailable("Invalid OSM response") from exc
         return {
@@ -143,6 +147,7 @@ class CityProvider:
             "pois": pois,
             "fetched_at": fetched,
             "source": settings.osm_map_url,
+            "catalog_version": version,
             "attribution": "© OpenStreetMap contributors, ODbL 1.0",
         }
 
@@ -151,7 +156,7 @@ class CityProvider:
             with httpx.Client(
                 timeout=httpx.Timeout(40, connect=5), follow_redirects=True
             ) as client:
-                return CityProvider(client, self.cache_dir).dataset(
+                return CityProvider(client, self.cache_dir, self.curated_path).dataset(
                     travel_date, mandatory, allow_empty
                 )
         catalog = self.catalog(travel_date)
@@ -231,8 +236,9 @@ class CityProvider:
             ],
             "limitations": [
                 "OSM data is not an official guarantee of opening or price",
-                "Node-only catalog in a fixed central Lisbon bounding box",
-                "60 minute visits are planning policy, not source facts",
+                "OSM nodes in central Lisbon plus source-verified curated locations",
+                "Visit durations are planning policy, not source facts",
+                "Standard adult entry prices; discounts, bundled tickets and booking fees excluded",
                 "Driving estimates exclude traffic, parking and transport costs",
                 "Travel is between OSRM-snapped road points, not door-to-door",
                 "No return trip, visas or weather checks",

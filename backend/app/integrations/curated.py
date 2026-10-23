@@ -1,0 +1,107 @@
+"""Versioned reference facts; overrides never erase their OSM originals."""
+
+import json
+from datetime import date
+from pathlib import Path
+
+from pydantic import BaseModel, Field, HttpUrl, model_validator
+
+from app.core.config import ROOT
+
+
+class Entry(BaseModel):
+    id: str
+    name: str
+    category: str
+    cost_per_person: int = Field(ge=0)
+    duration: int = Field(ge=60, le=240)
+    opening_hours: str
+    price_source: HttpUrl
+    hours_source: HttpUrl
+    notes: str
+    latitude: float | None = Field(default=None, ge=-90, le=90)
+    longitude: float | None = Field(default=None, ge=-180, le=180)
+    coordinates_source: HttpUrl | None = None
+
+    @model_validator(mode="after")
+    def coordinates(self):
+        if self.id.startswith("curated:") and (
+            self.latitude is None or self.longitude is None or self.coordinates_source is None
+        ):
+            raise ValueError("Standalone POI requires coordinates and source")
+        return self
+
+
+class Catalog(BaseModel):
+    version: str
+    checked_on: date
+    valid_until: date
+    price_policy: str
+    pois: list[Entry]
+
+    @model_validator(mode="after")
+    def consistency(self):
+        if self.valid_until < self.checked_on or len({p.id for p in self.pois}) != len(self.pois):
+            raise ValueError("Invalid curated validity range or duplicate ID")
+        return self
+
+
+def enrich(pois, travel_date, window_parser, path: Path | None = None):
+    catalog = Catalog.model_validate(
+        json.loads((path or ROOT / "data" / "lisbon-curated.json").read_text(encoding="utf-8"))
+    )
+    records = {p["id"]: dict(p) for p in pois}
+    for entry in catalog.pois:
+        original = records.get(entry.id)
+        if original is None and not entry.id.startswith("curated:"):
+            continue  # Missing mapped POI must not acquire invented coordinates.
+        poi = dict(original or {})
+        provenance = {
+            "version": catalog.version,
+            "checked_on": str(catalog.checked_on),
+            "valid_until": str(catalog.valid_until),
+            "price_policy": catalog.price_policy,
+            "price_source": str(entry.price_source),
+            "hours_source": str(entry.hours_source),
+            "notes": entry.notes,
+        }
+        if original:
+            provenance["original_osm"] = {
+                k: original.get(k) for k in ("name", "fee", "opening_hours", "osm_timestamp")
+            }
+        else:
+            poi.update(
+                id=entry.id,
+                latitude=entry.latitude,
+                longitude=entry.longitude,
+                source_url=str(entry.coordinates_source),
+            )
+            provenance["coordinates_source"] = str(entry.coordinates_source)
+        window = window_parser(entry.opening_hours, travel_date)
+        issues = [
+            i
+            for i in poi.get("issues", [])
+            if i
+            not in (
+                "unknown_price",
+                "unknown_closed_or_unsupported_hours",
+            )
+        ]
+        if not catalog.checked_on <= travel_date <= catalog.valid_until:
+            issues.append("curation_outside_validity")
+        if window is None:
+            issues.append("unknown_closed_or_unsupported_hours")
+        poi.update(
+            name=entry.name,
+            category=entry.category,
+            cost_per_person=entry.cost_per_person,
+            duration=entry.duration,
+            duration_source="curated_planning_policy",
+            opening_hours=entry.opening_hours,
+            window=window,
+            issues=issues,
+            eligible=not issues,
+            provenance=provenance,
+        )
+        records[entry.id] = poi
+    return sorted(records.values(), key=lambda p: p["id"]), catalog.version
