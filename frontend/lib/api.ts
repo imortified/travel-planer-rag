@@ -1,4 +1,8 @@
 export type Interests = Record<string, number>;
+export type SolverReport = {backend:string;version:string;status:string;time_limit_seconds:number;search_time_limit_seconds:number;
+  elapsed_seconds:number;solver_seconds:number;seed:number;workers:number;scale:number;objective_error_bound:number;
+  integer_model_optimal:boolean;model_objective:number|null;model_best_bound:number|null;original_upper_bound:number|null;
+  absolute_gap_bound:number|null;warm_start:boolean};
 export type ObjectiveReport = {version:string;weights:Record<string,number>;value:number;contributions:Record<string,number>;
   participant_utility:Record<string,number>;participant_coverage:Record<string,number>;utility_bounds:Record<string,number>;
   excluded_from_fairness:string[];mean_utility:number;reward_bound:number;reward:number;cost_ratio:number;travel_minutes:number;
@@ -33,6 +37,7 @@ export type Route = {id: number; trip_request_id: number; algorithm: string; dat
   result: {is_feasible: boolean; total_cost: number; satisfaction: Record<string, number>;
     days?: Day[] | null;
     objective?: ObjectiveReport | null;
+    solver?: SolverReport | null;
     reasons: string[]; visits: {place_id: string; arrival: number; start: number; end: number}[];
     validation: {is_valid: boolean; computed_cost: number; violations: {code: string; message: string; place_id: string | null}[]} | null;
     data_context: {pois: Poi[]; transport: string; fetched_at: string; attribution: string} | null}};

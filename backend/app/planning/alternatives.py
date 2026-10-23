@@ -3,6 +3,7 @@
 from collections import deque
 from dataclasses import dataclass, replace
 from math import ceil
+from time import perf_counter
 
 from app.planning.models import DayInput, Request, Result
 from app.planning.objective import VERSION, Objective
@@ -77,12 +78,15 @@ def alternatives(
     algorithm="beam",
     beam_width=32,
     multi_day=False,
+    time_limit=5.0,
 ) -> SearchOutcome:
     if not inputs or (not multi_day and len(inputs) != 1):
         raise ValueError("Expected one input for single-day planning")
     pool, queue, seen = [], deque([frozenset()]), {frozenset()}
     attempts, diagnostic = 0, None
     objective = Objective(request, inputs)
+    started = perf_counter()
+    timed_out = False
 
     def schedule(result):
         return [day.visits for day in result.days] if result.days is not None else [result.visits]
@@ -101,17 +105,24 @@ def alternatives(
         return selected
 
     while queue and attempts < ATTEMPT_LIMIT:
+        remaining = max(0.0, time_limit - (perf_counter() - started))
+        if algorithm == "cp-sat" and attempts and remaining == 0:
+            timed_out = True
+            break
         bans = queue.popleft()
         local = replace(request, excluded=request.excluded | bans)
+        extra = {"time_limit": remaining} if algorithm == "cp-sat" else {}
         if multi_day:
-            result = plan_period(local, inputs, algorithm, beam_width, objective)
+            result = plan_period(local, inputs, algorithm, beam_width, objective, **extra)
             report, days = validate_period(
                 request, [d.visits for d in result.days], inputs, result.total_cost
             )
             result = replace(result, validation=report, days=days)
         else:
             data = inputs[0]
-            result = checked_plan(local, data.places, data.travel, algorithm, beam_width, objective)
+            result = checked_plan(
+                local, data.places, data.travel, algorithm, beam_width, objective, **extra
+            )
             report = validate_route(
                 request, result.visits, data.places, data.travel, result.total_cost
             )
@@ -127,6 +138,9 @@ def alternatives(
         attempts += 1
         if diagnostic is None:
             diagnostic = result
+        if result.solver and result.solver.status == "UNKNOWN":
+            timed_out = True
+            break
         if result.is_feasible and report.is_valid:
             pool.append(Candidate(result, metrics(request, result, inputs)))
             if len(ranked_options()) == 3:
@@ -144,6 +158,8 @@ def alternatives(
                     queue.append(excluded)
     selected = ranked_options()
     notes = []
+    if timed_out:
+        notes.append("cp_sat_time_budget_exhausted")
     if not selected:
         notes.append("no_feasible_options_found")
     elif len(selected) < 3:

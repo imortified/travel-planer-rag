@@ -19,8 +19,9 @@ def health():
 @router.post("/api/v1/plans/demo", response_model=Result)
 def demo_plan(
     payload: PlanInput,
-    algorithm: Literal["greedy", "beam"] = "greedy",
+    algorithm: Literal["greedy", "beam", "cp-sat"] = "greedy",
     beam_width: Annotated[int, Query(ge=1, le=128)] = 32,
+    time_limit_seconds: Annotated[float, Query(ge=0.05, le=30)] = 5.0,
 ):
     places, travel = load_demo()
     request = Request(
@@ -31,4 +32,6 @@ def demo_plan(
         mandatory=frozenset(payload.mandatory),
         excluded=frozenset(payload.excluded),
     )
-    return checked_plan(request, places, travel, algorithm, beam_width)
+    return checked_plan(
+        request, places, travel, algorithm, beam_width, time_limit=time_limit_seconds
+    )

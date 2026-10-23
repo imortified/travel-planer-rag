@@ -70,8 +70,17 @@ class State:
 
 
 def plan_period(
-    request: Request, inputs: list[DayInput], algorithm="beam", beam_width=32, objective=None
+    request: Request,
+    inputs: list[DayInput],
+    algorithm="beam",
+    beam_width=32,
+    objective=None,
+    time_limit=5.0,
 ):
+    if algorithm == "cp-sat":
+        from app.planning.cp_sat import cp_sat_plan
+
+        return cp_sat_plan(request, inputs, objective, time_limit)
     if not 1 <= len(inputs) <= 14 or not 1 <= beam_width <= 128:
         raise ValueError("Expected 1-14 days and beam width 1-128")
     if algorithm not in ("greedy", "beam"):

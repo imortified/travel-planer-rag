@@ -14,8 +14,16 @@ def checked_plan(
     algorithm: str = "greedy",
     beam_width: int = 32,
     objective=None,
+    time_limit=5.0,
 ) -> Result:
     objective = objective or Objective.single(request, places)
+    if algorithm == "cp-sat":
+        from datetime import date
+
+        from app.planning.cp_sat import cp_sat_plan
+        from app.planning.models import DayInput
+
+        return cp_sat_plan(request, [DayInput(date.min, places, travel)], objective, time_limit)
     if algorithm == "greedy":
         candidate = plan(request, places, travel, objective)
     elif algorithm == "beam":

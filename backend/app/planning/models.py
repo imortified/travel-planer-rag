@@ -91,6 +91,27 @@ class ObjectiveReport:
 
 
 @dataclass(frozen=True)
+class SolverReport:
+    backend: str
+    version: str
+    status: str
+    time_limit_seconds: float
+    search_time_limit_seconds: float
+    elapsed_seconds: float
+    solver_seconds: float
+    seed: int
+    workers: int
+    scale: int
+    objective_error_bound: float
+    integer_model_optimal: bool
+    model_objective: float | None
+    model_best_bound: float | None
+    original_upper_bound: float | None
+    absolute_gap_bound: float | None
+    warm_start: bool
+
+
+@dataclass(frozen=True)
 class Result:
     is_feasible: bool
     visits: list[Visit]
@@ -101,3 +122,4 @@ class Result:
     data_context: dict | None = None
     days: list[DayResult] | None = None
     objective: ObjectiveReport | None = None
+    solver: SolverReport | None = None

@@ -151,7 +151,7 @@ def test_empty_comparison_keeps_visa_report_and_old_routes_are_compatible(
     try:
         route = session.scalar(select(RouteOption).where(RouteOption.id == single["id"]))
         route.visa_report = None
-        route.result = {k: v for k, v in route.result.items() if k != "objective"}
+        route.result = {k: v for k, v in route.result.items() if k not in {"objective", "solver"}}
         saved_trip = session.get(TripRequest, tid)
         saved_trip.purpose = "unknown"
         saved_trip.participants_snapshot = [
@@ -163,6 +163,7 @@ def test_empty_comparison_keeps_visa_report_and_old_routes_are_compatible(
         sessions.close()
     assert client.get(f"/api/v1/routes/{single['id']}").json()["visa_report"] is None
     assert client.get(f"/api/v1/routes/{single['id']}").json()["result"]["objective"] is None
+    assert client.get(f"/api/v1/routes/{single['id']}").json()["result"]["solver"] is None
     old_trip = client.get(f"/api/v1/trips/{tid}").json()
     assert old_trip["purpose"] == "unknown"
     assert old_trip["participants_snapshot"][0]["travel_profile"]["citizenship"] is None
@@ -199,6 +200,39 @@ def test_saved_trip_and_route_with_preference_snapshot(client):
     }
     assert client.get(f"/api/v1/routes/{saved['id']}").json() == saved
     assert client.get(f"/api/v1/trips/{tid}/routes").json() == [saved]
+
+
+@pytest.mark.parametrize("multi_day", [False, True])
+def test_cp_sat_solver_report_is_saved_with_route_and_comparison(client, multi_day):
+    gid, _ = create_group(client)
+    payload = {"budget": 10000, "travel_date": "2026-10-24"}
+    if multi_day:
+        payload["end_date"] = "2026-10-26"
+    trip = client.post(f"/api/v1/groups/{gid}/trips", json=payload).json()
+    tid = trip["id"]
+    single = client.post(f"/api/v1/trips/{tid}/routes?algorithm=cp-sat&time_limit_seconds=1")
+    assert single.status_code == 201
+    route = single.json()
+    assert route["algorithm"] == ("cp-sat-period-v1" if multi_day else "cp-sat-v1")
+    assert route["result"]["solver"]["status"] == "OPTIMAL"
+    assert route["result"]["solver"]["time_limit_seconds"] == 1
+    assert route["result"]["validation"]["is_valid"]
+    assert client.get(f"/api/v1/routes/{route['id']}").json() == route
+    response = client.post(f"/api/v1/trips/{tid}/route-sets?algorithm=cp-sat&time_limit_seconds=1")
+    assert response.status_code == 201
+    data = response.json()
+    assert data["algorithm"] == "diverse-v2:cp-sat"
+    assert data["options"]
+    for option in data["options"]:
+        assert option["result"]["solver"]["status"] in {"OPTIMAL", "FEASIBLE"}
+        assert option["result"]["objective"]["version"] == "normalized-group-objective-v1"
+    assert client.get(f"/api/v1/route-sets/{data['id']}").json() == data
+    assert (
+        client.post(
+            f"/api/v1/trips/{tid}/route-sets?algorithm=cp-sat&time_limit_seconds=31"
+        ).status_code
+        == 422
+    )
 
 
 def test_membership_limits_and_missing_resources(client):

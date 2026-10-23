@@ -42,3 +42,5 @@
 .route-objective table {border-collapse:collapse;width:100%;font-size:11px;margin:14px 0}
 .route-objective th,.route-objective td {text-align:left;padding:8px 5px;border-bottom:1px solid #d7dfd1;vertical-align:top}
 .route-objective tbody th {font-weight:400}
+.solver-status {margin:20px 0;padding:16px;background:#f5f3eb;border:1px solid var(--line);border-radius:9px;font-size:12px;line-height:1.7;overflow-wrap:anywhere}
+.solver-status h3 {font-size:15px;margin:0 0 10px}

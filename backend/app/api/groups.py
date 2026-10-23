@@ -299,6 +299,8 @@ def with_overview(result, inputs):
 
 
 def algorithm_name(algorithm, beam_width, multi_day):
+    if algorithm == "cp-sat":
+        return "cp-sat-period-v1" if multi_day else "cp-sat-v1"
     if multi_day:
         return f"{algorithm}-period-v2:w{beam_width}"
     return "greedy-v2" if algorithm == "greedy" else f"beam-v2:w{beam_width}"
@@ -308,17 +310,20 @@ def algorithm_name(algorithm, beam_width, multi_day):
 def calculate_route(
     trip_id: int,
     session: DB,
-    algorithm: Literal["greedy", "beam"] = "greedy",
+    algorithm: Literal["greedy", "beam", "cp-sat"] = "greedy",
     beam_width: Annotated[int, Query(ge=1, le=128)] = 32,
+    time_limit_seconds: Annotated[float, Query(ge=0.05, le=30)] = 5.0,
 ):
     trip = require(session, TripRequest, trip_id)
     request = planning_request(trip)
     inputs, multi_day, source = planning_inputs(trip, request)
     data = inputs[0]
     result = (
-        plan_period(request, inputs, algorithm, beam_width)
+        plan_period(request, inputs, algorithm, beam_width, time_limit=time_limit_seconds)
         if multi_day
-        else checked_plan(request, data.places, data.travel, algorithm, beam_width)
+        else checked_plan(
+            request, data.places, data.travel, algorithm, beam_width, time_limit=time_limit_seconds
+        )
     )
     route = RouteOption(
         trip_request_id=trip.id,
@@ -359,19 +364,24 @@ def route_set_output(session, route_set):
 def calculate_route_set(
     trip_id: int,
     session: DB,
-    algorithm: Literal["greedy", "beam"] = "beam",
+    algorithm: Literal["greedy", "beam", "cp-sat"] = "beam",
     beam_width: Annotated[int, Query(ge=1, le=128)] = 32,
+    time_limit_seconds: Annotated[float, Query(ge=0.05, le=30)] = 5.0,
 ):
     trip = require(session, TripRequest, trip_id)
     request = planning_request(trip)
     inputs, multi_day, source = planning_inputs(trip, request)
-    outcome = alternatives(request, inputs, algorithm, beam_width, multi_day)
+    outcome = alternatives(
+        request, inputs, algorithm, beam_width, multi_day, time_limit=time_limit_seconds
+    )
     visa_report = assess_visas(
         trip.destination, trip.travel_date, trip.end_date, trip.participants_snapshot, trip.purpose
     )
     route_set = RouteSet(
         trip_request_id=trip.id,
-        algorithm=f"diverse-v2:{algorithm}:w{beam_width}",
+        algorithm="diverse-v2:cp-sat"
+        if algorithm == "cp-sat"
+        else f"diverse-v2:{algorithm}:w{beam_width}",
         search_info=outcome.search_info,
         visa_report=visa_report,
         diagnostic=asdict(with_overview(outcome.diagnostic, inputs))

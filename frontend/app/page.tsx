@@ -9,6 +9,7 @@ import { RouteExplanation } from "./components/route-explanation";
 import { SemanticInterests } from "./components/semantic-search";
 import { TravelDocuments, VisaReport, emptyProfile } from "./components/visa-report";
 import { RouteObjective } from "./components/route-objective";
+import { SolverStatus } from "./components/solver-status";
 import { api, clock, money, minutes, type Group, type Trip, type Route, type RouteSet, type Poi, type Interests, type ParseOutput, type TravelProfile, type VisaReport as VisaData } from "../lib/api";
 
 type Draft = {key: number; name: string; interests: Interests; userId?: number; joined?: boolean; travel_profile?:TravelProfile};
@@ -18,6 +19,8 @@ const categories = [["history", "История"], ["nature", "Природа"],
 const demoPois: Poi[] = [{id:"museum",name:"Музей",eligible:true,issues:[]}, {id:"market",name:"Рынок",eligible:true,issues:[]}, {id:"park",name:"Парк",eligible:true,issues:[]}];
 const issueNames: Record<string,string> = {unknown_price:"Нет цены", unknown_closed_or_unsupported_hours:"Нет подходящих часов", restricted_access:"Ограничен доступ", curation_outside_validity:"Данные требуют повторной проверки", unsupported_conditional_access_or_fee:"Условный доступ"};
 const reasonNames: Record<string,string> = {mandatory_excluded_conflict:"Место одновременно обязательно и запрещено", no_feasible_visits:"Не найдено допустимых посещений", mandatory_not_scheduled:"Обязательное место не включено", budget_exceeded:"Превышен бюджет", cost_mismatch:"Стоимость рассчитана неверно", duplicate_visit_across_days:"Место повторяется в разные дни", unreachable_arrival:"Недостаточно времени на переезд", outside_opening_hours:"Посещение вне часов работы", missing_travel_time:"Нет данных о переезде"};
+reasonNames.cp_sat_unknown="Время поиска закончилось без решения; невозможность не доказана";
+reasonNames.cp_sat_infeasible="Допустимого маршрута нет при заданных данных и ограничениях";
 
 export default function Home() {
   const [name,setName] = useState("Наше путешествие");
@@ -39,6 +42,7 @@ export default function Home() {
   const [start,setStart] = useState("09:00");
   const [end,setEnd] = useState("18:00");
   const [algorithm,setAlgorithm] = useState("beam");
+  const [solverLimit,setSolverLimit] = useState("5");
   const [pois,setPois] = useState<Poi[]>(demoPois);
   const [choices,setChoices] = useState<Record<string,string>>({});
   const [pendingConstraints,setPendingConstraints] = useState<PendingConstraint[]>([]);
@@ -94,6 +98,7 @@ export default function Home() {
   }
   async function calculate() {
     if (!members.length) throw new Error("Добавьте хотя бы одного участника.");
+    if (algorithm==="cp-sat" && (!solverLimit.trim() || !Number.isFinite(Number(solverLimit)) || Number(solverLimit)<0.05 || Number(solverLimit)>30)) throw new Error("Лимит CP-SAT должен быть от 0,05 до 30 секунд.");
     if (destination==="Lisbon" && !date) throw new Error("Выберите дату поездки.");
     if (destination==="Lisbon" && catalogKey!==`Lisbon:${date}:${endDate || date}`) throw new Error("Сначала загрузите места для выбранной даты.");
     if (pendingConstraints.length) throw new Error("Сначала сопоставьте обязательные и исключённые места из текста с каталогом или явно уберите условие.");
@@ -106,7 +111,7 @@ export default function Home() {
     const signature=JSON.stringify({id,payload,members:members.map(m=>({interests:m.interests,profile:m.travel_profile || emptyProfile}))});
     let trip = pendingTrip.current?.signature===signature ? pendingTrip.current.trip : undefined;
     if (!trip) {trip = await api<Trip>(`/groups/${id}/trips`,"POST",payload); pendingTrip.current={signature,trip}; setTrips(old=>[...old,trip!]);}
-    const data = await api<RouteSet>(`/trips/${trip.id}/route-sets?algorithm=${algorithm}`,"POST");
+    const data = await api<RouteSet>(`/trips/${trip.id}/route-sets?algorithm=${algorithm}${algorithm==="cp-sat"?`&time_limit_seconds=${Number(solverLimit)}`:""}`,"POST");
     openComparison(data,trip); pendingTrip.current=undefined;
   }
   function openComparison(data: RouteSet, trip: Trip) {
@@ -174,7 +179,8 @@ export default function Home() {
         <fieldset disabled={!!busy} className="card"><legend><span className="step">2</span> Параметры поездки</legend>
           <div className="two"><label>Куда отправимся<select value={destination} onChange={e=>{setDestination(e.target.value);setChoices({});setPois(e.target.value==="Demo City"?demoPois:[]);setCatalogKey(e.target.value==="Demo City"?"Demo City":"");}}><option value="Demo City">Демо-город · без сети</option><option value="Lisbon">Лиссабон · реальные места</option></select></label><label>Начало поездки<input type="date" value={date} onChange={e=>changeDate(e.target.value)} onInput={e=>changeDate(e.currentTarget.value)}/></label></div>
           <div className="two"><label>Конец поездки<input type="date" value={endDate} min={date || undefined} onChange={e=>changeEndDate(e.target.value)} onInput={e=>changeEndDate(e.currentTarget.value)}/></label><p className="hint">До 14 дней включительно. Без даты окончания — один день. Бюджет общий на весь период.</p></div>
-          <div className="two"><label>Бюджет на всю группу, EUR<input type="number" min="0" max="10000000" step="0.01" value={budget} onChange={e=>setBudget(e.target.value)}/></label><label>Алгоритм<select value={algorithm} onChange={e=>setAlgorithm(e.target.value)}><option value="beam">Beam search</option><option value="greedy">Greedy</option></select></label></div>
+          <div className="two"><label>Бюджет на всю группу, EUR<input type="number" min="0" max="10000000" step="0.01" value={budget} onChange={e=>setBudget(e.target.value)}/></label><label>Алгоритм<select value={algorithm} onChange={e=>setAlgorithm(e.target.value)}><option value="beam">Beam search</option><option value="greedy">Greedy</option><option value="cp-sat">CP-SAT · OR-Tools</option></select></label></div>
+          {algorithm==="cp-sat" && <><label>Лимит CP-SAT на набор, с<input type="number" min="0.05" max="30" step="0.05" value={solverLimit} onChange={e=>setSolverLimit(e.target.value)}/></label><p className="hint">Общий бюджет времени поиска вариантов. Загрузка данных и подготовка могут добавить время. На сложной задаче оптимум может остаться недоказанным.</p></>}
           <div className="two"><label>Начало дня<input type="time" value={start} onChange={e=>setStart(e.target.value)}/></label><label>Окончание дня<input type="time" value={end} onChange={e=>setEnd(e.target.value)}/></label></div>
           {destination==="Lisbon" && <div className="visa-preview"><label>Цель въезда<select value={purpose} onChange={e=>setPurpose(e.target.value)}><option value="tourism">Туризм</option><option value="other">Иная цель</option><option value="unknown">Не уточнена</option></select></label><p className="hint">Визовый справочник: семь гражданств, краткосрочный туризм в Португалии. Документы заполняются у каждого участника.</p><button className="secondary" disabled={!members.length} onClick={()=>task("Проверяем визовые условия…",async()=>{if(members.some(m=>!m.name.trim())) throw new Error("Введите имена участников.");const report=await api<VisaData>("/visa-check","POST",visaInput);setVisaPreview({signature:visaSignature,report});})}>Проверить визовые условия</button>{visaPreview?.signature===visaSignature && <VisaReport report={visaPreview.report}/>}</div>}
           <p className="hint">{destination==="Lisbon"?"Лиссабон и Ажуда, старт — Rossio. Автомобильные переезды. Учитываются обычные взрослые билеты; скидки и транспортные расходы не включены. Гастрономические точки пока не представлены. Время — местное.":"Синтетические музей, рынок и парк для проверки сценария. Бюджет учитывает входные билеты на всех участников."}</p>
@@ -191,9 +197,10 @@ export default function Home() {
       {(!comparison || !!shown) && <section className="result card" aria-live="polite"><div className="result-header"><span className="eyebrow">ВАШ ПЛАН</span><span className="badge">{shown?`Маршрут №${shown.route.id}`:"Всё впереди"}</span></div>
         {!shown ? <div className="empty"><div className="journey-art" aria-hidden="true"><span>А</span><i/><span>Б</span><i/><span>В</span></div><h2>Место для новых<br/>впечатлений</h2><p>Здесь появится маршрут с временем<br/>посещений, переездами и стоимостью.</p><div className="empty-note">Сначала — ваша компания и пожелания.<br/>Затем — план, который можно проверить.</div></div> : <>
           <h2>{shown.trip.destination==="Lisbon"?"Поездка в Лиссабон":"Поездка в демо-город"}</h2><p className="muted">{shown.trip.travel_date || "Дата не задана"}{shown.trip.end_date && shown.trip.end_date!==shown.trip.travel_date ? ` — ${shown.trip.end_date}` : ""} · {shown.route.algorithm}</p>
-          <div className={`verdict ${result!.is_feasible?"valid":"invalid"}`}>{result!.is_feasible?"✓ Бюджет и расписание проверены":"! Найдены ограничения — маршрут не выполним"}</div>
+          <div className={`verdict ${result!.is_feasible?"valid":"invalid"}`}>{result!.is_feasible?"✓ Бюджет и расписание проверены":result!.solver?.status==="UNKNOWN"?"! За доступное время маршрут не найден; невозможность не доказана":"! Найдены ограничения — маршрут не выполним"}</div>
           <div className="stats"><div><small>Входные билеты</small><strong>{money(result!.total_cost)}</strong></div><div><small>Бюджет группы</small><strong>{money(shown.trip.budget)}</strong></div><div><small>Мест в плане</small><strong>{result!.visits.length}</strong></div></div>
           {result!.is_feasible && <RouteObjective report={result!.objective} trip={shown.trip}/>}
+          <SolverStatus report={result!.solver}/>
           <RouteDays route={shown.route} trip={shown.trip} names={resultPois}/>
           {!!result!.reasons.length && <div className="message error">{result!.reasons.map(r=><p key={r}>{reasonNames[r.split(":")[0]] || r}</p>)}</div>}
           <h3 className="subheading">Интересы участников</h3>{shown.trip.participants_snapshot.map(m=><div className="satisfaction" key={m.user_id}><span>{m.name}</span><meter min="0" max="1" value={result!.satisfaction[String(m.user_id)]||0}/><b>{Math.round((result!.satisfaction[String(m.user_id)]||0)*100)}%</b></div>)}

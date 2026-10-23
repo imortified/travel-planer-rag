@@ -1,5 +1,6 @@
 import { money, type Route, type RouteSet, type Trip } from "../../lib/api";
 import { VisaReport } from "./visa-report";
+import { SolverStatus } from "./solver-status";
 
 const points = (value: number) => value.toLocaleString("ru-RU", {maximumFractionDigits:2});
 
@@ -27,7 +28,7 @@ export function RouteComparison({data, trip, selectedId, names, reasonLabels, di
   return <section className="card comparison" aria-label="Сравнение маршрутов">
     <div className="comparison-heading"><h3>Сравнение маршрутов</h3><span className="badge">Расчёт №{data.id}</span></div>
     <p className="hint">{trip.destination==="Lisbon"?"Лиссабон":"Демо-город"} · {trip.travel_date || "Без даты"}{trip.end_date && trip.end_date!==trip.travel_date ? ` — ${trip.end_date}` : ""} · бюджет {money(trip.budget)}</p>
-    {!data.options.length ? <div role="status" className="message error">Допустимых маршрутов не найдено. Проверьте бюджет, время и обязательные места. Ограниченный поиск может пропустить существующий вариант.
+    {!data.options.length ? <div role="status" className="message error">{data.diagnostic?.solver?.status==="INFEASIBLE"?"При заданных данных и ограничениях допустимого маршрута нет: CP-SAT доказал невозможность.":data.diagnostic?.solver?.status==="UNKNOWN"?"За доступное время CP-SAT не нашёл допустимого маршрута. Это не доказывает невозможность; попробуйте увеличить лимит.":"Допустимых маршрутов не найдено. Проверьте бюджет, время и обязательные места. Ограниченный поиск может пропустить существующий вариант."}
       {data.diagnostic && <ul>{[...new Set(data.diagnostic.reasons.map(r=>r.split(":")[0]))].map(code=><li key={code}>{reasonLabels[code] || code}</li>)}</ul>}
     </div> : <>
       <p className="hint">Выберите вариант, чтобы увидеть расписание ниже. Все показанные варианты прошли проверку бюджета и расписания. Визовые условия — в отдельном отчёте.</p>
@@ -47,6 +48,8 @@ export function RouteComparison({data, trip, selectedId, names, reasonLabels, di
       <p className="hint">Полезность — сумма интересов к посещениям, в среднем по участникам. Разрыв в баллах — разница между наибольшей и наименьшей суммой. {data.options[0]?.result.objective?"Основной вариант выбран по общей оценке F: интересы с учётом стоимости, переездов и неравенства покрытия интересов. Формула приведена ниже.":"Основной вариант выбран по прежнему порядку полезности и стоимости."} Поиск ограничен; оптимальность не гарантируется.</p>
     </>}
     {data.search_info.note_codes.includes("fewer_distinct_options_found") && <p className="hint" role="status">Найдено вариантов: {data.options.length} из 3. Поиск ограничен; при текущих условиях больше содержательно разных вариантов не найдено. Перестановки тех же мест не считаются альтернативой.</p>}
+    {data.search_info.note_codes.includes("cp_sat_time_budget_exhausted") && <p className="hint" role="status">Бюджет времени CP-SAT исчерпан. Показаны найденные варианты; дополнительные альтернативы могли остаться ненайденными.</p>}
+    {!data.options.length && <SolverStatus report={data.diagnostic?.solver}/>}
     {!data.options.length && trip.destination==="Lisbon" && <VisaReport report={data.visa_report}/>}
   </section>;
 }
