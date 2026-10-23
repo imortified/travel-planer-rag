@@ -5,6 +5,7 @@ from dataclasses import dataclass, replace
 from math import ceil
 
 from app.planning.models import DayInput, Request, Result
+from app.planning.objective import VERSION, Objective
 from app.planning.period import plan_period, validate_period
 from app.planning.service import checked_plan
 from app.planning.validator import validate_route
@@ -81,16 +82,15 @@ def alternatives(
         raise ValueError("Expected one input for single-day planning")
     pool, queue, seen = [], deque([frozenset()]), {frozenset()}
     attempts, diagnostic = 0, None
+    objective = Objective(request, inputs)
+
+    def schedule(result):
+        return [day.visits for day in result.days] if result.days is not None else [result.visits]
 
     def ranked_options():
         ordered = sorted(
             pool,
-            key=lambda c: (
-                -c.comparison.mean_utility,
-                -c.comparison.min_utility,
-                c.result.total_cost,
-                tuple(sorted(place_ids(c.result))),
-            ),
+            key=lambda c: objective.key(schedule(c.result)),
         )
         selected = []
         for candidate in ordered:
@@ -104,14 +104,14 @@ def alternatives(
         bans = queue.popleft()
         local = replace(request, excluded=request.excluded | bans)
         if multi_day:
-            result = plan_period(local, inputs, algorithm, beam_width)
+            result = plan_period(local, inputs, algorithm, beam_width, objective)
             report, days = validate_period(
                 request, [d.visits for d in result.days], inputs, result.total_cost
             )
             result = replace(result, validation=report, days=days)
         else:
             data = inputs[0]
-            result = checked_plan(local, data.places, data.travel, algorithm, beam_width)
+            result = checked_plan(local, data.places, data.travel, algorithm, beam_width, objective)
             report = validate_route(
                 request, result.visits, data.places, data.travel, result.total_cost
             )
@@ -120,6 +120,9 @@ def alternatives(
             result,
             is_feasible=result.is_feasible and report.is_valid,
             reasons=list(dict.fromkeys(result.reasons + [v.code for v in report.violations])),
+            objective=objective.evaluate(schedule(result))
+            if result.is_feasible and report.is_valid
+            else None,
         )
         attempts += 1
         if diagnostic is None:
@@ -149,7 +152,8 @@ def alternatives(
         selected,
         None if selected else diagnostic,
         {
-            "method": "bounded-exclusions-v1",
+            "method": "bounded-exclusions-v2",
+            "objective_version": VERSION,
             "attempts": attempts,
             "attempt_limit": ATTEMPT_LIMIT,
             "min_jaccard_distance": MIN_DISTANCE,

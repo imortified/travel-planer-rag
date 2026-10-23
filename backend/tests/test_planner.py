@@ -19,7 +19,9 @@ def test_demo_respects_schedule_and_budget():
     places, travel = load_demo()
     result = plan(request(), places, travel)
     assert result.is_feasible
-    assert result.total_cost == 5400
+    # Food has zero interest here: the costly market no longer improves the objective.
+    assert result.total_cost == 2400
+    assert {v.place_id for v in result.visits} == {"museum", "park"}
     by_id = {p.id: p for p in places}
     previous, end = "start", 540
     for visit in result.visits:

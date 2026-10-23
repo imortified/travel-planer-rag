@@ -8,6 +8,7 @@ import { TextRequest } from "./components/text-request";
 import { RouteExplanation } from "./components/route-explanation";
 import { SemanticInterests } from "./components/semantic-search";
 import { TravelDocuments, VisaReport, emptyProfile } from "./components/visa-report";
+import { RouteObjective } from "./components/route-objective";
 import { api, clock, money, minutes, type Group, type Trip, type Route, type RouteSet, type Poi, type Interests, type ParseOutput, type TravelProfile, type VisaReport as VisaData } from "../lib/api";
 
 type Draft = {key: number; name: string; interests: Interests; userId?: number; joined?: boolean; travel_profile?:TravelProfile};
@@ -192,6 +193,7 @@ export default function Home() {
           <h2>{shown.trip.destination==="Lisbon"?"Поездка в Лиссабон":"Поездка в демо-город"}</h2><p className="muted">{shown.trip.travel_date || "Дата не задана"}{shown.trip.end_date && shown.trip.end_date!==shown.trip.travel_date ? ` — ${shown.trip.end_date}` : ""} · {shown.route.algorithm}</p>
           <div className={`verdict ${result!.is_feasible?"valid":"invalid"}`}>{result!.is_feasible?"✓ Бюджет и расписание проверены":"! Найдены ограничения — маршрут не выполним"}</div>
           <div className="stats"><div><small>Входные билеты</small><strong>{money(result!.total_cost)}</strong></div><div><small>Бюджет группы</small><strong>{money(shown.trip.budget)}</strong></div><div><small>Мест в плане</small><strong>{result!.visits.length}</strong></div></div>
+          {result!.is_feasible && <RouteObjective report={result!.objective} trip={shown.trip}/>}
           <RouteDays route={shown.route} trip={shown.trip} names={resultPois}/>
           {!!result!.reasons.length && <div className="message error">{result!.reasons.map(r=><p key={r}>{reasonNames[r.split(":")[0]] || r}</p>)}</div>}
           <h3 className="subheading">Интересы участников</h3>{shown.trip.participants_snapshot.map(m=><div className="satisfaction" key={m.user_id}><span>{m.name}</span><meter min="0" max="1" value={result!.satisfaction[String(m.user_id)]||0}/><b>{Math.round((result!.satisfaction[String(m.user_id)]||0)*100)}%</b></div>)}

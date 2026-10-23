@@ -94,6 +94,7 @@ class SearchInfo(BaseModel):
     attempt_limit: int
     min_jaccard_distance: float
     note_codes: list[str]
+    objective_version: str | None = None
 
 
 class RouteSetOutput(BaseModel):

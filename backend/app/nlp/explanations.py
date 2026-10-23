@@ -6,7 +6,7 @@ from app.integrations.demo import load_demo
 from app.integrations.llama_cpp import InvalidLlmOutput, LlamaCpp, LlmUnavailable
 from app.schemas.assistant import ExplanationDraft, ExplanationOutput
 
-PROMPT_VERSION = "grounded-explanation-v3-visa"
+PROMPT_VERSION = "grounded-explanation-v4-objective"
 REQUIRED = {"summary", "budget", "limitations"}
 CATEGORIES = {"history": "история", "nature": "природа", "art": "искусство", "food": "еда"}
 SYSTEM = """Compose a short Russian explanation by selecting and ordering supplied facts.
@@ -15,6 +15,7 @@ Each sentence MUST be copied EXACTLY from its fact, no paraphrase, no added word
 Include summary, budget and limitations. Also include choice when present.
 Include every supplied source_* fact; these are retrieved descriptions of visited places.
 Include visa when supplied. Never describe a visa report as permission to enter.
+Include objective when supplied; it is a saved weighted score, not an optimality guarantee.
 Select useful interests and constraints facts.
 Use 3 to 8 different facts. Never claim global optimality, booking, visa or data guarantees.
 Return only JSON, no reasoning. This is controlled narrative assembly, not free-form advice."""
@@ -24,8 +25,8 @@ def money(cents):
     return f"{cents / 100:.2f}".replace(".", ",") + " EUR"
 
 
-def points(value):
-    return f"{value:.2f}".replace(".", ",")
+def points(value, digits=2):
+    return f"{0.0 if value == 0 else value:.{digits}f}".replace(".", ",")
 
 
 def facts_for(route, trip, primary=None, option_count=1):
@@ -47,6 +48,16 @@ def facts_for(route, trip, primary=None, option_count=1):
             "транспортные расходы и обратный путь не включены; визы и погода не проверялись."
         ),
     }
+    objective = result.get("objective")
+    if objective:
+        terms = objective["contributions"]
+        facts["objective"] = (
+            f"Общая оценка маршрута — {points(objective['value'], 4)}. "
+            f"Вклад интересов: {points(terms['reward'], 4)}; "
+            f"стоимости: {points(terms['cost'], 4)}; переездов: {points(terms['travel'], 4)}; "
+            f"неравенства покрытия интересов: {points(terms['fairness'], 4)}. "
+            "Шкалы и коэффициенты сохранены в отчёте оценки."
+        )
     visa = getattr(route, "visa_report", None)
     if visa and visa["status"] != "not_applicable":
         counts = Counter(p["requirement"] for p in visa["participants"])
@@ -120,8 +131,13 @@ def facts_for(route, trip, primary=None, option_count=1):
     elif route.route_set_id:
         facts["choice"] = (
             f"Это основной вариант среди {option_count} сохранённых: "
-            "приоритет — средняя накопленная полезность, затем минимум у участника "
-            "и меньшая стоимость. Поиск ограничен и не гарантирует глобального оптимума."
+            + (
+                "выбор по общей оценке интересов, стоимости, переездов и баланса участников. "
+                if objective
+                else "приоритет — средняя накопленная полезность, затем минимум "
+                "у участника и меньшая стоимость. "
+            )
+            + "Поиск ограничен и не гарантирует глобального оптимума."
         )
     for key, document in retrieved_sources(route).items():
         facts[key] = f"{document['name']}: {document['description']}"
@@ -153,6 +169,7 @@ def explain(route, trip, primary=None, option_count=1, llm=None):
             | ({"choice"} if "choice" in facts else set())
             | set(retrieved_sources(route))
             | ({"visa"} if "visa" in facts else set())
+            | ({"objective"} if "objective" in facts else set())
         )
         if not required <= set(ids) or len(ids) != len(set(ids)):
             raise ValueError("Missing required facts or duplicate claims")
@@ -180,6 +197,7 @@ def explain(route, trip, primary=None, option_count=1, llm=None):
                 "mandatory",
                 "interests",
                 "balance",
+                "objective",
                 "visa",
                 "source_1",
                 "source_2",

@@ -51,7 +51,7 @@ def test_distinct_checked_options_metrics_and_determinism(algorithm):
         assert comparison.min_utility == min(expected.values())
         assert comparison.utility_gap == max(expected.values()) - min(expected.values())
         assert all(distance(result, c.result) >= 0.25 for c in outcome.options[:index])
-    assert outcome.options[0].comparison.mean_utility >= outcome.options[-1].comparison.mean_utility
+    assert outcome.options[0].result.objective.value >= outcome.options[-1].result.objective.value
     assert outcome.diagnostic is None
     assert outcome.search_info["attempts"] <= outcome.search_info["attempt_limit"]
 

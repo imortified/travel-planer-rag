@@ -12,6 +12,11 @@ export function RouteComparison({data, trip, selectedId, names, reasonLabels, di
   data.options.forEach(r=>r.result.data_context?.pois.forEach(p=>{allNames[p.id]=p.name;}));
   const mainIds = new Set(data.options[0]?.result.visits.map(v=>v.place_id) || []);
   const rows: {label: string; value: (route: Route)=>string}[] = [
+    ...(data.options.some(r=>r.result.objective)?[
+      {label:"Общая оценка F ↑",value:(r:Route)=>r.result.objective?r.result.objective.value.toLocaleString("ru-RU",{maximumFractionDigits:4}):"—"},
+      {label:"Переезды, мин",value:(r:Route)=>r.result.objective?String(r.result.objective.travel_minutes):"—"},
+      {label:"Разрыв покрытия интересов ↓",value:(r:Route)=>r.result.objective?r.result.objective.fairness_gap.toLocaleString("ru-RU",{maximumFractionDigits:4}):"—"},
+    ]:[]),
     {label:"Билеты на всю группу",value:r=>money(r.result.total_cost)},
     {label:"Посещения",value:r=>String(r.comparison!.visit_count)},
     {label:"Средняя полезность, баллы",value:r=>points(r.comparison!.mean_utility)},
@@ -39,7 +44,7 @@ export function RouteComparison({data, trip, selectedId, names, reasonLabels, di
           })}</tr>
         </tbody>
       </table></div>
-      <p className="hint">Полезность — сумма интересов к посещениям, в среднем по участникам. Разрыв — разница между наибольшей и наименьшей суммой; меньше означает более равный баланс. Основной вариант выбран по полезности среди найденных. Оптимальность не гарантируется.</p>
+      <p className="hint">Полезность — сумма интересов к посещениям, в среднем по участникам. Разрыв в баллах — разница между наибольшей и наименьшей суммой. {data.options[0]?.result.objective?"Основной вариант выбран по общей оценке F: интересы с учётом стоимости, переездов и неравенства покрытия интересов. Формула приведена ниже.":"Основной вариант выбран по прежнему порядку полезности и стоимости."} Поиск ограничен; оптимальность не гарантируется.</p>
     </>}
     {data.search_info.note_codes.includes("fewer_distinct_options_found") && <p className="hint" role="status">Найдено вариантов: {data.options.length} из 3. Поиск ограничен; при текущих условиях больше содержательно разных вариантов не найдено. Перестановки тех же мест не считаются альтернативой.</p>}
     {!data.options.length && trip.destination==="Lisbon" && <VisaReport report={data.visa_report}/>}

@@ -1,4 +1,8 @@
 export type Interests = Record<string, number>;
+export type ObjectiveReport = {version:string;weights:Record<string,number>;value:number;contributions:Record<string,number>;
+  participant_utility:Record<string,number>;participant_coverage:Record<string,number>;utility_bounds:Record<string,number>;
+  excluded_from_fairness:string[];mean_utility:number;reward_bound:number;reward:number;cost_ratio:number;travel_minutes:number;
+  travel_ratio:number;fairness_gap:number;candidate_count:number;budget:number;available_minutes:number};
 export type Explanation = {mode:"llm"|"template";model:string|null;verified:boolean;prompt_version:string;
   facts:Record<string,string>;selected_ids:string[];paragraphs:string[];fallback_reason:string|null;
   sources?:Record<string,SemanticMatch>};
@@ -28,6 +32,7 @@ export type Route = {id: number; trip_request_id: number; algorithm: string; dat
   comparison?: {visit_count: number; participant_utility: Record<string, number>; mean_utility: number; min_utility: number; utility_gap: number} | null;
   result: {is_feasible: boolean; total_cost: number; satisfaction: Record<string, number>;
     days?: Day[] | null;
+    objective?: ObjectiveReport | null;
     reasons: string[]; visits: {place_id: string; arrival: number; start: number; end: number}[];
     validation: {is_valid: boolean; computed_cost: number; violations: {code: string; message: string; place_id: string | null}[]} | null;
     data_context: {pois: Poi[]; transport: string; fetched_at: string; attribution: string} | null}};
@@ -35,7 +40,7 @@ export type Route = {id: number; trip_request_id: number; algorithm: string; dat
 export type RouteSet = {id: number; trip_request_id: number; algorithm: string; created_at: string;
   options: Route[]; diagnostic: Route["result"] | null;
   visa_report?: VisaReport | null;
-  search_info: {method: string; attempts: number; attempt_limit: number; min_jaccard_distance: number; note_codes: string[]}};
+  search_info: {method: string; attempts: number; attempt_limit: number; min_jaccard_distance: number; note_codes: string[];objective_version?:string|null}};
 
 export async function api<T>(path: string, method = "GET", body?: unknown): Promise<T> {
   const response = await fetch(`/api/v1${path}`, {method, headers: {"Content-Type": "application/json"},

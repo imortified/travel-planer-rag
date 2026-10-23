@@ -69,6 +69,28 @@ class DayResult:
 
 
 @dataclass(frozen=True)
+class ObjectiveReport:
+    version: str
+    weights: dict[str, float]
+    value: float
+    contributions: dict[str, float]
+    participant_utility: dict[str, float]
+    participant_coverage: dict[str, float]
+    utility_bounds: dict[str, float]
+    excluded_from_fairness: list[str]
+    mean_utility: float
+    reward_bound: float
+    reward: float
+    cost_ratio: float
+    travel_minutes: int
+    travel_ratio: float
+    fairness_gap: float
+    candidate_count: int
+    budget: int
+    available_minutes: int
+
+
+@dataclass(frozen=True)
 class Result:
     is_feasible: bool
     visits: list[Visit]
@@ -78,3 +100,4 @@ class Result:
     validation: ValidationReport | None = None
     data_context: dict | None = None
     days: list[DayResult] | None = None
+    objective: ObjectiveReport | None = None

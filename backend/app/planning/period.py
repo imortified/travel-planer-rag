@@ -11,6 +11,7 @@ from app.planning.models import (
     Violation,
     Visit,
 )
+from app.planning.objective import Objective
 from app.planning.planner import plan
 from app.planning.validator import validate_route
 
@@ -68,7 +69,9 @@ class State:
     cost: int
 
 
-def plan_period(request: Request, inputs: list[DayInput], algorithm="beam", beam_width=32):
+def plan_period(
+    request: Request, inputs: list[DayInput], algorithm="beam", beam_width=32, objective=None
+):
     if not 1 <= len(inputs) <= 14 or not 1 <= beam_width <= 128:
         raise ValueError("Expected 1-14 days and beam width 1-128")
     if algorithm not in ("greedy", "beam"):
@@ -85,22 +88,10 @@ def plan_period(request: Request, inputs: list[DayInput], algorithm="beam", beam
     def visited(state):
         return {v.place_id for day in state.visits for v in day}
 
+    objective = objective or Objective(request, inputs)
+
     def rank(state):
-        ids = visited(state)
-        totals = [
-            sum(p.interests.get(by_id[pid].category, 0) for pid in ids)
-            for p in request.participants
-        ]
-        return (
-            bool(request.mandatory - ids) or not ids,
-            -len(ids & request.mandatory),
-            -sum(totals) / len(totals),
-            -min(totals),
-            -sum(bool(day) for day in state.visits),
-            max(len(day) for day in state.visits),
-            state.cost,
-            tuple((i, v.start, v.place_id) for i, day in enumerate(state.visits) for v in day),
-        )
+        return objective.key(state.visits)
 
     # Greedy consumes a shared remaining budget and never repeats a POI.
     initial = State(0, tuple(() for _ in inputs), 0)
@@ -113,7 +104,7 @@ def plan_period(request: Request, inputs: list[DayInput], algorithm="beam", beam
             mandatory=request.mandatory & {p.id for p in data.places} - seen,
             excluded=request.excluded | seen,
         )
-        outcome = plan(local, data.places, data.travel)
+        outcome = plan(local, data.places, data.travel, objective, index, greedy.visits)
         visits = list(greedy.visits)
         visits[index] = tuple(outcome.visits)
         greedy = State(index, tuple(visits), greedy.cost + outcome.total_cost)
@@ -166,10 +157,9 @@ def plan_period(request: Request, inputs: list[DayInput], algorithm="beam", beam
     visits = [list(day) for day in best.visits]
     report, days = validate_period(request, visits, inputs, best.cost)
     flat = [v for day in visits for v in day]
+    score = objective.evaluate(visits)
     satisfaction = {
-        p.id: sum(p.interests.get(by_id[v.place_id].category, 0) for v in flat) / len(flat)
-        if flat
-        else 0
+        p.id: score.participant_utility[p.id] / len(flat) if flat else 0
         for p in request.participants
     }
     return Result(
@@ -180,4 +170,5 @@ def plan_period(request: Request, inputs: list[DayInput], algorithm="beam", beam
         list(dict.fromkeys(v.code for v in report.violations)),
         report,
         days=days,
+        objective=score if report.is_valid else None,
     )

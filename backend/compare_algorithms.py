@@ -5,7 +5,7 @@ from pathlib import Path
 from statistics import median
 from time import perf_counter
 
-from app.planning.beam import route_key
+from app.planning.objective import VERSION
 from app.planning.scenarios import scenarios
 from app.planning.service import checked_plan
 
@@ -24,7 +24,10 @@ def main():
                     "scenario": name,
                     "algorithm": algorithm,
                     "feasible": result.is_feasible,
-                    "utility": -route_key(request, places, result)[2],
+                    "objective_version": VERSION,
+                    "objective": result.objective.value if result.objective else None,
+                    "utility": result.objective.mean_utility if result.objective else None,
+                    "travel_minutes": result.objective.travel_minutes if result.objective else None,
                     "cost": result.total_cost,
                     "route": [v.place_id for v in result.visits],
                     "median_ms": round(median(times), 4),
@@ -32,12 +35,20 @@ def main():
             )
     path = Path(__file__).resolve().parents[1] / "docs" / "algorithm-comparison.json"
     path.write_text(json.dumps(rows, indent=2), encoding="utf-8")
-    print("scenario | algorithm | feasible | utility | cost | median ms")
+    print("scenario | algorithm | feasible | objective | utility | cost | median ms")
     for row in rows:
         print(
             " | ".join(
                 str(row[k])
-                for k in ("scenario", "algorithm", "feasible", "utility", "cost", "median_ms")
+                for k in (
+                    "scenario",
+                    "algorithm",
+                    "feasible",
+                    "objective",
+                    "utility",
+                    "cost",
+                    "median_ms",
+                )
             )
         )
     print(f"Saved: {path}")

@@ -300,8 +300,8 @@ def with_overview(result, inputs):
 
 def algorithm_name(algorithm, beam_width, multi_day):
     if multi_day:
-        return f"{algorithm}-period-v1:w{beam_width}"
-    return "greedy-v1" if algorithm == "greedy" else f"beam-v1:w{beam_width}"
+        return f"{algorithm}-period-v2:w{beam_width}"
+    return "greedy-v2" if algorithm == "greedy" else f"beam-v2:w{beam_width}"
 
 
 @router.post("/trips/{trip_id}/routes", response_model=RouteOutput, status_code=201)
@@ -371,7 +371,7 @@ def calculate_route_set(
     )
     route_set = RouteSet(
         trip_request_id=trip.id,
-        algorithm=f"diverse-v1:{algorithm}:w{beam_width}",
+        algorithm=f"diverse-v2:{algorithm}:w{beam_width}",
         search_info=outcome.search_info,
         visa_report=visa_report,
         diagnostic=asdict(with_overview(outcome.diagnostic, inputs))

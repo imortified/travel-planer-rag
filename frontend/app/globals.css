@@ -34,3 +34,11 @@
 .visa-timing {border-top:1px solid #deddd4;margin-top:12px;padding-top:8px}
 .visa-report a {color:#3d6349;text-underline-offset:3px}
 .visa-sources {display:flex;flex-direction:column;gap:6px;margin-top:12px;font-size:12px}
+.route-objective {margin:24px 0;padding:16px;background:#edf2e8;border:1px solid var(--line);border-radius:9px;font-size:12px;line-height:1.7;overflow-wrap:anywhere}
+.objective-heading {display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.objective-heading h3 {font-size:15px;margin:0}
+.objective-heading strong {font-size:18px;color:var(--green)}
+.objective-scroll {overflow:auto;max-width:100%}
+.route-objective table {border-collapse:collapse;width:100%;font-size:11px;margin:14px 0}
+.route-objective th,.route-objective td {text-align:left;padding:8px 5px;border-bottom:1px solid #d7dfd1;vertical-align:top}
+.route-objective tbody th {font-weight:400}

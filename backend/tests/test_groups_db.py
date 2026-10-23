@@ -151,6 +151,7 @@ def test_empty_comparison_keeps_visa_report_and_old_routes_are_compatible(
     try:
         route = session.scalar(select(RouteOption).where(RouteOption.id == single["id"]))
         route.visa_report = None
+        route.result = {k: v for k, v in route.result.items() if k != "objective"}
         saved_trip = session.get(TripRequest, tid)
         saved_trip.purpose = "unknown"
         saved_trip.participants_snapshot = [
@@ -161,6 +162,7 @@ def test_empty_comparison_keeps_visa_report_and_old_routes_are_compatible(
     finally:
         sessions.close()
     assert client.get(f"/api/v1/routes/{single['id']}").json()["visa_report"] is None
+    assert client.get(f"/api/v1/routes/{single['id']}").json()["result"]["objective"] is None
     old_trip = client.get(f"/api/v1/trips/{tid}").json()
     assert old_trip["purpose"] == "unknown"
     assert old_trip["participants_snapshot"][0]["travel_profile"]["citizenship"] is None
@@ -189,10 +191,10 @@ def test_saved_trip_and_route_with_preference_snapshot(client):
     assert route.status_code == 201
     saved = route.json()
     assert saved["result"]["is_feasible"]
-    assert saved["result"]["total_cost"] == 5400
+    assert saved["result"]["total_cost"] == 2400
     assert saved["result"]["validation"] == {
         "is_valid": True,
-        "computed_cost": 5400,
+        "computed_cost": 2400,
         "violations": [],
     }
     assert client.get(f"/api/v1/routes/{saved['id']}").json() == saved
@@ -273,7 +275,7 @@ def test_beam_algorithm_and_report_are_saved(client):
     response = client.post(f"/api/v1/trips/{trip['id']}/routes?algorithm=beam&beam_width=8")
     assert response.status_code == 201
     saved = client.get(f"/api/v1/routes/{response.json()['id']}").json()
-    assert saved["algorithm"] == "beam-v1:w8"
+    assert saved["algorithm"] == "beam-v2:w8"
     assert saved["result"]["validation"]["is_valid"]
 
 
@@ -424,11 +426,19 @@ def test_route_comparison_is_saved_together_and_reopened_without_recalculation(c
     saved = response.json()
     assert len(saved["options"]) == 3
     assert saved["diagnostic"] is None
-    assert saved["algorithm"] == "diverse-v1:beam:w8"
+    assert saved["algorithm"] == "diverse-v2:beam:w8"
+    assert saved["search_info"]["objective_version"] == "normalized-group-objective-v1"
+    scores = [o["result"]["objective"]["value"] for o in saved["options"]]
+    assert scores == sorted(scores, reverse=True)
     assert saved["options"][0]["comparison"]["participant_utility"] == {str(uid): 1 for uid in ids}
     for option in saved["options"]:
         assert option["route_set_id"] == saved["id"]
         assert option["result"]["is_feasible"] and option["result"]["validation"]["is_valid"]
+        objective = option["result"]["objective"]
+        assert objective["budget"] == 10000
+        assert objective["candidate_count"] == 3
+        assert objective["utility_bounds"] == {str(uid): 1 for uid in ids}
+        assert sum(objective["contributions"].values()) == objective["value"]
         assert client.get(f"/api/v1/routes/{option['id']}").json() == option
     assert client.get(f"/api/v1/route-sets/{saved['id']}").json() == saved
     assert client.get(f"/api/v1/trips/{trip['id']}/route-sets").json() == [saved]
@@ -536,7 +546,7 @@ def test_verified_explanation_is_saved_with_option_and_cached(client, monkeypatc
         draft = ExplanationDraft(
             claims=[
                 ExplanationClaim(fact_id=key, sentence=data["facts"][key])
-                for key in ("summary", "budget", "choice", "limitations")
+                for key in ("summary", "budget", "choice", "limitations", "objective")
             ]
         )
         verify(draft)
