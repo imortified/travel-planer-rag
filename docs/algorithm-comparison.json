@@ -1,0 +1,125 @@
+[
+  {
+    "scenario": "time_window_trap",
+    "algorithm": "greedy",
+    "feasible": false,
+    "utility": 1.0,
+    "cost": 0,
+    "route": [
+      "a_late"
+    ],
+    "median_ms": 0.0126
+  },
+  {
+    "scenario": "time_window_trap",
+    "algorithm": "beam",
+    "feasible": true,
+    "utility": 1.8,
+    "cost": 0,
+    "route": [
+      "b_early",
+      "a_late"
+    ],
+    "median_ms": 0.0439
+  },
+  {
+    "scenario": "optional_window_trap",
+    "algorithm": "greedy",
+    "feasible": true,
+    "utility": 1.0,
+    "cost": 0,
+    "route": [
+      "a_late"
+    ],
+    "median_ms": 0.0104
+  },
+  {
+    "scenario": "optional_window_trap",
+    "algorithm": "beam",
+    "feasible": true,
+    "utility": 1.8,
+    "cost": 0,
+    "route": [
+      "b_early",
+      "a_late"
+    ],
+    "median_ms": 0.0438
+  },
+  {
+    "scenario": "budget_trap",
+    "algorithm": "greedy",
+    "feasible": true,
+    "utility": 1.0,
+    "cost": 100,
+    "route": [
+      "expensive"
+    ],
+    "median_ms": 0.0118
+  },
+  {
+    "scenario": "budget_trap",
+    "algorithm": "beam",
+    "feasible": true,
+    "utility": 1.6,
+    "cost": 100,
+    "route": [
+      "cheap1",
+      "cheap2"
+    ],
+    "median_ms": 0.0632
+  },
+  {
+    "scenario": "constraint_conflict",
+    "algorithm": "greedy",
+    "feasible": false,
+    "utility": -0.0,
+    "cost": 0,
+    "route": [],
+    "median_ms": 0.0077
+  },
+  {
+    "scenario": "constraint_conflict",
+    "algorithm": "beam",
+    "feasible": false,
+    "utility": -0.0,
+    "cost": 0,
+    "route": [],
+    "median_ms": 0.0079
+  },
+  {
+    "scenario": "missing_routing",
+    "algorithm": "greedy",
+    "feasible": false,
+    "utility": -0.0,
+    "cost": 0,
+    "route": [],
+    "median_ms": 0.0078
+  },
+  {
+    "scenario": "missing_routing",
+    "algorithm": "beam",
+    "feasible": false,
+    "utility": -0.0,
+    "cost": 0,
+    "route": [],
+    "median_ms": 0.01
+  },
+  {
+    "scenario": "empty_catalog",
+    "algorithm": "greedy",
+    "feasible": false,
+    "utility": -0.0,
+    "cost": 0,
+    "route": [],
+    "median_ms": 0.0069
+  },
+  {
+    "scenario": "empty_catalog",
+    "algorithm": "beam",
+    "feasible": false,
+    "utility": -0.0,
+    "cost": 0,
+    "route": [],
+    "median_ms": 0.0084
+  }
+]

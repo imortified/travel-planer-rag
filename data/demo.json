@@ -1,0 +1,16 @@
+{
+  "city": "Demo City",
+  "currency": "EUR",
+  "synthetic": true,
+  "places": [
+    {"id": "museum", "category": "history", "cost_per_person": 1200, "duration": 90, "opens": 600, "closes": 1080},
+    {"id": "park", "category": "nature", "cost_per_person": 0, "duration": 60, "opens": 480, "closes": 1200},
+    {"id": "market", "category": "food", "cost_per_person": 1500, "duration": 60, "opens": 660, "closes": 1140}
+  ],
+  "travel_minutes": {
+    "start": {"museum": 15, "park": 10, "market": 20},
+    "museum": {"park": 20, "market": 15},
+    "park": {"museum": 20, "market": 25},
+    "market": {"museum": 15, "park": 25}
+  }
+}
