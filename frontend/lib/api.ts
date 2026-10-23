@@ -1,4 +1,12 @@
 export type Interests = Record<string, number>;
+export type Explanation = {mode:"llm"|"template";model:string|null;verified:boolean;prompt_version:string;
+  facts:Record<string,string>;selected_ids:string[];paragraphs:string[];fallback_reason:string|null};
+export type ParsedMember = {name:string;interests:Interests};
+export type ParseOutput = {model:string;prompt_version:string;reference_date:string;group_budget:number|null;
+  questions:{field:string;text:string}[];warnings:string[];
+  draft:{destination:"Lisbon"|"Demo City"|null;travel_date:string|null;end_date:string|null;
+    start:number|null;end:number|null;participant_count:number|null;participants:ParsedMember[];
+    common_interests:Interests;mandatory_names:string[];excluded_names:string[]}};
 export type Member = {user_id: number; name: string; interests: Interests};
 export type Group = {id: number; name: string; members: Member[]};
 export type Trip = {id: number; group_id: number; destination: string; travel_date: string | null; end_date?: string | null;
@@ -9,6 +17,7 @@ export type Poi = {id: string; name: string; eligible: boolean; issues: string[]
 export type Day = {travel_date: string; total_cost: number; visits: {place_id: string; arrival: number; start: number; end: number}[]};
 export type Route = {id: number; trip_request_id: number; algorithm: string; data_source: string; created_at: string;
   route_set_id?: number | null;
+  explanation?: Explanation | null;
   comparison?: {visit_count: number; participant_utility: Record<string, number>; mean_utility: number; min_utility: number; utility_gap: number} | null;
   result: {is_feasible: boolean; total_cost: number; satisfaction: Record<string, number>;
     days?: Day[] | null;

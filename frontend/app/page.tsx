@@ -4,9 +4,13 @@ import { useEffect, useRef, useState } from "react";
 import { RouteDays } from "./components/route-days";
 import { PoiFacts } from "./components/poi-facts";
 import { RouteComparison } from "./components/route-comparison";
-import { api, clock, money, minutes, type Group, type Trip, type Route, type RouteSet, type Poi, type Interests } from "../lib/api";
+import { TextRequest } from "./components/text-request";
+import { RouteExplanation } from "./components/route-explanation";
+import { api, clock, money, minutes, type Group, type Trip, type Route, type RouteSet, type Poi, type Interests, type ParseOutput } from "../lib/api";
 
 type Draft = {key: number; name: string; interests: Interests; userId?: number; joined?: boolean};
+type PendingConstraint = {key:string;name:string;kind:"mandatory"|"excluded"};
+const normalized=(text:string)=>text.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLocaleLowerCase().trim();
 const categories = [["history", "История"], ["nature", "Природа"], ["food", "Еда"], ["art", "Искусство"]];
 const demoPois: Poi[] = [{id:"museum",name:"Музей",eligible:true,issues:[]}, {id:"market",name:"Рынок",eligible:true,issues:[]}, {id:"park",name:"Парк",eligible:true,issues:[]}];
 const issueNames: Record<string,string> = {unknown_price:"Нет цены", unknown_closed_or_unsupported_hours:"Нет подходящих часов", restricted_access:"Ограничен доступ", curation_outside_validity:"Данные требуют повторной проверки", unsupported_conditional_access_or_fee:"Условный доступ"};
@@ -30,6 +34,7 @@ export default function Home() {
   const [algorithm,setAlgorithm] = useState("beam");
   const [pois,setPois] = useState<Poi[]>(demoPois);
   const [choices,setChoices] = useState<Record<string,string>>({});
+  const [pendingConstraints,setPendingConstraints] = useState<PendingConstraint[]>([]);
   const [catalogKey,setCatalogKey] = useState("Demo City");
   const [busy,setBusy] = useState("");
   const [error,setError] = useState("");
@@ -82,6 +87,7 @@ export default function Home() {
     if (!members.length) throw new Error("Добавьте хотя бы одного участника.");
     if (destination==="Lisbon" && !date) throw new Error("Выберите дату поездки.");
     if (destination==="Lisbon" && catalogKey!==`Lisbon:${date}:${endDate || date}`) throw new Error("Сначала загрузите места для выбранной даты.");
+    if (pendingConstraints.length) throw new Error("Сначала сопоставьте обязательные и исключённые места из текста с каталогом или явно уберите условие.");
     if (!Number.isFinite(Number(budget)) || Number(budget)<0 || Number(budget)>10000000 || !budget.trim()) throw new Error("Проверьте общий бюджет.");
     if (!start || !end || minutes(start)>=minutes(end)) throw new Error("Окончание дня должно быть позже начала.");
     if (endDate && (!date || endDate<date || (Date.parse(endDate)-Date.parse(date))/86400000>13)) throw new Error("Период должен содержать от 1 до 14 дней.");
@@ -97,6 +103,32 @@ export default function Home() {
   function openComparison(data: RouteSet, trip: Trip) {
     setComparison({data,trip});
     setShown(data.options.length ? {route:data.options[0],trip} : undefined);
+  }
+  async function applyParsed(parsed: ParseOutput) {
+    const d=parsed.draft;
+    if (parsed.questions.length || !d.destination || parsed.group_budget===null || !d.travel_date) throw new Error("Сначала уточните недостающие параметры.");
+    if (gid && d.participants.some(p=>!members.some(m=>normalized(m.name)===normalized(p.name)))) throw new Error("Имена в тексте отличаются от состава сохранённой группы. Укажите текущих участников или создайте новую группу.");
+    let catalog=demoPois;
+    if (d.destination==="Lisbon") catalog=(await api<{pois:Poi[]}>(`/destinations/Lisbon/pois?travel_date=${d.travel_date}${d.end_date?`&end_date=${d.end_date}`:""}`)).pois;
+    const nextChoices:Record<string,string>={}, unresolved:PendingConstraint[]=[];
+    const aliases:Record<string,string>={"музей":"museum","парк":"park","рынок":"market"};
+    for (const kind of ["mandatory","excluded"] as const) for (const [index,placeName] of (kind==="mandatory"?d.mandatory_names:d.excluded_names).entries()) {
+      const query=normalized(placeName);
+      const matches=catalog.filter(p=>(kind==="excluded" || p.eligible) && (p.id===placeName || normalized(p.name)===query || aliases[query]===p.id || (query.length>=4 && normalized(p.name).includes(query))));
+      if (matches.length===1) {
+        const id=matches[0].id;
+        if (nextChoices[id] && nextChoices[id]!==kind) throw new Error(`Место «${matches[0].name}» одновременно обязательно и исключено. Уточните текст.`);
+        nextChoices[id]=kind;
+      } else unresolved.push({key:`${kind}:${index}:${placeName}`,name:placeName,kind});
+    }
+    if (!gid && d.participants.length) setMembers(d.participants.map(p=>({key:key.current++,name:p.name,interests:{history:0.5,nature:0.5,food:0.5,art:0.5,...d.common_interests,...p.interests}})));
+    else setMembers(ms=>ms.map(m=>({...m,interests:{...m.interests,...d.common_interests,...d.participants.find(p=>normalized(p.name)===normalized(m.name))?.interests}})));
+    setDestination(d.destination);setDate(d.travel_date);setEndDate(d.end_date || "");setBudget(String(parsed.group_budget/100));
+    if (d.start!==null) setStart(clock(d.start));
+    if (d.end!==null) setEnd(clock(d.end));
+    setPois(catalog);setCatalogKey(d.destination==="Lisbon"?`Lisbon:${d.travel_date}:${d.end_date || d.travel_date}`:"Demo City");
+    setChoices(nextChoices);setPendingConstraints(unresolved);pendingTrip.current=undefined;
+    setNotice(unresolved.length?"Параметры заполнены. Сопоставьте оставшиеся названия мест с каталогом.":"Параметры заполнены. Проверьте форму перед расчётом маршрута.");
   }
   async function showTrip(trip: Trip) {
     const [routes,sets]=await Promise.all([api<Route[]>(`/trips/${trip.id}/routes`),api<RouteSet[]>(`/trips/${trip.id}/route-sets`)]);
@@ -118,6 +150,7 @@ export default function Home() {
     <section className="workspace"><header><span className="eyebrow">ПУТЕШЕСТВУЙТЕ ВМЕСТЕ</span><span className="header-tag">План на 1–14 дней</span></header>
       <div className="intro"><h1>Разные интересы.<br/><em>Один маршрут.</em></h1><p>Соберите компанию, расскажите о предпочтениях.<br/>Мы найдём места, на которые хватит времени и бюджета.</p></div>
       <div className="columns"><div className="form-column">
+        <TextRequest disabled={!!busy} memberNames={members.map(m=>m.name.trim()).filter(Boolean)} onBusy={setBusy} onApply={applyParsed}/>
         <fieldset disabled={!!busy} className="card"><legend><span className="step">1</span> Ваша компания</legend>
           <div className="card-top"><label>Название группы<input value={name} maxLength={100} disabled={!!gid} onChange={e=>setName(e.target.value)} /></label>{gid && <span className="badge">Группа №{gid}</span>}</div>
           {members.map((m,i)=><div className="member" key={m.key}>
@@ -135,6 +168,7 @@ export default function Home() {
           <p className="hint">{destination==="Lisbon"?"Лиссабон и Ажуда, старт — Rossio. Автомобильные переезды. Учитываются обычные взрослые билеты; скидки и транспортные расходы не включены. Гастрономические точки пока не представлены. Время — местное.":"Синтетические музей, рынок и парк для проверки сценария. Бюджет учитывает входные билеты на всех участников."}</p>
           {destination==="Lisbon" && <button className="secondary" disabled={!date} onClick={()=>task("Загружаем каталог…",async()=>{const c=await api<{pois:Poi[]}>(`/destinations/Lisbon/pois?travel_date=${date}${endDate?`&end_date=${endDate}`:""}`);setPois(c.pois);setCatalogKey(`Lisbon:${date}:${endDate || date}`);setNotice(`Найдено ${c.pois.length} мест, подходят для расчёта: ${c.pois.filter(p=>p.eligible).length}`);})}>Загрузить места на период</button>}
           {!!pois.length && <details className="places"><summary>Места и ограничения <span>{pois.filter(p=>p.eligible).length} доступны</span></summary>{pois.map(p=><div className="poi" key={p.id}><div><b>{p.name}</b><PoiFacts poi={p} sources/>{p.eligible && p.available_dates && <small>Открыто: {p.available_dates.join(", ")}</small>}{!p.eligible && <small>{p.issues.map(x=>issueNames[x]||x).join(" · ")}</small>}</div><select aria-label={`Ограничение: ${p.name}`} value={choices[p.id]||"optional"} onChange={e=>setChoices(c=>({...c,[p.id]:e.target.value}))}><option value="optional">По желанию</option><option value="mandatory" disabled={!p.eligible}>Обязательно</option><option value="excluded">Исключить</option></select></div>)}</details>}
+          {!!pendingConstraints.length && <div className="message"><b>Уточните места из текста</b>{pendingConstraints.map(item=><div className="pending-place" key={item.key}><label>{item.kind==="mandatory"?"Обязательно":"Исключить"}: {item.name}<select aria-label={`Сопоставить: ${item.name}`} value="" onChange={e=>{const id=e.target.value;if (!id) return;if(choices[id] && choices[id]!==item.kind){setError("Место уже имеет противоположное ограничение. Сначала измените его в каталоге.");return;}setChoices(c=>({...c,[id]:item.kind}));setPendingConstraints(old=>old.filter(p=>p.key!==item.key));}}><option value="">Выберите место из каталога</option>{pois.filter(p=>item.kind==="excluded" || p.eligible).map(p=><option key={p.id} value={p.id}>{p.name}</option>)}</select></label><button className="text-button" type="button" onClick={()=>setPendingConstraints(old=>old.filter(p=>p.key!==item.key))}>Убрать условие</button></div>)}</div>}
         </fieldset>
         <div aria-live="polite">{error && <div role="alert" className="message error">{error}</div>}{notice && <div className="message">{notice}</div>}</div>
         <button className="primary" disabled={!!busy || !members.length} onClick={()=>task("Собираем маршрут…",calculate)}>{busy||"Построить маршрут"}<span aria-hidden="true">↗</span></button>
@@ -150,6 +184,7 @@ export default function Home() {
           {!!result!.reasons.length && <div className="message error">{result!.reasons.map(r=><p key={r}>{reasonNames[r.split(":")[0]] || r}</p>)}</div>}
           <h3 className="subheading">Интересы участников</h3>{shown.trip.participants_snapshot.map(m=><div className="satisfaction" key={m.user_id}><span>{m.name}</span><meter min="0" max="1" value={result!.satisfaction[String(m.user_id)]||0}/><b>{Math.round((result!.satisfaction[String(m.user_id)]||0)*100)}%</b></div>)}
           <p className="hint">Средний интерес к категориям посещённых мест. Это оценка предпочтений, а не гарантия впечатлений.</p>
+          {result!.is_feasible && result!.validation?.is_valid && <RouteExplanation route={shown.route} disabled={!!busy} onBusy={setBusy} onGenerated={value=>{setShown(old=>old?{...old,route:{...old.route,explanation:value}}:old);setComparison(old=>old?{...old,data:{...old.data,options:old.data.options.map(r=>r.id===shown.route.id?{...r,explanation:value}:r)}}:old);}}/>}
           <details className="checks"><summary>Проверки и происхождение данных</summary><p>{result!.validation?`${result!.validation.is_valid?"Пройдены":"Есть нарушения"} · пересчитанная стоимость ${money(result!.validation.computed_cost)}`:"Для старого результата отчёт отсутствует"}</p>{result!.validation?.violations.map((v,i)=><p key={i}>{reasonNames[v.code] || v.message}{v.place_id?` · ${resultPois[v.place_id]||v.place_id}`:""}</p>)}<p>{shown.route.data_source}</p><p>{result!.data_context?"Автомобильные переезды OSRM. Данные OSM могут быть неполными. Длительность посещений — правило планирования. Цены — обычные взрослые билеты без скидок и сборов. Транспорт, парковка, жильё и обратный путь не включены.":"Демонстрационные места и время переездов."}</p>{result!.data_context && <p>{result!.data_context.attribution} · Данные получены {new Date(result!.data_context.fetched_at).toLocaleString("ru-RU")}</p>}{result!.data_context?.pois.filter(p=>p.provenance).map(p=><div key={p.id}><b>{p.name}</b><PoiFacts poi={p} sources/></div>)}</details>
         </>}
       </section>}

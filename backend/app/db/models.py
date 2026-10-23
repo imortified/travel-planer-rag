@@ -73,6 +73,7 @@ class RouteOption(Base):
     trip_request_id: Mapped[int] = mapped_column(ForeignKey("trip_requests.id"), index=True)
     route_set_id: Mapped[int | None] = mapped_column(ForeignKey("route_sets.id"), index=True)
     comparison: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    explanation: Mapped[dict | None] = mapped_column(JSON, nullable=True)
     algorithm: Mapped[str] = mapped_column(String(50), default="greedy-v1")
     data_source: Mapped[str] = mapped_column(String(50), default="synthetic-demo-v1")
     result: Mapped[dict] = mapped_column(JSON)

@@ -5,6 +5,7 @@ from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from app.planning.alternatives import ComparisonMetrics
 from app.planning.models import Result
+from app.schemas.assistant import ExplanationOutput
 
 Name = Annotated[str, Field(min_length=1, max_length=100, pattern=r"\S")]
 Weight = Annotated[float, Field(ge=0, le=1)]
@@ -73,6 +74,7 @@ class RouteOutput(BaseModel):
     trip_request_id: int
     route_set_id: int | None = None
     comparison: ComparisonMetrics | None = None
+    explanation: ExplanationOutput | None = None
     algorithm: str
     data_source: str
     result: Result

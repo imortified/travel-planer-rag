@@ -1,0 +1,351 @@
+{
+  "reference_date": "2026-10-23",
+  "runtime": "llama.cpp b11840",
+  "model": "Qwen3-4B-Q4_K_M",
+  "cases": [
+    {
+      "id": "complete-group",
+      "passed": true,
+      "output": {
+        "draft": {
+          "destination": "Lisbon",
+          "travel_date": "2026-10-23",
+          "end_date": "2026-10-25",
+          "duration_days": null,
+          "budget_eur": 100.0,
+          "currency": "EUR",
+          "budget_scope": "group",
+          "participant_count": 2,
+          "participants": [
+            {
+              "name": "Анна",
+              "interests": {}
+            },
+            {
+              "name": "Максим",
+              "interests": {}
+            }
+          ],
+          "common_interests": {
+            "history": 1.0,
+            "nature": 1.0
+          },
+          "start": 540,
+          "end": 1080,
+          "mandatory_names": [],
+          "excluded_names": [],
+          "unsupported": [],
+          "evidence": {
+            "destination": "Лиссабон",
+            "dates": "с 23 по 25 октября 2026",
+            "budget": "общий бюджет 100 евро",
+            "participants": "Анна и Максим",
+            "hours": "с 9 до 18",
+            "interests": "любим историю и природу"
+          }
+        },
+        "group_budget": 10000,
+        "questions": [],
+        "warnings": [],
+        "model": "Qwen3-4B-Q4_K_M",
+        "prompt_version": "trip-extract-v1",
+        "reference_date": "2026-10-23"
+      },
+      "seconds": 20.27
+    },
+    {
+      "id": "per-person",
+      "passed": true,
+      "output": {
+        "draft": {
+          "destination": "Lisbon",
+          "travel_date": "2026-10-24",
+          "end_date": null,
+          "duration_days": null,
+          "budget_eur": 50.0,
+          "currency": "EUR",
+          "budget_scope": "per_person",
+          "participant_count": null,
+          "participants": [],
+          "common_interests": {},
+          "start": null,
+          "end": null,
+          "mandatory_names": [],
+          "excluded_names": [],
+          "unsupported": [],
+          "evidence": {
+            "destination": "Лиссабон",
+            "dates": "24 октября 2026",
+            "budget": "бюджет 50 евро на человека",
+            "participants": "Анна и Максим",
+            "hours": null,
+            "interests": null
+          }
+        },
+        "group_budget": 10000,
+        "questions": [],
+        "warnings": [
+          "Неуказанные часы дня останутся такими, как в форме."
+        ],
+        "model": "Qwen3-4B-Q4_K_M",
+        "prompt_version": "trip-extract-v1",
+        "reference_date": "2026-10-23"
+      },
+      "seconds": 14.28
+    },
+    {
+      "id": "missing-budget",
+      "passed": true,
+      "output": {
+        "draft": {
+          "destination": "Lisbon",
+          "travel_date": "2026-10-24",
+          "end_date": null,
+          "duration_days": null,
+          "budget_eur": null,
+          "currency": null,
+          "budget_scope": null,
+          "participant_count": null,
+          "participants": [],
+          "common_interests": {
+            "history": 1.0
+          },
+          "start": null,
+          "end": null,
+          "mandatory_names": [],
+          "excluded_names": [],
+          "unsupported": [],
+          "evidence": {
+            "destination": "Лиссабон",
+            "dates": "24 октября 2026",
+            "budget": null,
+            "participants": "Анна",
+            "hours": null,
+            "interests": "интересует история"
+          }
+        },
+        "group_budget": null,
+        "questions": [
+          {
+            "field": "budget",
+            "text": "Какой бюджет на посещения мест?"
+          },
+          {
+            "field": "currency",
+            "text": "Укажите бюджет в евро: пересчёт других валют пока не поддерживается."
+          },
+          {
+            "field": "budget_scope",
+            "text": "Бюджет указан на всю группу или на одного человека?"
+          }
+        ],
+        "warnings": [
+          "Неуказанные часы дня останутся такими, как в форме."
+        ],
+        "model": "Qwen3-4B-Q4_K_M",
+        "prompt_version": "trip-extract-v1",
+        "reference_date": "2026-10-23"
+      },
+      "seconds": 12.12
+    },
+    {
+      "id": "ambiguous-scope",
+      "passed": true,
+      "output": {
+        "draft": {
+          "destination": "Lisbon",
+          "travel_date": "2026-10-24",
+          "end_date": null,
+          "duration_days": null,
+          "budget_eur": 100.0,
+          "currency": "EUR",
+          "budget_scope": null,
+          "participant_count": null,
+          "participants": [],
+          "common_interests": {},
+          "start": null,
+          "end": null,
+          "mandatory_names": [],
+          "excluded_names": [],
+          "unsupported": [],
+          "evidence": {
+            "destination": "Лиссабон",
+            "dates": "24 октября 2026",
+            "budget": "бюджет 100 евро",
+            "participants": "Анна и Максим",
+            "hours": null,
+            "interests": null
+          }
+        },
+        "group_budget": null,
+        "questions": [
+          {
+            "field": "budget_scope",
+            "text": "Бюджет указан на всю группу или на одного человека?"
+          }
+        ],
+        "warnings": [
+          "Неуказанные часы дня останутся такими, как в форме."
+        ],
+        "model": "Qwen3-4B-Q4_K_M",
+        "prompt_version": "trip-extract-v1",
+        "reference_date": "2026-10-23"
+      },
+      "seconds": 14.9
+    },
+    {
+      "id": "unsupported-currency",
+      "passed": true,
+      "output": {
+        "draft": {
+          "destination": "Lisbon",
+          "travel_date": "2026-10-24",
+          "end_date": null,
+          "duration_days": null,
+          "budget_eur": null,
+          "currency": "other",
+          "budget_scope": "group",
+          "participant_count": null,
+          "participants": [],
+          "common_interests": {},
+          "start": null,
+          "end": null,
+          "mandatory_names": [],
+          "excluded_names": [],
+          "unsupported": [],
+          "evidence": {
+            "destination": "Лиссабон",
+            "dates": "24 октября 2026",
+            "budget": "общий бюджет 100 долларов",
+            "participants": "Анна",
+            "hours": null,
+            "interests": null
+          }
+        },
+        "group_budget": null,
+        "questions": [
+          {
+            "field": "budget",
+            "text": "Какой бюджет на посещения мест?"
+          },
+          {
+            "field": "currency",
+            "text": "Укажите бюджет в евро: пересчёт других валют пока не поддерживается."
+          }
+        ],
+        "warnings": [
+          "Неуказанные часы дня останутся такими, как в форме."
+        ],
+        "model": "Qwen3-4B-Q4_K_M",
+        "prompt_version": "trip-extract-v1",
+        "reference_date": "2026-10-23"
+      },
+      "seconds": 13.16
+    },
+    {
+      "id": "required-demo-place",
+      "passed": true,
+      "output": {
+        "draft": {
+          "destination": "Demo City",
+          "travel_date": "2026-10-24",
+          "end_date": null,
+          "duration_days": null,
+          "budget_eur": 100.0,
+          "currency": "EUR",
+          "budget_scope": "group",
+          "participant_count": 1,
+          "participants": [
+            {
+              "name": "Анна",
+              "interests": {}
+            }
+          ],
+          "common_interests": {
+            "history": 1.0
+          },
+          "start": null,
+          "end": null,
+          "mandatory_names": [
+            "музей"
+          ],
+          "excluded_names": [
+            "рынок"
+          ],
+          "unsupported": [],
+          "evidence": {
+            "destination": "демо-город",
+            "dates": "24 октября 2026",
+            "budget": "общий бюджет 100 евро",
+            "participants": "Анна",
+            "hours": null,
+            "interests": "любит историю"
+          }
+        },
+        "group_budget": 10000,
+        "questions": [],
+        "warnings": [
+          "Неуказанные часы дня останутся такими, как в форме.",
+          "Названия мест будут сопоставлены с каталогом; неоднозначные нужно выбрать вручную."
+        ],
+        "model": "Qwen3-4B-Q4_K_M",
+        "prompt_version": "trip-extract-v1",
+        "reference_date": "2026-10-23"
+      },
+      "seconds": 13.51
+    },
+    {
+      "id": "different-group",
+      "passed": true,
+      "output": {
+        "draft": {
+          "destination": "Lisbon",
+          "travel_date": "2026-11-01",
+          "end_date": "2026-11-02",
+          "duration_days": null,
+          "budget_eur": 80.0,
+          "currency": "EUR",
+          "budget_scope": "group",
+          "participant_count": 3,
+          "participants": [
+            {
+              "name": "Ира",
+              "interests": {}
+            },
+            {
+              "name": "Олег",
+              "interests": {}
+            },
+            {
+              "name": "Юля",
+              "interests": {}
+            }
+          ],
+          "common_interests": {
+            "art": 1.0
+          },
+          "start": 600,
+          "end": 1020,
+          "mandatory_names": [],
+          "excluded_names": [],
+          "unsupported": [],
+          "evidence": {
+            "destination": "Лиссабон",
+            "dates": "с 1 по 2 ноября 2026",
+            "budget": "на всех 80 евро",
+            "participants": "Ира, Олег и Юля",
+            "hours": "с 10 до 17",
+            "interests": "всем нравится искусство"
+          }
+        },
+        "group_budget": 8000,
+        "questions": [],
+        "warnings": [],
+        "model": "Qwen3-4B-Q4_K_M",
+        "prompt_version": "trip-extract-v1",
+        "reference_date": "2026-10-23"
+      },
+      "seconds": 18.3
+    }
+  ]
+}

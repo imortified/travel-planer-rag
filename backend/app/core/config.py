@@ -10,6 +10,9 @@ class Settings(BaseSettings):
     database_url: str = "postgresql+psycopg://travel:local_dev_only@127.0.0.1:55432/travel_planner"
     osm_map_url: str = "https://www.openstreetmap.org/api/0.6/map"
     osrm_url: str = "https://router.project-osrm.org"
+    llm_base_url: str = "http://127.0.0.1:8081"
+    llm_model: str = "Qwen3-4B-Q4_K_M"
+    llm_timeout_seconds: float = 60
 
 
 settings = Settings()

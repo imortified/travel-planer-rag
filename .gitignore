@@ -21,6 +21,8 @@ coverage/
 .coverage
 htmlcov/
 *.log
+.local/
+*.gguf
 *.sqlite
 *.sqlite3
 *.db

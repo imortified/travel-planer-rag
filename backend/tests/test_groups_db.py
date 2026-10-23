@@ -402,3 +402,62 @@ def test_comparison_uses_one_source_snapshot_per_day_and_keeps_sets_on_source_fa
     assert client.get(f"/api/v1/trips/{trip['id']}/route-sets").json() == [saved]
     assert client.get("/api/v1/route-sets/2147483647").status_code == 404
     assert client.post(f"/api/v1/trips/{trip['id']}/route-sets?beam_width=129").status_code == 422
+
+
+def test_verified_explanation_is_saved_with_option_and_cached(client, monkeypatch):
+    from app.schemas.assistant import ExplanationClaim, ExplanationDraft
+
+    gid, _ = create_group(client)
+    trip = client.post(f"/api/v1/groups/{gid}/trips", json={"budget": 10000}).json()
+    saved = client.post(f"/api/v1/trips/{trip['id']}/route-sets").json()
+    option = saved["options"][1]
+    calls = []
+
+    def structured(self, system, data, schema, verify=None):
+        calls.append(data)
+        draft = ExplanationDraft(
+            claims=[
+                ExplanationClaim(fact_id=key, sentence=data["facts"][key])
+                for key in ("summary", "budget", "choice", "limitations")
+            ]
+        )
+        verify(draft)
+        return draft, "test-qwen"
+
+    monkeypatch.setattr("app.integrations.llama_cpp.LlamaCpp.structured", structured)
+    response = client.post(f"/api/v1/routes/{option['id']}/explanation")
+    assert response.status_code == 200
+    explanation = response.json()
+    assert explanation["mode"] == "llm" and explanation["verified"]
+    assert client.post(f"/api/v1/routes/{option['id']}/explanation").json() == explanation
+    assert len(calls) == 1
+    reopened = client.get(f"/api/v1/routes/{option['id']}").json()
+    assert reopened["explanation"] == explanation
+    assert reopened["result"] == option["result"]
+    set_again = client.get(f"/api/v1/route-sets/{saved['id']}").json()
+    assert set_again["options"][1]["explanation"] == explanation
+    assert set_again["options"][0]["explanation"] is None
+
+
+def test_unavailable_llm_saves_fallback_but_invalid_route_cannot_get_explanation(
+    client, monkeypatch
+):
+    from app.integrations.llama_cpp import LlmUnavailable
+
+    def fail(*args, **kwargs):
+        raise LlmUnavailable("offline")
+
+    monkeypatch.setattr("app.integrations.llama_cpp.LlamaCpp.structured", fail)
+    gid, _ = create_group(client)
+    trip = client.post(f"/api/v1/groups/{gid}/trips", json={"budget": 10000}).json()
+    route = client.post(f"/api/v1/trips/{trip['id']}/routes").json()
+    response = client.post(f"/api/v1/routes/{route['id']}/explanation")
+    assert response.status_code == 200
+    assert response.json()["mode"] == "template"
+    assert response.json()["fallback_reason"] == "llm_unavailable"
+    assert client.get(f"/api/v1/routes/{route['id']}").json()["explanation"] == response.json()
+    invalid = client.post(
+        f"/api/v1/groups/{gid}/trips", json={"budget": 0, "mandatory": ["museum"]}
+    ).json()
+    route = client.post(f"/api/v1/trips/{invalid['id']}/routes").json()
+    assert client.post(f"/api/v1/routes/{route['id']}/explanation").status_code == 409
