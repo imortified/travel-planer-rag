@@ -25,6 +25,7 @@ experiments = [
 [tool.pytest.ini_options]
 pythonpath = ["."]
 testpaths = ["tests"]
+markers = ["acceptance: cross-layer MVP acceptance scenarios (PostgreSQL, controlled external adapters)"]
 
 [tool.ruff]
 target-version = "py312"

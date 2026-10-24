@@ -26,9 +26,11 @@ export type Group = {id: number; name: string; members: Member[]};
 export type Trip = {id: number; group_id: number; destination: string; travel_date: string | null; end_date?: string | null;
   budget: number; start: number; end: number; participants_snapshot: Member[];semantic_query?:string|null;purpose?:string};
 export type Poi = {id: string; name: string; eligible: boolean; issues: string[]; source_url?: string; available_dates?: string[];
+  latitude?:number|null; longitude?:number|null;
   cost_per_person?: number | null; category?: string; duration?: number;
   provenance?: {checked_on: string; valid_until: string; price_source: string; hours_source: string; notes: string}};
-export type Day = {travel_date: string; total_cost: number; visits: {place_id: string; arrival: number; start: number; end: number}[]};
+export type DataContext = {pois:Poi[]; origin?:{id:string;name:string;latitude:number;longitude:number}; transport:string; fetched_at:string; attribution:string};
+export type Day = {travel_date: string; total_cost: number; visits: {place_id: string; arrival: number; start: number; end: number}[];data_context?:DataContext|null};
 export type Route = {id: number; trip_request_id: number; algorithm: string; data_source: string; created_at: string;
   route_set_id?: number | null;
   explanation?: Explanation | null;
@@ -40,7 +42,7 @@ export type Route = {id: number; trip_request_id: number; algorithm: string; dat
     solver?: SolverReport | null;
     reasons: string[]; visits: {place_id: string; arrival: number; start: number; end: number}[];
     validation: {is_valid: boolean; computed_cost: number; violations: {code: string; message: string; place_id: string | null}[]} | null;
-    data_context: {pois: Poi[]; transport: string; fetched_at: string; attribution: string} | null}};
+    data_context: DataContext | null}};
 
 export type RouteSet = {id: number; trip_request_id: number; algorithm: string; created_at: string;
   options: Route[]; diagnostic: Route["result"] | null;

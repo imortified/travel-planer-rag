@@ -77,7 +77,7 @@ def parse_request(payload: ParseInput, llm=None, today=None):
     if draft.currency == "EUR" and not re.search(r"евро|\beur\b|€", budget_quote):
         draft.currency = None
     group_scope = re.search(
-        r"общ(?:ий|его|ая)|на всех|на всю|на двоих|на троих|на четверых|"
+        r"общ(?:ий|его|ая)|на всех|на всю|на группу|на двоих|на троих|на четверых|"
         r"на пятерых|на шестерых|всего|\btotal\b",
         budget_quote,
     )
