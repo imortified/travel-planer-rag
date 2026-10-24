@@ -290,6 +290,7 @@ def configure_logging(config=settings, *, stream=None, file_enabled=True, file_t
             if file_tag not in {
                 "llm-evaluation",
                 "retrieval-evaluation",
+                "rag-evaluation",
                 "catalog-index",
                 "catalog-refresh",
             }:
@@ -319,6 +320,7 @@ def configure_logging(config=settings, *, stream=None, file_enabled=True, file_t
         "uvicorn.error",
         "uvicorn.access",
         "httpx",
+        "httpx2",
         "httpcore",
         "sqlalchemy.engine",
         "watchfiles",

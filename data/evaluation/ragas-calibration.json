@@ -1,0 +1,102 @@
+{
+  "version": "ru-ragas-calibration-2026-10-24-v1",
+  "provenance": "Eight authored controls, not a validated judge benchmark. Faithfulness expected fraction for simple atomic claims; human review required.",
+  "cases": [
+    {
+      "id": "supported-garden",
+      "sample": {
+        "user_input": "Где погулять?",
+        "response": "В саду есть озеро и птицы.",
+        "retrieved_contexts": [
+          "В саду есть озеро и птицы."
+        ]
+      },
+      "expected": 1,
+      "tolerance": 0.1
+    },
+    {
+      "id": "supported-cost",
+      "sample": {
+        "user_input": "Сколько стоит маршрут?",
+        "response": "Учтённые расходы составляют 56 EUR.",
+        "retrieved_contexts": [
+          "Учтённые расходы составляют 56 EUR."
+        ]
+      },
+      "expected": 1,
+      "tolerance": 0.1
+    },
+    {
+      "id": "supported-limits",
+      "sample": {
+        "user_input": "Учтён ли транспорт?",
+        "response": "Транспортные расходы не включены.",
+        "retrieved_contexts": [
+          "Транспортные расходы не включены."
+        ]
+      },
+      "expected": 1,
+      "tolerance": 0.1
+    },
+    {
+      "id": "wrong-cost",
+      "sample": {
+        "user_input": "Сколько стоит маршрут?",
+        "response": "Учтённые расходы составляют 12 EUR.",
+        "retrieved_contexts": [
+          "Учтённые расходы составляют 56 EUR."
+        ]
+      },
+      "expected": 0,
+      "tolerance": 0.1
+    },
+    {
+      "id": "wrong-count",
+      "sample": {
+        "user_input": "Сколько посещений?",
+        "response": "Маршрут включает семь посещений.",
+        "retrieved_contexts": [
+          "Маршрут включает три посещения."
+        ]
+      },
+      "expected": 0,
+      "tolerance": 0.1
+    },
+    {
+      "id": "wrong-diet",
+      "sample": {
+        "user_input": "Есть ли гарантия по аллергенам?",
+        "response": "Отсутствие аллергенов гарантировано.",
+        "retrieved_contexts": [
+          "Состав блюд и аллергены не проверялись."
+        ]
+      },
+      "expected": 0,
+      "tolerance": 0.1
+    },
+    {
+      "id": "mixed-garden",
+      "sample": {
+        "user_input": "Что есть в саду?",
+        "response": "В саду есть озеро. В саду есть аквариум.",
+        "retrieved_contexts": [
+          "В саду есть озеро. В саду нет аквариума."
+        ]
+      },
+      "expected": 0.5,
+      "tolerance": 0.1
+    },
+    {
+      "id": "mixed-cost",
+      "sample": {
+        "user_input": "Что включено?",
+        "response": "Посещения стоят 56 EUR. Проживание включено.",
+        "retrieved_contexts": [
+          "Посещения стоят 56 EUR. Проживание не включено."
+        ]
+      },
+      "expected": 0.5,
+      "tolerance": 0.1
+    }
+  ]
+}

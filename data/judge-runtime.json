@@ -1,0 +1,16 @@
+{
+  "checked_on": "2026-10-24",
+  "llama_cpp_version": "b11840",
+  "model": "Qwen3-8B-Q4_K_M",
+  "model_revision": "7c41481f57cb95916b40956ab2f0b139b296d974",
+  "purpose": "Separate local RAGAS judge; selected by user, no paid API. Same Qwen family as generator; not an independent human judge.",
+  "files": [
+    {
+      "name": "Qwen3-8B-Q4_K_M.gguf",
+      "size": 5027783488,
+      "url": "https://huggingface.co/Qwen/Qwen3-8B-GGUF/resolve/7c41481f57cb95916b40956ab2f0b139b296d974/Qwen3-8B-Q4_K_M.gguf",
+      "sha256": "d98cdcbd03e17ce47681435b5150e34c1417f50b5c0019dd560e4882c5745785",
+      "directory": "models"
+    }
+  ]
+}

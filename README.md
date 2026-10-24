@@ -45,6 +45,8 @@ API и правила поиска: [docs/alternatives.md](docs/alternatives.md)
 проверка объяснений и экспорт для RAGAS. [Методика и ограничения](docs/llm-quality.md).
 Исправления проверки города/дат, отрицаний и личных интересов:
 [правила и повторная оценка](docs/llm-parser-grounding.md).
+Оценка RAG: 40 размеченных запросов, снимок каталога, метрики поиска и отдельный
+запуск RAGAS с выбранным судьёй: [docs/rag-evaluation.md](docs/rag-evaluation.md).
 
 ## Веб-интерфейс
 

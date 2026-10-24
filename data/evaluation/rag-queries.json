@@ -1,0 +1,530 @@
+{
+  "version": "ru-rag-2026-10-24-v1",
+  "provenance": "Author-created regression queries and relevance labels, fixed before the first run. Not independent human-expert annotation or a blind user sample. Labels describe textual evidence in the frozen snapshot, not real-world POI quality. Needs human review.",
+  "snapshot": "rag-catalog.json",
+  "knowledge_version": "lisbon-semantics-2026-10-24-v2",
+  "cases": [
+    {
+      "id": "rag-01",
+      "query": "Хочу увидеть археологические находки среди руин монастыря.",
+      "expected_category": "history",
+      "relevance": {
+        "osm:node:5068486965": 2
+      },
+      "reference": "Museu Arqueológico do Carmo: Археологический музей Карму расположен среди руин монастыря. Его коллекция включает археологические и исторические предметы разных эпох.",
+      "tags": [
+        "history"
+      ],
+      "annotation_note": "2 = directly supports query; 1 = partial/name-only support; all unlisted snapshot IDs = 0."
+    },
+    {
+      "id": "rag-02",
+      "query": "Посоветуй музей Карму с предметами разных эпох.",
+      "expected_category": "history",
+      "relevance": {
+        "osm:node:5068486965": 2
+      },
+      "reference": "Museu Arqueológico do Carmo: Археологический музей Карму расположен среди руин монастыря. Его коллекция включает археологические и исторические предметы разных эпох.",
+      "tags": [
+        "history"
+      ],
+      "annotation_note": "2 = directly supports query; 1 = partial/name-only support; all unlisted snapshot IDs = 0."
+    },
+    {
+      "id": "rag-03",
+      "query": "Интересуют древние цивилизации и археология.",
+      "expected_category": "history",
+      "relevance": {
+        "osm:node:5068486965": 2,
+        "osm:node:12926040967": 1
+      },
+      "reference": "Museu Arqueológico do Carmo: Археологический музей Карму расположен среди руин монастыря. Его коллекция включает археологические и исторические предметы разных эпох.\nCasa dos Bicos - núcleo arqueológico (piso 0): Категория каталога: history",
+      "tags": [
+        "history"
+      ],
+      "annotation_note": "2 = directly supports query; 1 = partial/name-only support; all unlisted snapshot IDs = 0."
+    },
+    {
+      "id": "rag-04",
+      "query": "Где рассказывают о сопротивлении португальской диктатуре?",
+      "expected_category": "history",
+      "relevance": {
+        "osm:node:4419041593": 2
+      },
+      "reference": "Museu do Aljube - Resistência e Liberdade: Музей Алжубе посвящён сопротивлению диктатуре, борьбе за свободу и памяти политических заключённых в Португалии.",
+      "tags": [
+        "history"
+      ],
+      "annotation_note": "2 = directly supports query; 1 = partial/name-only support; all unlisted snapshot IDs = 0."
+    },
+    {
+      "id": "rag-05",
+      "query": "Хочу узнать о политических заключённых и борьбе за свободу.",
+      "expected_category": "history",
+      "relevance": {
+        "osm:node:4419041593": 2
+      },
+      "reference": "Museu do Aljube - Resistência e Liberdade: Музей Алжубе посвящён сопротивлению диктатуре, борьбе за свободу и памяти политических заключённых в Португалии.",
+      "tags": [
+        "history"
+      ],
+      "annotation_note": "2 = directly supports query; 1 = partial/name-only support; all unlisted snapshot IDs = 0."
+    },
+    {
+      "id": "rag-06",
+      "query": "Интересует память о сопротивлении в музее Алжубе.",
+      "expected_category": "history",
+      "relevance": {
+        "osm:node:4419041593": 2
+      },
+      "reference": "Museu do Aljube - Resistência e Liberdade: Музей Алжубе посвящён сопротивлению диктатуре, борьбе за свободу и памяти политических заключённых в Португалии.",
+      "tags": [
+        "history"
+      ],
+      "annotation_note": "2 = directly supports query; 1 = partial/name-only support; all unlisted snapshot IDs = 0."
+    },
+    {
+      "id": "rag-07",
+      "query": "Хочу посетить исторические музеи Лиссабона.",
+      "expected_category": "history",
+      "relevance": {
+        "osm:node:5068486965": 2,
+        "osm:node:4419041593": 2,
+        "osm:node:12926040967": 1,
+        "osm:node:5068486966": 1
+      },
+      "reference": "Museu Arqueológico do Carmo: Археологический музей Карму расположен среди руин монастыря. Его коллекция включает археологические и исторические предметы разных эпох.\nMuseu do Aljube - Resistência e Liberdade: Музей Алжубе посвящён сопротивлению диктатуре, борьбе за свободу и памяти политических заключённых в Португалии.\nCasa dos Bicos - núcleo arqueológico (piso 0): Категория каталога: history\nMuseu Nacional do Desporto: Категория каталога: history",
+      "tags": [
+        "history"
+      ],
+      "annotation_note": "2 = directly supports query; 1 = partial/name-only support; all unlisted snapshot IDs = 0."
+    },
+    {
+      "id": "rag-08",
+      "query": "Ищу музеи истории и археологии.",
+      "expected_category": "history",
+      "relevance": {
+        "osm:node:5068486965": 2,
+        "osm:node:4419041593": 2,
+        "osm:node:12926040967": 1,
+        "osm:node:5068486966": 1
+      },
+      "reference": "Museu Arqueológico do Carmo: Археологический музей Карму расположен среди руин монастыря. Его коллекция включает археологические и исторические предметы разных эпох.\nMuseu do Aljube - Resistência e Liberdade: Музей Алжубе посвящён сопротивлению диктатуре, борьбе за свободу и памяти политических заключённых в Португалии.\nCasa dos Bicos - núcleo arqueológico (piso 0): Категория каталога: history\nMuseu Nacional do Desporto: Категория каталога: history",
+      "tags": [
+        "history"
+      ],
+      "annotation_note": "2 = directly supports query; 1 = partial/name-only support; all unlisted snapshot IDs = 0."
+    },
+    {
+      "id": "rag-09",
+      "query": "Где посмотреть португальскую живопись XIX века и современности?",
+      "expected_category": "art",
+      "relevance": {
+        "osm:node:11047643391": 2
+      },
+      "reference": "Museu Nacional de Arte Contemporânea (MNAC): Национальный музей современного искусства представляет португальское искусство с середины XIX века до современности, в том числе живопись и скульптуру.",
+      "tags": [
+        "art"
+      ],
+      "annotation_note": "2 = directly supports query; 1 = partial/name-only support; all unlisted snapshot IDs = 0."
+    },
+    {
+      "id": "rag-10",
+      "query": "Хочу увидеть современное искусство Португалии.",
+      "expected_category": "art",
+      "relevance": {
+        "osm:node:11047643391": 2
+      },
+      "reference": "Museu Nacional de Arte Contemporânea (MNAC): Национальный музей современного искусства представляет португальское искусство с середины XIX века до современности, в том числе живопись и скульптуру.",
+      "tags": [
+        "art"
+      ],
+      "annotation_note": "2 = directly supports query; 1 = partial/name-only support; all unlisted snapshot IDs = 0."
+    },
+    {
+      "id": "rag-11",
+      "query": "Интересует национальный музей современного искусства MNAC.",
+      "expected_category": "art",
+      "relevance": {
+        "osm:node:11047643391": 2
+      },
+      "reference": "Museu Nacional de Arte Contemporânea (MNAC): Национальный музей современного искусства представляет португальское искусство с середины XIX века до современности, в том числе живопись и скульптуру.",
+      "tags": [
+        "art"
+      ],
+      "annotation_note": "2 = directly supports query; 1 = partial/name-only support; all unlisted snapshot IDs = 0."
+    },
+    {
+      "id": "rag-12",
+      "query": "Где есть реликварии и религиозное искусство?",
+      "expected_category": "art",
+      "relevance": {
+        "osm:node:13174527080": 2
+      },
+      "reference": "Museu de São Roque: Музей Сан-Роке хранит коллекцию религиозного искусства: живопись, скульптуру, реликварии и ткани.",
+      "tags": [
+        "art"
+      ],
+      "annotation_note": "2 = directly supports query; 1 = partial/name-only support; all unlisted snapshot IDs = 0."
+    },
+    {
+      "id": "rag-13",
+      "query": "Хочу посмотреть церковную живопись и скульптуру Сан-Роке.",
+      "expected_category": "art",
+      "relevance": {
+        "osm:node:13174527080": 2
+      },
+      "reference": "Museu de São Roque: Музей Сан-Роке хранит коллекцию религиозного искусства: живопись, скульптуру, реликварии и ткани.",
+      "tags": [
+        "art"
+      ],
+      "annotation_note": "2 = directly supports query; 1 = partial/name-only support; all unlisted snapshot IDs = 0."
+    },
+    {
+      "id": "rag-14",
+      "query": "Интересуют ткани и коллекция религиозного искусства.",
+      "expected_category": "art",
+      "relevance": {
+        "osm:node:13174527080": 2
+      },
+      "reference": "Museu de São Roque: Музей Сан-Роке хранит коллекцию религиозного искусства: живопись, скульптуру, реликварии и ткани.",
+      "tags": [
+        "art"
+      ],
+      "annotation_note": "2 = directly supports query; 1 = partial/name-only support; all unlisted snapshot IDs = 0."
+    },
+    {
+      "id": "rag-15",
+      "query": "Посоветуй музеи живописи и скульптуры.",
+      "expected_category": "art",
+      "relevance": {
+        "osm:node:11047643391": 2,
+        "osm:node:13174527080": 2
+      },
+      "reference": "Museu Nacional de Arte Contemporânea (MNAC): Национальный музей современного искусства представляет португальское искусство с середины XIX века до современности, в том числе живопись и скульптуру.\nMuseu de São Roque: Музей Сан-Роке хранит коллекцию религиозного искусства: живопись, скульптуру, реликварии и ткани.",
+      "tags": [
+        "art"
+      ],
+      "annotation_note": "2 = directly supports query; 1 = partial/name-only support; all unlisted snapshot IDs = 0."
+    },
+    {
+      "id": "rag-16",
+      "query": "Хочу посетить художественные музеи.",
+      "expected_category": "art",
+      "relevance": {
+        "osm:node:11047643391": 2,
+        "osm:node:13174527080": 2,
+        "osm:node:13096661171": 2
+      },
+      "reference": "Museu Nacional de Arte Contemporânea (MNAC): Национальный музей современного искусства представляет португальское искусство с середины XIX века до современности, в том числе живопись и скульптуру.\nMuseu de São Roque: Музей Сан-Роке хранит коллекцию религиозного искусства: живопись, скульптуру, реликварии и ткани.\nCasa Ásia - Coleção Francisco Capelo: Категория каталога: art",
+      "tags": [
+        "art"
+      ],
+      "annotation_note": "2 = directly supports query; 1 = partial/name-only support; all unlisted snapshot IDs = 0."
+    },
+    {
+      "id": "rag-17",
+      "query": "Ищу ботанический сад с коллекцией растений и террасами.",
+      "expected_category": "nature",
+      "relevance": {
+        "curated:lisbon:ajuda-botanical-garden": 2
+      },
+      "reference": "Jardim Botânico da Ajuda: Ботанический сад Ажуда знакомит с коллекцией растений. Террасы, фонтаны и зелёные пространства подходят для прогулки среди природы.",
+      "tags": [
+        "nature"
+      ],
+      "annotation_note": "2 = directly supports query; 1 = partial/name-only support; all unlisted snapshot IDs = 0."
+    },
+    {
+      "id": "rag-18",
+      "query": "Хочу погулять в ботаническом саду Ажуда.",
+      "expected_category": "nature",
+      "relevance": {
+        "curated:lisbon:ajuda-botanical-garden": 2
+      },
+      "reference": "Jardim Botânico da Ajuda: Ботанический сад Ажуда знакомит с коллекцией растений. Террасы, фонтаны и зелёные пространства подходят для прогулки среди природы.",
+      "tags": [
+        "nature"
+      ],
+      "annotation_note": "2 = directly supports query; 1 = partial/name-only support; all unlisted snapshot IDs = 0."
+    },
+    {
+      "id": "rag-19",
+      "query": "Где есть оранжерея с тёплой и суккулентной зонами?",
+      "expected_category": "nature",
+      "relevance": {
+        "curated:lisbon:estufa-fria": 2
+      },
+      "reference": "Estufa Fria de Lisboa: Оранжерейный комплекс Estufa Fria в парке Эдуарда VII. Прогулка среди растений, водоёмов и каскадов; включает холодную, тёплую и суккулентную зоны.",
+      "tags": [
+        "nature"
+      ],
+      "annotation_note": "2 = directly supports query; 1 = partial/name-only support; all unlisted snapshot IDs = 0."
+    },
+    {
+      "id": "rag-20",
+      "query": "Хочу увидеть растения и каскады Estufa Fria.",
+      "expected_category": "nature",
+      "relevance": {
+        "curated:lisbon:estufa-fria": 2
+      },
+      "reference": "Estufa Fria de Lisboa: Оранжерейный комплекс Estufa Fria в парке Эдуарда VII. Прогулка среди растений, водоёмов и каскадов; включает холодную, тёплую и суккулентную зоны.",
+      "tags": [
+        "nature"
+      ],
+      "annotation_note": "2 = directly supports query; 1 = partial/name-only support; all unlisted snapshot IDs = 0."
+    },
+    {
+      "id": "rag-21",
+      "query": "Посоветуй бесплатный сад с озером и птицами.",
+      "expected_category": "nature",
+      "relevance": {
+        "curated:lisbon:gulbenkian-garden": 2
+      },
+      "reference": "Jardim Gulbenkian — прогулка по саду: Бесплатный сад фонда Гулбенкяна. Деревья, растения, озеро и птицы для спокойной прогулки на открытом воздухе. Посещение музеев в эту остановку не входит.",
+      "tags": [
+        "nature"
+      ],
+      "annotation_note": "2 = directly supports query; 1 = partial/name-only support; all unlisted snapshot IDs = 0."
+    },
+    {
+      "id": "rag-22",
+      "query": "Хочу спокойно погулять в саду Гулбенкяна.",
+      "expected_category": "nature",
+      "relevance": {
+        "curated:lisbon:gulbenkian-garden": 2
+      },
+      "reference": "Jardim Gulbenkian — прогулка по саду: Бесплатный сад фонда Гулбенкяна. Деревья, растения, озеро и птицы для спокойной прогулки на открытом воздухе. Посещение музеев в эту остановку не входит.",
+      "tags": [
+        "nature"
+      ],
+      "annotation_note": "2 = directly supports query; 1 = partial/name-only support; all unlisted snapshot IDs = 0."
+    },
+    {
+      "id": "rag-23",
+      "query": "Нравятся растения и зелёные пространства для прогулки.",
+      "expected_category": "nature",
+      "relevance": {
+        "curated:lisbon:ajuda-botanical-garden": 2,
+        "curated:lisbon:estufa-fria": 2,
+        "curated:lisbon:gulbenkian-garden": 2
+      },
+      "reference": "Jardim Botânico da Ajuda: Ботанический сад Ажуда знакомит с коллекцией растений. Террасы, фонтаны и зелёные пространства подходят для прогулки среди природы.\nEstufa Fria de Lisboa: Оранжерейный комплекс Estufa Fria в парке Эдуарда VII. Прогулка среди растений, водоёмов и каскадов; включает холодную, тёплую и суккулентную зоны.\nJardim Gulbenkian — прогулка по саду: Бесплатный сад фонда Гулбенкяна. Деревья, растения, озеро и птицы для спокойной прогулки на открытом воздухе. Посещение музеев в эту остановку не входит.",
+      "tags": [
+        "nature"
+      ],
+      "annotation_note": "2 = directly supports query; 1 = partial/name-only support; all unlisted snapshot IDs = 0."
+    },
+    {
+      "id": "rag-24",
+      "query": "Ищу прогулку на природе среди деревьев и зелени.",
+      "expected_category": "nature",
+      "relevance": {
+        "curated:lisbon:ajuda-botanical-garden": 2,
+        "curated:lisbon:estufa-fria": 2,
+        "curated:lisbon:gulbenkian-garden": 2
+      },
+      "reference": "Jardim Botânico da Ajuda: Ботанический сад Ажуда знакомит с коллекцией растений. Террасы, фонтаны и зелёные пространства подходят для прогулки среди природы.\nEstufa Fria de Lisboa: Оранжерейный комплекс Estufa Fria в парке Эдуарда VII. Прогулка среди растений, водоёмов и каскадов; включает холодную, тёплую и суккулентную зоны.\nJardim Gulbenkian — прогулка по саду: Бесплатный сад фонда Гулбенкяна. Деревья, растения, озеро и птицы для спокойной прогулки на открытом воздухе. Посещение музеев в эту остановку не входит.",
+      "tags": [
+        "nature"
+      ],
+      "annotation_note": "2 = directly supports query; 1 = partial/name-only support; all unlisted snapshot IDs = 0."
+    },
+    {
+      "id": "rag-25",
+      "query": "Хочу бранч в Nicolau в районе Байша.",
+      "expected_category": "food",
+      "relevance": {
+        "curated:lisbon:nicolau-baixa": 2
+      },
+      "reference": "Nicolau Lisboa — Brunch Nicolau: Кафе Nicolau в районе Байша. Бранч из яиц, сока, кофе или чая и йогурта с гранолой либо панкейков. Гастрономическая остановка с конкретным набором из меню.",
+      "tags": [
+        "food"
+      ],
+      "annotation_note": "2 = directly supports query; 1 = partial/name-only support; all unlisted snapshot IDs = 0."
+    },
+    {
+      "id": "rag-26",
+      "query": "Где есть бранч с яйцами и гранолой?",
+      "expected_category": "food",
+      "relevance": {
+        "curated:lisbon:nicolau-baixa": 2
+      },
+      "reference": "Nicolau Lisboa — Brunch Nicolau: Кафе Nicolau в районе Байша. Бранч из яиц, сока, кофе или чая и йогурта с гранолой либо панкейков. Гастрономическая остановка с конкретным набором из меню.",
+      "tags": [
+        "food"
+      ],
+      "annotation_note": "2 = directly supports query; 1 = partial/name-only support; all unlisted snapshot IDs = 0."
+    },
+    {
+      "id": "rag-27",
+      "query": "Интересует бранч в кафе Amélia в Кампу-де-Орике.",
+      "expected_category": "food",
+      "relevance": {
+        "curated:lisbon:amelia-campo-de-ourique": 2
+      },
+      "reference": "Amélia Lisboa — Brunch Amélia: Кафе Amélia в Кампу-де-Орике. В меню бранч с яйцами, соком, йогуртом или панкейками и горячим напитком. Стоимость относится к одному набору на человека.",
+      "tags": [
+        "food"
+      ],
+      "annotation_note": "2 = directly supports query; 1 = partial/name-only support; all unlisted snapshot IDs = 0."
+    },
+    {
+      "id": "rag-28",
+      "query": "Хочу завтрак с яйцами в Amélia.",
+      "expected_category": "food",
+      "relevance": {
+        "curated:lisbon:amelia-campo-de-ourique": 2
+      },
+      "reference": "Amélia Lisboa — Brunch Amélia: Кафе Amélia в Кампу-де-Орике. В меню бранч с яйцами, соком, йогуртом или панкейками и горячим напитком. Стоимость относится к одному набору на человека.",
+      "tags": [
+        "food"
+      ],
+      "annotation_note": "2 = directly supports query; 1 = partial/name-only support; all unlisted snapshot IDs = 0."
+    },
+    {
+      "id": "rag-29",
+      "query": "Где попробовать Pastel de Belém с эспрессо?",
+      "expected_category": "food",
+      "relevance": {
+        "curated:lisbon:pasteis-de-belem": 2
+      },
+      "reference": "Pastéis de Belém — pastel и эспрессо: Историческая кондитерская в Белене. Гастрономическая остановка: португальская выпечка Pastel de Belém и эспрессо; другие заказы не входят в рассчитанную стоимость.",
+      "tags": [
+        "food"
+      ],
+      "annotation_note": "2 = directly supports query; 1 = partial/name-only support; all unlisted snapshot IDs = 0."
+    },
+    {
+      "id": "rag-30",
+      "query": "Интересует историческая кондитерская в Белене.",
+      "expected_category": "food",
+      "relevance": {
+        "curated:lisbon:pasteis-de-belem": 2
+      },
+      "reference": "Pastéis de Belém — pastel и эспрессо: Историческая кондитерская в Белене. Гастрономическая остановка: португальская выпечка Pastel de Belém и эспрессо; другие заказы не входят в рассчитанную стоимость.",
+      "tags": [
+        "food"
+      ],
+      "annotation_note": "2 = directly supports query; 1 = partial/name-only support; all unlisted snapshot IDs = 0."
+    },
+    {
+      "id": "rag-31",
+      "query": "Хочу гастрономическую остановку: бранч или португальская выпечка.",
+      "expected_category": "food",
+      "relevance": {
+        "curated:lisbon:nicolau-baixa": 2,
+        "curated:lisbon:amelia-campo-de-ourique": 2,
+        "curated:lisbon:pasteis-de-belem": 2
+      },
+      "reference": "Nicolau Lisboa — Brunch Nicolau: Кафе Nicolau в районе Байша. Бранч из яиц, сока, кофе или чая и йогурта с гранолой либо панкейков. Гастрономическая остановка с конкретным набором из меню.\nAmélia Lisboa — Brunch Amélia: Кафе Amélia в Кампу-де-Орике. В меню бранч с яйцами, соком, йогуртом или панкейками и горячим напитком. Стоимость относится к одному набору на человека.\nPastéis de Belém — pastel и эспрессо: Историческая кондитерская в Белене. Гастрономическая остановка: португальская выпечка Pastel de Belém и эспрессо; другие заказы не входят в рассчитанную стоимость.",
+      "tags": [
+        "food"
+      ],
+      "annotation_note": "2 = directly supports query; 1 = partial/name-only support; all unlisted snapshot IDs = 0."
+    },
+    {
+      "id": "rag-32",
+      "query": "Посоветуй места для еды и кофе.",
+      "expected_category": "food",
+      "relevance": {
+        "curated:lisbon:nicolau-baixa": 2,
+        "curated:lisbon:amelia-campo-de-ourique": 2,
+        "curated:lisbon:pasteis-de-belem": 2
+      },
+      "reference": "Nicolau Lisboa — Brunch Nicolau: Кафе Nicolau в районе Байша. Бранч из яиц, сока, кофе или чая и йогурта с гранолой либо панкейков. Гастрономическая остановка с конкретным набором из меню.\nAmélia Lisboa — Brunch Amélia: Кафе Amélia в Кампу-де-Орике. В меню бранч с яйцами, соком, йогуртом или панкейками и горячим напитком. Стоимость относится к одному набору на человека.\nPastéis de Belém — pastel и эспрессо: Историческая кондитерская в Белене. Гастрономическая остановка: португальская выпечка Pastel de Belém и эспрессо; другие заказы не входят в рассчитанную стоимость.",
+      "tags": [
+        "food"
+      ],
+      "annotation_note": "2 = directly supports query; 1 = partial/name-only support; all unlisted snapshot IDs = 0."
+    },
+    {
+      "id": "rag-33",
+      "query": "Где в каталоге есть планетарий с сеансами наблюдения звёзд?",
+      "expected_category": null,
+      "relevance": {},
+      "reference": "",
+      "tags": [
+        "no-evidence"
+      ],
+      "annotation_note": "2 = directly supports query; 1 = partial/name-only support; all unlisted snapshot IDs = 0."
+    },
+    {
+      "id": "rag-34",
+      "query": "Посоветуй концерт живой джазовой музыки.",
+      "expected_category": null,
+      "relevance": {},
+      "reference": "",
+      "tags": [
+        "no-evidence"
+      ],
+      "annotation_note": "2 = directly supports query; 1 = partial/name-only support; all unlisted snapshot IDs = 0."
+    },
+    {
+      "id": "rag-35",
+      "query": "В каком месте точно гарантируют блюда без следов орехов?",
+      "expected_category": null,
+      "relevance": {},
+      "reference": "",
+      "tags": [
+        "no-evidence"
+      ],
+      "annotation_note": "2 = directly supports query; 1 = partial/name-only support; all unlisted snapshot IDs = 0."
+    },
+    {
+      "id": "rag-36",
+      "query": "Какой бранч в каталоге подтверждён как полностью веганский?",
+      "expected_category": null,
+      "relevance": {},
+      "reference": "",
+      "tags": [
+        "no-evidence"
+      ],
+      "annotation_note": "2 = directly supports query; 1 = partial/name-only support; all unlisted snapshot IDs = 0."
+    },
+    {
+      "id": "rag-37",
+      "query": "Какая завтра погода у сада Ажуда?",
+      "expected_category": null,
+      "relevance": {},
+      "reference": "",
+      "tags": [
+        "no-evidence"
+      ],
+      "annotation_note": "2 = directly supports query; 1 = partial/name-only support; all unlisted snapshot IDs = 0."
+    },
+    {
+      "id": "rag-38",
+      "query": "Где можно изучить квантовые вычисления на экскурсии?",
+      "expected_category": null,
+      "relevance": {},
+      "reference": "",
+      "tags": [
+        "no-evidence"
+      ],
+      "annotation_note": "2 = directly supports query; 1 = partial/name-only support; all unlisted snapshot IDs = 0."
+    },
+    {
+      "id": "rag-39",
+      "query": "Не хочу посещать исторические музеи.",
+      "expected_category": null,
+      "relevance": {},
+      "reference": "",
+      "tags": [
+        "no-evidence"
+      ],
+      "annotation_note": "2 = directly supports query; 1 = partial/name-only support; all unlisted snapshot IDs = 0."
+    },
+    {
+      "id": "rag-40",
+      "query": "Покажи расписание ночных автобусов до отеля.",
+      "expected_category": null,
+      "relevance": {},
+      "reference": "",
+      "tags": [
+        "no-evidence"
+      ],
+      "annotation_note": "2 = directly supports query; 1 = partial/name-only support; all unlisted snapshot IDs = 0."
+    }
+  ]
+}
