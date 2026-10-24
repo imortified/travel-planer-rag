@@ -7,7 +7,7 @@ import pytest
 
 from app.evaluation.explanations import evaluate_fixture, fixtures
 from app.evaluation.observer import ObservedLlama
-from app.evaluation.runner import read_corpus, run
+from app.evaluation.runner import read_corpus, run, write_report
 from app.evaluation.scoring import grade, latency, summarize
 from app.schemas.assistant import ExtractedTrip, ParseOutput, Question
 
@@ -135,3 +135,44 @@ def test_runner_keeps_failure_denominators_and_writes_completed_report(tmp_path,
     assert json.loads(report_path.read_text("utf-8")) == report
     assert report["ragas"]["scores_computed"] is False
     assert all(r["passed"] for r in report["fault_controls"])
+
+
+def test_report_retries_sharing_failure_and_preserves_atomicity(tmp_path, monkeypatch):
+    import os
+
+    path = tmp_path / "report.json"
+    path.write_text('{"previous":true}', "utf-8")
+    original = os.replace
+    attempts = []
+
+    def transient(source, target):
+        attempts.append(1)
+        assert json.loads(path.read_text("utf-8")) == {"previous": True}
+        if len(attempts) == 1:
+            raise PermissionError("Simulated Windows sharing violation")
+        return original(source, target)
+
+    monkeypatch.setattr("app.evaluation.runner.os.replace", transient)
+    monkeypatch.setattr("app.evaluation.runner.sleep", lambda _: None)
+    write_report(path, {"completed": True})
+    assert len(attempts) == 2
+    assert json.loads(path.read_text("utf-8")) == {"completed": True}
+    assert not list(tmp_path.glob("*.tmp"))
+
+
+def test_permanent_report_lock_is_bounded_and_keeps_previous_result(tmp_path, monkeypatch):
+    path = tmp_path / "report.json"
+    path.write_text('{"previous":true}', "utf-8")
+    attempts = []
+
+    def locked(*args):
+        attempts.append(1)
+        raise PermissionError("Simulated persistent lock")
+
+    monkeypatch.setattr("app.evaluation.runner.os.replace", locked)
+    monkeypatch.setattr("app.evaluation.runner.sleep", lambda _: None)
+    with pytest.raises(PermissionError):
+        write_report(path, {"completed": True})
+    assert 1 < len(attempts) <= 5
+    assert json.loads(path.read_text("utf-8")) == {"previous": True}
+    assert len(list(tmp_path.glob("*.tmp"))) == 1

@@ -9,7 +9,7 @@ import re
 import subprocess
 from datetime import date, datetime, timezone
 from pathlib import Path
-from time import perf_counter
+from time import perf_counter, sleep
 from uuid import uuid4
 
 from app.core.config import ROOT, settings
@@ -48,7 +48,16 @@ def write_report(path, data):
     temporary.write_text(
         json.dumps(data, ensure_ascii=False, indent=2, allow_nan=False) + "\n", "utf-8"
     )
-    os.replace(temporary, path)
+    for attempt in range(5):
+        try:
+            os.replace(temporary, path)
+            break
+        except PermissionError:
+            # Windows readers/indexers can briefly deny delete-sharing during an atomic replace.
+            # Keep the previous report intact; retry only this bounded sharing failure.
+            if attempt == 4:
+                raise
+            sleep(0.05 * 2**attempt)
 
 
 def metadata(corpus_path):
