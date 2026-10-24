@@ -1,0 +1,1298 @@
+{
+  "version": "pace-replay-v1",
+  "fixture_sha256": "a054c7f73bcb58ead0a876742fcb5eb9638cd6054daac428038a8efc6cccb2fb",
+  "cp_sat_time_limit_seconds": 5.0,
+  "beam_width": 32,
+  "saved_baseline": {
+    "algorithm": "greedy-period-v2:w32",
+    "total_cost": 8350,
+    "daily_visits": [
+      2,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      6,
+      5,
+      1,
+      0,
+      0
+    ]
+  },
+  "note": "Single fixed snapshot; no general quality conclusions. Compare scores within one pace only.",
+  "rows": [
+    {
+      "pace": "unrestricted",
+      "settings": null,
+      "algorithm": "greedy",
+      "elapsed_seconds": 0.00503579992800951,
+      "is_feasible": true,
+      "total_cost": 8350,
+      "active_days": 4,
+      "visits": 14,
+      "daily_visits": [
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        6,
+        5,
+        1,
+        0,
+        0
+      ],
+      "daily_active_minutes": [
+        126,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        475,
+        429,
+        93,
+        0,
+        0
+      ],
+      "candidate_count": 14,
+      "coverage_upper_bound": 7,
+      "warnings": [
+        "availability_limits_coverage",
+        "dates_without_candidates",
+        "unscheduled_days",
+        "all_candidates_scheduled",
+        "candidate_subset"
+      ],
+      "objective": {
+        "version": "normalized-group-objective-v1",
+        "weights": {
+          "reward": 1.0,
+          "cost": 0.15,
+          "travel": 0.15,
+          "fairness": 0.35
+        },
+        "value": 0.9860265873015873,
+        "contributions": {
+          "reward": 1.0,
+          "cost": -0.012525,
+          "travel": -0.0014484126984126984,
+          "fairness": -0.0
+        },
+        "participant_utility": {
+          "1": 9.5
+        },
+        "participant_coverage": {
+          "1": 1.0
+        },
+        "utility_bounds": {
+          "1": 9.5
+        },
+        "excluded_from_fairness": [],
+        "mean_utility": 9.5,
+        "reward_bound": 9.5,
+        "reward": 1.0,
+        "cost_ratio": 0.0835,
+        "travel_minutes": 73,
+        "travel_ratio": 0.009656084656084656,
+        "fairness_gap": 0.0,
+        "candidate_count": 14,
+        "budget": 100000,
+        "available_minutes": 7560,
+        "day_coverage": 0.2857142857142857
+      },
+      "solver": null,
+      "validation": {
+        "is_valid": true,
+        "computed_cost": 8350,
+        "violations": []
+      }
+    },
+    {
+      "pace": "unrestricted",
+      "settings": null,
+      "algorithm": "beam",
+      "elapsed_seconds": 0.059999599936418235,
+      "is_feasible": true,
+      "total_cost": 8350,
+      "active_days": 5,
+      "visits": 14,
+      "daily_visits": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        4,
+        3,
+        5,
+        1,
+        0
+      ],
+      "daily_active_minutes": [
+        62,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        278,
+        198,
+        470,
+        93,
+        0
+      ],
+      "candidate_count": 14,
+      "coverage_upper_bound": 7,
+      "warnings": [
+        "availability_limits_coverage",
+        "dates_without_candidates",
+        "unscheduled_days",
+        "all_candidates_scheduled",
+        "candidate_subset"
+      ],
+      "objective": {
+        "version": "normalized-group-objective-v1",
+        "weights": {
+          "reward": 1.0,
+          "cost": 0.15,
+          "travel": 0.15,
+          "fairness": 0.35
+        },
+        "value": 0.9864630952380953,
+        "contributions": {
+          "reward": 1.0,
+          "cost": -0.012525,
+          "travel": -0.0010119047619047618,
+          "fairness": -0.0
+        },
+        "participant_utility": {
+          "1": 9.5
+        },
+        "participant_coverage": {
+          "1": 1.0
+        },
+        "utility_bounds": {
+          "1": 9.5
+        },
+        "excluded_from_fairness": [],
+        "mean_utility": 9.5,
+        "reward_bound": 9.5,
+        "reward": 1.0,
+        "cost_ratio": 0.0835,
+        "travel_minutes": 51,
+        "travel_ratio": 0.006746031746031746,
+        "fairness_gap": 0.0,
+        "candidate_count": 14,
+        "budget": 100000,
+        "available_minutes": 7560,
+        "day_coverage": 0.35714285714285715
+      },
+      "solver": null,
+      "validation": {
+        "is_valid": true,
+        "computed_cost": 8350,
+        "violations": []
+      }
+    },
+    {
+      "pace": "unrestricted",
+      "settings": null,
+      "algorithm": "cp-sat",
+      "elapsed_seconds": 0.5156644999515265,
+      "is_feasible": true,
+      "total_cost": 8350,
+      "active_days": 4,
+      "visits": 14,
+      "daily_visits": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        3,
+        3,
+        0,
+        6
+      ],
+      "daily_active_minutes": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        154,
+        246,
+        221,
+        0,
+        468
+      ],
+      "candidate_count": 14,
+      "coverage_upper_bound": 7,
+      "warnings": [
+        "availability_limits_coverage",
+        "dates_without_candidates",
+        "unscheduled_days",
+        "all_candidates_scheduled",
+        "candidate_subset"
+      ],
+      "objective": {
+        "version": "normalized-group-objective-v1",
+        "weights": {
+          "reward": 1.0,
+          "cost": 0.15,
+          "travel": 0.15,
+          "fairness": 0.35
+        },
+        "value": 0.9867011904761904,
+        "contributions": {
+          "reward": 1.0,
+          "cost": -0.012525,
+          "travel": -0.0007738095238095237,
+          "fairness": -0.0
+        },
+        "participant_utility": {
+          "1": 9.5
+        },
+        "participant_coverage": {
+          "1": 1.0
+        },
+        "utility_bounds": {
+          "1": 9.5
+        },
+        "excluded_from_fairness": [],
+        "mean_utility": 9.5,
+        "reward_bound": 9.5,
+        "reward": 1.0,
+        "cost_ratio": 0.0835,
+        "travel_minutes": 39,
+        "travel_ratio": 0.005158730158730159,
+        "fairness_gap": 0.0,
+        "candidate_count": 14,
+        "budget": 100000,
+        "available_minutes": 7560,
+        "day_coverage": 0.2857142857142857
+      },
+      "solver": {
+        "backend": "ortools-cp-sat",
+        "version": "9.15.6755",
+        "status": "OPTIMAL",
+        "time_limit_seconds": 5.0,
+        "search_time_limit_seconds": 4.97239560005255,
+        "elapsed_seconds": 0.24712069996166974,
+        "solver_seconds": 0.217978,
+        "seed": 42,
+        "workers": 1,
+        "scale": 1000000,
+        "objective_error_bound": 3.5001e-05,
+        "integer_model_optimal": true,
+        "model_objective": 0.986702,
+        "model_best_bound": 0.986702,
+        "original_upper_bound": 0.986737001,
+        "absolute_gap_bound": 3.581052380952077e-05,
+        "warm_start": true
+      },
+      "validation": {
+        "is_valid": true,
+        "computed_cost": 8350,
+        "violations": []
+      }
+    },
+    {
+      "pace": "relaxed",
+      "settings": {
+        "mode": "relaxed",
+        "max_visits": 2,
+        "max_active_minutes": 240,
+        "break_minutes": 30,
+        "version": "comfortable-pace-v1"
+      },
+      "algorithm": "greedy",
+      "elapsed_seconds": 0.004081599996425211,
+      "is_feasible": true,
+      "total_cost": 5350,
+      "active_days": 7,
+      "visits": 12,
+      "daily_visits": [
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "daily_active_minutes": [
+        62,
+        62,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        184,
+        166,
+        200,
+        187,
+        213
+      ],
+      "candidate_count": 14,
+      "coverage_upper_bound": 7,
+      "warnings": [
+        "availability_limits_coverage",
+        "dates_without_candidates",
+        "unscheduled_days",
+        "candidate_subset"
+      ],
+      "objective": {
+        "version": "normalized-group-objective-v2-pace",
+        "weights": {
+          "reward": 1.0,
+          "cost": 0.15,
+          "travel": 0.15,
+          "fairness": 0.35,
+          "spread": 0.12
+        },
+        "value": 0.9456404135338345,
+        "contributions": {
+          "reward": 0.8947368421052632,
+          "cost": -0.008025,
+          "travel": -0.0010714285714285713,
+          "fairness": -0.0,
+          "spread": 0.06
+        },
+        "participant_utility": {
+          "1": 8.5
+        },
+        "participant_coverage": {
+          "1": 0.8947368421052632
+        },
+        "utility_bounds": {
+          "1": 9.5
+        },
+        "excluded_from_fairness": [],
+        "mean_utility": 8.5,
+        "reward_bound": 9.5,
+        "reward": 0.8947368421052632,
+        "cost_ratio": 0.0535,
+        "travel_minutes": 54,
+        "travel_ratio": 0.007142857142857143,
+        "fairness_gap": 0.0,
+        "candidate_count": 14,
+        "budget": 100000,
+        "available_minutes": 7560,
+        "day_coverage": 0.5
+      },
+      "solver": null,
+      "validation": {
+        "is_valid": true,
+        "computed_cost": 5350,
+        "violations": []
+      }
+    },
+    {
+      "pace": "relaxed",
+      "settings": {
+        "mode": "relaxed",
+        "max_visits": 2,
+        "max_active_minutes": 240,
+        "break_minutes": 30,
+        "version": "comfortable-pace-v1"
+      },
+      "algorithm": "beam",
+      "elapsed_seconds": 0.05384910001885146,
+      "is_feasible": true,
+      "total_cost": 5350,
+      "active_days": 7,
+      "visits": 12,
+      "daily_visits": [
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "daily_active_minutes": [
+        62,
+        62,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        184,
+        166,
+        197,
+        187,
+        213
+      ],
+      "candidate_count": 14,
+      "coverage_upper_bound": 7,
+      "warnings": [
+        "availability_limits_coverage",
+        "dates_without_candidates",
+        "unscheduled_days",
+        "candidate_subset"
+      ],
+      "objective": {
+        "version": "normalized-group-objective-v2-pace",
+        "weights": {
+          "reward": 1.0,
+          "cost": 0.15,
+          "travel": 0.15,
+          "fairness": 0.35,
+          "spread": 0.12
+        },
+        "value": 0.9456999373433584,
+        "contributions": {
+          "reward": 0.8947368421052632,
+          "cost": -0.008025,
+          "travel": -0.0010119047619047618,
+          "fairness": -0.0,
+          "spread": 0.06
+        },
+        "participant_utility": {
+          "1": 8.5
+        },
+        "participant_coverage": {
+          "1": 0.8947368421052632
+        },
+        "utility_bounds": {
+          "1": 9.5
+        },
+        "excluded_from_fairness": [],
+        "mean_utility": 8.5,
+        "reward_bound": 9.5,
+        "reward": 0.8947368421052632,
+        "cost_ratio": 0.0535,
+        "travel_minutes": 51,
+        "travel_ratio": 0.006746031746031746,
+        "fairness_gap": 0.0,
+        "candidate_count": 14,
+        "budget": 100000,
+        "available_minutes": 7560,
+        "day_coverage": 0.5
+      },
+      "solver": null,
+      "validation": {
+        "is_valid": true,
+        "computed_cost": 5350,
+        "violations": []
+      }
+    },
+    {
+      "pace": "relaxed",
+      "settings": {
+        "mode": "relaxed",
+        "max_visits": 2,
+        "max_active_minutes": 240,
+        "break_minutes": 30,
+        "version": "comfortable-pace-v1"
+      },
+      "algorithm": "cp-sat",
+      "elapsed_seconds": 0.3273176000220701,
+      "is_feasible": true,
+      "total_cost": 4550,
+      "active_days": 7,
+      "visits": 12,
+      "daily_visits": [
+        1,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "daily_active_minutes": [
+        62,
+        0,
+        62,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        184,
+        213,
+        190,
+        162,
+        185
+      ],
+      "candidate_count": 14,
+      "coverage_upper_bound": 7,
+      "warnings": [
+        "availability_limits_coverage",
+        "dates_without_candidates",
+        "unscheduled_days",
+        "candidate_subset"
+      ],
+      "objective": {
+        "version": "normalized-group-objective-v2-pace",
+        "weights": {
+          "reward": 1.0,
+          "cost": 0.15,
+          "travel": 0.15,
+          "fairness": 0.35,
+          "spread": 0.12
+        },
+        "value": 0.9471578738512949,
+        "contributions": {
+          "reward": 0.8947368421052632,
+          "cost": -0.0068249999999999995,
+          "travel": -0.0007539682539682539,
+          "fairness": -0.0,
+          "spread": 0.06
+        },
+        "participant_utility": {
+          "1": 8.5
+        },
+        "participant_coverage": {
+          "1": 0.8947368421052632
+        },
+        "utility_bounds": {
+          "1": 9.5
+        },
+        "excluded_from_fairness": [],
+        "mean_utility": 8.5,
+        "reward_bound": 9.5,
+        "reward": 0.8947368421052632,
+        "cost_ratio": 0.0455,
+        "travel_minutes": 38,
+        "travel_ratio": 0.0050264550264550265,
+        "fairness_gap": 0.0,
+        "candidate_count": 14,
+        "budget": 100000,
+        "available_minutes": 7560,
+        "day_coverage": 0.5
+      },
+      "solver": {
+        "backend": "ortools-cp-sat",
+        "version": "9.15.6755",
+        "status": "OPTIMAL",
+        "time_limit_seconds": 5.0,
+        "search_time_limit_seconds": 4.9714894000208005,
+        "elapsed_seconds": 0.3268701999913901,
+        "solver_seconds": 0.29738390000000003,
+        "seed": 42,
+        "workers": 1,
+        "scale": 1000000,
+        "objective_error_bound": 4.2001e-05,
+        "integer_model_optimal": true,
+        "model_objective": 0.947155,
+        "model_best_bound": 0.947155,
+        "original_upper_bound": 0.9471970009999999,
+        "absolute_gap_bound": 3.912714870502043e-05,
+        "warm_start": true
+      },
+      "validation": {
+        "is_valid": true,
+        "computed_cost": 4550,
+        "violations": []
+      }
+    },
+    {
+      "pace": "balanced",
+      "settings": {
+        "mode": "balanced",
+        "max_visits": 3,
+        "max_active_minutes": 360,
+        "break_minutes": 20,
+        "version": "comfortable-pace-v1"
+      },
+      "algorithm": "greedy",
+      "elapsed_seconds": 0.004915999947115779,
+      "is_feasible": true,
+      "total_cost": 8350,
+      "active_days": 7,
+      "visits": 14,
+      "daily_visits": [
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        3,
+        3,
+        3,
+        2,
+        1
+      ],
+      "daily_active_minutes": [
+        62,
+        62,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        257,
+        238,
+        322,
+        213,
+        93
+      ],
+      "candidate_count": 14,
+      "coverage_upper_bound": 7,
+      "warnings": [
+        "availability_limits_coverage",
+        "dates_without_candidates",
+        "unscheduled_days",
+        "all_candidates_scheduled",
+        "candidate_subset"
+      ],
+      "objective": {
+        "version": "normalized-group-objective-v2-pace",
+        "weights": {
+          "reward": 1.0,
+          "cost": 0.15,
+          "travel": 0.15,
+          "fairness": 0.35,
+          "spread": 0.12
+        },
+        "value": 1.0463440476190475,
+        "contributions": {
+          "reward": 1.0,
+          "cost": -0.012525,
+          "travel": -0.001130952380952381,
+          "fairness": -0.0,
+          "spread": 0.06
+        },
+        "participant_utility": {
+          "1": 9.5
+        },
+        "participant_coverage": {
+          "1": 1.0
+        },
+        "utility_bounds": {
+          "1": 9.5
+        },
+        "excluded_from_fairness": [],
+        "mean_utility": 9.5,
+        "reward_bound": 9.5,
+        "reward": 1.0,
+        "cost_ratio": 0.0835,
+        "travel_minutes": 57,
+        "travel_ratio": 0.00753968253968254,
+        "fairness_gap": 0.0,
+        "candidate_count": 14,
+        "budget": 100000,
+        "available_minutes": 7560,
+        "day_coverage": 0.5
+      },
+      "solver": null,
+      "validation": {
+        "is_valid": true,
+        "computed_cost": 8350,
+        "violations": []
+      }
+    },
+    {
+      "pace": "balanced",
+      "settings": {
+        "mode": "balanced",
+        "max_visits": 3,
+        "max_active_minutes": 360,
+        "break_minutes": 20,
+        "version": "comfortable-pace-v1"
+      },
+      "algorithm": "beam",
+      "elapsed_seconds": 0.06671060004737228,
+      "is_feasible": true,
+      "total_cost": 8350,
+      "active_days": 7,
+      "visits": 14,
+      "daily_visits": [
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        3,
+        3,
+        3,
+        1,
+        2
+      ],
+      "daily_active_minutes": [
+        62,
+        62,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        257,
+        238,
+        322,
+        96,
+        206
+      ],
+      "candidate_count": 14,
+      "coverage_upper_bound": 7,
+      "warnings": [
+        "availability_limits_coverage",
+        "dates_without_candidates",
+        "unscheduled_days",
+        "all_candidates_scheduled",
+        "candidate_subset"
+      ],
+      "objective": {
+        "version": "normalized-group-objective-v2-pace",
+        "weights": {
+          "reward": 1.0,
+          "cost": 0.15,
+          "travel": 0.15,
+          "fairness": 0.35,
+          "spread": 0.12
+        },
+        "value": 1.0464234126984127,
+        "contributions": {
+          "reward": 1.0,
+          "cost": -0.012525,
+          "travel": -0.0010515873015873015,
+          "fairness": -0.0,
+          "spread": 0.06
+        },
+        "participant_utility": {
+          "1": 9.5
+        },
+        "participant_coverage": {
+          "1": 1.0
+        },
+        "utility_bounds": {
+          "1": 9.5
+        },
+        "excluded_from_fairness": [],
+        "mean_utility": 9.5,
+        "reward_bound": 9.5,
+        "reward": 1.0,
+        "cost_ratio": 0.0835,
+        "travel_minutes": 53,
+        "travel_ratio": 0.0070105820105820105,
+        "fairness_gap": 0.0,
+        "candidate_count": 14,
+        "budget": 100000,
+        "available_minutes": 7560,
+        "day_coverage": 0.5
+      },
+      "solver": null,
+      "validation": {
+        "is_valid": true,
+        "computed_cost": 8350,
+        "violations": []
+      }
+    },
+    {
+      "pace": "balanced",
+      "settings": {
+        "mode": "balanced",
+        "max_visits": 3,
+        "max_active_minutes": 360,
+        "break_minutes": 20,
+        "version": "comfortable-pace-v1"
+      },
+      "algorithm": "cp-sat",
+      "elapsed_seconds": 0.48258569999597967,
+      "is_feasible": true,
+      "total_cost": 8350,
+      "active_days": 7,
+      "visits": 14,
+      "daily_visits": [
+        1,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        3,
+        3,
+        3,
+        1,
+        2
+      ],
+      "daily_active_minutes": [
+        62,
+        0,
+        62,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        315,
+        286,
+        266,
+        62,
+        180
+      ],
+      "candidate_count": 14,
+      "coverage_upper_bound": 7,
+      "warnings": [
+        "availability_limits_coverage",
+        "dates_without_candidates",
+        "unscheduled_days",
+        "all_candidates_scheduled",
+        "candidate_subset"
+      ],
+      "objective": {
+        "version": "normalized-group-objective-v2-pace",
+        "weights": {
+          "reward": 1.0,
+          "cost": 0.15,
+          "travel": 0.15,
+          "fairness": 0.35,
+          "spread": 0.12
+        },
+        "value": 1.0466218253968254,
+        "contributions": {
+          "reward": 1.0,
+          "cost": -0.012525,
+          "travel": -0.0008531746031746032,
+          "fairness": -0.0,
+          "spread": 0.06
+        },
+        "participant_utility": {
+          "1": 9.5
+        },
+        "participant_coverage": {
+          "1": 1.0
+        },
+        "utility_bounds": {
+          "1": 9.5
+        },
+        "excluded_from_fairness": [],
+        "mean_utility": 9.5,
+        "reward_bound": 9.5,
+        "reward": 1.0,
+        "cost_ratio": 0.0835,
+        "travel_minutes": 43,
+        "travel_ratio": 0.005687830687830688,
+        "fairness_gap": 0.0,
+        "candidate_count": 14,
+        "budget": 100000,
+        "available_minutes": 7560,
+        "day_coverage": 0.5
+      },
+      "solver": {
+        "backend": "ortools-cp-sat",
+        "version": "9.15.6755",
+        "status": "OPTIMAL",
+        "time_limit_seconds": 5.0,
+        "search_time_limit_seconds": 4.968657599994913,
+        "elapsed_seconds": 0.48216160002630204,
+        "solver_seconds": 0.4498247,
+        "seed": 42,
+        "workers": 1,
+        "scale": 1000000,
+        "objective_error_bound": 4.2001e-05,
+        "integer_model_optimal": true,
+        "model_objective": 1.046619,
+        "model_best_bound": 1.046619,
+        "original_upper_bound": 1.046661001,
+        "absolute_gap_bound": 3.917560317456825e-05,
+        "warm_start": true
+      },
+      "validation": {
+        "is_valid": true,
+        "computed_cost": 8350,
+        "violations": []
+      }
+    },
+    {
+      "pace": "intensive",
+      "settings": {
+        "mode": "intensive",
+        "max_visits": 5,
+        "max_active_minutes": 480,
+        "break_minutes": 10,
+        "version": "comfortable-pace-v1"
+      },
+      "algorithm": "greedy",
+      "elapsed_seconds": 0.007300599943846464,
+      "is_feasible": true,
+      "total_cost": 8350,
+      "active_days": 7,
+      "visits": 14,
+      "daily_visits": [
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        4,
+        4,
+        2,
+        1,
+        1
+      ],
+      "daily_active_minutes": [
+        62,
+        62,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        316,
+        380,
+        203,
+        69,
+        93
+      ],
+      "candidate_count": 14,
+      "coverage_upper_bound": 7,
+      "warnings": [
+        "availability_limits_coverage",
+        "dates_without_candidates",
+        "unscheduled_days",
+        "all_candidates_scheduled",
+        "candidate_subset"
+      ],
+      "objective": {
+        "version": "normalized-group-objective-v2-pace",
+        "weights": {
+          "reward": 1.0,
+          "cost": 0.15,
+          "travel": 0.15,
+          "fairness": 0.35,
+          "spread": 0.12
+        },
+        "value": 1.0461853174603175,
+        "contributions": {
+          "reward": 1.0,
+          "cost": -0.012525,
+          "travel": -0.0012896825396825397,
+          "fairness": -0.0,
+          "spread": 0.06
+        },
+        "participant_utility": {
+          "1": 9.5
+        },
+        "participant_coverage": {
+          "1": 1.0
+        },
+        "utility_bounds": {
+          "1": 9.5
+        },
+        "excluded_from_fairness": [],
+        "mean_utility": 9.5,
+        "reward_bound": 9.5,
+        "reward": 1.0,
+        "cost_ratio": 0.0835,
+        "travel_minutes": 65,
+        "travel_ratio": 0.008597883597883597,
+        "fairness_gap": 0.0,
+        "candidate_count": 14,
+        "budget": 100000,
+        "available_minutes": 7560,
+        "day_coverage": 0.5
+      },
+      "solver": null,
+      "validation": {
+        "is_valid": true,
+        "computed_cost": 8350,
+        "violations": []
+      }
+    },
+    {
+      "pace": "intensive",
+      "settings": {
+        "mode": "intensive",
+        "max_visits": 5,
+        "max_active_minutes": 480,
+        "break_minutes": 10,
+        "version": "comfortable-pace-v1"
+      },
+      "algorithm": "beam",
+      "elapsed_seconds": 0.06349640002008528,
+      "is_feasible": true,
+      "total_cost": 8350,
+      "active_days": 7,
+      "visits": 14,
+      "daily_visits": [
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        3,
+        1,
+        5,
+        2,
+        1
+      ],
+      "daily_active_minutes": [
+        62,
+        62,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        237,
+        66,
+        458,
+        203,
+        93
+      ],
+      "candidate_count": 14,
+      "coverage_upper_bound": 7,
+      "warnings": [
+        "availability_limits_coverage",
+        "dates_without_candidates",
+        "unscheduled_days",
+        "all_candidates_scheduled",
+        "candidate_subset"
+      ],
+      "objective": {
+        "version": "normalized-group-objective-v2-pace",
+        "weights": {
+          "reward": 1.0,
+          "cost": 0.15,
+          "travel": 0.15,
+          "fairness": 0.35,
+          "spread": 0.12
+        },
+        "value": 1.0462646825396826,
+        "contributions": {
+          "reward": 1.0,
+          "cost": -0.012525,
+          "travel": -0.0012103174603174604,
+          "fairness": -0.0,
+          "spread": 0.06
+        },
+        "participant_utility": {
+          "1": 9.5
+        },
+        "participant_coverage": {
+          "1": 1.0
+        },
+        "utility_bounds": {
+          "1": 9.5
+        },
+        "excluded_from_fairness": [],
+        "mean_utility": 9.5,
+        "reward_bound": 9.5,
+        "reward": 1.0,
+        "cost_ratio": 0.0835,
+        "travel_minutes": 61,
+        "travel_ratio": 0.008068783068783069,
+        "fairness_gap": 0.0,
+        "candidate_count": 14,
+        "budget": 100000,
+        "available_minutes": 7560,
+        "day_coverage": 0.5
+      },
+      "solver": null,
+      "validation": {
+        "is_valid": true,
+        "computed_cost": 8350,
+        "violations": []
+      }
+    },
+    {
+      "pace": "intensive",
+      "settings": {
+        "mode": "intensive",
+        "max_visits": 5,
+        "max_active_minutes": 480,
+        "break_minutes": 10,
+        "version": "comfortable-pace-v1"
+      },
+      "algorithm": "cp-sat",
+      "elapsed_seconds": 0.25096259999554604,
+      "is_feasible": true,
+      "total_cost": 8350,
+      "active_days": 7,
+      "visits": 14,
+      "daily_visits": [
+        1,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        3,
+        5,
+        1,
+        2
+      ],
+      "daily_active_minutes": [
+        62,
+        0,
+        62,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        93,
+        266,
+        447,
+        62,
+        170
+      ],
+      "candidate_count": 14,
+      "coverage_upper_bound": 7,
+      "warnings": [
+        "availability_limits_coverage",
+        "dates_without_candidates",
+        "unscheduled_days",
+        "all_candidates_scheduled",
+        "candidate_subset"
+      ],
+      "objective": {
+        "version": "normalized-group-objective-v2-pace",
+        "weights": {
+          "reward": 1.0,
+          "cost": 0.15,
+          "travel": 0.15,
+          "fairness": 0.35,
+          "spread": 0.12
+        },
+        "value": 1.0466416666666667,
+        "contributions": {
+          "reward": 1.0,
+          "cost": -0.012525,
+          "travel": -0.0008333333333333334,
+          "fairness": -0.0,
+          "spread": 0.06
+        },
+        "participant_utility": {
+          "1": 9.5
+        },
+        "participant_coverage": {
+          "1": 1.0
+        },
+        "utility_bounds": {
+          "1": 9.5
+        },
+        "excluded_from_fairness": [],
+        "mean_utility": 9.5,
+        "reward_bound": 9.5,
+        "reward": 1.0,
+        "cost_ratio": 0.0835,
+        "travel_minutes": 42,
+        "travel_ratio": 0.005555555555555556,
+        "fairness_gap": 0.0,
+        "candidate_count": 14,
+        "budget": 100000,
+        "available_minutes": 7560,
+        "day_coverage": 0.5
+      },
+      "solver": {
+        "backend": "ortools-cp-sat",
+        "version": "9.15.6755",
+        "status": "OPTIMAL",
+        "time_limit_seconds": 5.0,
+        "search_time_limit_seconds": 4.969634499982931,
+        "elapsed_seconds": 0.25051279994659126,
+        "solver_seconds": 0.2191385,
+        "seed": 42,
+        "workers": 1,
+        "scale": 1000000,
+        "objective_error_bound": 4.2001e-05,
+        "integer_model_optimal": true,
+        "model_objective": 1.046639,
+        "model_best_bound": 1.046639,
+        "original_upper_bound": 1.046681001,
+        "absolute_gap_bound": 3.933433333336289e-05,
+        "warm_start": true
+      },
+      "validation": {
+        "is_valid": true,
+        "computed_cost": 8350,
+        "violations": []
+      }
+    }
+  ]
+}

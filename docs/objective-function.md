@@ -2,6 +2,8 @@
 
 Ветка `feature/shared-objective` создана от `feature/visa-rules`.
 Версия функции: `normalized-group-objective-v1`.
+Для запросов с выбранным темпом добавлена версия v2 с бонусом заполнения дней D;
+прежний режим и результаты экспериментов v1 сохранены. [Темп и формула v2](trip-pace.md).
 Код: `backend/app/planning/objective.py`.
 
 ## Формула и область

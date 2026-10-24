@@ -1,6 +1,10 @@
 import { validRequestId } from "./request-id";
 
 export type Interests = Record<string, number>;
+export type PaceMode = "unrestricted" | "relaxed" | "balanced" | "intensive";
+export type PaceSettings = {mode:Exclude<PaceMode,"unrestricted">;max_visits:number;max_active_minutes:number;break_minutes:number;version:string};
+export type PlanningSummary = {pace:PaceSettings|null;total_days:number;active_days:number;candidate_count:number;coverage_upper_bound:number;scheduled_count:number;cost_scope:string;warnings:string[];
+  days:{travel_date:string;visit_count:number;activity_minutes:number;drive_minutes:number;rest_minutes:number;active_minutes:number;opening_wait_minutes:number;eligible_count:number}[]};
 export type SolverReport = {backend:string;version:string;status:string;time_limit_seconds:number;search_time_limit_seconds:number;
   elapsed_seconds:number;solver_seconds:number;seed:number;workers:number;scale:number;objective_error_bound:number;
   integer_model_optimal:boolean;model_objective:number|null;model_best_bound:number|null;original_upper_bound:number|null;
@@ -8,7 +12,7 @@ export type SolverReport = {backend:string;version:string;status:string;time_lim
 export type ObjectiveReport = {version:string;weights:Record<string,number>;value:number;contributions:Record<string,number>;
   participant_utility:Record<string,number>;participant_coverage:Record<string,number>;utility_bounds:Record<string,number>;
   excluded_from_fairness:string[];mean_utility:number;reward_bound:number;reward:number;cost_ratio:number;travel_minutes:number;
-  travel_ratio:number;fairness_gap:number;candidate_count:number;budget:number;available_minutes:number};
+  travel_ratio:number;fairness_gap:number;candidate_count:number;budget:number;available_minutes:number;day_coverage?:number};
 export type Explanation = {mode:"llm"|"template";model:string|null;verified:boolean;prompt_version:string;
   facts:Record<string,string>;selected_ids:string[];paragraphs:string[];fallback_reason:string|null;
   sources?:Record<string,SemanticMatch>};
@@ -27,6 +31,7 @@ export type VisaReport = {version:string;assessed_on:string;checked_on:string;re
 export type Member = {user_id: number; name: string; interests: Interests;travel_profile?:TravelProfile};
 export type Group = {id: number; name: string; members: Member[]};
 export type Trip = {id: number; group_id: number; destination: string; travel_date: string | null; end_date?: string | null;
+  pace?:PaceMode;pace_settings?:PaceSettings|null;
   budget: number; start: number; end: number; participants_snapshot: Member[];semantic_query?:string|null;purpose?:string};
 export type Poi = {id: string; name: string; eligible: boolean; issues: string[]; source_url?: string; available_dates?: string[];
   latitude?:number|null; longitude?:number|null;
@@ -45,6 +50,7 @@ export type Route = {id: number; trip_request_id: number; algorithm: string; dat
     days?: Day[] | null;
     objective?: ObjectiveReport | null;
     solver?: SolverReport | null;
+    planning_summary?:PlanningSummary|null;
     reasons: string[]; visits: {place_id: string; arrival: number; start: number; end: number}[];
     validation: {is_valid: boolean; computed_cost: number; violations: {code: string; message: string; place_id: string | null}[]} | null;
     data_context: DataContext | null}};

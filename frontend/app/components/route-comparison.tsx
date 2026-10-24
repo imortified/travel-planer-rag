@@ -20,6 +20,9 @@ export function RouteComparison({data, trip, selectedId, names, reasonLabels, di
     ]:[]),
     {label:"Расходы на всю группу",value:r=>money(r.result.total_cost)},
     {label:"Посещения",value:r=>String(r.comparison!.visit_count)},
+    ...(data.options.some(r=>r.result.planning_summary)?[
+      {label:"Дней с посещениями",value:(r:Route)=>r.result.planning_summary?`${r.result.planning_summary.active_days} / ${r.result.planning_summary.total_days}`:"—"},
+    ]:[]),
     {label:"Средняя полезность, баллы",value:r=>points(r.comparison!.mean_utility)},
     {label:"Минимум у участника, баллы",value:r=>points(r.comparison!.min_utility)},
     {label:"Разрыв интересов, баллы ↓",value:r=>points(r.comparison!.utility_gap)},

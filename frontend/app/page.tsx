@@ -12,6 +12,8 @@ import { RouteObjective } from "./components/route-objective";
 import { SolverStatus } from "./components/solver-status";
 import { RouteMap } from "./components/route-map";
 import { CatalogStatus } from "./components/catalog-status";
+import { RoutePace, paceNames } from "./components/route-pace";
+import type { PaceMode, PaceSettings } from "../lib/api";
 import type { CatalogSnapshot, CatalogResponse } from "../lib/api";
 import { api, clock, money, minutes, type Group, type Trip, type Route, type RouteSet, type Poi, type Interests, type ParseOutput, type TravelProfile, type VisaReport as VisaData } from "../lib/api";
 
@@ -26,6 +28,9 @@ issueNames.curation_review_expired="Срок ручной проверки ис�
 const reasonNames: Record<string,string> = {mandatory_excluded_conflict:"Место одновременно обязательно и запрещено", no_feasible_visits:"Не найдено допустимых посещений", mandatory_not_scheduled:"Обязательное место не включено", budget_exceeded:"Превышен бюджет", cost_mismatch:"Стоимость рассчитана неверно", duplicate_visit_across_days:"Место повторяется в разные дни", unreachable_arrival:"Недостаточно времени на переезд", outside_opening_hours:"Посещение вне часов работы", missing_travel_time:"Нет данных о переезде"};
 reasonNames.cp_sat_unknown="Время поиска закончилось без решения; невозможность не доказана";
 reasonNames.cp_sat_infeasible="Допустимого маршрута нет при заданных данных и ограничениях";
+reasonNames.daily_visit_limit="Превышен лимит посещений за день";
+reasonNames.daily_load_limit="Превышена дневная нагрузка выбранного темпа";
+reasonNames.insufficient_rest="Недостаточно времени на перерыв между посещениями";
 
 export default function Home() {
   const [name,setName] = useState("Наше путешествие");
@@ -47,6 +52,8 @@ export default function Home() {
   const [start,setStart] = useState("09:00");
   const [end,setEnd] = useState("18:00");
   const [algorithm,setAlgorithm] = useState("beam");
+  const [pace,setPace] = useState<PaceMode>("balanced");
+  const [paceProfiles,setPaceProfiles] = useState<Partial<Record<PaceMode,PaceSettings>>>({});
   const [solverLimit,setSolverLimit] = useState("5");
   const [pois,setPois] = useState<Poi[]>(demoPois);
   const [choices,setChoices] = useState<Record<string,string>>({});
@@ -63,6 +70,7 @@ export default function Home() {
   const pendingTrip = useRef<{signature: string; trip: Trip} | undefined>(undefined);
 
   useEffect(() => { const stored = localStorage.getItem("travel-group-id"); if (stored) setLoadId(stored); }, []);
+  useEffect(() => {let active=true;api<Record<string,PaceSettings>>("/planning/pace-profiles").then(profiles=>{if(active)setPaceProfiles(profiles);}).catch(()=>{});return ()=>{active=false;};}, []);
   function changeMember(index: number, patch: Partial<Draft>) {setMembers(ms => ms.map((m,i) => i===index ? {...m,...patch} : m));}
   function changeDate(value: string) {
     if (value === date) return;
@@ -113,7 +121,7 @@ export default function Home() {
     if (!start || !end || minutes(start)>=minutes(end)) throw new Error("Окончание дня должно быть позже начала.");
     if (endDate && (!date || endDate<date || (Date.parse(endDate)-Date.parse(date))/86400000>13)) throw new Error("Период должен содержать от 1 до 14 дней.");
     const id = await saveGroup();
-    const payload={destination, purpose, travel_date:date || null, end_date:endDate || null, semantic_query:destination==="Lisbon" && semanticQuery?semanticQuery:null, budget:Math.round(Number(budget)*100), start:minutes(start), end:minutes(end),
+    const payload={destination, purpose, pace, travel_date:date || null, end_date:endDate || null, semantic_query:destination==="Lisbon" && semanticQuery?semanticQuery:null, budget:Math.round(Number(budget)*100), start:minutes(start), end:minutes(end),
       mandatory:Object.keys(choices).filter(k=>choices[k]==="mandatory"), excluded:Object.keys(choices).filter(k=>choices[k]==="excluded")};
     const signature=JSON.stringify({id,payload,members:members.map(m=>({interests:m.interests,profile:m.travel_profile || emptyProfile}))});
     let trip = pendingTrip.current?.signature===signature ? pendingTrip.current.trip : undefined;
@@ -191,7 +199,9 @@ export default function Home() {
         <fieldset disabled={!!busy} className="card"><legend><span className="step">2</span> Параметры поездки</legend>
           <div className="two"><label>Куда отправимся<select value={destination} onChange={e=>{setDestination(e.target.value);setCatalogSnapshot(undefined);setChoices({});setPois(e.target.value==="Demo City"?demoPois:[]);setCatalogKey(e.target.value==="Demo City"?"Demo City":"");}}><option value="Demo City">Демо-город · без сети</option><option value="Lisbon">Лиссабон · реальные места</option></select></label><label>Начало поездки<input type="date" value={date} onChange={e=>changeDate(e.target.value)} onInput={e=>changeDate(e.currentTarget.value)}/></label></div>
           <div className="two"><label>Конец поездки<input type="date" value={endDate} min={date || undefined} onChange={e=>changeEndDate(e.target.value)} onInput={e=>changeEndDate(e.currentTarget.value)}/></label><p className="hint">До 14 дней включительно. Без даты окончания — один день. Бюджет общий на весь период.</p></div>
-          <div className="two"><label>Бюджет на всю группу, EUR<input type="number" min="0" max="10000000" step="0.01" value={budget} onChange={e=>setBudget(e.target.value)}/></label><label>Алгоритм<select value={algorithm} onChange={e=>setAlgorithm(e.target.value)}><option value="beam">Beam search</option><option value="greedy">Greedy</option><option value="cp-sat">CP-SAT · OR-Tools</option></select></label></div>
+          <div className="two"><label>Бюджет посещений на группу, EUR<input type="number" min="0" max="10000000" step="0.01" value={budget} onChange={e=>setBudget(e.target.value)}/></label><label>Алгоритм<select value={algorithm} onChange={e=>setAlgorithm(e.target.value)}><option value="beam">Beam search</option><option value="greedy">Greedy</option><option value="cp-sat">CP-SAT · OR-Tools</option></select></label></div>
+          <label>Темп поездки<select value={pace} onChange={e=>setPace(e.target.value as PaceMode)}>{(["relaxed","balanced","intensive","unrestricted"] as PaceMode[]).map(mode=><option key={mode} value={mode}>{paceNames[mode]}</option>)}</select></label>
+          {paceProfiles[pace] && <p className="hint">До {paceProfiles[pace]!.max_visits} мест и {paceProfiles[pace]!.max_active_minutes} мин нагрузки в день; между посещениями минимум {paceProfiles[pace]!.break_minutes} мин перерыва. Ожидание открытия считается отдельно.</p>}
           {algorithm==="cp-sat" && <><label>Лимит CP-SAT на набор, с<input type="number" min="0.05" max="30" step="0.05" value={solverLimit} onChange={e=>setSolverLimit(e.target.value)}/></label><p className="hint">Общий бюджет времени поиска вариантов. Загрузка данных и подготовка могут добавить время. На сложной задаче оптимум может остаться недоказанным.</p></>}
           <div className="two"><label>Начало дня<input type="time" value={start} onChange={e=>setStart(e.target.value)}/></label><label>Окончание дня<input type="time" value={end} onChange={e=>setEnd(e.target.value)}/></label></div>
           {destination==="Lisbon" && <div className="visa-preview"><label>Цель въезда<select value={purpose} onChange={e=>setPurpose(e.target.value)}><option value="tourism">Туризм</option><option value="other">Иная цель</option><option value="unknown">Не уточнена</option></select></label><p className="hint">Визовый справочник: семь гражданств, краткосрочный туризм в Португалии. Документы заполняются у каждого участника.</p><button className="secondary" disabled={!members.length} onClick={()=>task("Проверяем визовые условия…",async()=>{if(members.some(m=>!m.name.trim())) throw new Error("Введите имена участников.");const report=await api<VisaData>("/visa-check","POST",visaInput);setVisaPreview({signature:visaSignature,report});})}>Проверить визовые условия</button>{visaPreview?.signature===visaSignature && <VisaReport report={visaPreview.report}/>}</div>}
@@ -214,6 +224,7 @@ export default function Home() {
           <div className="stats"><div><small>Расходы на посещения</small><strong>{money(result!.total_cost)}</strong></div><div><small>Бюджет группы</small><strong>{money(shown.trip.budget)}</strong></div><div><small>Мест в плане</small><strong>{result!.visits.length}</strong></div></div>
           {result!.is_feasible && <RouteObjective report={result!.objective} trip={shown.trip}/>}
           <SolverStatus report={result!.solver}/>
+          <RoutePace summary={result!.planning_summary}/>
           <CatalogStatus snapshot={result!.data_context?.catalog_snapshot} saved/>
           <RouteMap key={shown.route.id} route={shown.route} trip={shown.trip} names={resultPois}/>
           <RouteDays route={shown.route} trip={shown.trip} names={resultPois}/>

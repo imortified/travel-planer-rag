@@ -10,12 +10,14 @@ export function RouteObjective({report, trip}: {report?:ObjectiveReport|null;tri
     {key:"travel",label:"Доля времени на переезды T",value:report.travel_ratio},
     {key:"fairness",label:"Неравенство покрытия интересов P",value:report.fairness_gap},
   ];
+  if (report.weights.spread !== undefined) rows.push({key:"spread",label:"Доля дней с посещениями D",value:report.day_coverage || 0});
   const names = Object.fromEntries(trip.participants_snapshot.map(p=>[String(p.user_id),p.name]));
   return <section className="route-objective" aria-label="Оценка маршрута">
     <div className="objective-heading"><h3>Оценка маршрута</h3><strong>F = {number(report.value)}</strong></div>
-    <p className="hint">Выше — лучше при одинаковом запросе и коэффициентах. Оценка объединяет интересы, расходы, переезды и баланс участников; это не процент удовлетворённости.</p>
+    <p className="hint">Выше — лучше при одинаковом запросе и коэффициентах. Оценка объединяет интересы, расходы, переезды и баланс участников{report.weights.spread!==undefined?", а также заполнение дней":""}; это не процент удовлетворённости.</p>
     <details><summary>Формула и вклад критериев</summary>
-      <p>F = {number(report.weights.reward)}R − {number(report.weights.cost)}C − {number(report.weights.travel)}T − {number(report.weights.fairness)}P</p>
+      <p>F = {number(report.weights.reward)}R − {number(report.weights.cost)}C − {number(report.weights.travel)}T − {number(report.weights.fairness)}P{report.weights.spread!==undefined?` + ${number(report.weights.spread)}D`:""}</p>
+      {report.weights.spread!==undefined && <p>D — доля дней с хотя бы одним посещением. Бонус поощряет распределение по дням; пустые дни допустимы.</p>}
       <div className="objective-scroll"><table><thead><tr><th>Критерий</th><th>Значение</th><th>Вклад в F</th></tr></thead><tbody>{rows.map(r=><tr key={r.key}><th scope="row">{r.label}</th><td>{number(r.value)}</td><td>{report.contributions[r.key]>0?"+":""}{number(report.contributions[r.key])}</td></tr>)}</tbody></table></div>
       <p>Переезды: {report.travel_minutes} мин из {report.available_minutes} мин дневных окон за всю поездку. Ожидание открытия не считается переездом.</p>
       <p>R — доля верхней оценки полезности доступного каталога ({report.candidate_count} мест). Граница не учитывает совместимость расписаний, бюджет и достижимость; она не гарантирует, что можно посетить все места.</p>
