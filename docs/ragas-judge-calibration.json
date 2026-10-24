@@ -1,0 +1,643 @@
+{
+  "schema_version": 1,
+  "completed": true,
+  "started_at": "2026-10-24T11:45:13.399880+00:00",
+  "input_sha256": "03931882808ea5a117b504e3976496ee66442e50529bbae90626bb4bb1f58298",
+  "runner_sha256": "283ee5f2d8aee021215ced18f0207c3453a9bc7f56085be77e11e91522dd5ad3",
+  "lock_sha256": "16d18bf4f509612a86091b2480dc7d67694d6be1d6e3323ad74b5b304a512eb8",
+  "python": "3.13.3",
+  "judge": {
+    "model": "Qwen3-8B-Q4_K_M",
+    "backend": "llama-cpp",
+    "identity_note": "revision=7c41481f57cb95916b40956ab2f0b139b296d974; sha256=d98cdcbd03e17ce47681435b5150e34c1417f50b5c0019dd560e4882c5745785; llama=b11840; gpu_layers=18; context=8192",
+    "same_model_as_generator": false,
+    "identity_verification": "API alias checked; weight identity supplied separately",
+    "runtime_manifest": {
+      "checked_on": "2026-10-24",
+      "llama_cpp_version": "b11840",
+      "model": "Qwen3-8B-Q4_K_M",
+      "model_revision": "7c41481f57cb95916b40956ab2f0b139b296d974",
+      "purpose": "Separate local RAGAS judge; selected by user, no paid API. Same Qwen family as generator; not an independent human judge.",
+      "files": [
+        {
+          "name": "Qwen3-8B-Q4_K_M.gguf",
+          "size": 5027783488,
+          "url": "https://huggingface.co/Qwen/Qwen3-8B-GGUF/resolve/7c41481f57cb95916b40956ab2f0b139b296d974/Qwen3-8B-Q4_K_M.gguf",
+          "sha256": "d98cdcbd03e17ce47681435b5150e34c1417f50b5c0019dd560e4882c5745785",
+          "directory": "models"
+        }
+      ]
+    },
+    "server_settings": {
+      "default_generation_settings": {
+        "params": {
+          "seed": 4294967295,
+          "temperature": 0.800000011920929,
+          "dynatemp_range": 0.0,
+          "dynatemp_exponent": 1.0,
+          "top_k": 40,
+          "top_p": 0.949999988079071,
+          "min_p": 0.05000000074505806,
+          "top_n_sigma": -1.0,
+          "xtc_probability": 0.0,
+          "xtc_threshold": 0.10000000149011612,
+          "typical_p": 1.0,
+          "repeat_last_n": 64,
+          "repeat_penalty": 1.0,
+          "presence_penalty": 0.0,
+          "frequency_penalty": 0.0,
+          "dry_multiplier": 0.0,
+          "dry_base": 1.75,
+          "dry_allowed_length": 2,
+          "dry_penalty_last_n": 64,
+          "mirostat": 0,
+          "mirostat_tau": 5.0,
+          "mirostat_eta": 0.10000000149011612,
+          "adaptive_target": -1.0,
+          "adaptive_decay": 0.8999999761581421,
+          "max_tokens": -1,
+          "n_predict": -1,
+          "n_keep": 0,
+          "n_discard": 0,
+          "ignore_eos": false,
+          "stream": false,
+          "n_probs": 0,
+          "min_keep": 0,
+          "chat_format": "Content-only",
+          "reasoning_format": "none",
+          "reasoning_in_content": false,
+          "generation_prompt": "",
+          "samplers": [
+            "penalties",
+            "dry",
+            "top_n_sigma",
+            "top_k",
+            "typ_p",
+            "top_p",
+            "min_p",
+            "xtc",
+            "temperature"
+          ],
+          "speculative.types": "none",
+          "timings_per_token": false,
+          "post_sampling_probs": false,
+          "backend_sampling": false,
+          "lora": []
+        },
+        "n_ctx": 8192
+      },
+      "total_slots": 1
+    }
+  },
+  "ragas_version": "0.4.3",
+  "openai_client_version": "2.54.0",
+  "generation": {
+    "temperature": 0,
+    "max_tokens": 2048,
+    "seed": 42,
+    "enable_thinking": false
+  },
+  "metric_timeout_seconds": 180,
+  "rows": [
+    {
+      "case_id": "supported-garden",
+      "kind": "calibration",
+      "mode": "authored_control",
+      "metrics": {
+        "faithfulness": {
+          "status": "ok",
+          "value": 1.0,
+          "reason": null,
+          "expected": 1,
+          "absolute_error": 0.0,
+          "agrees": true,
+          "seconds": 26.8934
+        }
+      }
+    },
+    {
+      "case_id": "supported-cost",
+      "kind": "calibration",
+      "mode": "authored_control",
+      "metrics": {
+        "faithfulness": {
+          "status": "ok",
+          "value": 1.0,
+          "reason": null,
+          "expected": 1,
+          "absolute_error": 0.0,
+          "agrees": true,
+          "seconds": 13.332
+        }
+      }
+    },
+    {
+      "case_id": "supported-limits",
+      "kind": "calibration",
+      "mode": "authored_control",
+      "metrics": {
+        "faithfulness": {
+          "status": "ok",
+          "value": 1.0,
+          "reason": null,
+          "expected": 1,
+          "absolute_error": 0.0,
+          "agrees": true,
+          "seconds": 14.6649
+        }
+      }
+    },
+    {
+      "case_id": "wrong-cost",
+      "kind": "calibration",
+      "mode": "authored_control",
+      "metrics": {
+        "faithfulness": {
+          "status": "ok",
+          "value": 0.0,
+          "reason": null,
+          "expected": 0,
+          "absolute_error": 0.0,
+          "agrees": true,
+          "seconds": 11.0423
+        }
+      }
+    },
+    {
+      "case_id": "wrong-count",
+      "kind": "calibration",
+      "mode": "authored_control",
+      "metrics": {
+        "faithfulness": {
+          "status": "ok",
+          "value": 0.0,
+          "reason": null,
+          "expected": 0,
+          "absolute_error": 0.0,
+          "agrees": true,
+          "seconds": 9.0712
+        }
+      }
+    },
+    {
+      "case_id": "wrong-diet",
+      "kind": "calibration",
+      "mode": "authored_control",
+      "metrics": {
+        "faithfulness": {
+          "status": "ok",
+          "value": 0.0,
+          "reason": null,
+          "expected": 0,
+          "absolute_error": 0.0,
+          "agrees": true,
+          "seconds": 14.7456
+        }
+      }
+    },
+    {
+      "case_id": "mixed-garden",
+      "kind": "calibration",
+      "mode": "authored_control",
+      "metrics": {
+        "faithfulness": {
+          "status": "ok",
+          "value": 0.5,
+          "reason": null,
+          "expected": 0.5,
+          "absolute_error": 0.0,
+          "agrees": true,
+          "seconds": 19.9902
+        }
+      }
+    },
+    {
+      "case_id": "mixed-cost",
+      "kind": "calibration",
+      "mode": "authored_control",
+      "metrics": {
+        "faithfulness": {
+          "status": "ok",
+          "value": 0.5,
+          "reason": null,
+          "expected": 0.5,
+          "absolute_error": 0.0,
+          "agrees": true,
+          "seconds": 19.0379
+        }
+      }
+    }
+  ],
+  "http_calls": [
+    {
+      "status_code": 200,
+      "metric": "faithfulness",
+      "case_id": "supported-garden",
+      "prompt_sha256": "3b145bc7d52d3433927463789e6e475e9c62c42ea8de9294f76fa6b38c6afd73",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 34,
+        "prompt_tokens": 514,
+        "total_tokens": 548,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"statements\": [\n        \"В саду находится озеро.\",\n        \"В саду обитают птицы.\"\n    ]\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "faithfulness",
+      "case_id": "supported-garden",
+      "prompt_sha256": "47947d6424d2eab6631c197a8fc07923065931105ef1112037f93c94966ec32e",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 132,
+        "prompt_tokens": 1066,
+        "total_tokens": 1198,
+        "prompt_tokens_details": {
+          "cached_tokens": 35
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"statements\": [\n        {\n            \"statement\": \"В саду находится озеро.\",\n            \"reason\": \"Контекст упоминает, что в саду есть озеро, что подтверждает утверждение.\",\n            \"verdict\": 1\n        },\n        {\n            \"statement\": \"В саду обитают птицы.\",\n            \"reason\": \"Контекст упоминает, что в саду есть птицы, что подтверждает утверждение.\",\n            \"verdict\": 1\n        }\n    ]\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "faithfulness",
+      "case_id": "supported-cost",
+      "prompt_sha256": "8be7d2e445f0ba5f6a3329635a84ef93dec7cb68238f3276c71cef0970ebf3ee",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 22,
+        "prompt_tokens": 514,
+        "total_tokens": 536,
+        "prompt_tokens_details": {
+          "cached_tokens": 475
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"statements\": [\n        \"The considered expenses amount to 56 EUR.\"\n    ]\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "faithfulness",
+      "case_id": "supported-cost",
+      "prompt_sha256": "027d7baa67866da7849f915a4911c99b7efc125e3405db43605769d30254d3ac",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 78,
+        "prompt_tokens": 1056,
+        "total_tokens": 1134,
+        "prompt_tokens_details": {
+          "cached_tokens": 1009
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"statements\": [\n        {\n            \"statement\": \"The considered expenses amount to 56 EUR.\",\n            \"reason\": \"The context states that 'Учтённые расходы составляют 56 EUR', which directly translates to 'The considered expenses amount to 56 EUR'.\",\n            \"verdict\": 1\n        }\n    ]\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "faithfulness",
+      "case_id": "supported-limits",
+      "prompt_sha256": "2f0a29be26131acff70529bf517dded0f8217089550fc4ca69d0f21af4d6d62c",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 23,
+        "prompt_tokens": 515,
+        "total_tokens": 538,
+        "prompt_tokens_details": {
+          "cached_tokens": 475
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"statements\": [\n        \"Транспортные расходы не учитываются.\"\n    ]\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "faithfulness",
+      "case_id": "supported-limits",
+      "prompt_sha256": "c9d5e2258e2e1262445aec310bd87e4b570c0b627e72e28c8db26a96aa315c5f",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 88,
+        "prompt_tokens": 1054,
+        "total_tokens": 1142,
+        "prompt_tokens_details": {
+          "cached_tokens": 1009
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"statements\": [\n        {\n            \"statement\": \"Транспортные расходы не учитываются.\",\n            \"reason\": \"Слова 'не включены' и 'не учитываются' имеют схожее значение в данном контексте, что позволяет сделать вывод о том, что транспортные расходы не учитываются.\",\n            \"verdict\": 1\n        }\n    ]\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "faithfulness",
+      "case_id": "wrong-cost",
+      "prompt_sha256": "7ab7a60ff2961af37e06592397c6a5402970c7220fd3ba3eb4281283f7b73ca5",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 22,
+        "prompt_tokens": 514,
+        "total_tokens": 536,
+        "prompt_tokens_details": {
+          "cached_tokens": 475
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"statements\": [\n        \"The considered expenses amount to 12 EUR.\"\n    ]\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "faithfulness",
+      "case_id": "wrong-cost",
+      "prompt_sha256": "2e39c373afd4d20c4f24af7860c8b5453b4410d167a96cfa487932093fc9639b",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 62,
+        "prompt_tokens": 1056,
+        "total_tokens": 1118,
+        "prompt_tokens_details": {
+          "cached_tokens": 1009
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"statements\": [\n        {\n            \"statement\": \"The considered expenses amount to 12 EUR.\",\n            \"reason\": \"The context states that the considered expenses amount to 56 EUR, not 12 EUR.\",\n            \"verdict\": 0\n        }\n    ]\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "faithfulness",
+      "case_id": "wrong-count",
+      "prompt_sha256": "c7700bc8b4d9b72db54fdbdbdfeabc724b188e5ccd98e321402eca6f41271154",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 18,
+        "prompt_tokens": 514,
+        "total_tokens": 532,
+        "prompt_tokens_details": {
+          "cached_tokens": 478
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"statements\": [\n        \"The route includes seven visits.\"\n    ]\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "faithfulness",
+      "case_id": "wrong-count",
+      "prompt_sha256": "f068c201ebae154f18b5932b9db186385c139f5da62133dd702838eb4a4d0b6c",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 51,
+        "prompt_tokens": 1050,
+        "total_tokens": 1101,
+        "prompt_tokens_details": {
+          "cached_tokens": 1009
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"statements\": [\n        {\n            \"statement\": \"The route includes seven visits.\",\n            \"reason\": \"The context states that the route includes three visits, not seven.\",\n            \"verdict\": 0\n        }\n    ]\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "faithfulness",
+      "case_id": "wrong-diet",
+      "prompt_sha256": "ae86a13f532043c6e5570cf23a613e6163bf482d85f861874266a169d4fb944a",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 24,
+        "prompt_tokens": 516,
+        "total_tokens": 540,
+        "prompt_tokens_details": {
+          "cached_tokens": 475
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"statements\": [\n        \"Отсутствие аллергенов гарантировано.\"\n    ]\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "faithfulness",
+      "case_id": "wrong-diet",
+      "prompt_sha256": "ab4254123a454d6cbfe9fb99005e4177344072b3e711af35b1d10ed97a66d551",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 86,
+        "prompt_tokens": 1058,
+        "total_tokens": 1144,
+        "prompt_tokens_details": {
+          "cached_tokens": 1009
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"statements\": [\n        {\n            \"statement\": \"Отсутствие аллергенов гарантировано.\",\n            \"reason\": \"Контекст указывает, что состав блюд и аллергены не проверялись, что означает, что отсутствие аллергенов не может быть гарантировано.\",\n            \"verdict\": 0\n        }\n    ]\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "faithfulness",
+      "case_id": "mixed-garden",
+      "prompt_sha256": "decd77592b0d070e0d77aefc781e5ac909dae303b62be5e538a3e50c08909fd0",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 33,
+        "prompt_tokens": 520,
+        "total_tokens": 553,
+        "prompt_tokens_details": {
+          "cached_tokens": 475
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"statements\": [\n        \"В саду находится озеро.\",\n        \"В саду находится аквариум.\"\n    ]\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "faithfulness",
+      "case_id": "mixed-garden",
+      "prompt_sha256": "0ccc5b3f03c9ddb5c9ae3f75c8d323f9d76be2003df928f2a251df2491769f1f",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 116,
+        "prompt_tokens": 1071,
+        "total_tokens": 1187,
+        "prompt_tokens_details": {
+          "cached_tokens": 1009
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"statements\": [\n        {\n            \"statement\": \"В саду находится озеро.\",\n            \"reason\": \"Контекст прямо упоминает, что в саду есть озеро.\",\n            \"verdict\": 1\n        },\n        {\n            \"statement\": \"В саду находится аквариум.\",\n            \"reason\": \"Контекст прямо упоминает, что в саду нет аквариума.\",\n            \"verdict\": 0\n        }\n    ]\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "faithfulness",
+      "case_id": "mixed-cost",
+      "prompt_sha256": "907498f39063d37238669185b59c1dfc09fa804ce015400bd2cd509476f030bc",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 33,
+        "prompt_tokens": 518,
+        "total_tokens": 551,
+        "prompt_tokens_details": {
+          "cached_tokens": 477
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"statements\": [\n        \"Посещения стоят 56 EUR.\",\n        \"Проживание включено.\"\n    ]\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "faithfulness",
+      "case_id": "mixed-cost",
+      "prompt_sha256": "ea39ea33d71c8573d854787acd0c6a9ae207de9fac899c3375d2c51e5c3e072e",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 112,
+        "prompt_tokens": 1072,
+        "total_tokens": 1184,
+        "prompt_tokens_details": {
+          "cached_tokens": 1009
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"statements\": [\n        {\n            \"statement\": \"Посещения стоят 56 EUR.\",\n            \"reason\": \"The context explicitly states that 'Посещения стоят 56 EUR.'\",\n            \"verdict\": 1\n        },\n        {\n            \"statement\": \"Проживание включено.\",\n            \"reason\": \"The context states that 'Проживание не включено.' which directly contradicts the statement.\",\n            \"verdict\": 0\n        }\n    ]\n}"
+          }
+        }
+      ]
+    }
+  ],
+  "scope": "Authored calibration controls",
+  "summary": {
+    "calibration:authored_control:faithfulness": {
+      "scored": 8,
+      "errors": 0,
+      "mean": 0.5
+    }
+  },
+  "finished_at": "2026-10-24T11:47:22.892423+00:00",
+  "inputs_unchanged": true
+}

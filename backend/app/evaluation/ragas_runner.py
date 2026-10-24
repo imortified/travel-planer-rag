@@ -186,13 +186,15 @@ async def run(args):
 
     current = {"metric": None, "case_id": None}
     digest = hashlib.sha256(args.samples.read_bytes()).hexdigest()
+    runner_digest = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
+    lock_digest = hashlib.sha256((ROOT / "backend/uv.lock").read_bytes()).hexdigest()
     report = {
         "schema_version": 1,
         "completed": False,
         "started_at": datetime.now(timezone.utc).isoformat(),
         "input_sha256": digest,
-        "runner_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
-        "lock_sha256": hashlib.sha256((ROOT / "backend/uv.lock").read_bytes()).hexdigest(),
+        "runner_sha256": runner_digest,
+        "lock_sha256": lock_digest,
         "python": platform.python_version(),
         "judge": {
             "model": args.model,
@@ -204,7 +206,8 @@ async def run(args):
         "ragas_version": importlib.metadata.version("ragas"),
         "openai_client_version": importlib.metadata.version("openai"),
         "generation": generation,
-        "metric_timeout_seconds": 180,
+        "metric_timeout_seconds": args.metric_timeout,
+        "http_timeout_seconds": args.http_timeout,
         "rows": [],
         "http_calls": calls,
         "scope": "Authored calibration controls"
@@ -217,7 +220,9 @@ async def run(args):
         if runtime["model"] == args.model:
             report["judge"]["runtime_manifest"] = runtime
     # Explicit URL/key only: never fall back to an account's default cloud endpoint.
-    async with httpx.AsyncClient(timeout=90, event_hooks={"response": [observe]}) as transport:
+    async with httpx.AsyncClient(
+        timeout=args.http_timeout, event_hooks={"response": [observe]}
+    ) as transport:
         async with AsyncOpenAI(
             base_url=args.base_url,
             api_key=api_key or "local",
@@ -252,11 +257,22 @@ async def run(args):
             def on_metric(case_id, name):
                 current.update(case_id=case_id, metric=name)
 
-            await score_rows(rows, metrics, args.output, report, on_metric=on_metric)
+            await score_rows(
+                rows,
+                metrics,
+                args.output,
+                report,
+                metric_timeout=args.metric_timeout,
+                on_metric=on_metric,
+            )
     report.update(
         completed=True,
         finished_at=datetime.now(timezone.utc).isoformat(),
-        inputs_unchanged=digest == hashlib.sha256(args.samples.read_bytes()).hexdigest(),
+        inputs_unchanged=(
+            digest == hashlib.sha256(args.samples.read_bytes()).hexdigest()
+            and runner_digest == hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
+            and lock_digest == hashlib.sha256((ROOT / "backend/uv.lock").read_bytes()).hexdigest()
+        ),
     )
     write_report(args.output, report)
     return report
@@ -277,6 +293,12 @@ def main():
     parser.add_argument("--calibration", action="store_true")
     parser.add_argument("--allow-self-judge", action="store_true")
     parser.add_argument("--case-id", action="append")
+    parser.add_argument(
+        "--http-timeout", type=int, choices=range(1, 601), default=180, metavar="SECONDS"
+    )
+    parser.add_argument(
+        "--metric-timeout", type=int, choices=range(1, 901), default=360, metavar="SECONDS"
+    )
     args = parser.parse_args()
     report = asyncio.run(run(args))
     if not report["inputs_unchanged"] or any(g["errors"] for g in report["summary"].values()):
