@@ -49,7 +49,7 @@ ENUMS = {
         "invalid_cache",
         "cache_unavailable",
     },
-    "data_source": {"synthetic-demo-v1", "osm-osrm-lisbon-v2"},
+    "data_source": {"synthetic-demo-v1", "osm-osrm-lisbon-v2", "curated-osrm-portugal-v1"},
 }
 COUNTS = {
     "attempt",

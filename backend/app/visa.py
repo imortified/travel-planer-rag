@@ -6,6 +6,7 @@ from pathlib import Path
 from zoneinfo import ZoneInfo
 
 from app.core.config import ROOT
+from app.core.destinations import CITIES
 from app.schemas.visa import TravelProfile
 
 RULES_PATH = ROOT / "data" / "visa-rules.json"
@@ -30,7 +31,7 @@ def assess_visas(
         "assessed_on": str(today),
         "checked_on": catalog["checked_on"],
         "review_by": catalog["review_by"],
-        "destination_country": "PT" if destination == "Lisbon" else None,
+        "destination_country": CITIES[destination].country if destination in CITIES else None,
         "purpose": purpose,
         "travel_date": str(first) if first else None,
         "end_date": str(last) if last else None,

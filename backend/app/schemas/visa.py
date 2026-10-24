@@ -3,6 +3,8 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
+from app.core.destinations import Destination
+
 
 class TravelProfile(BaseModel):
     model_config = ConfigDict(extra="forbid")
@@ -26,7 +28,7 @@ class VisaTraveller(BaseModel):
 
 class VisaPreviewInput(BaseModel):
     model_config = ConfigDict(extra="forbid")
-    destination: Literal["Lisbon", "Demo City"]
+    destination: Destination
     travel_date: date | None = None
     end_date: date | None = None
     purpose: Literal["tourism", "other", "unknown"] = "tourism"

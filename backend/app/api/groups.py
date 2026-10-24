@@ -7,6 +7,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from app.core.destinations import CITIES
 from app.core.logging import emit, span
 from app.db.models import Group, Membership, RouteOption, RouteSet, TripRequest, User
 from app.db.session import get_session
@@ -248,10 +249,24 @@ def planning_inputs(trip, request):
     first = trip.travel_date or trip.created_at.date()
     count = (trip.end_date - first).days + 1 if multi_day else 1
     inputs = []
-    provider = CityProvider() if trip.destination == "Lisbon" else None
+    provider = (
+        (
+            CityProvider()
+            if trip.destination == "Lisbon"
+            else CityProvider(destination=trip.destination)
+        )
+        if trip.destination in CITIES
+        else None
+    )
+    if provider is not None:
+        provider.preferences = {
+            category: sum(p.interests.get(category, 0) for p in request.participants)
+            / len(request.participants)
+            for category in ("history", "nature", "food", "art")
+        }
     for offset in range(count):
         day, context = first + timedelta(days=offset), None
-        if trip.destination == "Lisbon":
+        if trip.destination in CITIES:
             try:
                 semantic = (
                     {"semantic_query": trip.semantic_query, "excluded": request.excluded}
@@ -281,13 +296,15 @@ def planning_inputs(trip, request):
                     "Запустите docker compose up -d qdrant "
                     "или уберите тему поиска из запроса.",
                 ) from exc
-            source = "osm-osrm-lisbon-v2"
+            source = (
+                "osm-osrm-lisbon-v2" if trip.destination == "Lisbon" else "curated-osrm-portugal-v1"
+            )
         else:
             places, travel = load_demo()
         inputs.append(DayInput(day, places, travel, context))
     if (
         multi_day
-        and trip.destination == "Lisbon"
+        and trip.destination in CITIES
         and request.mandatory - {p.id for data in inputs for p in data.places}
     ):
         raise HTTPException(422, "Mandatory POI lacks usable data throughout the period")

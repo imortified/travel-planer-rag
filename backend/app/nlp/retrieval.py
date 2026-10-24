@@ -15,7 +15,10 @@ CATEGORY_NAMES = {"history": "история", "nature": "природа", "food
 
 
 class Retrieval:
-    def __init__(self, embedder=None, store=None, knowledge_path=None):
+    def __init__(self, embedder=None, store=None, knowledge_path=None, destination="Lisbon"):
+        from app.core.destinations import city_for
+
+        self.destination = city_for(destination).id
         self.embedder = embedder or Embeddings()
         self.store = store or QdrantStore()
         self.knowledge = json.loads(
@@ -59,11 +62,11 @@ class Retrieval:
         categories = {p["id"]: p["category"] for p in pois}
         places = [
             {
-                "key": f"Lisbon:{doc['place_id']}",
+                "key": f"{self.destination}:{doc['place_id']}",
                 "text": doc["description"],
                 "metadata": {
                     **doc,
-                    "city": "Lisbon",
+                    "city": self.destination,
                     "category": categories[doc["place_id"]],
                     "knowledge_version": version,
                 },

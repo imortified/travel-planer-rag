@@ -3,6 +3,8 @@ from typing import Annotated, Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
+from app.core.destinations import Destination, RealDestination
+
 Category = Literal["history", "nature", "food", "art"]
 Weight = Annotated[float, Field(ge=0, le=1, allow_inf_nan=False)]
 ShortText = Annotated[str, Field(min_length=1, max_length=100, pattern=r"\S")]
@@ -27,7 +29,7 @@ class Evidence(StrictModel):
 
 
 class ExtractedTrip(StrictModel):
-    destination: Literal["Lisbon", "Demo City"] | None = None
+    destination: Destination | None = None
     travel_date: date | None = None
     end_date: date | None = None
     duration_days: int | None = Field(default=None, ge=1, le=365)
@@ -52,6 +54,7 @@ class ParseInput(StrictModel):
 
 class SemanticInput(BaseModel):
     model_config = ConfigDict(extra="forbid")
+    destination: RealDestination = "Lisbon"
     text: str = Field(min_length=1, max_length=300, pattern=r"\S")
     travel_date: date
     end_date: date | None = None

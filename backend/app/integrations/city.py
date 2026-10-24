@@ -11,8 +11,10 @@ import httpx
 from opening_hours import OpeningHours, ParserError
 
 from app.core.config import settings
+from app.core.destinations import city_for
 from app.integrations.curated import enrich
 from app.integrations.http_cache import RedisHttpCache, SourceUnavailable, cached_get
+from app.planning.candidates import CANDIDATE_LIMIT, PERIOD_POOL_LIMIT, POLICY, select_candidates
 from app.planning.models import Place
 
 BBOX = "-9.145,38.708,-9.130,38.720"
@@ -38,8 +40,9 @@ def opening_window(expression, travel_date):
         return None
 
 
-def parse_catalog(body: bytes, travel_date: date):
+def parse_catalog(body: bytes, travel_date: date, bbox=BBOX):
     root = ET.fromstring(body)
+    west, south, east, north = map(float, bbox.split(","))
     if root.tag != "osm":
         raise ValueError("Expected OSM XML")
     pois = []
@@ -49,7 +52,7 @@ def parse_catalog(body: bytes, travel_date: date):
         lat, lon = float(node.attrib["lat"]), float(node.attrib["lon"])
         if not math.isfinite(lat) or not math.isfinite(lon):
             raise ValueError("Invalid OSM coordinates")
-        if not 38.708 <= lat <= 38.720 or not -9.145 <= lon <= -9.130:
+        if not south <= lat <= north or not west <= lon <= east:
             continue
         if not tags.get("name") or tags.get("tourism") not in ("museum", "attraction", "viewpoint"):
             continue
@@ -117,31 +120,50 @@ def parse_matrix(body, points):
 
 class CityProvider:
     def __init__(
-        self, client=None, cache=None, curated_path=None, *, live_catalog=False, catalog_source=None
+        self,
+        client=None,
+        cache=None,
+        curated_path=None,
+        *,
+        live_catalog=False,
+        catalog_source=None,
+        destination="Lisbon",
+        preferences=None,
     ):
+        self.city = city_for(destination)
+        self.preferences = preferences or {}
+        self.selection_state = {}
         self.client = client
         self.cache = cache if cache is not None else RedisHttpCache()
-        self.curated_path = curated_path
+        self.curated_path = curated_path or self.city.curated_path
         self.live_catalog = live_catalog
         if catalog_source is None and not live_catalog:
             from app.catalog.reader import CatalogReader
 
-            catalog_source = CatalogReader()
+            catalog_source = CatalogReader(destination=destination)
         self.catalog_source = catalog_source
 
     def with_client(self, client):
-        return CityProvider(
+        provider = CityProvider(
             client,
             self.cache,
             self.curated_path,
             live_catalog=self.live_catalog,
             catalog_source=self.catalog_source,
+            destination=self.city.id,
+            preferences=self.preferences,
         )
+        provider.selection_state = self.selection_state
+        return provider
 
     def catalog(self, travel_date):
         if not self.live_catalog:
             return self.catalog_source.catalog(travel_date)
-        return self.fetch_catalog(travel_date)
+        catalog = self.fetch_catalog(travel_date)
+        for poi in catalog["pois"]:
+            if poi.get("provenance") and travel_date.weekday() in (poi.get("free_weekdays") or []):
+                poi["cost_per_person"] = 0
+        return catalog
 
     def fetch_catalog(self, travel_date, *, curated_catalog=None, force=False):
         """Explicit upstream fetch for refresh tooling/tests; API reads published snapshots."""
@@ -156,7 +178,7 @@ class CityProvider:
 
             def validate(body):
                 try:
-                    parsed = parse_catalog(body, travel_date)
+                    parsed = parse_catalog(body, travel_date, self.city.bbox)
                     if len({p["id"] for p in parsed}) != len(parsed):
                         raise ValueError("Duplicate OSM POI IDs")
                     return parsed
@@ -166,7 +188,7 @@ class CityProvider:
             parsed, fetched, cache_info = cached_get(
                 self.client,
                 settings.osm_map_url,
-                {"bbox": BBOX},
+                {"bbox": self.city.bbox},
                 settings.osm_cache_ttl_seconds,
                 self.cache,
                 "osm",
@@ -179,11 +201,11 @@ class CityProvider:
         except (ET.ParseError, KeyError, ValueError) as exc:
             raise SourceUnavailable("Invalid OSM response") from exc
         return {
-            "destination": "Lisbon",
+            "destination": self.city.id,
             "currency": "EUR",
             "travel_date": str(travel_date),
-            "timezone": "Europe/Lisbon",
-            "origin": ORIGIN,
+            "timezone": self.city.timezone,
+            "origin": self.city.origin,
             "pois": pois,
             "fetched_at": fetched,
             "source": settings.osm_map_url,
@@ -209,9 +231,25 @@ class CityProvider:
                     travel_date, mandatory, allow_empty, semantic_query, excluded
                 )
         catalog = self.catalog(travel_date)
+        if len(mandatory) > CANDIDATE_LIMIT:
+            raise IncompleteData(f"At most {CANDIDATE_LIMIT} mandatory POI are supported")
         if (catalog.get("catalog_snapshot") or {}).get("status") == "expired":
             raise SourceUnavailable("Сохранённый каталог устарел. Обновите данные перед расчётом.")
-        usable = [p for p in catalog["pois"] if p["eligible"]]
+        if "pool" not in self.selection_state:
+            self.selection_state["pool"] = {
+                p["id"]
+                for p in select_candidates(
+                    [p for p in catalog["pois"] if p["id"] not in excluded or p["id"] in mandatory],
+                    mandatory,
+                    self.preferences,
+                    limit=PERIOD_POOL_LIMIT,
+                )
+            }
+        usable = [
+            p
+            for p in catalog["pois"]
+            if p["eligible"] and p["id"] not in excluded and p["id"] in self.selection_state["pool"]
+        ]
         if not allow_empty and mandatory - {p["id"] for p in usable}:
             raise IncompleteData(
                 "Mandatory POI absent or missing supported hours/price/access data"
@@ -221,14 +259,18 @@ class CityProvider:
             from app.nlp.retrieval import Retrieval
 
             usable = [p for p in usable if p["id"] not in excluded or p["id"] in mandatory]
-            retrieval = Retrieval().search(
+            retriever = (
+                Retrieval() if self.city.id == "Lisbon" else Retrieval(destination=self.city.id)
+            )
+            retrieval = retriever.search(
                 semantic_query, [p for p in usable if p["id"] not in excluded]
             )
             if retrieval.get("can_apply") is False:
                 raise IncompleteData(retrieval["message"])
         relevance = {m["place_id"]: m["score"] for m in retrieval["matches"]} if retrieval else {}
-        usable.sort(key=lambda p: (p["id"] not in mandatory, -relevance.get(p["id"], -1), p["id"]))
-        selected = usable[:12]
+        selected = select_candidates(
+            usable, mandatory, self.preferences, relevance, offset=travel_date.toordinal()
+        )
         if allow_empty and not selected:
             return (
                 [],
@@ -241,8 +283,8 @@ class CityProvider:
                     "travel_minutes": [],
                 },
             )
-        if len(mandatory) > 12 or not selected:
-            raise IncompleteData("No eligible POI for this date, or more than 12 mandatory POI")
+        if not selected:
+            raise IncompleteData("No eligible POI for this date")
         points = [catalog["origin"]] + selected
         coordinates = ";".join(f"{p['longitude']},{p['latitude']}" for p in points)
         url = f"{settings.osrm_url.rstrip('/')}/table/v1/driving/{coordinates}"
@@ -271,6 +313,9 @@ class CityProvider:
             "pois": selected,
             "catalog_count": len(catalog["pois"]),
             "eligible_count": len(usable),
+            "candidate_limit": CANDIDATE_LIMIT,
+            "candidate_policy": POLICY,
+            "period_pool_limit": PERIOD_POOL_LIMIT,
             "routing_fetched_at": fetched,
             "routing_source": settings.osrm_url,
             "cache": {**catalog.get("cache", {}), "osrm": cache_info},
@@ -282,7 +327,7 @@ class CityProvider:
             ],
             "limitations": [
                 "OSM data is not an official guarantee of opening or price",
-                "OSM nodes in central Lisbon plus source-verified curated locations",
+                "Mapped city POI plus source-verified curated locations",
                 "Visit durations are planning policy, not source facts",
                 "Regular adult admission and explicit food orders per participant; "
                 "other meals, extras and discounts excluded",
@@ -294,6 +339,6 @@ class CityProvider:
         if retrieval:
             context["retrieval"] = {
                 **retrieval,
-                "candidate_policy": "mandatory_then_similarity_cap_12",
+                "candidate_policy": POLICY,
             }
         return places, travel, context

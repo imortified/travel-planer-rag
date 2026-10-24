@@ -27,6 +27,8 @@ class Entry(BaseModel):
     checked_on: date | None = None
     valid_until: date | None = None
     price_policy: str | None = Field(default=None, min_length=1, pattern=r"\S")
+    free_weekdays: list[Literal[0, 1, 2, 3, 4, 5, 6]] | None = None
+    restricted_access: bool = False
 
     @model_validator(mode="after")
     def coordinates(self):
@@ -72,7 +74,7 @@ def enrich(
         checked_on = entry.checked_on or catalog.checked_on
         valid_until = entry.valid_until or catalog.valid_until
         original = records.get(entry.id)
-        if original is None and not entry.id.startswith("curated:"):
+        if original is None and not entry.id.startswith("curated:") and entry.latitude is None:
             continue  # Missing mapped POI must not acquire invented coordinates.
         poi = dict(original or {})
         provenance = {
@@ -89,6 +91,12 @@ def enrich(
                 k: original.get(k) for k in ("name", "fee", "opening_hours", "osm_timestamp")
             }
         else:
+            if (
+                entry.latitude is None
+                or entry.longitude is None
+                or entry.coordinates_source is None
+            ):
+                raise ValueError("Standalone POI requires sourced coordinates")
             poi.update(
                 id=entry.id,
                 latitude=entry.latitude,
@@ -110,6 +118,8 @@ def enrich(
             issues.append("curation_outside_validity")
         if window is None:
             issues.append("unknown_closed_or_unsupported_hours")
+        if entry.restricted_access and "restricted_access" not in issues:
+            issues.append("restricted_access")
         poi.update(
             name=entry.name,
             category=entry.category,
@@ -122,5 +132,7 @@ def enrich(
             eligible=not issues,
             provenance=provenance,
         )
+        if entry.free_weekdays is not None:
+            poi["free_weekdays"] = entry.free_weekdays
         records[entry.id] = poi
     return sorted(records.values(), key=lambda p: p["id"]), catalog.version

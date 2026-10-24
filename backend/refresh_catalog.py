@@ -10,6 +10,7 @@ from sqlalchemy.orm import Session
 
 from app.catalog.refresh import refresh
 from app.catalog.repository import load_active
+from app.core.destinations import CITIES
 from app.core.logging import configure_logging, request_id
 from app.db.models import CatalogVersion
 from app.db.session import engine
@@ -17,6 +18,12 @@ from app.db.session import engine
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--city", choices=list(CITIES), default="Lisbon")
+    parser.add_argument(
+        "--curated-only",
+        action="store_true",
+        help="Publish only explicitly reviewed standalone facts; no OSM refresh",
+    )
     parser.add_argument(
         "--status",
         action="store_true",
@@ -28,10 +35,10 @@ def main():
     try:
         if args.status:
             with Session(engine) as session:
-                snapshot = load_active(session)
+                snapshot = load_active(session, args.city)
                 versions = session.scalars(
                     select(CatalogVersion)
-                    .where(CatalogVersion.destination == "Lisbon")
+                    .where(CatalogVersion.destination == args.city)
                     .order_by(CatalogVersion.id.desc())
                     .limit(10)
                 ).all()
@@ -54,7 +61,7 @@ def main():
                     ],
                 }
         else:
-            snapshot, reused = refresh()
+            snapshot, reused = refresh(destination=args.city, curated_only=args.curated_only)
             result = {
                 "published": True,
                 "version_id": snapshot.version_id,

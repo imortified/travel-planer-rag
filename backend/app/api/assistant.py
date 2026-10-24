@@ -3,7 +3,7 @@ import logging
 from fastapi import APIRouter, HTTPException
 from sqlalchemy import select
 
-from app.api.destinations import lisbon_pois
+from app.api.destinations import city_pois, lisbon_pois
 from app.api.groups import DB, require
 from app.core.logging import emit, span
 from app.db.models import RouteOption, TripRequest
@@ -21,13 +21,23 @@ logger = logging.getLogger(__name__)
 
 @router.post("/assistant/search")
 def semantic_search(payload: SemanticInput):
-    catalog = lisbon_pois(payload.travel_date, payload.end_date)
+    catalog = (
+        lisbon_pois(payload.travel_date, payload.end_date)
+        if payload.destination == "Lisbon"
+        else city_pois(payload.destination, payload.travel_date, payload.end_date)
+    )
     try:
         with span(logger, "retrieval.search", operation="search") as details:
-            result = Retrieval().search(payload.text, [p for p in catalog["pois"] if p["eligible"]])
+            retrieval = (
+                Retrieval()
+                if payload.destination == "Lisbon"
+                else Retrieval(destination=payload.destination)
+            )
+            result = retrieval.search(payload.text, [p for p in catalog["pois"] if p["eligible"]])
             details.update(poi_count=len(result["matches"]))
         return {
             **result,
+            "destination": payload.destination,
             "travel_date": str(payload.travel_date),
             "end_date": str(payload.end_date or payload.travel_date),
         }

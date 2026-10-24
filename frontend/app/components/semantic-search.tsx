@@ -6,8 +6,8 @@ import { semanticSelection } from "../../lib/semantic-search";
 
 const categories:Record<string,string>={history:"История",nature:"Природа",food:"Еда",art:"Искусство"};
 
-export function SemanticInterests({date,endDate,disabled,members,selected,onApply,onClear,onBusy}: {
-  date:string;endDate:string;disabled:boolean;members:{key:number;name:string}[];selected:string;
+export function SemanticInterests({destination,date,endDate,disabled,members,selected,onApply,onClear,onBusy}: {
+  destination:string;date:string;endDate:string;disabled:boolean;members:{key:number;name:string}[];selected:string;
   onApply:(query:string,category:string,target:string)=>void;onClear:()=>void;onBusy:(label:string)=>void;
 }) {
   const [text,setText]=useState("");
@@ -15,12 +15,12 @@ export function SemanticInterests({date,endDate,disabled,members,selected,onAppl
   const [result,setResult]=useState<{value:SemanticSearch;signature:string}>();
   const [manual,setManual]=useState("");
   const [error,setError]=useState("");
-  const signature=JSON.stringify([text.trim(),date,endDate]);
+  const signature=JSON.stringify([destination,text.trim(),date,endDate]);
   const value=result?.signature===signature?result.value:undefined;
   async function search() {
     if(disabled || !date || !text.trim()) return;
     onBusy("Ищем по интересам…");setError("");setManual("");setResult(undefined);
-    try {const value=await api<SemanticSearch>("/assistant/search","POST",{text:text.trim(),travel_date:date,end_date:endDate||null});setResult({value,signature});}
+    try {const value=await api<SemanticSearch>("/assistant/search","POST",{destination,text:text.trim(),travel_date:date,end_date:endDate||null});setResult({value,signature});}
     catch(e){setError(e instanceof Error?e.message:"Не удалось найти места");}
     finally{onBusy("");}
   }

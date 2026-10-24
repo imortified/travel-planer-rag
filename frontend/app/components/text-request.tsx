@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { api, clock, money, type ParseOutput } from "../../lib/api";
+import { destinationName } from "../../lib/destinations";
 
 const interestNames: Record<string,string>={history:"История",nature:"Природа",food:"Еда",art:"Искусство"};
 const interestText=(values:Record<string,number>)=>Object.entries(values).map(([k,v])=>`${interestNames[k]||k}: ${Math.round(v*100)}%`).join(", ") || "Не указаны";
@@ -29,7 +30,7 @@ export function TextRequest({disabled, memberNames, onBusy, onApply}: {
     <button className="secondary" disabled={disabled || working || !text.trim()} onClick={()=>run("Разбираем текст…",async()=>{setParsed(await api<ParseOutput>("/assistant/parse","POST",{text,member_names:memberNames}));setApplied(false);})}>Разобрать текст</button>
     <div aria-live="polite">{error && <div role="alert" className="message error">{error} Форма остаётся доступной.</div>}
     {parsed && draft && <div className="draft-preview"><h3>Распознанные параметры</h3>
-      <dl><dt>Направление</dt><dd>{draft.destination==="Lisbon"?"Лиссабон":draft.destination==="Demo City"?"Демо-город":"Не указано"}</dd>
+      <dl><dt>Направление</dt><dd>{draft.destination?destinationName(draft.destination):"Не указано"}</dd>
       <dt>Даты</dt><dd>{draft.travel_date || "Не указаны"}{draft.end_date?` — ${draft.end_date}`:""}</dd>
       <dt>Бюджет группы</dt><dd>{parsed.group_budget===null?"Требует уточнения":money(parsed.group_budget)}</dd>
       <dt>Участники</dt><dd>{draft.participants.map(m=>m.name).join(", ") || (draft.participant_count?`${draft.participant_count} чел.`:memberNames.join(", ") || "Не указаны")}</dd>

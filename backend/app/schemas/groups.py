@@ -3,6 +3,7 @@ from typing import Annotated, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
+from app.core.destinations import Destination
 from app.planning.alternatives import ComparisonMetrics
 from app.planning.models import Result
 from app.schemas.assistant import ExplanationOutput
@@ -42,7 +43,7 @@ class GroupOutput(NamedOutput):
 
 class TripInput(BaseModel):
     pace: Literal["unrestricted", "relaxed", "balanced", "intensive"] = "unrestricted"
-    destination: Literal["Demo City", "Lisbon"] = "Demo City"
+    destination: Destination = "Demo City"
     travel_date: date | None = None
     end_date: date | None = None
     currency: Literal["EUR"] = "EUR"
@@ -56,13 +57,13 @@ class TripInput(BaseModel):
 
     @model_validator(mode="after")
     def check_interval(self):
-        if self.semantic_query and self.destination != "Lisbon":
-            raise ValueError("Semantic retrieval is supported for Lisbon only")
+        if self.semantic_query and self.destination == "Demo City":
+            raise ValueError("Semantic retrieval requires a real city")
         if self.end_date is not None:
             if self.travel_date is None or not 0 <= (self.end_date - self.travel_date).days <= 13:
                 raise ValueError("Period must have a start date and contain 1-14 days")
-        if self.destination == "Lisbon" and self.travel_date is None:
-            raise ValueError("travel_date is required for Lisbon")
+        if self.destination != "Demo City" and self.travel_date is None:
+            raise ValueError("travel_date is required for a real city")
         if self.start >= self.end:
             raise ValueError("start must precede end")
         return self

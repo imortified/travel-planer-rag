@@ -5,6 +5,8 @@ from datetime import date, timedelta
 
 DESTINATIONS = {
     "Lisbon": r"\b(?:лиссабон(?:а|е|у|ом)?|lisbon|lisboa)\b",
+    "Porto": r"\b(?:порту|porto)\b",
+    "Sintra": r"\b(?:синтр(?:а|е|у|ы|ой)|sintra)\b",
     "Demo City": r"\b(?:демо[-\s]*город(?:а|е|у|ом)?|demo\s+city)\b",
 }
 CATEGORIES = {
@@ -89,6 +91,16 @@ def destination_supported(destination, quote, text):
         return False
     pattern = DESTINATIONS[destination]
     if not re.search(pattern, quote, re.I):
+        return False
+    positive = {
+        city
+        for city, expression in DESTINATIONS.items()
+        if any(
+            not re.search(r"\b(?:не(?:\s+(?:в|во|на))?|вместо|кроме)\s*$", text[: m.start()], re.I)
+            for m in re.finditer(expression, text, re.I)
+        )
+    }
+    if len(positive) > 1:
         return False
     matches = list(re.finditer(pattern, text, re.I))
     return any(

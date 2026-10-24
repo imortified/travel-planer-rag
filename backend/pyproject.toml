@@ -17,6 +17,7 @@ dependencies = [
 ]
 
 [dependency-groups]
+catalog = ["osmium==4.3.2"]
 dev = ["pytest>=8,<10", "ruff>=0.9,<1"]
 evaluation = [
     "langchain-community>=0.3.29,<0.4",

@@ -15,14 +15,16 @@ from app.integrations.http_cache import SourceUnavailable
 logger = logging.getLogger(__name__)
 
 
-def load_current():
+def load_current(destination="Lisbon"):
     with Session(engine) as session:
-        return load_active(session)
+        return load_active(session, destination)
 
 
 class CatalogReader:
-    def __init__(self, loader=None, clock=None):
-        self.loader = loader or load_current
+    def __init__(self, loader=None, clock=None, destination="Lisbon"):
+        self.loader = loader or (
+            load_current if destination == "Lisbon" else lambda: load_current(destination)
+        )
         self.clock = clock or (lambda: datetime.now(timezone.utc))
         self._snapshot = None
         self._read_at = None
@@ -58,6 +60,12 @@ class CatalogReader:
         for fact in snapshot.data.pois:
             poi = fact.model_dump(mode="json", exclude_none=True)
             poi["cost_per_person"] = fact.cost_per_person
+            if (
+                fact.provenance
+                and fact.free_weekdays
+                and travel_date.weekday() in fact.free_weekdays
+            ):
+                poi["cost_per_person"] = 0
             poi["opening_hours"] = fact.opening_hours
             window = opening_window(fact.opening_hours, travel_date)
             issues = list(fact.issues)

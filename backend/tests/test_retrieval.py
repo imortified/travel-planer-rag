@@ -128,7 +128,7 @@ def test_ranked_candidate_cap_keeps_mandatory_excludes_blocked_and_preserves_val
     with httpx.Client(
         transport=httpx.MockTransport(
             lambda _: httpx.Response(
-                200, json={"code": "Ok", "durations": [[0] * 13 for _ in range(13)]}
+                200, json={"code": "Ok", "durations": [[0] * 15 for _ in range(15)]}
             )
         )
     ) as client:
@@ -136,15 +136,15 @@ def test_ranked_candidate_cap_keeps_mandatory_excludes_blocked_and_preserves_val
             date(2026, 10, 23), frozenset({"0"}), semantic_query="history", excluded={"14"}
         )
     ids = [p.id for p in places]
-    assert ids[0] == "0" and ids[1] == "13" and len(ids) == 12
-    assert "1" not in ids and "14" not in ids and "15" not in ids
+    assert ids[0] == "0" and ids[1] == "13" and len(ids) == 14
+    assert "1" in ids and "14" not in ids and "15" not in ids
     request = Request(
         [Participant("a", {"history": 1})], 100, 540, 1080, frozenset({"0"}), frozenset({"14"})
     )
     result = checked_plan(request, places, travel, "beam")
     assert result.is_feasible and result.validation.is_valid
     assert result.total_cost == 100 and result.visits[0].place_id == "0"
-    assert context["retrieval"]["candidate_policy"] == "mandatory_then_similarity_cap_12"
+    assert context["retrieval"]["candidate_policy"] == "category-rotation-v1"
 
 
 @pytest.mark.parametrize("failure", [EmbeddingUnavailable, VectorStoreUnavailable])

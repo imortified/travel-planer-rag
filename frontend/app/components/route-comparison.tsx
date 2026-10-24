@@ -1,6 +1,7 @@
 import { money, type Route, type RouteSet, type Trip } from "../../lib/api";
 import { VisaReport } from "./visa-report";
 import { SolverStatus } from "./solver-status";
+import { destinationName } from "../../lib/destinations";
 
 const points = (value: number) => value.toLocaleString("ru-RU", {maximumFractionDigits:2});
 
@@ -30,7 +31,7 @@ export function RouteComparison({data, trip, selectedId, names, reasonLabels, di
   ];
   return <section className="card comparison" aria-label="Сравнение маршрутов">
     <div className="comparison-heading"><h3>Сравнение маршрутов</h3><span className="badge">Расчёт №{data.id}</span></div>
-    <p className="hint">{trip.destination==="Lisbon"?"Лиссабон":"Демо-город"} · {trip.travel_date || "Без даты"}{trip.end_date && trip.end_date!==trip.travel_date ? ` — ${trip.end_date}` : ""} · бюджет {money(trip.budget)}</p>
+    <p className="hint">{destinationName(trip.destination)} · {trip.travel_date || "Без даты"}{trip.end_date && trip.end_date!==trip.travel_date ? ` — ${trip.end_date}` : ""} · бюджет {money(trip.budget)}</p>
     {!data.options.length ? <div role="status" className="message error">{data.diagnostic?.solver?.status==="INFEASIBLE"?"При заданных данных и ограничениях допустимого маршрута нет: CP-SAT доказал невозможность.":data.diagnostic?.solver?.status==="UNKNOWN"?"За доступное время CP-SAT не нашёл допустимого маршрута. Это не доказывает невозможность; попробуйте увеличить лимит.":"Допустимых маршрутов не найдено. Проверьте бюджет, время и обязательные места. Ограниченный поиск может пропустить существующий вариант."}
       {data.diagnostic && <ul>{[...new Set(data.diagnostic.reasons.map(r=>r.split(":")[0]))].map(code=><li key={code}>{reasonLabels[code] || code}</li>)}</ul>}
     </div> : <>
@@ -53,6 +54,6 @@ export function RouteComparison({data, trip, selectedId, names, reasonLabels, di
     {data.search_info.note_codes.includes("fewer_distinct_options_found") && <p className="hint" role="status">Найдено вариантов: {data.options.length} из 3. Поиск ограничен; при текущих условиях больше содержательно разных вариантов не найдено. Перестановки тех же мест не считаются альтернативой.</p>}
     {data.search_info.note_codes.includes("cp_sat_time_budget_exhausted") && <p className="hint" role="status">Бюджет времени CP-SAT исчерпан. Показаны найденные варианты; дополнительные альтернативы могли остаться ненайденными.</p>}
     {!data.options.length && <SolverStatus report={data.diagnostic?.solver}/>}
-    {!data.options.length && trip.destination==="Lisbon" && <VisaReport report={data.visa_report}/>}
+    {!data.options.length && trip.destination!=="Demo City" && <VisaReport report={data.visa_report}/>}
   </section>;
 }

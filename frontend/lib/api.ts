@@ -1,4 +1,5 @@
 import { validRequestId } from "./request-id";
+import type { Destination } from "./destinations";
 
 export type Interests = Record<string, number>;
 export type PaceMode = "unrestricted" | "relaxed" | "balanced" | "intensive";
@@ -23,7 +24,7 @@ export type SemanticSearch = {query:string;model:string;knowledge_version:string
 export type ParsedMember = {name:string;interests:Interests};
 export type ParseOutput = {model:string;prompt_version:string;reference_date:string;group_budget:number|null;
   questions:{field:string;text:string}[];warnings:string[];
-  draft:{destination:"Lisbon"|"Demo City"|null;travel_date:string|null;end_date:string|null;
+  draft:{destination:Destination|null;travel_date:string|null;end_date:string|null;
     start:number|null;end:number|null;participant_count:number|null;participants:ParsedMember[];
     common_interests:Interests;mandatory_names:string[];excluded_names:string[]}};
 export type TravelProfile = {citizenship:string|null;passport_kind:"unknown"|"ordinary"|"special";biometric:boolean|null;special_entry_basis:boolean|null;visa_status:"unknown"|"held"|"not_held"};

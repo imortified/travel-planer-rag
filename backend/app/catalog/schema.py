@@ -63,6 +63,10 @@ class PoiFact(FactModel):
         default_factory=list
     )
     provenance: Provenance | None = None
+    # Absent on historical snapshots: omitting null preserves their canonical hashes.
+    free_weekdays: list[Literal[0, 1, 2, 3, 4, 5, 6]] | None = Field(
+        default=None, exclude_if=lambda value: value is None
+    )
 
 
 class Manifest(FactModel):
