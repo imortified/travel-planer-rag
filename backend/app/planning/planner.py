@@ -2,6 +2,7 @@
 
 from app.planning.models import Place, Request, Result, Visit
 from app.planning.objective import Objective
+from app.planning.pace import fits_pace
 
 
 def plan(
@@ -52,10 +53,16 @@ def plan(
             if minutes is None:
                 continue  # Missing routing data must never imply zero travel time.
             arrival = now + minutes
-            begins = max(arrival, place.opens)
+            rest = request.pace.break_minutes if request.pace and visits else 0
+            begins = max(arrival + rest, place.opens)
             ends = begins + place.duration
             price = place.cost_per_person * len(request.participants)
-            if ends <= min(place.closes, request.end) and cost + price <= request.budget:
+            extension = visits + [Visit(place.id, arrival, begins, ends)]
+            if (
+                ends <= min(place.closes, request.end)
+                and cost + price <= request.budget
+                and fits_pace(request, extension, travel)
+            ):
                 candidates.append((place, arrival, begins, ends, price))
         if not candidates:
             break

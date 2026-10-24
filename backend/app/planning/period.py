@@ -12,6 +12,7 @@ from app.planning.models import (
     Visit,
 )
 from app.planning.objective import Objective
+from app.planning.pace import fits_pace, spread_visits
 from app.planning.planner import plan
 from app.planning.validator import validate_route
 
@@ -117,7 +118,13 @@ def plan_period(
         visits = list(greedy.visits)
         visits[index] = tuple(outcome.visits)
         greedy = State(index, tuple(visits), greedy.cost + outcome.total_cost)
-    best = greedy
+    spread = spread_visits(request, greedy.visits, inputs, objective)
+    spread_cost = sum(
+        objective.places[i][v.place_id].cost_per_person * len(request.participants)
+        for i, day in enumerate(spread)
+        for v in day
+    )
+    best = State(greedy.day, tuple(tuple(day) for day in spread), spread_cost)
     if algorithm == "beam" and not request.mandatory & request.excluded:
         frontier = [initial]
         for _ in range(len(by_id) + len(inputs)):
@@ -135,10 +142,17 @@ def plan_period(
                     if travel is None:
                         continue
                     arrival = now + travel
-                    begins = max(arrival, place.opens)
+                    rest = request.pace.break_minutes if request.pace and today else 0
+                    begins = max(arrival + rest, place.opens)
                     ends = begins + place.duration
                     cost = state.cost + place.cost_per_person * len(request.participants)
-                    if ends > min(place.closes, request.end) or cost > request.budget:
+                    if (
+                        ends > min(place.closes, request.end)
+                        or cost > request.budget
+                        or not fits_pace(
+                            request, [*today, Visit(place.id, arrival, begins, ends)], data.travel
+                        )
+                    ):
                         continue
                     days = list(state.visits)
                     days[state.day] = today + (Visit(place.id, arrival, begins, ends),)
@@ -163,8 +177,13 @@ def plan_period(
             frontier.extend(s for s in ordered if s not in selected)
             frontier = frontier[:beam_width]
             best = min([best, *frontier], key=rank)
-    visits = [list(day) for day in best.visits]
-    report, days = validate_period(request, visits, inputs, best.cost)
+    visits = spread_visits(request, best.visits, inputs, objective)
+    cost = sum(
+        objective.places[i][v.place_id].cost_per_person * len(request.participants)
+        for i, day in enumerate(visits)
+        for v in day
+    )
+    report, days = validate_period(request, visits, inputs, cost)
     flat = [v for day in visits for v in day]
     score = objective.evaluate(visits)
     satisfaction = {
@@ -174,7 +193,7 @@ def plan_period(
     return Result(
         report.is_valid,
         flat,
-        best.cost,
+        cost,
         satisfaction,
         list(dict.fromkeys(v.code for v in report.violations)),
         report,

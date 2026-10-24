@@ -61,6 +61,7 @@ class TripRequest(Base):
     travel_date: Mapped[date | None]
     end_date: Mapped[date | None]
     semantic_query: Mapped[str | None] = mapped_column(String(300), nullable=True)
+    pace_settings: Mapped[dict | None] = mapped_column(JSON, nullable=True)
     purpose: Mapped[str] = mapped_column(String(20), default="tourism", server_default="unknown")
     budget: Mapped[int]
     start: Mapped[int]

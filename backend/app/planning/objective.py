@@ -7,6 +7,7 @@ from math import isfinite
 from app.planning.models import DayInput, ObjectiveReport, Request
 
 VERSION = "normalized-group-objective-v1"
+PACE_VERSION = "normalized-group-objective-v2-pace"
 
 
 @dataclass(frozen=True)
@@ -15,20 +16,24 @@ class Weights:
     cost: float = 0.15
     travel: float = 0.15
     fairness: float = 0.35
+    spread: float = 0.12
 
     def __post_init__(self):
-        if any(not isfinite(v) or v < 0 for v in self.as_dict().values()):
+        if any(not isfinite(v) or v < 0 for v in self.as_dict(True).values()):
             raise ValueError("Objective weights must be finite and nonnegative")
         if self.reward == 0:
             raise ValueError("Reward weight must be positive")
 
-    def as_dict(self):
-        return {
+    def as_dict(self, include_spread=False):
+        values = {
             "reward": self.reward,
             "cost": self.cost,
             "travel": self.travel,
             "fairness": self.fairness,
         }
+        if include_spread:
+            values["spread"] = self.spread
+        return values
 
 
 class Objective:
@@ -38,6 +43,7 @@ class Objective:
         if request.budget < 0:
             raise ValueError("Budget cannot be negative")
         self.request, self.weights = request, weights
+        self.version = PACE_VERSION if request.pace else VERSION
         self.places = [{p.id: p for p in day.places} for day in inputs]
         ids = set().union(*(set(day) for day in self.places)) - request.excluded
         self.candidate_count = len(ids)
@@ -95,9 +101,12 @@ class Objective:
             "travel": -self.weights.travel * travel_ratio,
             "fairness": -self.weights.fairness * gap,
         }
+        day_coverage = sum(bool(day) for day in visits_by_day) / len(self.places)
+        if self.request.pace:
+            contributions["spread"] = self.weights.spread * day_coverage
         return ObjectiveReport(
-            version=VERSION,
-            weights=self.weights.as_dict(),
+            version=self.version,
+            weights=self.weights.as_dict(self.request.pace is not None),
             value=sum(contributions.values()),
             contributions=contributions,
             participant_utility=totals,
@@ -114,6 +123,7 @@ class Objective:
             candidate_count=self.candidate_count,
             budget=self.request.budget,
             available_minutes=self.available_minutes,
+            day_coverage=day_coverage,
         )
 
     def key(self, visits_by_day):

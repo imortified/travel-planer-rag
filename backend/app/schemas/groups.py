@@ -41,6 +41,7 @@ class GroupOutput(NamedOutput):
 
 
 class TripInput(BaseModel):
+    pace: Literal["unrestricted", "relaxed", "balanced", "intensive"] = "unrestricted"
     destination: Literal["Demo City", "Lisbon"] = "Demo City"
     travel_date: date | None = None
     end_date: date | None = None
@@ -68,6 +69,7 @@ class TripInput(BaseModel):
 
 
 class TripOutput(TripInput):
+    pace_settings: dict | None = None
     id: int
     group_id: int
     participants_snapshot: list[MemberOutput]

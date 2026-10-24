@@ -1,0 +1,3824 @@
+{
+  "version": "pace-replay-v1",
+  "note": "Public POI/travel snapshots from a saved 14-day calculation; participant anonymized; no external refresh.",
+  "request": {
+    "participants": [
+      {
+        "id": "1",
+        "interests": {
+          "history": 1.0,
+          "nature": 0.5,
+          "food": 0.5,
+          "art": 0.5
+        }
+      }
+    ],
+    "budget": 100000,
+    "start": 540,
+    "end": 1080,
+    "mandatory": [],
+    "excluded": []
+  },
+  "days": [
+    {
+      "travel_date": "2026-10-14",
+      "places": [
+        {
+          "id": "osm:node:4804718021",
+          "category": "history",
+          "cost_per_person": 0,
+          "duration": 60,
+          "opens": 600,
+          "closes": 1080
+        },
+        {
+          "id": "osm:node:5068486966",
+          "category": "history",
+          "cost_per_person": 0,
+          "duration": 60,
+          "opens": 600,
+          "closes": 1020
+        }
+      ],
+      "travel": [
+        {
+          "from": "osm:node:4804718021",
+          "to": "osm:node:5068486966",
+          "minutes": 4
+        },
+        {
+          "from": "osm:node:4804718021",
+          "to": "start",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:5068486966",
+          "to": "osm:node:4804718021",
+          "minutes": 4
+        },
+        {
+          "from": "osm:node:5068486966",
+          "to": "start",
+          "minutes": 2
+        },
+        {
+          "from": "start",
+          "to": "osm:node:4804718021",
+          "minutes": 2
+        },
+        {
+          "from": "start",
+          "to": "osm:node:5068486966",
+          "minutes": 2
+        }
+      ],
+      "eligible_count": 2
+    },
+    {
+      "travel_date": "2026-10-15",
+      "places": [
+        {
+          "id": "osm:node:4804718021",
+          "category": "history",
+          "cost_per_person": 0,
+          "duration": 60,
+          "opens": 600,
+          "closes": 1080
+        },
+        {
+          "id": "osm:node:5068486966",
+          "category": "history",
+          "cost_per_person": 0,
+          "duration": 60,
+          "opens": 600,
+          "closes": 1020
+        }
+      ],
+      "travel": [
+        {
+          "from": "osm:node:4804718021",
+          "to": "osm:node:5068486966",
+          "minutes": 4
+        },
+        {
+          "from": "osm:node:4804718021",
+          "to": "start",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:5068486966",
+          "to": "osm:node:4804718021",
+          "minutes": 4
+        },
+        {
+          "from": "osm:node:5068486966",
+          "to": "start",
+          "minutes": 2
+        },
+        {
+          "from": "start",
+          "to": "osm:node:4804718021",
+          "minutes": 2
+        },
+        {
+          "from": "start",
+          "to": "osm:node:5068486966",
+          "minutes": 2
+        }
+      ],
+      "eligible_count": 2
+    },
+    {
+      "travel_date": "2026-10-16",
+      "places": [
+        {
+          "id": "osm:node:4804718021",
+          "category": "history",
+          "cost_per_person": 0,
+          "duration": 60,
+          "opens": 600,
+          "closes": 1080
+        },
+        {
+          "id": "osm:node:5068486966",
+          "category": "history",
+          "cost_per_person": 0,
+          "duration": 60,
+          "opens": 600,
+          "closes": 1020
+        }
+      ],
+      "travel": [
+        {
+          "from": "osm:node:4804718021",
+          "to": "osm:node:5068486966",
+          "minutes": 4
+        },
+        {
+          "from": "osm:node:4804718021",
+          "to": "start",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:5068486966",
+          "to": "osm:node:4804718021",
+          "minutes": 4
+        },
+        {
+          "from": "osm:node:5068486966",
+          "to": "start",
+          "minutes": 2
+        },
+        {
+          "from": "start",
+          "to": "osm:node:4804718021",
+          "minutes": 2
+        },
+        {
+          "from": "start",
+          "to": "osm:node:5068486966",
+          "minutes": 2
+        }
+      ],
+      "eligible_count": 2
+    },
+    {
+      "travel_date": "2026-10-17",
+      "places": [
+        {
+          "id": "osm:node:4804718021",
+          "category": "history",
+          "cost_per_person": 0,
+          "duration": 60,
+          "opens": 600,
+          "closes": 1080
+        },
+        {
+          "id": "osm:node:5068486966",
+          "category": "history",
+          "cost_per_person": 0,
+          "duration": 60,
+          "opens": 600,
+          "closes": 1020
+        }
+      ],
+      "travel": [
+        {
+          "from": "osm:node:4804718021",
+          "to": "osm:node:5068486966",
+          "minutes": 4
+        },
+        {
+          "from": "osm:node:4804718021",
+          "to": "start",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:5068486966",
+          "to": "osm:node:4804718021",
+          "minutes": 4
+        },
+        {
+          "from": "osm:node:5068486966",
+          "to": "start",
+          "minutes": 2
+        },
+        {
+          "from": "start",
+          "to": "osm:node:4804718021",
+          "minutes": 2
+        },
+        {
+          "from": "start",
+          "to": "osm:node:5068486966",
+          "minutes": 2
+        }
+      ],
+      "eligible_count": 2
+    },
+    {
+      "travel_date": "2026-10-18",
+      "places": [
+        {
+          "id": "osm:node:5068486966",
+          "category": "history",
+          "cost_per_person": 0,
+          "duration": 60,
+          "opens": 600,
+          "closes": 1020
+        }
+      ],
+      "travel": [
+        {
+          "from": "osm:node:5068486966",
+          "to": "start",
+          "minutes": 2
+        },
+        {
+          "from": "start",
+          "to": "osm:node:5068486966",
+          "minutes": 2
+        }
+      ],
+      "eligible_count": 1
+    },
+    {
+      "travel_date": "2026-10-19",
+      "places": [],
+      "travel": [],
+      "eligible_count": null
+    },
+    {
+      "travel_date": "2026-10-20",
+      "places": [
+        {
+          "id": "osm:node:5068486966",
+          "category": "history",
+          "cost_per_person": 0,
+          "duration": 60,
+          "opens": 600,
+          "closes": 1020
+        }
+      ],
+      "travel": [
+        {
+          "from": "osm:node:5068486966",
+          "to": "start",
+          "minutes": 2
+        },
+        {
+          "from": "start",
+          "to": "osm:node:5068486966",
+          "minutes": 2
+        }
+      ],
+      "eligible_count": 1
+    },
+    {
+      "travel_date": "2026-10-21",
+      "places": [
+        {
+          "id": "osm:node:4804718021",
+          "category": "history",
+          "cost_per_person": 0,
+          "duration": 60,
+          "opens": 600,
+          "closes": 1080
+        },
+        {
+          "id": "osm:node:5068486966",
+          "category": "history",
+          "cost_per_person": 0,
+          "duration": 60,
+          "opens": 600,
+          "closes": 1020
+        }
+      ],
+      "travel": [
+        {
+          "from": "osm:node:4804718021",
+          "to": "osm:node:5068486966",
+          "minutes": 4
+        },
+        {
+          "from": "osm:node:4804718021",
+          "to": "start",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:5068486966",
+          "to": "osm:node:4804718021",
+          "minutes": 4
+        },
+        {
+          "from": "osm:node:5068486966",
+          "to": "start",
+          "minutes": 2
+        },
+        {
+          "from": "start",
+          "to": "osm:node:4804718021",
+          "minutes": 2
+        },
+        {
+          "from": "start",
+          "to": "osm:node:5068486966",
+          "minutes": 2
+        }
+      ],
+      "eligible_count": 2
+    },
+    {
+      "travel_date": "2026-10-22",
+      "places": [
+        {
+          "id": "osm:node:4804718021",
+          "category": "history",
+          "cost_per_person": 0,
+          "duration": 60,
+          "opens": 600,
+          "closes": 1080
+        },
+        {
+          "id": "osm:node:5068486966",
+          "category": "history",
+          "cost_per_person": 0,
+          "duration": 60,
+          "opens": 600,
+          "closes": 1020
+        }
+      ],
+      "travel": [
+        {
+          "from": "osm:node:4804718021",
+          "to": "osm:node:5068486966",
+          "minutes": 4
+        },
+        {
+          "from": "osm:node:4804718021",
+          "to": "start",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:5068486966",
+          "to": "osm:node:4804718021",
+          "minutes": 4
+        },
+        {
+          "from": "osm:node:5068486966",
+          "to": "start",
+          "minutes": 2
+        },
+        {
+          "from": "start",
+          "to": "osm:node:4804718021",
+          "minutes": 2
+        },
+        {
+          "from": "start",
+          "to": "osm:node:5068486966",
+          "minutes": 2
+        }
+      ],
+      "eligible_count": 2
+    },
+    {
+      "travel_date": "2026-10-23",
+      "places": [
+        {
+          "id": "curated:lisbon:ajuda-botanical-garden",
+          "category": "nature",
+          "cost_per_person": 200,
+          "duration": 60,
+          "opens": 600,
+          "closes": 1020
+        },
+        {
+          "id": "osm:node:11047643391",
+          "category": "art",
+          "cost_per_person": 1000,
+          "duration": 90,
+          "opens": 600,
+          "closes": 1080
+        },
+        {
+          "id": "osm:node:12926040967",
+          "category": "history",
+          "cost_per_person": 0,
+          "duration": 60,
+          "opens": 600,
+          "closes": 1080
+        },
+        {
+          "id": "osm:node:13096661171",
+          "category": "art",
+          "cost_per_person": 800,
+          "duration": 90,
+          "opens": 600,
+          "closes": 1080
+        },
+        {
+          "id": "osm:node:13174527080",
+          "category": "art",
+          "cost_per_person": 800,
+          "duration": 90,
+          "opens": 600,
+          "closes": 1080
+        },
+        {
+          "id": "osm:node:4419041593",
+          "category": "history",
+          "cost_per_person": 400,
+          "duration": 90,
+          "opens": 600,
+          "closes": 1080
+        },
+        {
+          "id": "osm:node:4804718021",
+          "category": "history",
+          "cost_per_person": 0,
+          "duration": 60,
+          "opens": 600,
+          "closes": 1080
+        },
+        {
+          "id": "osm:node:5068486965",
+          "category": "history",
+          "cost_per_person": 700,
+          "duration": 60,
+          "opens": 600,
+          "closes": 1140
+        },
+        {
+          "id": "osm:node:5068486966",
+          "category": "history",
+          "cost_per_person": 0,
+          "duration": 60,
+          "opens": 600,
+          "closes": 1020
+        }
+      ],
+      "travel": [
+        {
+          "from": "curated:lisbon:ajuda-botanical-garden",
+          "to": "osm:node:11047643391",
+          "minutes": 10
+        },
+        {
+          "from": "curated:lisbon:ajuda-botanical-garden",
+          "to": "osm:node:12926040967",
+          "minutes": 11
+        },
+        {
+          "from": "curated:lisbon:ajuda-botanical-garden",
+          "to": "osm:node:13096661171",
+          "minutes": 9
+        },
+        {
+          "from": "curated:lisbon:ajuda-botanical-garden",
+          "to": "osm:node:13174527080",
+          "minutes": 9
+        },
+        {
+          "from": "curated:lisbon:ajuda-botanical-garden",
+          "to": "osm:node:4419041593",
+          "minutes": 11
+        },
+        {
+          "from": "curated:lisbon:ajuda-botanical-garden",
+          "to": "osm:node:4804718021",
+          "minutes": 11
+        },
+        {
+          "from": "curated:lisbon:ajuda-botanical-garden",
+          "to": "osm:node:5068486965",
+          "minutes": 10
+        },
+        {
+          "from": "curated:lisbon:ajuda-botanical-garden",
+          "to": "osm:node:5068486966",
+          "minutes": 11
+        },
+        {
+          "from": "curated:lisbon:ajuda-botanical-garden",
+          "to": "start",
+          "minutes": 11
+        },
+        {
+          "from": "osm:node:11047643391",
+          "to": "curated:lisbon:ajuda-botanical-garden",
+          "minutes": 9
+        },
+        {
+          "from": "osm:node:11047643391",
+          "to": "osm:node:12926040967",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:11047643391",
+          "to": "osm:node:13096661171",
+          "minutes": 2
+        },
+        {
+          "from": "osm:node:11047643391",
+          "to": "osm:node:13174527080",
+          "minutes": 2
+        },
+        {
+          "from": "osm:node:11047643391",
+          "to": "osm:node:4419041593",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:11047643391",
+          "to": "osm:node:4804718021",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:11047643391",
+          "to": "osm:node:5068486965",
+          "minutes": 2
+        },
+        {
+          "from": "osm:node:11047643391",
+          "to": "osm:node:5068486966",
+          "minutes": 4
+        },
+        {
+          "from": "osm:node:11047643391",
+          "to": "start",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:12926040967",
+          "to": "curated:lisbon:ajuda-botanical-garden",
+          "minutes": 11
+        },
+        {
+          "from": "osm:node:12926040967",
+          "to": "osm:node:11047643391",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:12926040967",
+          "to": "osm:node:13096661171",
+          "minutes": 4
+        },
+        {
+          "from": "osm:node:12926040967",
+          "to": "osm:node:13174527080",
+          "minutes": 4
+        },
+        {
+          "from": "osm:node:12926040967",
+          "to": "osm:node:4419041593",
+          "minutes": 1
+        },
+        {
+          "from": "osm:node:12926040967",
+          "to": "osm:node:4804718021",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:12926040967",
+          "to": "osm:node:5068486965",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:12926040967",
+          "to": "osm:node:5068486966",
+          "minutes": 5
+        },
+        {
+          "from": "osm:node:12926040967",
+          "to": "start",
+          "minutes": 4
+        },
+        {
+          "from": "osm:node:13096661171",
+          "to": "curated:lisbon:ajuda-botanical-garden",
+          "minutes": 9
+        },
+        {
+          "from": "osm:node:13096661171",
+          "to": "osm:node:11047643391",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:13096661171",
+          "to": "osm:node:12926040967",
+          "minutes": 4
+        },
+        {
+          "from": "osm:node:13096661171",
+          "to": "osm:node:13174527080",
+          "minutes": 0
+        },
+        {
+          "from": "osm:node:13096661171",
+          "to": "osm:node:4419041593",
+          "minutes": 4
+        },
+        {
+          "from": "osm:node:13096661171",
+          "to": "osm:node:4804718021",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:13096661171",
+          "to": "osm:node:5068486965",
+          "minutes": 2
+        },
+        {
+          "from": "osm:node:13096661171",
+          "to": "osm:node:5068486966",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:13096661171",
+          "to": "start",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:13174527080",
+          "to": "curated:lisbon:ajuda-botanical-garden",
+          "minutes": 9
+        },
+        {
+          "from": "osm:node:13174527080",
+          "to": "osm:node:11047643391",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:13174527080",
+          "to": "osm:node:12926040967",
+          "minutes": 4
+        },
+        {
+          "from": "osm:node:13174527080",
+          "to": "osm:node:13096661171",
+          "minutes": 0
+        },
+        {
+          "from": "osm:node:13174527080",
+          "to": "osm:node:4419041593",
+          "minutes": 4
+        },
+        {
+          "from": "osm:node:13174527080",
+          "to": "osm:node:4804718021",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:13174527080",
+          "to": "osm:node:5068486965",
+          "minutes": 2
+        },
+        {
+          "from": "osm:node:13174527080",
+          "to": "osm:node:5068486966",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:13174527080",
+          "to": "start",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:4419041593",
+          "to": "curated:lisbon:ajuda-botanical-garden",
+          "minutes": 10
+        },
+        {
+          "from": "osm:node:4419041593",
+          "to": "osm:node:11047643391",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:4419041593",
+          "to": "osm:node:12926040967",
+          "minutes": 1
+        },
+        {
+          "from": "osm:node:4419041593",
+          "to": "osm:node:13096661171",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:4419041593",
+          "to": "osm:node:13174527080",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:4419041593",
+          "to": "osm:node:4804718021",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:4419041593",
+          "to": "osm:node:5068486965",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:4419041593",
+          "to": "osm:node:5068486966",
+          "minutes": 4
+        },
+        {
+          "from": "osm:node:4419041593",
+          "to": "start",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:4804718021",
+          "to": "curated:lisbon:ajuda-botanical-garden",
+          "minutes": 9
+        },
+        {
+          "from": "osm:node:4804718021",
+          "to": "osm:node:11047643391",
+          "minutes": 2
+        },
+        {
+          "from": "osm:node:4804718021",
+          "to": "osm:node:12926040967",
+          "minutes": 2
+        },
+        {
+          "from": "osm:node:4804718021",
+          "to": "osm:node:13096661171",
+          "minutes": 2
+        },
+        {
+          "from": "osm:node:4804718021",
+          "to": "osm:node:13174527080",
+          "minutes": 2
+        },
+        {
+          "from": "osm:node:4804718021",
+          "to": "osm:node:4419041593",
+          "minutes": 2
+        },
+        {
+          "from": "osm:node:4804718021",
+          "to": "osm:node:5068486965",
+          "minutes": 2
+        },
+        {
+          "from": "osm:node:4804718021",
+          "to": "osm:node:5068486966",
+          "minutes": 4
+        },
+        {
+          "from": "osm:node:4804718021",
+          "to": "start",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:5068486965",
+          "to": "curated:lisbon:ajuda-botanical-garden",
+          "minutes": 9
+        },
+        {
+          "from": "osm:node:5068486965",
+          "to": "osm:node:11047643391",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:5068486965",
+          "to": "osm:node:12926040967",
+          "minutes": 4
+        },
+        {
+          "from": "osm:node:5068486965",
+          "to": "osm:node:13096661171",
+          "minutes": 2
+        },
+        {
+          "from": "osm:node:5068486965",
+          "to": "osm:node:13174527080",
+          "minutes": 2
+        },
+        {
+          "from": "osm:node:5068486965",
+          "to": "osm:node:4419041593",
+          "minutes": 4
+        },
+        {
+          "from": "osm:node:5068486965",
+          "to": "osm:node:4804718021",
+          "minutes": 4
+        },
+        {
+          "from": "osm:node:5068486965",
+          "to": "osm:node:5068486966",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:5068486965",
+          "to": "start",
+          "minutes": 2
+        },
+        {
+          "from": "osm:node:5068486966",
+          "to": "curated:lisbon:ajuda-botanical-garden",
+          "minutes": 11
+        },
+        {
+          "from": "osm:node:5068486966",
+          "to": "osm:node:11047643391",
+          "minutes": 4
+        },
+        {
+          "from": "osm:node:5068486966",
+          "to": "osm:node:12926040967",
+          "minutes": 5
+        },
+        {
+          "from": "osm:node:5068486966",
+          "to": "osm:node:13096661171",
+          "minutes": 4
+        },
+        {
+          "from": "osm:node:5068486966",
+          "to": "osm:node:13174527080",
+          "minutes": 4
+        },
+        {
+          "from": "osm:node:5068486966",
+          "to": "osm:node:4419041593",
+          "minutes": 4
+        },
+        {
+          "from": "osm:node:5068486966",
+          "to": "osm:node:4804718021",
+          "minutes": 4
+        },
+        {
+          "from": "osm:node:5068486966",
+          "to": "osm:node:5068486965",
+          "minutes": 4
+        },
+        {
+          "from": "osm:node:5068486966",
+          "to": "start",
+          "minutes": 2
+        },
+        {
+          "from": "start",
+          "to": "curated:lisbon:ajuda-botanical-garden",
+          "minutes": 10
+        },
+        {
+          "from": "start",
+          "to": "osm:node:11047643391",
+          "minutes": 3
+        },
+        {
+          "from": "start",
+          "to": "osm:node:12926040967",
+          "minutes": 3
+        },
+        {
+          "from": "start",
+          "to": "osm:node:13096661171",
+          "minutes": 3
+        },
+        {
+          "from": "start",
+          "to": "osm:node:13174527080",
+          "minutes": 3
+        },
+        {
+          "from": "start",
+          "to": "osm:node:4419041593",
+          "minutes": 3
+        },
+        {
+          "from": "start",
+          "to": "osm:node:4804718021",
+          "minutes": 2
+        },
+        {
+          "from": "start",
+          "to": "osm:node:5068486965",
+          "minutes": 2
+        },
+        {
+          "from": "start",
+          "to": "osm:node:5068486966",
+          "minutes": 2
+        }
+      ],
+      "eligible_count": 9
+    },
+    {
+      "travel_date": "2026-10-24",
+      "places": [
+        {
+          "id": "curated:lisbon:ajuda-botanical-garden",
+          "category": "nature",
+          "cost_per_person": 200,
+          "duration": 60,
+          "opens": 600,
+          "closes": 1020
+        },
+        {
+          "id": "curated:lisbon:amelia-campo-de-ourique",
+          "category": "food",
+          "cost_per_person": 1800,
+          "duration": 90,
+          "opens": 540,
+          "closes": 1320
+        },
+        {
+          "id": "curated:lisbon:estufa-fria",
+          "category": "nature",
+          "cost_per_person": 370,
+          "duration": 90,
+          "opens": 600,
+          "closes": 1020
+        },
+        {
+          "id": "curated:lisbon:gulbenkian-garden",
+          "category": "nature",
+          "cost_per_person": 0,
+          "duration": 60,
+          "opens": 600,
+          "closes": 960
+        },
+        {
+          "id": "curated:lisbon:nicolau-baixa",
+          "category": "food",
+          "cost_per_person": 2000,
+          "duration": 90,
+          "opens": 510,
+          "closes": 1350
+        },
+        {
+          "id": "curated:lisbon:pasteis-de-belem",
+          "category": "food",
+          "cost_per_person": 280,
+          "duration": 60,
+          "opens": 480,
+          "closes": 1260
+        },
+        {
+          "id": "osm:node:11047643391",
+          "category": "art",
+          "cost_per_person": 1000,
+          "duration": 90,
+          "opens": 600,
+          "closes": 1080
+        },
+        {
+          "id": "osm:node:12926040967",
+          "category": "history",
+          "cost_per_person": 0,
+          "duration": 60,
+          "opens": 600,
+          "closes": 1080
+        },
+        {
+          "id": "osm:node:13096661171",
+          "category": "art",
+          "cost_per_person": 800,
+          "duration": 90,
+          "opens": 600,
+          "closes": 1080
+        },
+        {
+          "id": "osm:node:13174527080",
+          "category": "art",
+          "cost_per_person": 800,
+          "duration": 90,
+          "opens": 600,
+          "closes": 1080
+        },
+        {
+          "id": "osm:node:4419041593",
+          "category": "history",
+          "cost_per_person": 400,
+          "duration": 90,
+          "opens": 600,
+          "closes": 1080
+        },
+        {
+          "id": "osm:node:4804718021",
+          "category": "history",
+          "cost_per_person": 0,
+          "duration": 60,
+          "opens": 600,
+          "closes": 1080
+        }
+      ],
+      "travel": [
+        {
+          "from": "curated:lisbon:ajuda-botanical-garden",
+          "to": "curated:lisbon:amelia-campo-de-ourique",
+          "minutes": 8
+        },
+        {
+          "from": "curated:lisbon:ajuda-botanical-garden",
+          "to": "curated:lisbon:estufa-fria",
+          "minutes": 10
+        },
+        {
+          "from": "curated:lisbon:ajuda-botanical-garden",
+          "to": "curated:lisbon:gulbenkian-garden",
+          "minutes": 11
+        },
+        {
+          "from": "curated:lisbon:ajuda-botanical-garden",
+          "to": "curated:lisbon:nicolau-baixa",
+          "minutes": 11
+        },
+        {
+          "from": "curated:lisbon:ajuda-botanical-garden",
+          "to": "curated:lisbon:pasteis-de-belem",
+          "minutes": 2
+        },
+        {
+          "from": "curated:lisbon:ajuda-botanical-garden",
+          "to": "osm:node:11047643391",
+          "minutes": 10
+        },
+        {
+          "from": "curated:lisbon:ajuda-botanical-garden",
+          "to": "osm:node:12926040967",
+          "minutes": 11
+        },
+        {
+          "from": "curated:lisbon:ajuda-botanical-garden",
+          "to": "osm:node:13096661171",
+          "minutes": 9
+        },
+        {
+          "from": "curated:lisbon:ajuda-botanical-garden",
+          "to": "osm:node:13174527080",
+          "minutes": 9
+        },
+        {
+          "from": "curated:lisbon:ajuda-botanical-garden",
+          "to": "osm:node:4419041593",
+          "minutes": 11
+        },
+        {
+          "from": "curated:lisbon:ajuda-botanical-garden",
+          "to": "osm:node:4804718021",
+          "minutes": 11
+        },
+        {
+          "from": "curated:lisbon:ajuda-botanical-garden",
+          "to": "start",
+          "minutes": 11
+        },
+        {
+          "from": "curated:lisbon:amelia-campo-de-ourique",
+          "to": "curated:lisbon:ajuda-botanical-garden",
+          "minutes": 8
+        },
+        {
+          "from": "curated:lisbon:amelia-campo-de-ourique",
+          "to": "curated:lisbon:estufa-fria",
+          "minutes": 5
+        },
+        {
+          "from": "curated:lisbon:amelia-campo-de-ourique",
+          "to": "curated:lisbon:gulbenkian-garden",
+          "minutes": 6
+        },
+        {
+          "from": "curated:lisbon:amelia-campo-de-ourique",
+          "to": "curated:lisbon:nicolau-baixa",
+          "minutes": 7
+        },
+        {
+          "from": "curated:lisbon:amelia-campo-de-ourique",
+          "to": "curated:lisbon:pasteis-de-belem",
+          "minutes": 7
+        },
+        {
+          "from": "curated:lisbon:amelia-campo-de-ourique",
+          "to": "osm:node:11047643391",
+          "minutes": 7
+        },
+        {
+          "from": "curated:lisbon:amelia-campo-de-ourique",
+          "to": "osm:node:12926040967",
+          "minutes": 8
+        },
+        {
+          "from": "curated:lisbon:amelia-campo-de-ourique",
+          "to": "osm:node:13096661171",
+          "minutes": 4
+        },
+        {
+          "from": "curated:lisbon:amelia-campo-de-ourique",
+          "to": "osm:node:13174527080",
+          "minutes": 4
+        },
+        {
+          "from": "curated:lisbon:amelia-campo-de-ourique",
+          "to": "osm:node:4419041593",
+          "minutes": 7
+        },
+        {
+          "from": "curated:lisbon:amelia-campo-de-ourique",
+          "to": "osm:node:4804718021",
+          "minutes": 7
+        },
+        {
+          "from": "curated:lisbon:amelia-campo-de-ourique",
+          "to": "start",
+          "minutes": 6
+        },
+        {
+          "from": "curated:lisbon:estufa-fria",
+          "to": "curated:lisbon:ajuda-botanical-garden",
+          "minutes": 11
+        },
+        {
+          "from": "curated:lisbon:estufa-fria",
+          "to": "curated:lisbon:amelia-campo-de-ourique",
+          "minutes": 5
+        },
+        {
+          "from": "curated:lisbon:estufa-fria",
+          "to": "curated:lisbon:gulbenkian-garden",
+          "minutes": 4
+        },
+        {
+          "from": "curated:lisbon:estufa-fria",
+          "to": "curated:lisbon:nicolau-baixa",
+          "minutes": 8
+        },
+        {
+          "from": "curated:lisbon:estufa-fria",
+          "to": "curated:lisbon:pasteis-de-belem",
+          "minutes": 11
+        },
+        {
+          "from": "curated:lisbon:estufa-fria",
+          "to": "osm:node:11047643391",
+          "minutes": 8
+        },
+        {
+          "from": "curated:lisbon:estufa-fria",
+          "to": "osm:node:12926040967",
+          "minutes": 8
+        },
+        {
+          "from": "curated:lisbon:estufa-fria",
+          "to": "osm:node:13096661171",
+          "minutes": 6
+        },
+        {
+          "from": "curated:lisbon:estufa-fria",
+          "to": "osm:node:13174527080",
+          "minutes": 6
+        },
+        {
+          "from": "curated:lisbon:estufa-fria",
+          "to": "osm:node:4419041593",
+          "minutes": 8
+        },
+        {
+          "from": "curated:lisbon:estufa-fria",
+          "to": "osm:node:4804718021",
+          "minutes": 7
+        },
+        {
+          "from": "curated:lisbon:estufa-fria",
+          "to": "start",
+          "minutes": 6
+        },
+        {
+          "from": "curated:lisbon:gulbenkian-garden",
+          "to": "curated:lisbon:ajuda-botanical-garden",
+          "minutes": 10
+        },
+        {
+          "from": "curated:lisbon:gulbenkian-garden",
+          "to": "curated:lisbon:amelia-campo-de-ourique",
+          "minutes": 6
+        },
+        {
+          "from": "curated:lisbon:gulbenkian-garden",
+          "to": "curated:lisbon:estufa-fria",
+          "minutes": 5
+        },
+        {
+          "from": "curated:lisbon:gulbenkian-garden",
+          "to": "curated:lisbon:nicolau-baixa",
+          "minutes": 10
+        },
+        {
+          "from": "curated:lisbon:gulbenkian-garden",
+          "to": "curated:lisbon:pasteis-de-belem",
+          "minutes": 9
+        },
+        {
+          "from": "curated:lisbon:gulbenkian-garden",
+          "to": "osm:node:11047643391",
+          "minutes": 9
+        },
+        {
+          "from": "curated:lisbon:gulbenkian-garden",
+          "to": "osm:node:12926040967",
+          "minutes": 10
+        },
+        {
+          "from": "curated:lisbon:gulbenkian-garden",
+          "to": "osm:node:13096661171",
+          "minutes": 8
+        },
+        {
+          "from": "curated:lisbon:gulbenkian-garden",
+          "to": "osm:node:13174527080",
+          "minutes": 8
+        },
+        {
+          "from": "curated:lisbon:gulbenkian-garden",
+          "to": "osm:node:4419041593",
+          "minutes": 9
+        },
+        {
+          "from": "curated:lisbon:gulbenkian-garden",
+          "to": "osm:node:4804718021",
+          "minutes": 9
+        },
+        {
+          "from": "curated:lisbon:gulbenkian-garden",
+          "to": "start",
+          "minutes": 7
+        },
+        {
+          "from": "curated:lisbon:nicolau-baixa",
+          "to": "curated:lisbon:ajuda-botanical-garden",
+          "minutes": 12
+        },
+        {
+          "from": "curated:lisbon:nicolau-baixa",
+          "to": "curated:lisbon:amelia-campo-de-ourique",
+          "minutes": 8
+        },
+        {
+          "from": "curated:lisbon:nicolau-baixa",
+          "to": "curated:lisbon:estufa-fria",
+          "minutes": 7
+        },
+        {
+          "from": "curated:lisbon:nicolau-baixa",
+          "to": "curated:lisbon:gulbenkian-garden",
+          "minutes": 7
+        },
+        {
+          "from": "curated:lisbon:nicolau-baixa",
+          "to": "curated:lisbon:pasteis-de-belem",
+          "minutes": 11
+        },
+        {
+          "from": "curated:lisbon:nicolau-baixa",
+          "to": "osm:node:11047643391",
+          "minutes": 5
+        },
+        {
+          "from": "curated:lisbon:nicolau-baixa",
+          "to": "osm:node:12926040967",
+          "minutes": 5
+        },
+        {
+          "from": "curated:lisbon:nicolau-baixa",
+          "to": "osm:node:13096661171",
+          "minutes": 5
+        },
+        {
+          "from": "curated:lisbon:nicolau-baixa",
+          "to": "osm:node:13174527080",
+          "minutes": 5
+        },
+        {
+          "from": "curated:lisbon:nicolau-baixa",
+          "to": "osm:node:4419041593",
+          "minutes": 5
+        },
+        {
+          "from": "curated:lisbon:nicolau-baixa",
+          "to": "osm:node:4804718021",
+          "minutes": 4
+        },
+        {
+          "from": "curated:lisbon:nicolau-baixa",
+          "to": "start",
+          "minutes": 3
+        },
+        {
+          "from": "curated:lisbon:pasteis-de-belem",
+          "to": "curated:lisbon:ajuda-botanical-garden",
+          "minutes": 3
+        },
+        {
+          "from": "curated:lisbon:pasteis-de-belem",
+          "to": "curated:lisbon:amelia-campo-de-ourique",
+          "minutes": 7
+        },
+        {
+          "from": "curated:lisbon:pasteis-de-belem",
+          "to": "curated:lisbon:estufa-fria",
+          "minutes": 11
+        },
+        {
+          "from": "curated:lisbon:pasteis-de-belem",
+          "to": "curated:lisbon:gulbenkian-garden",
+          "minutes": 10
+        },
+        {
+          "from": "curated:lisbon:pasteis-de-belem",
+          "to": "curated:lisbon:nicolau-baixa",
+          "minutes": 10
+        },
+        {
+          "from": "curated:lisbon:pasteis-de-belem",
+          "to": "osm:node:11047643391",
+          "minutes": 10
+        },
+        {
+          "from": "curated:lisbon:pasteis-de-belem",
+          "to": "osm:node:12926040967",
+          "minutes": 11
+        },
+        {
+          "from": "curated:lisbon:pasteis-de-belem",
+          "to": "osm:node:13096661171",
+          "minutes": 8
+        },
+        {
+          "from": "curated:lisbon:pasteis-de-belem",
+          "to": "osm:node:13174527080",
+          "minutes": 8
+        },
+        {
+          "from": "curated:lisbon:pasteis-de-belem",
+          "to": "osm:node:4419041593",
+          "minutes": 10
+        },
+        {
+          "from": "curated:lisbon:pasteis-de-belem",
+          "to": "osm:node:4804718021",
+          "minutes": 10
+        },
+        {
+          "from": "curated:lisbon:pasteis-de-belem",
+          "to": "start",
+          "minutes": 10
+        },
+        {
+          "from": "osm:node:11047643391",
+          "to": "curated:lisbon:ajuda-botanical-garden",
+          "minutes": 9
+        },
+        {
+          "from": "osm:node:11047643391",
+          "to": "curated:lisbon:amelia-campo-de-ourique",
+          "minutes": 5
+        },
+        {
+          "from": "osm:node:11047643391",
+          "to": "curated:lisbon:estufa-fria",
+          "minutes": 7
+        },
+        {
+          "from": "osm:node:11047643391",
+          "to": "curated:lisbon:gulbenkian-garden",
+          "minutes": 7
+        },
+        {
+          "from": "osm:node:11047643391",
+          "to": "curated:lisbon:nicolau-baixa",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:11047643391",
+          "to": "curated:lisbon:pasteis-de-belem",
+          "minutes": 8
+        },
+        {
+          "from": "osm:node:11047643391",
+          "to": "osm:node:12926040967",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:11047643391",
+          "to": "osm:node:13096661171",
+          "minutes": 2
+        },
+        {
+          "from": "osm:node:11047643391",
+          "to": "osm:node:13174527080",
+          "minutes": 2
+        },
+        {
+          "from": "osm:node:11047643391",
+          "to": "osm:node:4419041593",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:11047643391",
+          "to": "osm:node:4804718021",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:11047643391",
+          "to": "start",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:12926040967",
+          "to": "curated:lisbon:ajuda-botanical-garden",
+          "minutes": 11
+        },
+        {
+          "from": "osm:node:12926040967",
+          "to": "curated:lisbon:amelia-campo-de-ourique",
+          "minutes": 7
+        },
+        {
+          "from": "osm:node:12926040967",
+          "to": "curated:lisbon:estufa-fria",
+          "minutes": 8
+        },
+        {
+          "from": "osm:node:12926040967",
+          "to": "curated:lisbon:gulbenkian-garden",
+          "minutes": 8
+        },
+        {
+          "from": "osm:node:12926040967",
+          "to": "curated:lisbon:nicolau-baixa",
+          "minutes": 2
+        },
+        {
+          "from": "osm:node:12926040967",
+          "to": "curated:lisbon:pasteis-de-belem",
+          "minutes": 10
+        },
+        {
+          "from": "osm:node:12926040967",
+          "to": "osm:node:11047643391",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:12926040967",
+          "to": "osm:node:13096661171",
+          "minutes": 4
+        },
+        {
+          "from": "osm:node:12926040967",
+          "to": "osm:node:13174527080",
+          "minutes": 4
+        },
+        {
+          "from": "osm:node:12926040967",
+          "to": "osm:node:4419041593",
+          "minutes": 1
+        },
+        {
+          "from": "osm:node:12926040967",
+          "to": "osm:node:4804718021",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:12926040967",
+          "to": "start",
+          "minutes": 4
+        },
+        {
+          "from": "osm:node:13096661171",
+          "to": "curated:lisbon:ajuda-botanical-garden",
+          "minutes": 9
+        },
+        {
+          "from": "osm:node:13096661171",
+          "to": "curated:lisbon:amelia-campo-de-ourique",
+          "minutes": 4
+        },
+        {
+          "from": "osm:node:13096661171",
+          "to": "curated:lisbon:estufa-fria",
+          "minutes": 5
+        },
+        {
+          "from": "osm:node:13096661171",
+          "to": "curated:lisbon:gulbenkian-garden",
+          "minutes": 6
+        },
+        {
+          "from": "osm:node:13096661171",
+          "to": "curated:lisbon:nicolau-baixa",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:13096661171",
+          "to": "curated:lisbon:pasteis-de-belem",
+          "minutes": 8
+        },
+        {
+          "from": "osm:node:13096661171",
+          "to": "osm:node:11047643391",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:13096661171",
+          "to": "osm:node:12926040967",
+          "minutes": 4
+        },
+        {
+          "from": "osm:node:13096661171",
+          "to": "osm:node:13174527080",
+          "minutes": 0
+        },
+        {
+          "from": "osm:node:13096661171",
+          "to": "osm:node:4419041593",
+          "minutes": 4
+        },
+        {
+          "from": "osm:node:13096661171",
+          "to": "osm:node:4804718021",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:13096661171",
+          "to": "start",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:13174527080",
+          "to": "curated:lisbon:ajuda-botanical-garden",
+          "minutes": 9
+        },
+        {
+          "from": "osm:node:13174527080",
+          "to": "curated:lisbon:amelia-campo-de-ourique",
+          "minutes": 4
+        },
+        {
+          "from": "osm:node:13174527080",
+          "to": "curated:lisbon:estufa-fria",
+          "minutes": 5
+        },
+        {
+          "from": "osm:node:13174527080",
+          "to": "curated:lisbon:gulbenkian-garden",
+          "minutes": 6
+        },
+        {
+          "from": "osm:node:13174527080",
+          "to": "curated:lisbon:nicolau-baixa",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:13174527080",
+          "to": "curated:lisbon:pasteis-de-belem",
+          "minutes": 8
+        },
+        {
+          "from": "osm:node:13174527080",
+          "to": "osm:node:11047643391",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:13174527080",
+          "to": "osm:node:12926040967",
+          "minutes": 4
+        },
+        {
+          "from": "osm:node:13174527080",
+          "to": "osm:node:13096661171",
+          "minutes": 0
+        },
+        {
+          "from": "osm:node:13174527080",
+          "to": "osm:node:4419041593",
+          "minutes": 4
+        },
+        {
+          "from": "osm:node:13174527080",
+          "to": "osm:node:4804718021",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:13174527080",
+          "to": "start",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:4419041593",
+          "to": "curated:lisbon:ajuda-botanical-garden",
+          "minutes": 10
+        },
+        {
+          "from": "osm:node:4419041593",
+          "to": "curated:lisbon:amelia-campo-de-ourique",
+          "minutes": 6
+        },
+        {
+          "from": "osm:node:4419041593",
+          "to": "curated:lisbon:estufa-fria",
+          "minutes": 8
+        },
+        {
+          "from": "osm:node:4419041593",
+          "to": "curated:lisbon:gulbenkian-garden",
+          "minutes": 8
+        },
+        {
+          "from": "osm:node:4419041593",
+          "to": "curated:lisbon:nicolau-baixa",
+          "minutes": 2
+        },
+        {
+          "from": "osm:node:4419041593",
+          "to": "curated:lisbon:pasteis-de-belem",
+          "minutes": 9
+        },
+        {
+          "from": "osm:node:4419041593",
+          "to": "osm:node:11047643391",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:4419041593",
+          "to": "osm:node:12926040967",
+          "minutes": 1
+        },
+        {
+          "from": "osm:node:4419041593",
+          "to": "osm:node:13096661171",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:4419041593",
+          "to": "osm:node:13174527080",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:4419041593",
+          "to": "osm:node:4804718021",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:4419041593",
+          "to": "start",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:4804718021",
+          "to": "curated:lisbon:ajuda-botanical-garden",
+          "minutes": 9
+        },
+        {
+          "from": "osm:node:4804718021",
+          "to": "curated:lisbon:amelia-campo-de-ourique",
+          "minutes": 5
+        },
+        {
+          "from": "osm:node:4804718021",
+          "to": "curated:lisbon:estufa-fria",
+          "minutes": 7
+        },
+        {
+          "from": "osm:node:4804718021",
+          "to": "curated:lisbon:gulbenkian-garden",
+          "minutes": 8
+        },
+        {
+          "from": "osm:node:4804718021",
+          "to": "curated:lisbon:nicolau-baixa",
+          "minutes": 2
+        },
+        {
+          "from": "osm:node:4804718021",
+          "to": "curated:lisbon:pasteis-de-belem",
+          "minutes": 8
+        },
+        {
+          "from": "osm:node:4804718021",
+          "to": "osm:node:11047643391",
+          "minutes": 2
+        },
+        {
+          "from": "osm:node:4804718021",
+          "to": "osm:node:12926040967",
+          "minutes": 2
+        },
+        {
+          "from": "osm:node:4804718021",
+          "to": "osm:node:13096661171",
+          "minutes": 2
+        },
+        {
+          "from": "osm:node:4804718021",
+          "to": "osm:node:13174527080",
+          "minutes": 2
+        },
+        {
+          "from": "osm:node:4804718021",
+          "to": "osm:node:4419041593",
+          "minutes": 2
+        },
+        {
+          "from": "osm:node:4804718021",
+          "to": "start",
+          "minutes": 3
+        },
+        {
+          "from": "start",
+          "to": "curated:lisbon:ajuda-botanical-garden",
+          "minutes": 10
+        },
+        {
+          "from": "start",
+          "to": "curated:lisbon:amelia-campo-de-ourique",
+          "minutes": 6
+        },
+        {
+          "from": "start",
+          "to": "curated:lisbon:estufa-fria",
+          "minutes": 6
+        },
+        {
+          "from": "start",
+          "to": "curated:lisbon:gulbenkian-garden",
+          "minutes": 6
+        },
+        {
+          "from": "start",
+          "to": "curated:lisbon:nicolau-baixa",
+          "minutes": 3
+        },
+        {
+          "from": "start",
+          "to": "curated:lisbon:pasteis-de-belem",
+          "minutes": 9
+        },
+        {
+          "from": "start",
+          "to": "osm:node:11047643391",
+          "minutes": 3
+        },
+        {
+          "from": "start",
+          "to": "osm:node:12926040967",
+          "minutes": 3
+        },
+        {
+          "from": "start",
+          "to": "osm:node:13096661171",
+          "minutes": 3
+        },
+        {
+          "from": "start",
+          "to": "osm:node:13174527080",
+          "minutes": 3
+        },
+        {
+          "from": "start",
+          "to": "osm:node:4419041593",
+          "minutes": 3
+        },
+        {
+          "from": "start",
+          "to": "osm:node:4804718021",
+          "minutes": 2
+        }
+      ],
+      "eligible_count": 14
+    },
+    {
+      "travel_date": "2026-10-25",
+      "places": [
+        {
+          "id": "curated:lisbon:ajuda-botanical-garden",
+          "category": "nature",
+          "cost_per_person": 200,
+          "duration": 60,
+          "opens": 600,
+          "closes": 1020
+        },
+        {
+          "id": "curated:lisbon:amelia-campo-de-ourique",
+          "category": "food",
+          "cost_per_person": 1800,
+          "duration": 90,
+          "opens": 540,
+          "closes": 1200
+        },
+        {
+          "id": "curated:lisbon:estufa-fria",
+          "category": "nature",
+          "cost_per_person": 370,
+          "duration": 90,
+          "opens": 600,
+          "closes": 1020
+        },
+        {
+          "id": "curated:lisbon:gulbenkian-garden",
+          "category": "nature",
+          "cost_per_person": 0,
+          "duration": 60,
+          "opens": 600,
+          "closes": 960
+        },
+        {
+          "id": "curated:lisbon:nicolau-baixa",
+          "category": "food",
+          "cost_per_person": 2000,
+          "duration": 90,
+          "opens": 510,
+          "closes": 1200
+        },
+        {
+          "id": "curated:lisbon:pasteis-de-belem",
+          "category": "food",
+          "cost_per_person": 280,
+          "duration": 60,
+          "opens": 480,
+          "closes": 1260
+        },
+        {
+          "id": "osm:node:11047643391",
+          "category": "art",
+          "cost_per_person": 1000,
+          "duration": 90,
+          "opens": 600,
+          "closes": 1080
+        },
+        {
+          "id": "osm:node:13096661171",
+          "category": "art",
+          "cost_per_person": 800,
+          "duration": 90,
+          "opens": 600,
+          "closes": 1080
+        },
+        {
+          "id": "osm:node:13174527080",
+          "category": "art",
+          "cost_per_person": 800,
+          "duration": 90,
+          "opens": 600,
+          "closes": 1080
+        },
+        {
+          "id": "osm:node:4419041593",
+          "category": "history",
+          "cost_per_person": 400,
+          "duration": 90,
+          "opens": 600,
+          "closes": 1080
+        },
+        {
+          "id": "osm:node:5068486966",
+          "category": "history",
+          "cost_per_person": 0,
+          "duration": 60,
+          "opens": 600,
+          "closes": 1020
+        }
+      ],
+      "travel": [
+        {
+          "from": "curated:lisbon:ajuda-botanical-garden",
+          "to": "curated:lisbon:amelia-campo-de-ourique",
+          "minutes": 8
+        },
+        {
+          "from": "curated:lisbon:ajuda-botanical-garden",
+          "to": "curated:lisbon:estufa-fria",
+          "minutes": 10
+        },
+        {
+          "from": "curated:lisbon:ajuda-botanical-garden",
+          "to": "curated:lisbon:gulbenkian-garden",
+          "minutes": 11
+        },
+        {
+          "from": "curated:lisbon:ajuda-botanical-garden",
+          "to": "curated:lisbon:nicolau-baixa",
+          "minutes": 11
+        },
+        {
+          "from": "curated:lisbon:ajuda-botanical-garden",
+          "to": "curated:lisbon:pasteis-de-belem",
+          "minutes": 2
+        },
+        {
+          "from": "curated:lisbon:ajuda-botanical-garden",
+          "to": "osm:node:11047643391",
+          "minutes": 10
+        },
+        {
+          "from": "curated:lisbon:ajuda-botanical-garden",
+          "to": "osm:node:13096661171",
+          "minutes": 9
+        },
+        {
+          "from": "curated:lisbon:ajuda-botanical-garden",
+          "to": "osm:node:13174527080",
+          "minutes": 9
+        },
+        {
+          "from": "curated:lisbon:ajuda-botanical-garden",
+          "to": "osm:node:4419041593",
+          "minutes": 11
+        },
+        {
+          "from": "curated:lisbon:ajuda-botanical-garden",
+          "to": "osm:node:5068486966",
+          "minutes": 11
+        },
+        {
+          "from": "curated:lisbon:ajuda-botanical-garden",
+          "to": "start",
+          "minutes": 11
+        },
+        {
+          "from": "curated:lisbon:amelia-campo-de-ourique",
+          "to": "curated:lisbon:ajuda-botanical-garden",
+          "minutes": 8
+        },
+        {
+          "from": "curated:lisbon:amelia-campo-de-ourique",
+          "to": "curated:lisbon:estufa-fria",
+          "minutes": 5
+        },
+        {
+          "from": "curated:lisbon:amelia-campo-de-ourique",
+          "to": "curated:lisbon:gulbenkian-garden",
+          "minutes": 6
+        },
+        {
+          "from": "curated:lisbon:amelia-campo-de-ourique",
+          "to": "curated:lisbon:nicolau-baixa",
+          "minutes": 7
+        },
+        {
+          "from": "curated:lisbon:amelia-campo-de-ourique",
+          "to": "curated:lisbon:pasteis-de-belem",
+          "minutes": 7
+        },
+        {
+          "from": "curated:lisbon:amelia-campo-de-ourique",
+          "to": "osm:node:11047643391",
+          "minutes": 7
+        },
+        {
+          "from": "curated:lisbon:amelia-campo-de-ourique",
+          "to": "osm:node:13096661171",
+          "minutes": 4
+        },
+        {
+          "from": "curated:lisbon:amelia-campo-de-ourique",
+          "to": "osm:node:13174527080",
+          "minutes": 4
+        },
+        {
+          "from": "curated:lisbon:amelia-campo-de-ourique",
+          "to": "osm:node:4419041593",
+          "minutes": 7
+        },
+        {
+          "from": "curated:lisbon:amelia-campo-de-ourique",
+          "to": "osm:node:5068486966",
+          "minutes": 5
+        },
+        {
+          "from": "curated:lisbon:amelia-campo-de-ourique",
+          "to": "start",
+          "minutes": 6
+        },
+        {
+          "from": "curated:lisbon:estufa-fria",
+          "to": "curated:lisbon:ajuda-botanical-garden",
+          "minutes": 11
+        },
+        {
+          "from": "curated:lisbon:estufa-fria",
+          "to": "curated:lisbon:amelia-campo-de-ourique",
+          "minutes": 5
+        },
+        {
+          "from": "curated:lisbon:estufa-fria",
+          "to": "curated:lisbon:gulbenkian-garden",
+          "minutes": 4
+        },
+        {
+          "from": "curated:lisbon:estufa-fria",
+          "to": "curated:lisbon:nicolau-baixa",
+          "minutes": 8
+        },
+        {
+          "from": "curated:lisbon:estufa-fria",
+          "to": "curated:lisbon:pasteis-de-belem",
+          "minutes": 11
+        },
+        {
+          "from": "curated:lisbon:estufa-fria",
+          "to": "osm:node:11047643391",
+          "minutes": 8
+        },
+        {
+          "from": "curated:lisbon:estufa-fria",
+          "to": "osm:node:13096661171",
+          "minutes": 6
+        },
+        {
+          "from": "curated:lisbon:estufa-fria",
+          "to": "osm:node:13174527080",
+          "minutes": 6
+        },
+        {
+          "from": "curated:lisbon:estufa-fria",
+          "to": "osm:node:4419041593",
+          "minutes": 8
+        },
+        {
+          "from": "curated:lisbon:estufa-fria",
+          "to": "osm:node:5068486966",
+          "minutes": 5
+        },
+        {
+          "from": "curated:lisbon:estufa-fria",
+          "to": "start",
+          "minutes": 6
+        },
+        {
+          "from": "curated:lisbon:gulbenkian-garden",
+          "to": "curated:lisbon:ajuda-botanical-garden",
+          "minutes": 10
+        },
+        {
+          "from": "curated:lisbon:gulbenkian-garden",
+          "to": "curated:lisbon:amelia-campo-de-ourique",
+          "minutes": 6
+        },
+        {
+          "from": "curated:lisbon:gulbenkian-garden",
+          "to": "curated:lisbon:estufa-fria",
+          "minutes": 5
+        },
+        {
+          "from": "curated:lisbon:gulbenkian-garden",
+          "to": "curated:lisbon:nicolau-baixa",
+          "minutes": 10
+        },
+        {
+          "from": "curated:lisbon:gulbenkian-garden",
+          "to": "curated:lisbon:pasteis-de-belem",
+          "minutes": 9
+        },
+        {
+          "from": "curated:lisbon:gulbenkian-garden",
+          "to": "osm:node:11047643391",
+          "minutes": 9
+        },
+        {
+          "from": "curated:lisbon:gulbenkian-garden",
+          "to": "osm:node:13096661171",
+          "minutes": 8
+        },
+        {
+          "from": "curated:lisbon:gulbenkian-garden",
+          "to": "osm:node:13174527080",
+          "minutes": 8
+        },
+        {
+          "from": "curated:lisbon:gulbenkian-garden",
+          "to": "osm:node:4419041593",
+          "minutes": 9
+        },
+        {
+          "from": "curated:lisbon:gulbenkian-garden",
+          "to": "osm:node:5068486966",
+          "minutes": 6
+        },
+        {
+          "from": "curated:lisbon:gulbenkian-garden",
+          "to": "start",
+          "minutes": 7
+        },
+        {
+          "from": "curated:lisbon:nicolau-baixa",
+          "to": "curated:lisbon:ajuda-botanical-garden",
+          "minutes": 12
+        },
+        {
+          "from": "curated:lisbon:nicolau-baixa",
+          "to": "curated:lisbon:amelia-campo-de-ourique",
+          "minutes": 8
+        },
+        {
+          "from": "curated:lisbon:nicolau-baixa",
+          "to": "curated:lisbon:estufa-fria",
+          "minutes": 7
+        },
+        {
+          "from": "curated:lisbon:nicolau-baixa",
+          "to": "curated:lisbon:gulbenkian-garden",
+          "minutes": 7
+        },
+        {
+          "from": "curated:lisbon:nicolau-baixa",
+          "to": "curated:lisbon:pasteis-de-belem",
+          "minutes": 11
+        },
+        {
+          "from": "curated:lisbon:nicolau-baixa",
+          "to": "osm:node:11047643391",
+          "minutes": 5
+        },
+        {
+          "from": "curated:lisbon:nicolau-baixa",
+          "to": "osm:node:13096661171",
+          "minutes": 5
+        },
+        {
+          "from": "curated:lisbon:nicolau-baixa",
+          "to": "osm:node:13174527080",
+          "minutes": 5
+        },
+        {
+          "from": "curated:lisbon:nicolau-baixa",
+          "to": "osm:node:4419041593",
+          "minutes": 5
+        },
+        {
+          "from": "curated:lisbon:nicolau-baixa",
+          "to": "osm:node:5068486966",
+          "minutes": 4
+        },
+        {
+          "from": "curated:lisbon:nicolau-baixa",
+          "to": "start",
+          "minutes": 3
+        },
+        {
+          "from": "curated:lisbon:pasteis-de-belem",
+          "to": "curated:lisbon:ajuda-botanical-garden",
+          "minutes": 3
+        },
+        {
+          "from": "curated:lisbon:pasteis-de-belem",
+          "to": "curated:lisbon:amelia-campo-de-ourique",
+          "minutes": 7
+        },
+        {
+          "from": "curated:lisbon:pasteis-de-belem",
+          "to": "curated:lisbon:estufa-fria",
+          "minutes": 11
+        },
+        {
+          "from": "curated:lisbon:pasteis-de-belem",
+          "to": "curated:lisbon:gulbenkian-garden",
+          "minutes": 10
+        },
+        {
+          "from": "curated:lisbon:pasteis-de-belem",
+          "to": "curated:lisbon:nicolau-baixa",
+          "minutes": 10
+        },
+        {
+          "from": "curated:lisbon:pasteis-de-belem",
+          "to": "osm:node:11047643391",
+          "minutes": 10
+        },
+        {
+          "from": "curated:lisbon:pasteis-de-belem",
+          "to": "osm:node:13096661171",
+          "minutes": 8
+        },
+        {
+          "from": "curated:lisbon:pasteis-de-belem",
+          "to": "osm:node:13174527080",
+          "minutes": 8
+        },
+        {
+          "from": "curated:lisbon:pasteis-de-belem",
+          "to": "osm:node:4419041593",
+          "minutes": 10
+        },
+        {
+          "from": "curated:lisbon:pasteis-de-belem",
+          "to": "osm:node:5068486966",
+          "minutes": 10
+        },
+        {
+          "from": "curated:lisbon:pasteis-de-belem",
+          "to": "start",
+          "minutes": 10
+        },
+        {
+          "from": "osm:node:11047643391",
+          "to": "curated:lisbon:ajuda-botanical-garden",
+          "minutes": 9
+        },
+        {
+          "from": "osm:node:11047643391",
+          "to": "curated:lisbon:amelia-campo-de-ourique",
+          "minutes": 5
+        },
+        {
+          "from": "osm:node:11047643391",
+          "to": "curated:lisbon:estufa-fria",
+          "minutes": 7
+        },
+        {
+          "from": "osm:node:11047643391",
+          "to": "curated:lisbon:gulbenkian-garden",
+          "minutes": 7
+        },
+        {
+          "from": "osm:node:11047643391",
+          "to": "curated:lisbon:nicolau-baixa",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:11047643391",
+          "to": "curated:lisbon:pasteis-de-belem",
+          "minutes": 8
+        },
+        {
+          "from": "osm:node:11047643391",
+          "to": "osm:node:13096661171",
+          "minutes": 2
+        },
+        {
+          "from": "osm:node:11047643391",
+          "to": "osm:node:13174527080",
+          "minutes": 2
+        },
+        {
+          "from": "osm:node:11047643391",
+          "to": "osm:node:4419041593",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:11047643391",
+          "to": "osm:node:5068486966",
+          "minutes": 4
+        },
+        {
+          "from": "osm:node:11047643391",
+          "to": "start",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:13096661171",
+          "to": "curated:lisbon:ajuda-botanical-garden",
+          "minutes": 9
+        },
+        {
+          "from": "osm:node:13096661171",
+          "to": "curated:lisbon:amelia-campo-de-ourique",
+          "minutes": 4
+        },
+        {
+          "from": "osm:node:13096661171",
+          "to": "curated:lisbon:estufa-fria",
+          "minutes": 5
+        },
+        {
+          "from": "osm:node:13096661171",
+          "to": "curated:lisbon:gulbenkian-garden",
+          "minutes": 6
+        },
+        {
+          "from": "osm:node:13096661171",
+          "to": "curated:lisbon:nicolau-baixa",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:13096661171",
+          "to": "curated:lisbon:pasteis-de-belem",
+          "minutes": 8
+        },
+        {
+          "from": "osm:node:13096661171",
+          "to": "osm:node:11047643391",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:13096661171",
+          "to": "osm:node:13174527080",
+          "minutes": 0
+        },
+        {
+          "from": "osm:node:13096661171",
+          "to": "osm:node:4419041593",
+          "minutes": 4
+        },
+        {
+          "from": "osm:node:13096661171",
+          "to": "osm:node:5068486966",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:13096661171",
+          "to": "start",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:13174527080",
+          "to": "curated:lisbon:ajuda-botanical-garden",
+          "minutes": 9
+        },
+        {
+          "from": "osm:node:13174527080",
+          "to": "curated:lisbon:amelia-campo-de-ourique",
+          "minutes": 4
+        },
+        {
+          "from": "osm:node:13174527080",
+          "to": "curated:lisbon:estufa-fria",
+          "minutes": 5
+        },
+        {
+          "from": "osm:node:13174527080",
+          "to": "curated:lisbon:gulbenkian-garden",
+          "minutes": 6
+        },
+        {
+          "from": "osm:node:13174527080",
+          "to": "curated:lisbon:nicolau-baixa",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:13174527080",
+          "to": "curated:lisbon:pasteis-de-belem",
+          "minutes": 8
+        },
+        {
+          "from": "osm:node:13174527080",
+          "to": "osm:node:11047643391",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:13174527080",
+          "to": "osm:node:13096661171",
+          "minutes": 0
+        },
+        {
+          "from": "osm:node:13174527080",
+          "to": "osm:node:4419041593",
+          "minutes": 4
+        },
+        {
+          "from": "osm:node:13174527080",
+          "to": "osm:node:5068486966",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:13174527080",
+          "to": "start",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:4419041593",
+          "to": "curated:lisbon:ajuda-botanical-garden",
+          "minutes": 10
+        },
+        {
+          "from": "osm:node:4419041593",
+          "to": "curated:lisbon:amelia-campo-de-ourique",
+          "minutes": 6
+        },
+        {
+          "from": "osm:node:4419041593",
+          "to": "curated:lisbon:estufa-fria",
+          "minutes": 8
+        },
+        {
+          "from": "osm:node:4419041593",
+          "to": "curated:lisbon:gulbenkian-garden",
+          "minutes": 8
+        },
+        {
+          "from": "osm:node:4419041593",
+          "to": "curated:lisbon:nicolau-baixa",
+          "minutes": 2
+        },
+        {
+          "from": "osm:node:4419041593",
+          "to": "curated:lisbon:pasteis-de-belem",
+          "minutes": 9
+        },
+        {
+          "from": "osm:node:4419041593",
+          "to": "osm:node:11047643391",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:4419041593",
+          "to": "osm:node:13096661171",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:4419041593",
+          "to": "osm:node:13174527080",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:4419041593",
+          "to": "osm:node:5068486966",
+          "minutes": 4
+        },
+        {
+          "from": "osm:node:4419041593",
+          "to": "start",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:5068486966",
+          "to": "curated:lisbon:ajuda-botanical-garden",
+          "minutes": 11
+        },
+        {
+          "from": "osm:node:5068486966",
+          "to": "curated:lisbon:amelia-campo-de-ourique",
+          "minutes": 5
+        },
+        {
+          "from": "osm:node:5068486966",
+          "to": "curated:lisbon:estufa-fria",
+          "minutes": 5
+        },
+        {
+          "from": "osm:node:5068486966",
+          "to": "curated:lisbon:gulbenkian-garden",
+          "minutes": 5
+        },
+        {
+          "from": "osm:node:5068486966",
+          "to": "curated:lisbon:nicolau-baixa",
+          "minutes": 5
+        },
+        {
+          "from": "osm:node:5068486966",
+          "to": "curated:lisbon:pasteis-de-belem",
+          "minutes": 11
+        },
+        {
+          "from": "osm:node:5068486966",
+          "to": "osm:node:11047643391",
+          "minutes": 4
+        },
+        {
+          "from": "osm:node:5068486966",
+          "to": "osm:node:13096661171",
+          "minutes": 4
+        },
+        {
+          "from": "osm:node:5068486966",
+          "to": "osm:node:13174527080",
+          "minutes": 4
+        },
+        {
+          "from": "osm:node:5068486966",
+          "to": "osm:node:4419041593",
+          "minutes": 4
+        },
+        {
+          "from": "osm:node:5068486966",
+          "to": "start",
+          "minutes": 2
+        },
+        {
+          "from": "start",
+          "to": "curated:lisbon:ajuda-botanical-garden",
+          "minutes": 10
+        },
+        {
+          "from": "start",
+          "to": "curated:lisbon:amelia-campo-de-ourique",
+          "minutes": 6
+        },
+        {
+          "from": "start",
+          "to": "curated:lisbon:estufa-fria",
+          "minutes": 6
+        },
+        {
+          "from": "start",
+          "to": "curated:lisbon:gulbenkian-garden",
+          "minutes": 6
+        },
+        {
+          "from": "start",
+          "to": "curated:lisbon:nicolau-baixa",
+          "minutes": 3
+        },
+        {
+          "from": "start",
+          "to": "curated:lisbon:pasteis-de-belem",
+          "minutes": 9
+        },
+        {
+          "from": "start",
+          "to": "osm:node:11047643391",
+          "minutes": 3
+        },
+        {
+          "from": "start",
+          "to": "osm:node:13096661171",
+          "minutes": 3
+        },
+        {
+          "from": "start",
+          "to": "osm:node:13174527080",
+          "minutes": 3
+        },
+        {
+          "from": "start",
+          "to": "osm:node:4419041593",
+          "minutes": 3
+        },
+        {
+          "from": "start",
+          "to": "osm:node:5068486966",
+          "minutes": 2
+        }
+      ],
+      "eligible_count": 11
+    },
+    {
+      "travel_date": "2026-10-26",
+      "places": [
+        {
+          "id": "curated:lisbon:ajuda-botanical-garden",
+          "category": "nature",
+          "cost_per_person": 200,
+          "duration": 60,
+          "opens": 600,
+          "closes": 1020
+        },
+        {
+          "id": "curated:lisbon:amelia-campo-de-ourique",
+          "category": "food",
+          "cost_per_person": 1800,
+          "duration": 90,
+          "opens": 540,
+          "closes": 1200
+        },
+        {
+          "id": "curated:lisbon:gulbenkian-garden",
+          "category": "nature",
+          "cost_per_person": 0,
+          "duration": 60,
+          "opens": 600,
+          "closes": 960
+        },
+        {
+          "id": "curated:lisbon:nicolau-baixa",
+          "category": "food",
+          "cost_per_person": 2000,
+          "duration": 90,
+          "opens": 510,
+          "closes": 1200
+        },
+        {
+          "id": "curated:lisbon:pasteis-de-belem",
+          "category": "food",
+          "cost_per_person": 280,
+          "duration": 60,
+          "opens": 480,
+          "closes": 1260
+        },
+        {
+          "id": "osm:node:12926040967",
+          "category": "history",
+          "cost_per_person": 0,
+          "duration": 60,
+          "opens": 600,
+          "closes": 1080
+        },
+        {
+          "id": "osm:node:5068486965",
+          "category": "history",
+          "cost_per_person": 700,
+          "duration": 60,
+          "opens": 600,
+          "closes": 1140
+        }
+      ],
+      "travel": [
+        {
+          "from": "curated:lisbon:ajuda-botanical-garden",
+          "to": "curated:lisbon:amelia-campo-de-ourique",
+          "minutes": 8
+        },
+        {
+          "from": "curated:lisbon:ajuda-botanical-garden",
+          "to": "curated:lisbon:gulbenkian-garden",
+          "minutes": 11
+        },
+        {
+          "from": "curated:lisbon:ajuda-botanical-garden",
+          "to": "curated:lisbon:nicolau-baixa",
+          "minutes": 11
+        },
+        {
+          "from": "curated:lisbon:ajuda-botanical-garden",
+          "to": "curated:lisbon:pasteis-de-belem",
+          "minutes": 2
+        },
+        {
+          "from": "curated:lisbon:ajuda-botanical-garden",
+          "to": "osm:node:12926040967",
+          "minutes": 11
+        },
+        {
+          "from": "curated:lisbon:ajuda-botanical-garden",
+          "to": "osm:node:5068486965",
+          "minutes": 10
+        },
+        {
+          "from": "curated:lisbon:ajuda-botanical-garden",
+          "to": "start",
+          "minutes": 11
+        },
+        {
+          "from": "curated:lisbon:amelia-campo-de-ourique",
+          "to": "curated:lisbon:ajuda-botanical-garden",
+          "minutes": 8
+        },
+        {
+          "from": "curated:lisbon:amelia-campo-de-ourique",
+          "to": "curated:lisbon:gulbenkian-garden",
+          "minutes": 6
+        },
+        {
+          "from": "curated:lisbon:amelia-campo-de-ourique",
+          "to": "curated:lisbon:nicolau-baixa",
+          "minutes": 7
+        },
+        {
+          "from": "curated:lisbon:amelia-campo-de-ourique",
+          "to": "curated:lisbon:pasteis-de-belem",
+          "minutes": 7
+        },
+        {
+          "from": "curated:lisbon:amelia-campo-de-ourique",
+          "to": "osm:node:12926040967",
+          "minutes": 8
+        },
+        {
+          "from": "curated:lisbon:amelia-campo-de-ourique",
+          "to": "osm:node:5068486965",
+          "minutes": 6
+        },
+        {
+          "from": "curated:lisbon:amelia-campo-de-ourique",
+          "to": "start",
+          "minutes": 6
+        },
+        {
+          "from": "curated:lisbon:gulbenkian-garden",
+          "to": "curated:lisbon:ajuda-botanical-garden",
+          "minutes": 10
+        },
+        {
+          "from": "curated:lisbon:gulbenkian-garden",
+          "to": "curated:lisbon:amelia-campo-de-ourique",
+          "minutes": 6
+        },
+        {
+          "from": "curated:lisbon:gulbenkian-garden",
+          "to": "curated:lisbon:nicolau-baixa",
+          "minutes": 10
+        },
+        {
+          "from": "curated:lisbon:gulbenkian-garden",
+          "to": "curated:lisbon:pasteis-de-belem",
+          "minutes": 9
+        },
+        {
+          "from": "curated:lisbon:gulbenkian-garden",
+          "to": "osm:node:12926040967",
+          "minutes": 10
+        },
+        {
+          "from": "curated:lisbon:gulbenkian-garden",
+          "to": "osm:node:5068486965",
+          "minutes": 9
+        },
+        {
+          "from": "curated:lisbon:gulbenkian-garden",
+          "to": "start",
+          "minutes": 7
+        },
+        {
+          "from": "curated:lisbon:nicolau-baixa",
+          "to": "curated:lisbon:ajuda-botanical-garden",
+          "minutes": 12
+        },
+        {
+          "from": "curated:lisbon:nicolau-baixa",
+          "to": "curated:lisbon:amelia-campo-de-ourique",
+          "minutes": 8
+        },
+        {
+          "from": "curated:lisbon:nicolau-baixa",
+          "to": "curated:lisbon:gulbenkian-garden",
+          "minutes": 7
+        },
+        {
+          "from": "curated:lisbon:nicolau-baixa",
+          "to": "curated:lisbon:pasteis-de-belem",
+          "minutes": 11
+        },
+        {
+          "from": "curated:lisbon:nicolau-baixa",
+          "to": "osm:node:12926040967",
+          "minutes": 5
+        },
+        {
+          "from": "curated:lisbon:nicolau-baixa",
+          "to": "osm:node:5068486965",
+          "minutes": 5
+        },
+        {
+          "from": "curated:lisbon:nicolau-baixa",
+          "to": "start",
+          "minutes": 3
+        },
+        {
+          "from": "curated:lisbon:pasteis-de-belem",
+          "to": "curated:lisbon:ajuda-botanical-garden",
+          "minutes": 3
+        },
+        {
+          "from": "curated:lisbon:pasteis-de-belem",
+          "to": "curated:lisbon:amelia-campo-de-ourique",
+          "minutes": 7
+        },
+        {
+          "from": "curated:lisbon:pasteis-de-belem",
+          "to": "curated:lisbon:gulbenkian-garden",
+          "minutes": 10
+        },
+        {
+          "from": "curated:lisbon:pasteis-de-belem",
+          "to": "curated:lisbon:nicolau-baixa",
+          "minutes": 10
+        },
+        {
+          "from": "curated:lisbon:pasteis-de-belem",
+          "to": "osm:node:12926040967",
+          "minutes": 11
+        },
+        {
+          "from": "curated:lisbon:pasteis-de-belem",
+          "to": "osm:node:5068486965",
+          "minutes": 9
+        },
+        {
+          "from": "curated:lisbon:pasteis-de-belem",
+          "to": "start",
+          "minutes": 10
+        },
+        {
+          "from": "osm:node:12926040967",
+          "to": "curated:lisbon:ajuda-botanical-garden",
+          "minutes": 11
+        },
+        {
+          "from": "osm:node:12926040967",
+          "to": "curated:lisbon:amelia-campo-de-ourique",
+          "minutes": 7
+        },
+        {
+          "from": "osm:node:12926040967",
+          "to": "curated:lisbon:gulbenkian-garden",
+          "minutes": 8
+        },
+        {
+          "from": "osm:node:12926040967",
+          "to": "curated:lisbon:nicolau-baixa",
+          "minutes": 2
+        },
+        {
+          "from": "osm:node:12926040967",
+          "to": "curated:lisbon:pasteis-de-belem",
+          "minutes": 10
+        },
+        {
+          "from": "osm:node:12926040967",
+          "to": "osm:node:5068486965",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:12926040967",
+          "to": "start",
+          "minutes": 4
+        },
+        {
+          "from": "osm:node:5068486965",
+          "to": "curated:lisbon:ajuda-botanical-garden",
+          "minutes": 9
+        },
+        {
+          "from": "osm:node:5068486965",
+          "to": "curated:lisbon:amelia-campo-de-ourique",
+          "minutes": 5
+        },
+        {
+          "from": "osm:node:5068486965",
+          "to": "curated:lisbon:gulbenkian-garden",
+          "minutes": 7
+        },
+        {
+          "from": "osm:node:5068486965",
+          "to": "curated:lisbon:nicolau-baixa",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:5068486965",
+          "to": "curated:lisbon:pasteis-de-belem",
+          "minutes": 8
+        },
+        {
+          "from": "osm:node:5068486965",
+          "to": "osm:node:12926040967",
+          "minutes": 4
+        },
+        {
+          "from": "osm:node:5068486965",
+          "to": "start",
+          "minutes": 2
+        },
+        {
+          "from": "start",
+          "to": "curated:lisbon:ajuda-botanical-garden",
+          "minutes": 10
+        },
+        {
+          "from": "start",
+          "to": "curated:lisbon:amelia-campo-de-ourique",
+          "minutes": 6
+        },
+        {
+          "from": "start",
+          "to": "curated:lisbon:gulbenkian-garden",
+          "minutes": 6
+        },
+        {
+          "from": "start",
+          "to": "curated:lisbon:nicolau-baixa",
+          "minutes": 3
+        },
+        {
+          "from": "start",
+          "to": "curated:lisbon:pasteis-de-belem",
+          "minutes": 9
+        },
+        {
+          "from": "start",
+          "to": "osm:node:12926040967",
+          "minutes": 3
+        },
+        {
+          "from": "start",
+          "to": "osm:node:5068486965",
+          "minutes": 2
+        }
+      ],
+      "eligible_count": 7
+    },
+    {
+      "travel_date": "2026-10-27",
+      "places": [
+        {
+          "id": "curated:lisbon:ajuda-botanical-garden",
+          "category": "nature",
+          "cost_per_person": 200,
+          "duration": 60,
+          "opens": 600,
+          "closes": 1020
+        },
+        {
+          "id": "curated:lisbon:amelia-campo-de-ourique",
+          "category": "food",
+          "cost_per_person": 1800,
+          "duration": 90,
+          "opens": 540,
+          "closes": 1200
+        },
+        {
+          "id": "curated:lisbon:estufa-fria",
+          "category": "nature",
+          "cost_per_person": 370,
+          "duration": 90,
+          "opens": 600,
+          "closes": 1020
+        },
+        {
+          "id": "curated:lisbon:gulbenkian-garden",
+          "category": "nature",
+          "cost_per_person": 0,
+          "duration": 60,
+          "opens": 600,
+          "closes": 960
+        },
+        {
+          "id": "curated:lisbon:nicolau-baixa",
+          "category": "food",
+          "cost_per_person": 2000,
+          "duration": 90,
+          "opens": 510,
+          "closes": 1200
+        },
+        {
+          "id": "curated:lisbon:pasteis-de-belem",
+          "category": "food",
+          "cost_per_person": 280,
+          "duration": 60,
+          "opens": 480,
+          "closes": 1260
+        },
+        {
+          "id": "osm:node:11047643391",
+          "category": "art",
+          "cost_per_person": 1000,
+          "duration": 90,
+          "opens": 600,
+          "closes": 1080
+        },
+        {
+          "id": "osm:node:12926040967",
+          "category": "history",
+          "cost_per_person": 0,
+          "duration": 60,
+          "opens": 600,
+          "closes": 1080
+        },
+        {
+          "id": "osm:node:13096661171",
+          "category": "art",
+          "cost_per_person": 800,
+          "duration": 90,
+          "opens": 600,
+          "closes": 1080
+        },
+        {
+          "id": "osm:node:13174527080",
+          "category": "art",
+          "cost_per_person": 800,
+          "duration": 90,
+          "opens": 600,
+          "closes": 1080
+        },
+        {
+          "id": "osm:node:4419041593",
+          "category": "history",
+          "cost_per_person": 400,
+          "duration": 90,
+          "opens": 600,
+          "closes": 1080
+        },
+        {
+          "id": "osm:node:5068486965",
+          "category": "history",
+          "cost_per_person": 700,
+          "duration": 60,
+          "opens": 600,
+          "closes": 1140
+        }
+      ],
+      "travel": [
+        {
+          "from": "curated:lisbon:ajuda-botanical-garden",
+          "to": "curated:lisbon:amelia-campo-de-ourique",
+          "minutes": 8
+        },
+        {
+          "from": "curated:lisbon:ajuda-botanical-garden",
+          "to": "curated:lisbon:estufa-fria",
+          "minutes": 10
+        },
+        {
+          "from": "curated:lisbon:ajuda-botanical-garden",
+          "to": "curated:lisbon:gulbenkian-garden",
+          "minutes": 11
+        },
+        {
+          "from": "curated:lisbon:ajuda-botanical-garden",
+          "to": "curated:lisbon:nicolau-baixa",
+          "minutes": 11
+        },
+        {
+          "from": "curated:lisbon:ajuda-botanical-garden",
+          "to": "curated:lisbon:pasteis-de-belem",
+          "minutes": 2
+        },
+        {
+          "from": "curated:lisbon:ajuda-botanical-garden",
+          "to": "osm:node:11047643391",
+          "minutes": 10
+        },
+        {
+          "from": "curated:lisbon:ajuda-botanical-garden",
+          "to": "osm:node:12926040967",
+          "minutes": 11
+        },
+        {
+          "from": "curated:lisbon:ajuda-botanical-garden",
+          "to": "osm:node:13096661171",
+          "minutes": 9
+        },
+        {
+          "from": "curated:lisbon:ajuda-botanical-garden",
+          "to": "osm:node:13174527080",
+          "minutes": 9
+        },
+        {
+          "from": "curated:lisbon:ajuda-botanical-garden",
+          "to": "osm:node:4419041593",
+          "minutes": 11
+        },
+        {
+          "from": "curated:lisbon:ajuda-botanical-garden",
+          "to": "osm:node:5068486965",
+          "minutes": 10
+        },
+        {
+          "from": "curated:lisbon:ajuda-botanical-garden",
+          "to": "start",
+          "minutes": 11
+        },
+        {
+          "from": "curated:lisbon:amelia-campo-de-ourique",
+          "to": "curated:lisbon:ajuda-botanical-garden",
+          "minutes": 8
+        },
+        {
+          "from": "curated:lisbon:amelia-campo-de-ourique",
+          "to": "curated:lisbon:estufa-fria",
+          "minutes": 5
+        },
+        {
+          "from": "curated:lisbon:amelia-campo-de-ourique",
+          "to": "curated:lisbon:gulbenkian-garden",
+          "minutes": 6
+        },
+        {
+          "from": "curated:lisbon:amelia-campo-de-ourique",
+          "to": "curated:lisbon:nicolau-baixa",
+          "minutes": 7
+        },
+        {
+          "from": "curated:lisbon:amelia-campo-de-ourique",
+          "to": "curated:lisbon:pasteis-de-belem",
+          "minutes": 7
+        },
+        {
+          "from": "curated:lisbon:amelia-campo-de-ourique",
+          "to": "osm:node:11047643391",
+          "minutes": 7
+        },
+        {
+          "from": "curated:lisbon:amelia-campo-de-ourique",
+          "to": "osm:node:12926040967",
+          "minutes": 8
+        },
+        {
+          "from": "curated:lisbon:amelia-campo-de-ourique",
+          "to": "osm:node:13096661171",
+          "minutes": 4
+        },
+        {
+          "from": "curated:lisbon:amelia-campo-de-ourique",
+          "to": "osm:node:13174527080",
+          "minutes": 4
+        },
+        {
+          "from": "curated:lisbon:amelia-campo-de-ourique",
+          "to": "osm:node:4419041593",
+          "minutes": 7
+        },
+        {
+          "from": "curated:lisbon:amelia-campo-de-ourique",
+          "to": "osm:node:5068486965",
+          "minutes": 6
+        },
+        {
+          "from": "curated:lisbon:amelia-campo-de-ourique",
+          "to": "start",
+          "minutes": 6
+        },
+        {
+          "from": "curated:lisbon:estufa-fria",
+          "to": "curated:lisbon:ajuda-botanical-garden",
+          "minutes": 11
+        },
+        {
+          "from": "curated:lisbon:estufa-fria",
+          "to": "curated:lisbon:amelia-campo-de-ourique",
+          "minutes": 5
+        },
+        {
+          "from": "curated:lisbon:estufa-fria",
+          "to": "curated:lisbon:gulbenkian-garden",
+          "minutes": 4
+        },
+        {
+          "from": "curated:lisbon:estufa-fria",
+          "to": "curated:lisbon:nicolau-baixa",
+          "minutes": 8
+        },
+        {
+          "from": "curated:lisbon:estufa-fria",
+          "to": "curated:lisbon:pasteis-de-belem",
+          "minutes": 11
+        },
+        {
+          "from": "curated:lisbon:estufa-fria",
+          "to": "osm:node:11047643391",
+          "minutes": 8
+        },
+        {
+          "from": "curated:lisbon:estufa-fria",
+          "to": "osm:node:12926040967",
+          "minutes": 8
+        },
+        {
+          "from": "curated:lisbon:estufa-fria",
+          "to": "osm:node:13096661171",
+          "minutes": 6
+        },
+        {
+          "from": "curated:lisbon:estufa-fria",
+          "to": "osm:node:13174527080",
+          "minutes": 6
+        },
+        {
+          "from": "curated:lisbon:estufa-fria",
+          "to": "osm:node:4419041593",
+          "minutes": 8
+        },
+        {
+          "from": "curated:lisbon:estufa-fria",
+          "to": "osm:node:5068486965",
+          "minutes": 7
+        },
+        {
+          "from": "curated:lisbon:estufa-fria",
+          "to": "start",
+          "minutes": 6
+        },
+        {
+          "from": "curated:lisbon:gulbenkian-garden",
+          "to": "curated:lisbon:ajuda-botanical-garden",
+          "minutes": 10
+        },
+        {
+          "from": "curated:lisbon:gulbenkian-garden",
+          "to": "curated:lisbon:amelia-campo-de-ourique",
+          "minutes": 6
+        },
+        {
+          "from": "curated:lisbon:gulbenkian-garden",
+          "to": "curated:lisbon:estufa-fria",
+          "minutes": 5
+        },
+        {
+          "from": "curated:lisbon:gulbenkian-garden",
+          "to": "curated:lisbon:nicolau-baixa",
+          "minutes": 10
+        },
+        {
+          "from": "curated:lisbon:gulbenkian-garden",
+          "to": "curated:lisbon:pasteis-de-belem",
+          "minutes": 9
+        },
+        {
+          "from": "curated:lisbon:gulbenkian-garden",
+          "to": "osm:node:11047643391",
+          "minutes": 9
+        },
+        {
+          "from": "curated:lisbon:gulbenkian-garden",
+          "to": "osm:node:12926040967",
+          "minutes": 10
+        },
+        {
+          "from": "curated:lisbon:gulbenkian-garden",
+          "to": "osm:node:13096661171",
+          "minutes": 8
+        },
+        {
+          "from": "curated:lisbon:gulbenkian-garden",
+          "to": "osm:node:13174527080",
+          "minutes": 8
+        },
+        {
+          "from": "curated:lisbon:gulbenkian-garden",
+          "to": "osm:node:4419041593",
+          "minutes": 9
+        },
+        {
+          "from": "curated:lisbon:gulbenkian-garden",
+          "to": "osm:node:5068486965",
+          "minutes": 9
+        },
+        {
+          "from": "curated:lisbon:gulbenkian-garden",
+          "to": "start",
+          "minutes": 7
+        },
+        {
+          "from": "curated:lisbon:nicolau-baixa",
+          "to": "curated:lisbon:ajuda-botanical-garden",
+          "minutes": 12
+        },
+        {
+          "from": "curated:lisbon:nicolau-baixa",
+          "to": "curated:lisbon:amelia-campo-de-ourique",
+          "minutes": 8
+        },
+        {
+          "from": "curated:lisbon:nicolau-baixa",
+          "to": "curated:lisbon:estufa-fria",
+          "minutes": 7
+        },
+        {
+          "from": "curated:lisbon:nicolau-baixa",
+          "to": "curated:lisbon:gulbenkian-garden",
+          "minutes": 7
+        },
+        {
+          "from": "curated:lisbon:nicolau-baixa",
+          "to": "curated:lisbon:pasteis-de-belem",
+          "minutes": 11
+        },
+        {
+          "from": "curated:lisbon:nicolau-baixa",
+          "to": "osm:node:11047643391",
+          "minutes": 5
+        },
+        {
+          "from": "curated:lisbon:nicolau-baixa",
+          "to": "osm:node:12926040967",
+          "minutes": 5
+        },
+        {
+          "from": "curated:lisbon:nicolau-baixa",
+          "to": "osm:node:13096661171",
+          "minutes": 5
+        },
+        {
+          "from": "curated:lisbon:nicolau-baixa",
+          "to": "osm:node:13174527080",
+          "minutes": 5
+        },
+        {
+          "from": "curated:lisbon:nicolau-baixa",
+          "to": "osm:node:4419041593",
+          "minutes": 5
+        },
+        {
+          "from": "curated:lisbon:nicolau-baixa",
+          "to": "osm:node:5068486965",
+          "minutes": 5
+        },
+        {
+          "from": "curated:lisbon:nicolau-baixa",
+          "to": "start",
+          "minutes": 3
+        },
+        {
+          "from": "curated:lisbon:pasteis-de-belem",
+          "to": "curated:lisbon:ajuda-botanical-garden",
+          "minutes": 3
+        },
+        {
+          "from": "curated:lisbon:pasteis-de-belem",
+          "to": "curated:lisbon:amelia-campo-de-ourique",
+          "minutes": 7
+        },
+        {
+          "from": "curated:lisbon:pasteis-de-belem",
+          "to": "curated:lisbon:estufa-fria",
+          "minutes": 11
+        },
+        {
+          "from": "curated:lisbon:pasteis-de-belem",
+          "to": "curated:lisbon:gulbenkian-garden",
+          "minutes": 10
+        },
+        {
+          "from": "curated:lisbon:pasteis-de-belem",
+          "to": "curated:lisbon:nicolau-baixa",
+          "minutes": 10
+        },
+        {
+          "from": "curated:lisbon:pasteis-de-belem",
+          "to": "osm:node:11047643391",
+          "minutes": 10
+        },
+        {
+          "from": "curated:lisbon:pasteis-de-belem",
+          "to": "osm:node:12926040967",
+          "minutes": 11
+        },
+        {
+          "from": "curated:lisbon:pasteis-de-belem",
+          "to": "osm:node:13096661171",
+          "minutes": 8
+        },
+        {
+          "from": "curated:lisbon:pasteis-de-belem",
+          "to": "osm:node:13174527080",
+          "minutes": 8
+        },
+        {
+          "from": "curated:lisbon:pasteis-de-belem",
+          "to": "osm:node:4419041593",
+          "minutes": 10
+        },
+        {
+          "from": "curated:lisbon:pasteis-de-belem",
+          "to": "osm:node:5068486965",
+          "minutes": 9
+        },
+        {
+          "from": "curated:lisbon:pasteis-de-belem",
+          "to": "start",
+          "minutes": 10
+        },
+        {
+          "from": "osm:node:11047643391",
+          "to": "curated:lisbon:ajuda-botanical-garden",
+          "minutes": 9
+        },
+        {
+          "from": "osm:node:11047643391",
+          "to": "curated:lisbon:amelia-campo-de-ourique",
+          "minutes": 5
+        },
+        {
+          "from": "osm:node:11047643391",
+          "to": "curated:lisbon:estufa-fria",
+          "minutes": 7
+        },
+        {
+          "from": "osm:node:11047643391",
+          "to": "curated:lisbon:gulbenkian-garden",
+          "minutes": 7
+        },
+        {
+          "from": "osm:node:11047643391",
+          "to": "curated:lisbon:nicolau-baixa",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:11047643391",
+          "to": "curated:lisbon:pasteis-de-belem",
+          "minutes": 8
+        },
+        {
+          "from": "osm:node:11047643391",
+          "to": "osm:node:12926040967",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:11047643391",
+          "to": "osm:node:13096661171",
+          "minutes": 2
+        },
+        {
+          "from": "osm:node:11047643391",
+          "to": "osm:node:13174527080",
+          "minutes": 2
+        },
+        {
+          "from": "osm:node:11047643391",
+          "to": "osm:node:4419041593",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:11047643391",
+          "to": "osm:node:5068486965",
+          "minutes": 2
+        },
+        {
+          "from": "osm:node:11047643391",
+          "to": "start",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:12926040967",
+          "to": "curated:lisbon:ajuda-botanical-garden",
+          "minutes": 11
+        },
+        {
+          "from": "osm:node:12926040967",
+          "to": "curated:lisbon:amelia-campo-de-ourique",
+          "minutes": 7
+        },
+        {
+          "from": "osm:node:12926040967",
+          "to": "curated:lisbon:estufa-fria",
+          "minutes": 8
+        },
+        {
+          "from": "osm:node:12926040967",
+          "to": "curated:lisbon:gulbenkian-garden",
+          "minutes": 8
+        },
+        {
+          "from": "osm:node:12926040967",
+          "to": "curated:lisbon:nicolau-baixa",
+          "minutes": 2
+        },
+        {
+          "from": "osm:node:12926040967",
+          "to": "curated:lisbon:pasteis-de-belem",
+          "minutes": 10
+        },
+        {
+          "from": "osm:node:12926040967",
+          "to": "osm:node:11047643391",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:12926040967",
+          "to": "osm:node:13096661171",
+          "minutes": 4
+        },
+        {
+          "from": "osm:node:12926040967",
+          "to": "osm:node:13174527080",
+          "minutes": 4
+        },
+        {
+          "from": "osm:node:12926040967",
+          "to": "osm:node:4419041593",
+          "minutes": 1
+        },
+        {
+          "from": "osm:node:12926040967",
+          "to": "osm:node:5068486965",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:12926040967",
+          "to": "start",
+          "minutes": 4
+        },
+        {
+          "from": "osm:node:13096661171",
+          "to": "curated:lisbon:ajuda-botanical-garden",
+          "minutes": 9
+        },
+        {
+          "from": "osm:node:13096661171",
+          "to": "curated:lisbon:amelia-campo-de-ourique",
+          "minutes": 4
+        },
+        {
+          "from": "osm:node:13096661171",
+          "to": "curated:lisbon:estufa-fria",
+          "minutes": 5
+        },
+        {
+          "from": "osm:node:13096661171",
+          "to": "curated:lisbon:gulbenkian-garden",
+          "minutes": 6
+        },
+        {
+          "from": "osm:node:13096661171",
+          "to": "curated:lisbon:nicolau-baixa",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:13096661171",
+          "to": "curated:lisbon:pasteis-de-belem",
+          "minutes": 8
+        },
+        {
+          "from": "osm:node:13096661171",
+          "to": "osm:node:11047643391",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:13096661171",
+          "to": "osm:node:12926040967",
+          "minutes": 4
+        },
+        {
+          "from": "osm:node:13096661171",
+          "to": "osm:node:13174527080",
+          "minutes": 0
+        },
+        {
+          "from": "osm:node:13096661171",
+          "to": "osm:node:4419041593",
+          "minutes": 4
+        },
+        {
+          "from": "osm:node:13096661171",
+          "to": "osm:node:5068486965",
+          "minutes": 2
+        },
+        {
+          "from": "osm:node:13096661171",
+          "to": "start",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:13174527080",
+          "to": "curated:lisbon:ajuda-botanical-garden",
+          "minutes": 9
+        },
+        {
+          "from": "osm:node:13174527080",
+          "to": "curated:lisbon:amelia-campo-de-ourique",
+          "minutes": 4
+        },
+        {
+          "from": "osm:node:13174527080",
+          "to": "curated:lisbon:estufa-fria",
+          "minutes": 5
+        },
+        {
+          "from": "osm:node:13174527080",
+          "to": "curated:lisbon:gulbenkian-garden",
+          "minutes": 6
+        },
+        {
+          "from": "osm:node:13174527080",
+          "to": "curated:lisbon:nicolau-baixa",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:13174527080",
+          "to": "curated:lisbon:pasteis-de-belem",
+          "minutes": 8
+        },
+        {
+          "from": "osm:node:13174527080",
+          "to": "osm:node:11047643391",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:13174527080",
+          "to": "osm:node:12926040967",
+          "minutes": 4
+        },
+        {
+          "from": "osm:node:13174527080",
+          "to": "osm:node:13096661171",
+          "minutes": 0
+        },
+        {
+          "from": "osm:node:13174527080",
+          "to": "osm:node:4419041593",
+          "minutes": 4
+        },
+        {
+          "from": "osm:node:13174527080",
+          "to": "osm:node:5068486965",
+          "minutes": 2
+        },
+        {
+          "from": "osm:node:13174527080",
+          "to": "start",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:4419041593",
+          "to": "curated:lisbon:ajuda-botanical-garden",
+          "minutes": 10
+        },
+        {
+          "from": "osm:node:4419041593",
+          "to": "curated:lisbon:amelia-campo-de-ourique",
+          "minutes": 6
+        },
+        {
+          "from": "osm:node:4419041593",
+          "to": "curated:lisbon:estufa-fria",
+          "minutes": 8
+        },
+        {
+          "from": "osm:node:4419041593",
+          "to": "curated:lisbon:gulbenkian-garden",
+          "minutes": 8
+        },
+        {
+          "from": "osm:node:4419041593",
+          "to": "curated:lisbon:nicolau-baixa",
+          "minutes": 2
+        },
+        {
+          "from": "osm:node:4419041593",
+          "to": "curated:lisbon:pasteis-de-belem",
+          "minutes": 9
+        },
+        {
+          "from": "osm:node:4419041593",
+          "to": "osm:node:11047643391",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:4419041593",
+          "to": "osm:node:12926040967",
+          "minutes": 1
+        },
+        {
+          "from": "osm:node:4419041593",
+          "to": "osm:node:13096661171",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:4419041593",
+          "to": "osm:node:13174527080",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:4419041593",
+          "to": "osm:node:5068486965",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:4419041593",
+          "to": "start",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:5068486965",
+          "to": "curated:lisbon:ajuda-botanical-garden",
+          "minutes": 9
+        },
+        {
+          "from": "osm:node:5068486965",
+          "to": "curated:lisbon:amelia-campo-de-ourique",
+          "minutes": 5
+        },
+        {
+          "from": "osm:node:5068486965",
+          "to": "curated:lisbon:estufa-fria",
+          "minutes": 6
+        },
+        {
+          "from": "osm:node:5068486965",
+          "to": "curated:lisbon:gulbenkian-garden",
+          "minutes": 7
+        },
+        {
+          "from": "osm:node:5068486965",
+          "to": "curated:lisbon:nicolau-baixa",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:5068486965",
+          "to": "curated:lisbon:pasteis-de-belem",
+          "minutes": 8
+        },
+        {
+          "from": "osm:node:5068486965",
+          "to": "osm:node:11047643391",
+          "minutes": 3
+        },
+        {
+          "from": "osm:node:5068486965",
+          "to": "osm:node:12926040967",
+          "minutes": 4
+        },
+        {
+          "from": "osm:node:5068486965",
+          "to": "osm:node:13096661171",
+          "minutes": 2
+        },
+        {
+          "from": "osm:node:5068486965",
+          "to": "osm:node:13174527080",
+          "minutes": 2
+        },
+        {
+          "from": "osm:node:5068486965",
+          "to": "osm:node:4419041593",
+          "minutes": 4
+        },
+        {
+          "from": "osm:node:5068486965",
+          "to": "start",
+          "minutes": 2
+        },
+        {
+          "from": "start",
+          "to": "curated:lisbon:ajuda-botanical-garden",
+          "minutes": 10
+        },
+        {
+          "from": "start",
+          "to": "curated:lisbon:amelia-campo-de-ourique",
+          "minutes": 6
+        },
+        {
+          "from": "start",
+          "to": "curated:lisbon:estufa-fria",
+          "minutes": 6
+        },
+        {
+          "from": "start",
+          "to": "curated:lisbon:gulbenkian-garden",
+          "minutes": 6
+        },
+        {
+          "from": "start",
+          "to": "curated:lisbon:nicolau-baixa",
+          "minutes": 3
+        },
+        {
+          "from": "start",
+          "to": "curated:lisbon:pasteis-de-belem",
+          "minutes": 9
+        },
+        {
+          "from": "start",
+          "to": "osm:node:11047643391",
+          "minutes": 3
+        },
+        {
+          "from": "start",
+          "to": "osm:node:12926040967",
+          "minutes": 3
+        },
+        {
+          "from": "start",
+          "to": "osm:node:13096661171",
+          "minutes": 3
+        },
+        {
+          "from": "start",
+          "to": "osm:node:13174527080",
+          "minutes": 3
+        },
+        {
+          "from": "start",
+          "to": "osm:node:4419041593",
+          "minutes": 3
+        },
+        {
+          "from": "start",
+          "to": "osm:node:5068486965",
+          "minutes": 2
+        }
+      ],
+      "eligible_count": 13
+    }
+  ],
+  "saved_baseline": {
+    "algorithm": "greedy-period-v2:w32",
+    "total_cost": 8350,
+    "daily_visits": [
+      2,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      6,
+      5,
+      1,
+      0,
+      0
+    ]
+  }
+}

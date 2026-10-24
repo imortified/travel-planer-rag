@@ -61,6 +61,10 @@ def facts_for(route, trip, primary=None, option_count=1):
             f"неравенства покрытия интересов: {points(terms['fairness'], 4)}. "
             "Шкалы и коэффициенты сохранены в отчёте оценки."
         )
+        if "spread" in terms:
+            facts["objective"] += (
+                f" Вклад распределения посещений по дням: {points(terms['spread'], 4)}."
+            )
     visa = getattr(route, "visa_report", None)
     if visa and visa["status"] != "not_applicable":
         counts = Counter(p["requirement"] for p in visa["participants"])

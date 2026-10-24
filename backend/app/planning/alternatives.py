@@ -6,7 +6,7 @@ from math import ceil
 from time import perf_counter
 
 from app.planning.models import DayInput, Request, Result
-from app.planning.objective import VERSION, Objective
+from app.planning.objective import Objective
 from app.planning.period import plan_period, validate_period
 from app.planning.service import checked_plan
 from app.planning.validator import validate_route
@@ -169,7 +169,7 @@ def alternatives(
         None if selected else diagnostic,
         {
             "method": "bounded-exclusions-v2",
-            "objective_version": VERSION,
+            "objective_version": objective.version,
             "attempts": attempts,
             "attempt_limit": ATTEMPT_LIMIT,
             "min_jaccard_distance": MIN_DISTANCE,

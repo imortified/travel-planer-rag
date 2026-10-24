@@ -19,6 +19,29 @@ class Place:
 
 
 @dataclass(frozen=True)
+class Pace:
+    mode: str
+    max_visits: int
+    max_active_minutes: int
+    break_minutes: int
+    version: str = "comfortable-pace-v1"
+
+    def __post_init__(self):
+        if (
+            self.mode not in ("relaxed", "balanced", "intensive")
+            or self.version != "comfortable-pace-v1"
+            or any(
+                type(v) is not int
+                for v in (self.max_visits, self.max_active_minutes, self.break_minutes)
+            )
+            or not 1 <= self.max_visits <= 100
+            or not 1 <= self.max_active_minutes <= 1440
+            or not 0 <= self.break_minutes <= 1440
+        ):
+            raise ValueError("Invalid or unsupported pace settings")
+
+
+@dataclass(frozen=True)
 class Request:
     participants: list[Participant]
     budget: int
@@ -26,6 +49,7 @@ class Request:
     end: int
     mandatory: frozenset[str] = field(default_factory=frozenset)
     excluded: frozenset[str] = field(default_factory=frozenset)
+    pace: Pace | None = None
 
 
 @dataclass(frozen=True)
@@ -88,6 +112,7 @@ class ObjectiveReport:
     candidate_count: int
     budget: int
     available_minutes: int
+    day_coverage: float = 0.0
 
 
 @dataclass(frozen=True)
@@ -123,3 +148,4 @@ class Result:
     days: list[DayResult] | None = None
     objective: ObjectiveReport | None = None
     solver: SolverReport | None = None
+    planning_summary: dict | None = None

@@ -15,7 +15,8 @@ from app.integrations.demo import load_demo
 from app.integrations.embeddings import EmbeddingUnavailable
 from app.integrations.qdrant import VectorStoreUnavailable
 from app.planning.alternatives import alternatives
-from app.planning.models import DayInput, Participant, Request
+from app.planning.models import DayInput, Pace, Participant, Request
+from app.planning.pace import PROFILES, planning_summary, profile_snapshot
 from app.planning.period import plan_period
 from app.planning.service import checked_plan
 from app.schemas.groups import (
@@ -36,6 +37,11 @@ from app.visa import assess_visas
 router = APIRouter(prefix="/api/v1", tags=["Groups and trips"])
 DB = Annotated[Session, Depends(get_session)]
 logger = logging.getLogger(__name__)
+
+
+@router.get("/planning/pace-profiles")
+def pace_profiles():
+    return {mode: asdict(profile) for mode, profile in PROFILES.items()}
 
 
 def require(session, model, identifier):
@@ -152,7 +158,10 @@ def update_travel_profile(group_id: int, user_id: int, payload: TravelProfile, s
 
 
 def trip_output(trip):
+    pace = getattr(trip, "pace_settings", None)
     return TripOutput(
+        pace=pace["mode"] if pace else "unrestricted",
+        pace_settings=pace,
         id=trip.id,
         group_id=trip.group_id,
         destination=trip.destination,
@@ -190,6 +199,7 @@ def create_trip(group_id: int, payload: TripInput, session: DB):
         mandatory=sorted(payload.mandatory),
         excluded=sorted(payload.excluded),
         semantic_query=payload.semantic_query.strip() if payload.semantic_query else None,
+        pace_settings=profile_snapshot(payload.pace),
         participants_snapshot=[p.model_dump() for p in participants],
     )
     session.add(trip)
@@ -215,7 +225,9 @@ def get_trip(trip_id: int, session: DB):
 
 
 def planning_request(trip):
+    pace = getattr(trip, "pace_settings", None)
     return Request(
+        pace=Pace(**pace) if pace else None,
         participants=[
             Participant(str(p["user_id"]), p["interests"]) for p in trip.participants_snapshot
         ],
@@ -281,7 +293,8 @@ def planning_inputs(trip, request):
     return inputs, multi_day, source
 
 
-def with_overview(result, inputs):
+def with_overview(result, inputs, request):
+    result = replace(result, planning_summary=planning_summary(request, result, inputs))
     if inputs[0].data_context is None:
         return result
     if len(inputs) == 1:
@@ -356,7 +369,7 @@ def calculate_route(
         trip_request_id=trip.id,
         algorithm=algorithm_name(algorithm, beam_width, multi_day),
         data_source=source,
-        result=asdict(with_overview(result, inputs)),
+        result=asdict(with_overview(result, inputs, request)),
         visa_report=assess_visas(
             trip.destination,
             trip.travel_date,
@@ -434,7 +447,7 @@ def calculate_route_set(
         else f"diverse-v2:{algorithm}:w{beam_width}",
         search_info=outcome.search_info,
         visa_report=visa_report,
-        diagnostic=asdict(with_overview(outcome.diagnostic, inputs))
+        diagnostic=asdict(with_overview(outcome.diagnostic, inputs, request))
         if outcome.diagnostic
         else None,
     )
@@ -449,7 +462,7 @@ def calculate_route_set(
                 visa_report=visa_report,
                 algorithm=algorithm_name(algorithm, beam_width, multi_day),
                 data_source=source,
-                result=asdict(with_overview(candidate.result, inputs)),
+                result=asdict(with_overview(candidate.result, inputs, request)),
             )
         )
     # One transaction: a comparison cannot be persisted only partially.

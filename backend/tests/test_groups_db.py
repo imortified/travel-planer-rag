@@ -48,6 +48,27 @@ def create_group(client, count=2):
     return gid, ids
 
 
+def test_pace_is_frozen_and_legacy_remains_unrestricted(client, monkeypatch):
+    from app.planning.models import Pace
+    from app.planning.pace import PROFILES
+
+    gid, _ = create_group(client, count=1)
+    path = f"/api/v1/groups/{gid}/trips"
+    legacy = client.post(path, json={"budget": 100000}).json()
+    assert legacy["pace"] == "unrestricted" and legacy["pace_settings"] is None
+    trip = client.post(path, json={"budget": 100000, "pace": "balanced"}).json()
+    assert trip["pace_settings"]["max_visits"] == 3
+    monkeypatch.setitem(PROFILES, "balanced", Pace("balanced", 1, 100, 40))
+    assert (
+        client.get(f"/api/v1/trips/{trip['id']}").json()["pace_settings"] == trip["pace_settings"]
+    )
+    result = client.post(f"/api/v1/trips/{trip['id']}/routes").json()["result"]
+    assert result["planning_summary"]["pace"] == trip["pace_settings"]
+    assert result["objective"]["version"] == "normalized-group-objective-v2-pace"
+    assert client.post(path, json={"budget": 100, "pace": "typo"}).status_code == 422
+    assert client.get("/api/v1/planning/pace-profiles").json()["balanced"]["max_visits"] == 1
+
+
 def test_travel_profiles_and_visa_reports_are_frozen(client, monkeypatch):
     from datetime import date
 

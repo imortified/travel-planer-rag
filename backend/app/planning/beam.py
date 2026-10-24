@@ -4,6 +4,7 @@ from dataclasses import replace
 
 from app.planning.models import Place, Request, Result, Visit
 from app.planning.objective import Objective
+from app.planning.pace import fits_pace
 from app.planning.planner import plan
 
 
@@ -61,10 +62,17 @@ def beam_plan(
                 if minutes is None:
                     continue
                 arrival = now + minutes
-                begins = max(arrival, place.opens)
+                rest = request.pace.break_minutes if request.pace and state.visits else 0
+                begins = max(arrival + rest, place.opens)
                 ends = begins + place.duration
                 cost = state.total_cost + place.cost_per_person * len(request.participants)
-                if ends > min(place.closes, request.end) or cost > request.budget:
+                if (
+                    ends > min(place.closes, request.end)
+                    or cost > request.budget
+                    or not fits_pace(
+                        request, state.visits + [Visit(place.id, arrival, begins, ends)], travel
+                    )
+                ):
                     continue
                 candidate = result(state.visits + [Visit(place.id, arrival, begins, ends)], cost)
                 if key(candidate) < key(best):

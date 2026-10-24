@@ -43,6 +43,9 @@ def cp_sat_plan(request, inputs, objective=None, time_limit=5.0, seed=42, scale=
         ]
         chosen, starts = {}, {}
         used = model.new_bool_var(f"day_{d}")
+        if request.pace:
+            reward_terms.append(integer(objective.weights.spread / len(inputs)) * used)
+        day_drive = []
         arcs, edge_vars = [(0, 0, used.Not())], {}
         for i, place in enumerate(places, 1):
             x = model.new_bool_var(f"visit_{d}_{i}")
@@ -84,7 +87,9 @@ def cp_sat_plan(request, inputs, objective=None, time_limit=5.0, seed=42, scale=
             edge_vars[a, b] = literal
             if b:
                 earliest = request.start if a == 0 else starts[a] + places[a - 1].duration
-                model.add(starts[b] >= earliest + minutes).only_enforce_if(literal)
+                rest = request.pace.break_minutes if request.pace and a else 0
+                model.add(starts[b] >= earliest + minutes + rest).only_enforce_if(literal)
+                day_drive.append(minutes * literal)
                 drive_terms.append(
                     integer(objective.weights.travel * minutes / objective.available_minutes)
                     * literal
@@ -106,6 +111,14 @@ def cp_sat_plan(request, inputs, objective=None, time_limit=5.0, seed=42, scale=
                 ) + target.duration <= min(request.end, target.closes):
                     edge(i, j, travel)
         model.add(sum(chosen.values()) >= used)
+        if request.pace:
+            model.add(sum(chosen.values()) <= request.pace.max_visits)
+            model.add(
+                sum(places[i - 1].duration * x for i, x in chosen.items())
+                + sum(day_drive)
+                + request.pace.break_minutes * (sum(chosen.values()) - used)
+                <= request.pace.max_active_minutes
+            )
         model.add_circuit(arcs)
         day_models.append((places, chosen, starts, used, edge_vars))
 
@@ -160,6 +173,8 @@ def cp_sat_plan(request, inputs, objective=None, time_limit=5.0, seed=42, scale=
             for arc, literal in edges.items():
                 model.add_hint(literal, arc in desired)
     error = 2.5 * objective.candidate_count / scale + 1e-9
+    if request.pace:
+        error += 0.5 * len(inputs) / scale
     validation_error = model.validate()
     if validation_error:
         raise ValueError(f"Invalid CP-SAT model: {validation_error}")
@@ -184,7 +199,8 @@ def cp_sat_plan(request, inputs, objective=None, time_limit=5.0, seed=42, scale=
             while node:
                 place = places[node - 1]
                 arrival = now + inputs[d].travel[previous, place.id]
-                begins = max(arrival, place.opens)
+                rest = request.pace.break_minutes if request.pace and schedule[d] else 0
+                begins = max(arrival + rest, place.opens)
                 now = begins + place.duration
                 schedule[d].append(Visit(place.id, arrival, begins, now))
                 previous, node = place.id, successors[node]
@@ -199,7 +215,8 @@ def cp_sat_plan(request, inputs, objective=None, time_limit=5.0, seed=42, scale=
     score = objective.evaluate(schedule) if found else None
     model_value = solver.objective_value / scale if found else None
     model_bound = solver.best_objective_bound / scale if found else None
-    upper = min(objective.weights.reward + 1e-9, model_bound + error) if found else None
+    max_score = objective.weights.reward + (objective.weights.spread if request.pace else 0)
+    upper = min(max_score + 1e-9, model_bound + error) if found else None
     if found and (abs(score.value - model_value) > error or upper + 1e-8 < score.value):
         raise RuntimeError(
             f"CP-SAT objective mismatch: evaluated={score.value}, scaled={model_value}, "

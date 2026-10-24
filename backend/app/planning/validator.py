@@ -45,6 +45,7 @@ def validate_route(
         add("no_feasible_visits", "Route has no visits")
     seen: set[str] = set()
     cost, previous_end, previous_id = 0, request.start, "start"
+    drive_minutes = 0
     for index, visit in enumerate(visits):
         pid = visit.place_id
         if pid in seen:
@@ -64,6 +65,10 @@ def validate_route(
             add("missing_travel_time", "Transition has no reference travel time", pid, index)
         elif visit.arrival < previous_end + minutes:
             add("unreachable_arrival", "Arrival is earlier than physically reachable", pid, index)
+        if minutes is not None:
+            drive_minutes += minutes
+        if request.pace and index and visit.start < visit.arrival + request.pace.break_minutes:
+            add("insufficient_rest", "Required inter-visit rest is missing", pid, index)
         place = by_id.get(pid)
         if place is None:
             add("unknown_place", "Visited place is absent from reference data", pid, index)
@@ -74,6 +79,13 @@ def validate_route(
             if visit.end - visit.start < place.duration:
                 add("insufficient_visit_duration", "Visit is shorter than required", pid, index)
         previous_id, previous_end = pid, visit.end
+    if request.pace:
+        if len(visits) > request.pace.max_visits:
+            add("daily_visit_limit", "Daily visit limit exceeded")
+        load = sum(v.end - v.start for v in visits) + drive_minutes
+        load += max(0, len(visits) - 1) * request.pace.break_minutes
+        if load > request.pace.max_active_minutes:
+            add("daily_load_limit", "Daily active-time limit exceeded")
     for pid in sorted(request.mandatory - seen):
         add("mandatory_not_scheduled", "Mandatory place is missing from route", pid)
     if cost > request.budget:
