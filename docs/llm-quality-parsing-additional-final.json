@@ -1,0 +1,2094 @@
+{
+  "schema_version": 1,
+  "completed": true,
+  "started_at": "2026-10-24T11:00:32.427392+00:00",
+  "dataset_version": "ru-trip-additional-2026-10-24-v1",
+  "reference_date": "2026-10-24",
+  "metadata": {
+    "source_revision": "7d09fb8d4bde2f25d30d96b79ad88442b06b8591",
+    "input_sha256": {
+      "data/evaluation/llm-parser-additional.json": "089ea1881676d50563305df91e39a34ccdb370a941a7cf69bf52e2b74d33c193",
+      "data/llm-runtime.json": "00fa4eff4aee7dff0ed8106808498ad8bb3a4db8e9415b949bec02d6b3bff0b4",
+      "data/semantic-knowledge.json": "29c0a54ea54a7a47eef4388e022b8142ca1cc5e16d2422ce311f516614ac5954",
+      "backend/app/evaluation/__init__.py": "a266cdc72f26fb403efea5e4c822800d2eab7e72e50b45469ddaa64e45a4b7d1",
+      "backend/app/evaluation/controls.py": "415bb6afd71bc0b5bf10639b2eda53089f860f8d5d01164903fb9cba63a0f198",
+      "backend/app/evaluation/explanations.py": "e7fb0d534d09e2bfcc85b4123ba1b939016a383d66d7bf0f4bc36eda9d08f21c",
+      "backend/app/evaluation/observer.py": "3c0669f58f870839cfd372205344eaa0cc2957a88b7bfea224b73f4185f38f84",
+      "backend/app/evaluation/runner.py": "05cda352e4f5f3f3c5f69b278f20134427d991813a6ed6ef41453b768d0bdcd4",
+      "backend/app/evaluation/scoring.py": "0cde01269fbf9ac556da6dac7254395d3e25cc3e4adc1c988f4a4cb0e4b98b58",
+      "backend/app/nlp/parser.py": "0922993ce9b1bf5f6916771683830139b4b3fe7ae0d541d239139b2d529c730a",
+      "backend/app/nlp/grounding.py": "c1d78103c14b0b244b1aad31a7ca30318cd49cb4f449b56517b85773d4dcc56e",
+      "backend/app/nlp/explanations.py": "d49dd3e6d0da4d913c83c2c652ef417c1490db0602aa8d0129359228c0e26338",
+      "backend/app/integrations/llama_cpp.py": "04308a19fa4b4a18995ab30ab412ab59152f97ee7565090dba6b0a962faffe68",
+      "backend/app/schemas/assistant.py": "30be1c4110c36f8dc5a80fc5871431248fdd9e3fae9972c9d14b1c2f38f92cf1"
+    },
+    "python": "3.13.3",
+    "model_requested": "Qwen3-4B-Q4_K_M",
+    "runtime_manifest": {
+      "checked_on": "2026-10-23",
+      "llama_cpp_version": "b11840",
+      "model": "Qwen3-4B-Q4_K_M",
+      "model_revision": "bc640142c66e1fdd12af0bd68f40445458f3869b",
+      "files": [
+        {
+          "name": "llama-b11840-bin-win-cuda-12.4-x64.zip",
+          "size": 272406409,
+          "url": "https://github.com/ggml-org/llama.cpp/releases/download/b11840/llama-b11840-bin-win-cuda-12.4-x64.zip",
+          "sha256": "519357996dfae171eee635cfbe9b4ca0c21bdfd85a59356b593578b41c1a2d0f",
+          "extract_to": "llama.cpp/b11840"
+        },
+        {
+          "name": "cudart-llama-bin-win-cuda-12.4-x64.zip",
+          "size": 391443627,
+          "url": "https://github.com/ggml-org/llama.cpp/releases/download/b11840/cudart-llama-bin-win-cuda-12.4-x64.zip",
+          "sha256": "8c79a9b226de4b3cacfd1f83d24f962d0773be79f1e7b75c6af4ded7e32ae1d6",
+          "extract_to": "llama.cpp/b11840"
+        },
+        {
+          "name": "Qwen3-4B-Q4_K_M.gguf",
+          "size": 2497280256,
+          "url": "https://huggingface.co/Qwen/Qwen3-4B-GGUF/resolve/bc640142c66e1fdd12af0bd68f40445458f3869b/Qwen3-4B-Q4_K_M.gguf",
+          "sha256": "7485fe6f11af29433bc51cab58009521f205840f5b4ae3a32fa7f92e8534fdf5",
+          "directory": "models"
+        }
+      ]
+    },
+    "generation": {
+      "temperature": 0,
+      "seed": 42,
+      "max_tokens": 1400,
+      "enable_thinking": false
+    },
+    "timeout_seconds_per_http_operation": 60.0,
+    "parser_prompt_version": "trip-extract-v2-grounded",
+    "explanation_prompt_version": "grounded-explanation-v5-catalog-costs"
+  },
+  "parser": [
+    {
+      "id": "rome-is-unsupported",
+      "repeat": 1,
+      "tags": [
+        "additional-regression"
+      ],
+      "output": {
+        "draft": {
+          "destination": null,
+          "travel_date": "2026-11-04",
+          "end_date": null,
+          "duration_days": null,
+          "budget_eur": 88.0,
+          "currency": "EUR",
+          "budget_scope": "group",
+          "participant_count": 2,
+          "participants": [
+            {
+              "name": "Аня",
+              "interests": {}
+            },
+            {
+              "name": "Борис",
+              "interests": {}
+            }
+          ],
+          "common_interests": {},
+          "start": null,
+          "end": null,
+          "mandatory_names": [],
+          "excluded_names": [],
+          "unsupported": [
+            "Рим"
+          ],
+          "evidence": {
+            "destination": "Demo City",
+            "dates": "в Рим 4 ноября 2026",
+            "budget": "общий бюджет 88 евро",
+            "participants": "Едем вдвоём",
+            "hours": null,
+            "interests": null
+          }
+        },
+        "group_budget": 8800,
+        "questions": [
+          {
+            "field": "destination",
+            "text": "Куда отправляемся? Сейчас доступны Лиссабон и демо-город."
+          }
+        ],
+        "warnings": [
+          "Не поддерживается автоматически: Рим",
+          "Неуказанные часы дня останутся такими, как в форме."
+        ],
+        "model": "Qwen3-4B-Q4_K_M",
+        "prompt_version": "trip-extract-v2-grounded",
+        "reference_date": "2026-10-24"
+      },
+      "checks": [
+        {
+          "field": "draft.destination",
+          "passed": true,
+          "expected": null,
+          "actual": null
+        },
+        {
+          "field": "draft.travel_date",
+          "passed": true,
+          "expected": "2026-11-04",
+          "actual": "2026-11-04"
+        },
+        {
+          "field": "group_budget",
+          "passed": true,
+          "expected": 8800,
+          "actual": 8800
+        },
+        {
+          "field": "draft.unsupported",
+          "passed": true,
+          "expected": "nonempty",
+          "actual": [
+            "Рим"
+          ]
+        },
+        {
+          "field": "questions",
+          "passed": true,
+          "expected": {
+            "required": [
+              "destination"
+            ],
+            "allowed": [
+              "destination"
+            ]
+          },
+          "actual": [
+            "destination"
+          ]
+        }
+      ],
+      "passed": true,
+      "attempts": [
+        {
+          "status_code": 200,
+          "schema_valid": true,
+          "finish_reason": "stop",
+          "usage": {
+            "completion_tokens": 155,
+            "prompt_tokens": 1677,
+            "total_tokens": 1832,
+            "prompt_tokens_details": {
+              "cached_tokens": 1612
+            }
+          },
+          "output": {
+            "destination": "Demo City",
+            "travel_date": null,
+            "end_date": "2026-11-04",
+            "duration_days": null,
+            "budget_eur": 88.0,
+            "currency": "EUR",
+            "budget_scope": "group",
+            "participant_count": 2,
+            "participants": [
+              {
+                "name": "Аня",
+                "interests": {}
+              },
+              {
+                "name": "Борис",
+                "interests": {}
+              }
+            ],
+            "common_interests": {},
+            "start": null,
+            "end": null,
+            "mandatory_names": [],
+            "excluded_names": [],
+            "unsupported": [
+              "Рим"
+            ],
+            "evidence": {
+              "destination": "Demo City",
+              "dates": "в Рим 4 ноября 2026",
+              "budget": "общий бюджет 88 евро",
+              "participants": "Едем вдвоём",
+              "hours": null,
+              "interests": null
+            }
+          }
+        }
+      ],
+      "seconds": 10.7674
+    },
+    {
+      "id": "negated-supported-city",
+      "repeat": 1,
+      "tags": [
+        "additional-regression"
+      ],
+      "output": {
+        "draft": {
+          "destination": null,
+          "travel_date": "2026-11-04",
+          "end_date": null,
+          "duration_days": null,
+          "budget_eur": 80.0,
+          "currency": "EUR",
+          "budget_scope": "group",
+          "participant_count": 1,
+          "participants": [
+            {
+              "name": "Аня",
+              "interests": {}
+            }
+          ],
+          "common_interests": {},
+          "start": null,
+          "end": null,
+          "mandatory_names": [],
+          "excluded_names": [
+            "Лиссабон",
+            "Париж"
+          ],
+          "unsupported": [
+            "Лиссабон",
+            "Париж"
+          ],
+          "evidence": {
+            "destination": "Demo City",
+            "dates": "не в Лиссабон, а в Париж 4 ноября 2026",
+            "budget": "общий бюджет 80 евро",
+            "participants": "Аня",
+            "hours": null,
+            "interests": null
+          }
+        },
+        "group_budget": 8000,
+        "questions": [
+          {
+            "field": "destination",
+            "text": "Куда отправляемся? Сейчас доступны Лиссабон и демо-город."
+          },
+          {
+            "field": "mandatory_names",
+            "text": "Уточните названия обязательных и исключённых мест своими словами."
+          }
+        ],
+        "warnings": [
+          "Не поддерживается автоматически: Лиссабон, Париж",
+          "Неуказанные часы дня останутся такими, как в форме.",
+          "Названия мест будут сопоставлены с каталогом; неоднозначные нужно выбрать вручную."
+        ],
+        "model": "Qwen3-4B-Q4_K_M",
+        "prompt_version": "trip-extract-v2-grounded",
+        "reference_date": "2026-10-24"
+      },
+      "checks": [
+        {
+          "field": "draft.destination",
+          "passed": true,
+          "expected": null,
+          "actual": null
+        },
+        {
+          "field": "draft.travel_date",
+          "passed": true,
+          "expected": "2026-11-04",
+          "actual": "2026-11-04"
+        },
+        {
+          "field": "group_budget",
+          "passed": true,
+          "expected": 8000,
+          "actual": 8000
+        },
+        {
+          "field": "names",
+          "passed": true,
+          "expected": [
+            "Аня"
+          ],
+          "actual": [
+            "Аня"
+          ]
+        },
+        {
+          "field": "questions",
+          "passed": false,
+          "expected": {
+            "required": [
+              "destination"
+            ],
+            "allowed": [
+              "destination"
+            ]
+          },
+          "actual": [
+            "destination",
+            "mandatory_names"
+          ]
+        }
+      ],
+      "passed": false,
+      "attempts": [
+        {
+          "status_code": 200,
+          "schema_valid": true,
+          "finish_reason": "stop",
+          "usage": {
+            "completion_tokens": 158,
+            "prompt_tokens": 1677,
+            "total_tokens": 1835,
+            "prompt_tokens_details": {
+              "cached_tokens": 1612
+            }
+          },
+          "output": {
+            "destination": "Demo City",
+            "travel_date": null,
+            "end_date": "2026-11-04",
+            "duration_days": null,
+            "budget_eur": 80.0,
+            "currency": "EUR",
+            "budget_scope": "group",
+            "participant_count": 1,
+            "participants": [
+              {
+                "name": "Аня",
+                "interests": {}
+              }
+            ],
+            "common_interests": {},
+            "start": null,
+            "end": null,
+            "mandatory_names": [
+              "Demo City"
+            ],
+            "excluded_names": [
+              "Лиссабон",
+              "Париж"
+            ],
+            "unsupported": [
+              "Лиссабон",
+              "Париж"
+            ],
+            "evidence": {
+              "destination": "Demo City",
+              "dates": "не в Лиссабон, а в Париж 4 ноября 2026",
+              "budget": "общий бюджет 80 евро",
+              "participants": "Аня",
+              "hours": null,
+              "interests": null
+            }
+          }
+        }
+      ],
+      "seconds": 11.5918
+    },
+    {
+      "id": "budget-is-not-date-year",
+      "repeat": 1,
+      "tags": [
+        "additional-regression"
+      ],
+      "output": {
+        "draft": {
+          "destination": "Lisbon",
+          "travel_date": null,
+          "end_date": null,
+          "duration_days": null,
+          "budget_eur": 2026.0,
+          "currency": "EUR",
+          "budget_scope": "group",
+          "participant_count": 2,
+          "participants": [
+            {
+              "name": "Аня",
+              "interests": {}
+            },
+            {
+              "name": "Борис",
+              "interests": {}
+            }
+          ],
+          "common_interests": {},
+          "start": null,
+          "end": null,
+          "mandatory_names": [],
+          "excluded_names": [],
+          "unsupported": [],
+          "evidence": {
+            "destination": "Лиссабон",
+            "dates": "4 ноября",
+            "budget": "общий бюджет 2026 евро",
+            "participants": "вдвоём",
+            "hours": null,
+            "interests": null
+          }
+        },
+        "group_budget": 202600,
+        "questions": [
+          {
+            "field": "travel_date",
+            "text": "Укажите дату начала поездки с годом."
+          }
+        ],
+        "warnings": [
+          "Неуказанные часы дня останутся такими, как в форме."
+        ],
+        "model": "Qwen3-4B-Q4_K_M",
+        "prompt_version": "trip-extract-v2-grounded",
+        "reference_date": "2026-10-24"
+      },
+      "checks": [
+        {
+          "field": "draft.destination",
+          "passed": true,
+          "expected": "Lisbon",
+          "actual": "Lisbon"
+        },
+        {
+          "field": "draft.travel_date",
+          "passed": true,
+          "expected": null,
+          "actual": null
+        },
+        {
+          "field": "group_budget",
+          "passed": true,
+          "expected": 202600,
+          "actual": 202600
+        },
+        {
+          "field": "questions",
+          "passed": true,
+          "expected": {
+            "required": [
+              "travel_date"
+            ],
+            "allowed": [
+              "travel_date"
+            ]
+          },
+          "actual": [
+            "travel_date"
+          ]
+        }
+      ],
+      "passed": true,
+      "attempts": [
+        {
+          "status_code": 200,
+          "schema_valid": true,
+          "finish_reason": "stop",
+          "usage": {
+            "completion_tokens": 149,
+            "prompt_tokens": 1677,
+            "total_tokens": 1826,
+            "prompt_tokens_details": {
+              "cached_tokens": 1612
+            }
+          },
+          "output": {
+            "destination": "Lisbon",
+            "travel_date": null,
+            "end_date": "2026-11-04",
+            "duration_days": null,
+            "budget_eur": 2026.0,
+            "currency": "EUR",
+            "budget_scope": "group",
+            "participant_count": 2,
+            "participants": [
+              {
+                "name": "Аня",
+                "interests": {}
+              },
+              {
+                "name": "Борис",
+                "interests": {}
+              }
+            ],
+            "common_interests": {},
+            "start": null,
+            "end": null,
+            "mandatory_names": [],
+            "excluded_names": [],
+            "unsupported": [],
+            "evidence": {
+              "destination": "Лиссабон",
+              "dates": "4 ноября",
+              "budget": "общий бюджет 2026 евро",
+              "participants": "вдвоём",
+              "hours": null,
+              "interests": null
+            }
+          }
+        }
+      ],
+      "seconds": 10.9933
+    },
+    {
+      "id": "nearest-weekday",
+      "repeat": 1,
+      "tags": [
+        "additional-regression"
+      ],
+      "output": {
+        "draft": {
+          "destination": "Lisbon",
+          "travel_date": "2026-10-28",
+          "end_date": null,
+          "duration_days": null,
+          "budget_eur": 75.0,
+          "currency": "EUR",
+          "budget_scope": "group",
+          "participant_count": 1,
+          "participants": [
+            {
+              "name": "Аня",
+              "interests": {}
+            }
+          ],
+          "common_interests": {},
+          "start": null,
+          "end": null,
+          "mandatory_names": [],
+          "excluded_names": [],
+          "unsupported": [],
+          "evidence": {
+            "destination": "Лиссабон",
+            "dates": "в ближайшую среду",
+            "budget": "общий бюджет 75 евро",
+            "participants": "Аня",
+            "hours": null,
+            "interests": null
+          }
+        },
+        "group_budget": 7500,
+        "questions": [],
+        "warnings": [
+          "Неуказанные часы дня останутся такими, как в форме."
+        ],
+        "model": "Qwen3-4B-Q4_K_M",
+        "prompt_version": "trip-extract-v2-grounded",
+        "reference_date": "2026-10-24"
+      },
+      "checks": [
+        {
+          "field": "draft.destination",
+          "passed": true,
+          "expected": "Lisbon",
+          "actual": "Lisbon"
+        },
+        {
+          "field": "draft.travel_date",
+          "passed": true,
+          "expected": "2026-10-28",
+          "actual": "2026-10-28"
+        },
+        {
+          "field": "group_budget",
+          "passed": true,
+          "expected": 7500,
+          "actual": 7500
+        },
+        {
+          "field": "names",
+          "passed": true,
+          "expected": [
+            "Аня"
+          ],
+          "actual": [
+            "Аня"
+          ]
+        },
+        {
+          "field": "questions",
+          "passed": true,
+          "expected": {
+            "required": [],
+            "allowed": []
+          },
+          "actual": []
+        }
+      ],
+      "passed": true,
+      "attempts": [
+        {
+          "status_code": 200,
+          "schema_valid": true,
+          "finish_reason": "stop",
+          "usage": {
+            "completion_tokens": 139,
+            "prompt_tokens": 1671,
+            "total_tokens": 1810,
+            "prompt_tokens_details": {
+              "cached_tokens": 1612
+            }
+          },
+          "output": {
+            "destination": "Lisbon",
+            "travel_date": "2026-10-26",
+            "end_date": null,
+            "duration_days": null,
+            "budget_eur": 75.0,
+            "currency": "EUR",
+            "budget_scope": "group",
+            "participant_count": 1,
+            "participants": [
+              {
+                "name": "Аня",
+                "interests": {}
+              }
+            ],
+            "common_interests": {},
+            "start": null,
+            "end": null,
+            "mandatory_names": [],
+            "excluded_names": [],
+            "unsupported": [],
+            "evidence": {
+              "destination": "Лиссабон",
+              "dates": "в ближайшую среду",
+              "budget": "общий бюджет 75 евро",
+              "participants": "Аня",
+              "hours": null,
+              "interests": null
+            }
+          }
+        }
+      ],
+      "seconds": 10.4945
+    },
+    {
+      "id": "duration-crosses-year",
+      "repeat": 1,
+      "tags": [
+        "additional-regression"
+      ],
+      "output": {
+        "draft": {
+          "destination": "Lisbon",
+          "travel_date": "2026-12-30",
+          "end_date": "2027-01-03",
+          "duration_days": 5,
+          "budget_eur": 1000.0,
+          "currency": "EUR",
+          "budget_scope": "group",
+          "participant_count": 2,
+          "participants": [
+            {
+              "name": "Аня",
+              "interests": {}
+            },
+            {
+              "name": "Борис",
+              "interests": {}
+            }
+          ],
+          "common_interests": {},
+          "start": null,
+          "end": null,
+          "mandatory_names": [],
+          "excluded_names": [],
+          "unsupported": [],
+          "evidence": {
+            "destination": "Лиссабон",
+            "dates": "30 декабря 2026",
+            "budget": "общий бюджет 1000 евро",
+            "participants": "вдвоём",
+            "hours": null,
+            "interests": null
+          }
+        },
+        "group_budget": 100000,
+        "questions": [],
+        "warnings": [
+          "Неуказанные часы дня останутся такими, как в форме."
+        ],
+        "model": "Qwen3-4B-Q4_K_M",
+        "prompt_version": "trip-extract-v2-grounded",
+        "reference_date": "2026-10-24"
+      },
+      "checks": [
+        {
+          "field": "draft.destination",
+          "passed": true,
+          "expected": "Lisbon",
+          "actual": "Lisbon"
+        },
+        {
+          "field": "draft.travel_date",
+          "passed": true,
+          "expected": "2026-12-30",
+          "actual": "2026-12-30"
+        },
+        {
+          "field": "draft.end_date",
+          "passed": true,
+          "expected": "2027-01-03",
+          "actual": "2027-01-03"
+        },
+        {
+          "field": "group_budget",
+          "passed": true,
+          "expected": 100000,
+          "actual": 100000
+        },
+        {
+          "field": "questions",
+          "passed": true,
+          "expected": {
+            "required": [],
+            "allowed": []
+          },
+          "actual": []
+        }
+      ],
+      "passed": true,
+      "attempts": [
+        {
+          "status_code": 200,
+          "schema_valid": true,
+          "finish_reason": "stop",
+          "usage": {
+            "completion_tokens": 155,
+            "prompt_tokens": 1687,
+            "total_tokens": 1842,
+            "prompt_tokens_details": {
+              "cached_tokens": 1612
+            }
+          },
+          "output": {
+            "destination": "Lisbon",
+            "travel_date": "2026-12-30",
+            "end_date": null,
+            "duration_days": 5,
+            "budget_eur": 1000.0,
+            "currency": "EUR",
+            "budget_scope": "group",
+            "participant_count": 2,
+            "participants": [
+              {
+                "name": "Аня",
+                "interests": {}
+              },
+              {
+                "name": "Борис",
+                "interests": {}
+              }
+            ],
+            "common_interests": {},
+            "start": null,
+            "end": null,
+            "mandatory_names": [],
+            "excluded_names": [],
+            "unsupported": [],
+            "evidence": {
+              "destination": "Лиссабон",
+              "dates": "30 декабря 2026",
+              "budget": "общий бюджет 1000 евро",
+              "participants": "вдвоём",
+              "hours": null,
+              "interests": null
+            }
+          }
+        }
+      ],
+      "seconds": 11.3744
+    },
+    {
+      "id": "personal-dislikes",
+      "repeat": 1,
+      "tags": [
+        "additional-regression"
+      ],
+      "output": {
+        "draft": {
+          "destination": "Lisbon",
+          "travel_date": "2026-11-04",
+          "end_date": null,
+          "duration_days": null,
+          "budget_eur": 120.0,
+          "currency": "EUR",
+          "budget_scope": "group",
+          "participant_count": 2,
+          "participants": [
+            {
+              "name": "Пётр",
+              "interests": {
+                "history": 0.0
+              }
+            },
+            {
+              "name": "Даша",
+              "interests": {
+                "nature": 1.0
+              }
+            }
+          ],
+          "common_interests": {},
+          "start": null,
+          "end": null,
+          "mandatory_names": [],
+          "excluded_names": [],
+          "unsupported": [],
+          "evidence": {
+            "destination": "Лиссабон",
+            "dates": "4 ноября 2026",
+            "budget": "общий бюджет 120 евро",
+            "participants": "Пётр и Даша",
+            "hours": null,
+            "interests": "Пётр не интересуется историей, Даша любит природу"
+          }
+        },
+        "group_budget": 12000,
+        "questions": [],
+        "warnings": [
+          "Неуказанные часы дня останутся такими, как в форме."
+        ],
+        "model": "Qwen3-4B-Q4_K_M",
+        "prompt_version": "trip-extract-v2-grounded",
+        "reference_date": "2026-10-24"
+      },
+      "checks": [
+        {
+          "field": "draft.destination",
+          "passed": true,
+          "expected": "Lisbon",
+          "actual": "Lisbon"
+        },
+        {
+          "field": "draft.travel_date",
+          "passed": true,
+          "expected": "2026-11-04",
+          "actual": "2026-11-04"
+        },
+        {
+          "field": "draft.end_date",
+          "passed": true,
+          "expected": null,
+          "actual": null
+        },
+        {
+          "field": "group_budget",
+          "passed": true,
+          "expected": 12000,
+          "actual": 12000
+        },
+        {
+          "field": "names",
+          "passed": true,
+          "expected": [
+            "Даша",
+            "Пётр"
+          ],
+          "actual": [
+            "Даша",
+            "Пётр"
+          ]
+        },
+        {
+          "field": "draft.common_interests",
+          "passed": true,
+          "expected": {},
+          "actual": {}
+        },
+        {
+          "field": "individual_interests",
+          "passed": true,
+          "expected": {
+            "Пётр": {
+              "history": 0
+            },
+            "Даша": {
+              "nature": 1
+            }
+          },
+          "actual": {
+            "Пётр": {
+              "history": 0.0
+            },
+            "Даша": {
+              "nature": 1.0
+            }
+          }
+        },
+        {
+          "field": "questions",
+          "passed": true,
+          "expected": {
+            "required": [],
+            "allowed": []
+          },
+          "actual": []
+        }
+      ],
+      "passed": true,
+      "attempts": [
+        {
+          "status_code": 200,
+          "schema_valid": true,
+          "finish_reason": "stop",
+          "usage": {
+            "completion_tokens": 180,
+            "prompt_tokens": 1695,
+            "total_tokens": 1875,
+            "prompt_tokens_details": {
+              "cached_tokens": 1612
+            }
+          },
+          "output": {
+            "destination": "Lisbon",
+            "travel_date": "2026-11-04",
+            "end_date": null,
+            "duration_days": null,
+            "budget_eur": 120.0,
+            "currency": "EUR",
+            "budget_scope": "group",
+            "participant_count": 2,
+            "participants": [
+              {
+                "name": "Пётр",
+                "interests": {
+                  "history": 0.0
+                }
+              },
+              {
+                "name": "Даша",
+                "interests": {
+                  "nature": 1.0
+                }
+              }
+            ],
+            "common_interests": {
+              "nature": 1.0
+            },
+            "start": null,
+            "end": null,
+            "mandatory_names": [],
+            "excluded_names": [],
+            "unsupported": [],
+            "evidence": {
+              "destination": "Лиссабон",
+              "dates": "4 ноября 2026",
+              "budget": "общий бюджет 120 евро",
+              "participants": "Пётр и Даша",
+              "hours": null,
+              "interests": "Пётр не интересуется историей, Даша любит природу"
+            }
+          }
+        }
+      ],
+      "seconds": 13.3753
+    },
+    {
+      "id": "negative-food-positive-art",
+      "repeat": 1,
+      "tags": [
+        "additional-regression"
+      ],
+      "output": {
+        "draft": {
+          "destination": "Lisbon",
+          "travel_date": "2026-11-04",
+          "end_date": null,
+          "duration_days": null,
+          "budget_eur": 120.0,
+          "currency": "EUR",
+          "budget_scope": "group",
+          "participant_count": 2,
+          "participants": [
+            {
+              "name": "Аня",
+              "interests": {}
+            },
+            {
+              "name": "Борис",
+              "interests": {}
+            }
+          ],
+          "common_interests": {
+            "food": 0.0,
+            "art": 1.0
+          },
+          "start": null,
+          "end": null,
+          "mandatory_names": [],
+          "excluded_names": [],
+          "unsupported": [],
+          "evidence": {
+            "destination": "Лиссабон",
+            "dates": "4 ноября 2026",
+            "budget": "общий бюджет 120 евро",
+            "participants": "вдвоём",
+            "hours": null,
+            "interests": "живопись нравится"
+          }
+        },
+        "group_budget": 12000,
+        "questions": [],
+        "warnings": [
+          "Неуказанные часы дня останутся такими, как в форме."
+        ],
+        "model": "Qwen3-4B-Q4_K_M",
+        "prompt_version": "trip-extract-v2-grounded",
+        "reference_date": "2026-10-24"
+      },
+      "checks": [
+        {
+          "field": "draft.destination",
+          "passed": true,
+          "expected": "Lisbon",
+          "actual": "Lisbon"
+        },
+        {
+          "field": "draft.travel_date",
+          "passed": true,
+          "expected": "2026-11-04",
+          "actual": "2026-11-04"
+        },
+        {
+          "field": "draft.end_date",
+          "passed": true,
+          "expected": null,
+          "actual": null
+        },
+        {
+          "field": "group_budget",
+          "passed": true,
+          "expected": 12000,
+          "actual": 12000
+        },
+        {
+          "field": "draft.common_interests",
+          "passed": true,
+          "expected": {
+            "food": 0,
+            "art": 1
+          },
+          "actual": {
+            "food": 0.0,
+            "art": 1.0
+          }
+        },
+        {
+          "field": "questions",
+          "passed": true,
+          "expected": {
+            "required": [],
+            "allowed": []
+          },
+          "actual": []
+        }
+      ],
+      "passed": true,
+      "attempts": [
+        {
+          "status_code": 200,
+          "schema_valid": true,
+          "finish_reason": "stop",
+          "usage": {
+            "completion_tokens": 160,
+            "prompt_tokens": 1698,
+            "total_tokens": 1858,
+            "prompt_tokens_details": {
+              "cached_tokens": 1612
+            }
+          },
+          "output": {
+            "destination": "Lisbon",
+            "travel_date": "2026-11-04",
+            "end_date": null,
+            "duration_days": null,
+            "budget_eur": 120.0,
+            "currency": "EUR",
+            "budget_scope": "group",
+            "participant_count": 2,
+            "participants": [
+              {
+                "name": "Аня",
+                "interests": {}
+              },
+              {
+                "name": "Борис",
+                "interests": {}
+              }
+            ],
+            "common_interests": {
+              "art": 1.0
+            },
+            "start": null,
+            "end": null,
+            "mandatory_names": [],
+            "excluded_names": [],
+            "unsupported": [],
+            "evidence": {
+              "destination": "Лиссабон",
+              "dates": "4 ноября 2026",
+              "budget": "общий бюджет 120 евро",
+              "participants": "вдвоём",
+              "hours": null,
+              "interests": "живопись нравится"
+            }
+          }
+        }
+      ],
+      "seconds": 11.705
+    },
+    {
+      "id": "personal-contrast",
+      "repeat": 1,
+      "tags": [
+        "additional-regression"
+      ],
+      "output": {
+        "draft": {
+          "destination": "Lisbon",
+          "travel_date": "2026-11-04",
+          "end_date": null,
+          "duration_days": null,
+          "budget_eur": 100.0,
+          "currency": "EUR",
+          "budget_scope": "group",
+          "participant_count": 2,
+          "participants": [
+            {
+              "name": "Варя",
+              "interests": {
+                "history": 1.0,
+                "art": 0.0
+              }
+            },
+            {
+              "name": "Пётр",
+              "interests": {
+                "nature": 1.0
+              }
+            }
+          ],
+          "common_interests": {},
+          "start": null,
+          "end": null,
+          "mandatory_names": [],
+          "excluded_names": [],
+          "unsupported": [],
+          "evidence": {
+            "destination": "Лиссабон",
+            "dates": "4 ноября 2026",
+            "budget": "общий бюджет 100 евро",
+            "participants": "Варя и Пётр",
+            "hours": null,
+            "interests": "Варя любит историю, но не искусство. Пётр любит природу"
+          }
+        },
+        "group_budget": 10000,
+        "questions": [],
+        "warnings": [
+          "Неуказанные часы дня останутся такими, как в форме."
+        ],
+        "model": "Qwen3-4B-Q4_K_M",
+        "prompt_version": "trip-extract-v2-grounded",
+        "reference_date": "2026-10-24"
+      },
+      "checks": [
+        {
+          "field": "draft.destination",
+          "passed": true,
+          "expected": "Lisbon",
+          "actual": "Lisbon"
+        },
+        {
+          "field": "draft.travel_date",
+          "passed": true,
+          "expected": "2026-11-04",
+          "actual": "2026-11-04"
+        },
+        {
+          "field": "draft.end_date",
+          "passed": true,
+          "expected": null,
+          "actual": null
+        },
+        {
+          "field": "group_budget",
+          "passed": true,
+          "expected": 10000,
+          "actual": 10000
+        },
+        {
+          "field": "names",
+          "passed": true,
+          "expected": [
+            "Варя",
+            "Пётр"
+          ],
+          "actual": [
+            "Варя",
+            "Пётр"
+          ]
+        },
+        {
+          "field": "draft.common_interests",
+          "passed": true,
+          "expected": {},
+          "actual": {}
+        },
+        {
+          "field": "individual_interests",
+          "passed": true,
+          "expected": {
+            "Варя": {
+              "history": 1,
+              "art": 0
+            },
+            "Пётр": {
+              "nature": 1
+            }
+          },
+          "actual": {
+            "Варя": {
+              "history": 1.0,
+              "art": 0.0
+            },
+            "Пётр": {
+              "nature": 1.0
+            }
+          }
+        },
+        {
+          "field": "questions",
+          "passed": true,
+          "expected": {
+            "required": [],
+            "allowed": []
+          },
+          "actual": []
+        }
+      ],
+      "passed": true,
+      "attempts": [
+        {
+          "status_code": 200,
+          "schema_valid": true,
+          "finish_reason": "stop",
+          "usage": {
+            "completion_tokens": 199,
+            "prompt_tokens": 1698,
+            "total_tokens": 1897,
+            "prompt_tokens_details": {
+              "cached_tokens": 1612
+            }
+          },
+          "output": {
+            "destination": "Lisbon",
+            "travel_date": "2026-11-04",
+            "end_date": null,
+            "duration_days": null,
+            "budget_eur": 100.0,
+            "currency": "EUR",
+            "budget_scope": "group",
+            "participant_count": 2,
+            "participants": [
+              {
+                "name": "Варя",
+                "interests": {
+                  "history": 1.0,
+                  "art": 0.0
+                }
+              },
+              {
+                "name": "Пётр",
+                "interests": {
+                  "nature": 1.0
+                }
+              }
+            ],
+            "common_interests": {
+              "history": 0.0,
+              "nature": 0.0,
+              "food": 0.0,
+              "art": 0.0
+            },
+            "start": null,
+            "end": null,
+            "mandatory_names": [],
+            "excluded_names": [],
+            "unsupported": [],
+            "evidence": {
+              "destination": "Лиссабон",
+              "dates": "4 ноября 2026",
+              "budget": "общий бюджет 100 евро",
+              "participants": "Варя и Пётр",
+              "hours": null,
+              "interests": "Варя любит историю, но не искусство. Пётр любит природу"
+            }
+          }
+        }
+      ],
+      "seconds": 15.0487
+    },
+    {
+      "id": "inflected-names",
+      "repeat": 1,
+      "tags": [
+        "additional-regression"
+      ],
+      "output": {
+        "draft": {
+          "destination": "Lisbon",
+          "travel_date": "2026-11-04",
+          "end_date": null,
+          "duration_days": null,
+          "budget_eur": 100.0,
+          "currency": "EUR",
+          "budget_scope": "group",
+          "participant_count": 2,
+          "participants": [
+            {
+              "name": "Ольга",
+              "interests": {
+                "history": 0.0
+              }
+            },
+            {
+              "name": "Иван",
+              "interests": {
+                "nature": 1.0
+              }
+            }
+          ],
+          "common_interests": {},
+          "start": null,
+          "end": null,
+          "mandatory_names": [],
+          "excluded_names": [],
+          "unsupported": [],
+          "evidence": {
+            "destination": "Лиссабон",
+            "dates": "4 ноября 2026",
+            "budget": "общий бюджет 100 евро",
+            "participants": "Ольга и Иван",
+            "hours": null,
+            "interests": "Ольге история не интересна, Ивану нравится природа"
+          }
+        },
+        "group_budget": 10000,
+        "questions": [],
+        "warnings": [
+          "Неуказанные часы дня останутся такими, как в форме."
+        ],
+        "model": "Qwen3-4B-Q4_K_M",
+        "prompt_version": "trip-extract-v2-grounded",
+        "reference_date": "2026-10-24"
+      },
+      "checks": [
+        {
+          "field": "draft.destination",
+          "passed": true,
+          "expected": "Lisbon",
+          "actual": "Lisbon"
+        },
+        {
+          "field": "draft.travel_date",
+          "passed": true,
+          "expected": "2026-11-04",
+          "actual": "2026-11-04"
+        },
+        {
+          "field": "draft.end_date",
+          "passed": true,
+          "expected": null,
+          "actual": null
+        },
+        {
+          "field": "group_budget",
+          "passed": true,
+          "expected": 10000,
+          "actual": 10000
+        },
+        {
+          "field": "names",
+          "passed": true,
+          "expected": [
+            "Иван",
+            "Ольга"
+          ],
+          "actual": [
+            "Иван",
+            "Ольга"
+          ]
+        },
+        {
+          "field": "draft.common_interests",
+          "passed": true,
+          "expected": {},
+          "actual": {}
+        },
+        {
+          "field": "individual_interests",
+          "passed": true,
+          "expected": {
+            "Ольга": {
+              "history": 0
+            },
+            "Иван": {
+              "nature": 1
+            }
+          },
+          "actual": {
+            "Ольга": {
+              "history": 0.0
+            },
+            "Иван": {
+              "nature": 1.0
+            }
+          }
+        },
+        {
+          "field": "questions",
+          "passed": true,
+          "expected": {
+            "required": [],
+            "allowed": []
+          },
+          "actual": []
+        }
+      ],
+      "passed": true,
+      "attempts": [
+        {
+          "status_code": 200,
+          "schema_valid": true,
+          "finish_reason": "stop",
+          "usage": {
+            "completion_tokens": 177,
+            "prompt_tokens": 1693,
+            "total_tokens": 1870,
+            "prompt_tokens_details": {
+              "cached_tokens": 1612
+            }
+          },
+          "output": {
+            "destination": "Lisbon",
+            "travel_date": "2026-11-04",
+            "end_date": null,
+            "duration_days": null,
+            "budget_eur": 100.0,
+            "currency": "EUR",
+            "budget_scope": "group",
+            "participant_count": 2,
+            "participants": [
+              {
+                "name": "Ольга",
+                "interests": {
+                  "history": 0.0
+                }
+              },
+              {
+                "name": "Иван",
+                "interests": {
+                  "nature": 1.0
+                }
+              }
+            ],
+            "common_interests": {
+              "nature": 1.0
+            },
+            "start": null,
+            "end": null,
+            "mandatory_names": [],
+            "excluded_names": [],
+            "unsupported": [],
+            "evidence": {
+              "destination": "Лиссабон",
+              "dates": "4 ноября 2026",
+              "budget": "общий бюджет 100 евро",
+              "participants": "Ольга и Иван",
+              "hours": null,
+              "interests": "Ольге история не интересна, Ивану нравится природа"
+            }
+          }
+        }
+      ],
+      "seconds": 13.3394
+    },
+    {
+      "id": "whole-name",
+      "repeat": 1,
+      "tags": [
+        "additional-regression"
+      ],
+      "output": {
+        "draft": {
+          "destination": "Lisbon",
+          "travel_date": "2026-11-04",
+          "end_date": null,
+          "duration_days": null,
+          "budget_eur": 30.0,
+          "currency": "EUR",
+          "budget_scope": "group",
+          "participant_count": 1,
+          "participants": [
+            {
+              "name": "Жанна",
+              "interests": {}
+            }
+          ],
+          "common_interests": {},
+          "start": null,
+          "end": null,
+          "mandatory_names": [],
+          "excluded_names": [],
+          "unsupported": [],
+          "evidence": {
+            "destination": "Лиссабон",
+            "dates": "4 ноября 2026",
+            "budget": "общий бюджет 30 евро",
+            "participants": "Жанна",
+            "hours": null,
+            "interests": null
+          }
+        },
+        "group_budget": 3000,
+        "questions": [],
+        "warnings": [
+          "Неуказанные часы дня останутся такими, как в форме."
+        ],
+        "model": "Qwen3-4B-Q4_K_M",
+        "prompt_version": "trip-extract-v2-grounded",
+        "reference_date": "2026-10-24"
+      },
+      "checks": [
+        {
+          "field": "draft.destination",
+          "passed": true,
+          "expected": "Lisbon",
+          "actual": "Lisbon"
+        },
+        {
+          "field": "draft.travel_date",
+          "passed": true,
+          "expected": "2026-11-04",
+          "actual": "2026-11-04"
+        },
+        {
+          "field": "draft.end_date",
+          "passed": true,
+          "expected": null,
+          "actual": null
+        },
+        {
+          "field": "group_budget",
+          "passed": true,
+          "expected": 3000,
+          "actual": 3000
+        },
+        {
+          "field": "names",
+          "passed": true,
+          "expected": [
+            "Жанна"
+          ],
+          "actual": [
+            "Жанна"
+          ]
+        },
+        {
+          "field": "questions",
+          "passed": true,
+          "expected": {
+            "required": [],
+            "allowed": []
+          },
+          "actual": []
+        }
+      ],
+      "passed": true,
+      "attempts": [
+        {
+          "status_code": 200,
+          "schema_valid": true,
+          "finish_reason": "stop",
+          "usage": {
+            "completion_tokens": 139,
+            "prompt_tokens": 1671,
+            "total_tokens": 1810,
+            "prompt_tokens_details": {
+              "cached_tokens": 1612
+            }
+          },
+          "output": {
+            "destination": "Lisbon",
+            "travel_date": "2026-11-04",
+            "end_date": null,
+            "duration_days": null,
+            "budget_eur": 30.0,
+            "currency": "EUR",
+            "budget_scope": "group",
+            "participant_count": 1,
+            "participants": [
+              {
+                "name": "Жанна",
+                "interests": {}
+              }
+            ],
+            "common_interests": {},
+            "start": null,
+            "end": null,
+            "mandatory_names": [],
+            "excluded_names": [],
+            "unsupported": [],
+            "evidence": {
+              "destination": "Лиссабон",
+              "dates": "4 ноября 2026",
+              "budget": "общий бюджет 30 евро",
+              "participants": "Жанна",
+              "hours": null,
+              "interests": null
+            }
+          }
+        }
+      ],
+      "seconds": 10.3396
+    },
+    {
+      "id": "supported-car-mode",
+      "repeat": 1,
+      "tags": [
+        "additional-regression"
+      ],
+      "output": {
+        "draft": {
+          "destination": "Lisbon",
+          "travel_date": "2026-11-04",
+          "end_date": null,
+          "duration_days": null,
+          "budget_eur": 100.0,
+          "currency": "EUR",
+          "budget_scope": "group",
+          "participant_count": 2,
+          "participants": [
+            {
+              "name": "Аня",
+              "interests": {}
+            },
+            {
+              "name": "Борис",
+              "interests": {}
+            }
+          ],
+          "common_interests": {
+            "nature": 1.0
+          },
+          "start": null,
+          "end": null,
+          "mandatory_names": [],
+          "excluded_names": [],
+          "unsupported": [],
+          "evidence": {
+            "destination": "Лиссабон",
+            "dates": "4 ноября 2026",
+            "budget": "общий бюджет 100 евро",
+            "participants": "вдвоём",
+            "hours": null,
+            "interests": "предпочитаем природу"
+          }
+        },
+        "group_budget": 10000,
+        "questions": [],
+        "warnings": [
+          "Неуказанные часы дня останутся такими, как в форме."
+        ],
+        "model": "Qwen3-4B-Q4_K_M",
+        "prompt_version": "trip-extract-v2-grounded",
+        "reference_date": "2026-10-24"
+      },
+      "checks": [
+        {
+          "field": "draft.destination",
+          "passed": true,
+          "expected": "Lisbon",
+          "actual": "Lisbon"
+        },
+        {
+          "field": "draft.travel_date",
+          "passed": true,
+          "expected": "2026-11-04",
+          "actual": "2026-11-04"
+        },
+        {
+          "field": "draft.end_date",
+          "passed": true,
+          "expected": null,
+          "actual": null
+        },
+        {
+          "field": "group_budget",
+          "passed": true,
+          "expected": 10000,
+          "actual": 10000
+        },
+        {
+          "field": "draft.unsupported",
+          "passed": true,
+          "expected": [],
+          "actual": []
+        },
+        {
+          "field": "draft.common_interests",
+          "passed": true,
+          "expected": {
+            "nature": 1
+          },
+          "actual": {
+            "nature": 1.0
+          }
+        },
+        {
+          "field": "questions",
+          "passed": true,
+          "expected": {
+            "required": [],
+            "allowed": []
+          },
+          "actual": []
+        }
+      ],
+      "passed": true,
+      "attempts": [
+        {
+          "status_code": 200,
+          "schema_valid": true,
+          "finish_reason": "stop",
+          "usage": {
+            "completion_tokens": 166,
+            "prompt_tokens": 1696,
+            "total_tokens": 1862,
+            "prompt_tokens_details": {
+              "cached_tokens": 1612
+            }
+          },
+          "output": {
+            "destination": "Lisbon",
+            "travel_date": "2026-11-04",
+            "end_date": null,
+            "duration_days": null,
+            "budget_eur": 100.0,
+            "currency": "EUR",
+            "budget_scope": "group",
+            "participant_count": 2,
+            "participants": [
+              {
+                "name": "Аня",
+                "interests": {}
+              },
+              {
+                "name": "Борис",
+                "interests": {}
+              }
+            ],
+            "common_interests": {
+              "nature": 1.0
+            },
+            "start": null,
+            "end": null,
+            "mandatory_names": [],
+            "excluded_names": [],
+            "unsupported": [
+              "автомобильный маршрут"
+            ],
+            "evidence": {
+              "destination": "Лиссабон",
+              "dates": "4 ноября 2026",
+              "budget": "общий бюджет 100 евро",
+              "participants": "вдвоём",
+              "hours": null,
+              "interests": "предпочитаем природу"
+            }
+          }
+        }
+      ],
+      "seconds": 12.6823
+    },
+    {
+      "id": "ambiguous-pronoun",
+      "repeat": 1,
+      "tags": [
+        "additional-regression"
+      ],
+      "output": {
+        "draft": {
+          "destination": "Lisbon",
+          "travel_date": "2026-11-04",
+          "end_date": null,
+          "duration_days": null,
+          "budget_eur": 100.0,
+          "currency": "EUR",
+          "budget_scope": "group",
+          "participant_count": 2,
+          "participants": [
+            {
+              "name": "Аня",
+              "interests": {}
+            },
+            {
+              "name": "Вера",
+              "interests": {}
+            }
+          ],
+          "common_interests": {
+            "history": 0.0
+          },
+          "start": null,
+          "end": null,
+          "mandatory_names": [],
+          "excluded_names": [],
+          "unsupported": [],
+          "evidence": {
+            "destination": "Лиссабон",
+            "dates": "4 ноября 2026",
+            "budget": "общий бюджет 100 евро",
+            "participants": "Аня и Вера",
+            "hours": null,
+            "interests": "Ей не нравится история"
+          }
+        },
+        "group_budget": 10000,
+        "questions": [
+          {
+            "field": "interests",
+            "text": "Уточните, кому относятся предпочтения и отрицания; используйте имена участников."
+          }
+        ],
+        "warnings": [
+          "Неуказанные часы дня останутся такими, как в форме."
+        ],
+        "model": "Qwen3-4B-Q4_K_M",
+        "prompt_version": "trip-extract-v2-grounded",
+        "reference_date": "2026-10-24"
+      },
+      "checks": [
+        {
+          "field": "draft.destination",
+          "passed": true,
+          "expected": "Lisbon",
+          "actual": "Lisbon"
+        },
+        {
+          "field": "draft.travel_date",
+          "passed": true,
+          "expected": "2026-11-04",
+          "actual": "2026-11-04"
+        },
+        {
+          "field": "draft.end_date",
+          "passed": true,
+          "expected": null,
+          "actual": null
+        },
+        {
+          "field": "group_budget",
+          "passed": true,
+          "expected": 10000,
+          "actual": 10000
+        },
+        {
+          "field": "names",
+          "passed": true,
+          "expected": [
+            "Аня",
+            "Вера"
+          ],
+          "actual": [
+            "Аня",
+            "Вера"
+          ]
+        },
+        {
+          "field": "questions",
+          "passed": true,
+          "expected": {
+            "required": [
+              "interests"
+            ],
+            "allowed": [
+              "interests"
+            ]
+          },
+          "actual": [
+            "interests"
+          ]
+        }
+      ],
+      "passed": true,
+      "attempts": [
+        {
+          "status_code": 200,
+          "schema_valid": true,
+          "finish_reason": "stop",
+          "usage": {
+            "completion_tokens": 160,
+            "prompt_tokens": 1682,
+            "total_tokens": 1842,
+            "prompt_tokens_details": {
+              "cached_tokens": 1612
+            }
+          },
+          "output": {
+            "destination": "Lisbon",
+            "travel_date": "2026-11-04",
+            "end_date": null,
+            "duration_days": null,
+            "budget_eur": 100.0,
+            "currency": "EUR",
+            "budget_scope": "group",
+            "participant_count": 2,
+            "participants": [
+              {
+                "name": "Аня",
+                "interests": {}
+              },
+              {
+                "name": "Вера",
+                "interests": {}
+              }
+            ],
+            "common_interests": {
+              "history": 0.0
+            },
+            "start": null,
+            "end": null,
+            "mandatory_names": [],
+            "excluded_names": [],
+            "unsupported": [],
+            "evidence": {
+              "destination": "Лиссабон",
+              "dates": "4 ноября 2026",
+              "budget": "общий бюджет 100 евро",
+              "participants": "Аня и Вера",
+              "hours": null,
+              "interests": "Ей не нравится история"
+            }
+          }
+        }
+      ],
+      "seconds": 11.9809
+    }
+  ],
+  "explanations": [],
+  "fault_controls": [
+    {
+      "id": "parse_timeout",
+      "passed": true,
+      "status_code": 503,
+      "manual_planner_status": 200,
+      "attempts": 1
+    },
+    {
+      "id": "parse_invalid_json",
+      "passed": true,
+      "status_code": 502,
+      "manual_planner_status": 200,
+      "attempts": 2
+    },
+    {
+      "id": "explain_unavailable",
+      "passed": true,
+      "mode": "template",
+      "fallback_reason": "llm_unavailable"
+    },
+    {
+      "id": "explain_invented_fact",
+      "passed": true,
+      "mode": "template",
+      "fallback_reason": "unverified_output"
+    }
+  ],
+  "parser_summary": {
+    "runs": 12,
+    "passed": 11,
+    "errors": 0,
+    "per_field": {
+      "draft.common_interests": {
+        "passed": 5,
+        "total": 5,
+        "accuracy": 1.0
+      },
+      "draft.destination": {
+        "passed": 12,
+        "total": 12,
+        "accuracy": 1.0
+      },
+      "draft.end_date": {
+        "passed": 8,
+        "total": 8,
+        "accuracy": 1.0
+      },
+      "draft.travel_date": {
+        "passed": 12,
+        "total": 12,
+        "accuracy": 1.0
+      },
+      "draft.unsupported": {
+        "passed": 2,
+        "total": 2,
+        "accuracy": 1.0
+      },
+      "group_budget": {
+        "passed": 12,
+        "total": 12,
+        "accuracy": 1.0
+      },
+      "individual_interests": {
+        "passed": 3,
+        "total": 3,
+        "accuracy": 1.0
+      },
+      "names": {
+        "passed": 7,
+        "total": 7,
+        "accuracy": 1.0
+      },
+      "questions": {
+        "passed": 11,
+        "total": 12,
+        "accuracy": 0.9166666666666666
+      }
+    },
+    "latency_all": {
+      "n": 12,
+      "median_seconds": 11.648399999999999,
+      "p95_seconds": 15.0487,
+      "max_seconds": 15.0487
+    },
+    "latency_successful": {
+      "n": 12,
+      "median_seconds": 11.648399999999999,
+      "p95_seconds": 15.0487,
+      "max_seconds": 15.0487
+    },
+    "repairs": 0,
+    "first_response_schema_valid": 12,
+    "any_response_schema_valid": 12
+  },
+  "explanation_summary": {
+    "runs": 0,
+    "grounding_passed": 0,
+    "llm_mode": 0,
+    "fallback_mode": 0,
+    "latency": {
+      "n": 0,
+      "median_seconds": null,
+      "p95_seconds": null,
+      "max_seconds": null
+    }
+  },
+  "finished_at": "2026-10-24T11:02:56.266043+00:00",
+  "inputs_unchanged": true,
+  "ragas": {
+    "export_path": ".local\\evaluations\\parsing-additional-final-unused.jsonl",
+    "samples": 0,
+    "scores_computed": false,
+    "scope": "Synthetic explanation contexts; does not measure live retrieval quality"
+  }
+}

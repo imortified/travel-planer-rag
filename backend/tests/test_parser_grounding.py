@@ -13,6 +13,9 @@ from app.schemas.assistant import ExtractedTrip, ParseInput
 
 CORPUS = json.loads((ROOT / "data/evaluation/llm-parser.json").read_text("utf-8"))
 BASELINE = json.loads((ROOT / "docs/llm-quality-evaluation.json").read_text("utf-8"))
+V2 = json.loads((ROOT / "docs/llm-quality-parsing-v2.json").read_text("utf-8"))
+ADDITIONAL = json.loads((ROOT / "data/evaluation/llm-parser-additional.json").read_text("utf-8"))
+V2_ADDITIONAL = json.loads((ROOT / "docs/llm-quality-parsing-additional.json").read_text("utf-8"))
 
 
 class RecordedModel:
@@ -34,6 +37,23 @@ def test_recorded_predictions_pass_server_guards(case, row):
         ParseInput(text=case["text"], member_names=case["members"]),
         RecordedModel(row["attempts"][0]["output"]),
         date.fromisoformat(CORPUS["reference_date"]),
+    )
+    assert all(c["passed"] for c in grade(case, result)), grade(case, result)
+
+
+SCOPE_REGRESSIONS = list(zip(CORPUS["cases"], V2["parser"], strict=True)) + [
+    (case, row)
+    for case, row in zip(ADDITIONAL["cases"], V2_ADDITIONAL["parser"], strict=True)
+    if case["id"] in {"personal-contrast", "supported-car-mode"}
+]
+
+
+@pytest.mark.parametrize("case,row", SCOPE_REGRESSIONS, ids=[c["id"] for c, _ in SCOPE_REGRESSIONS])
+def test_new_generations_keep_only_grounded_scopes(case, row):
+    result = parse_request(
+        ParseInput(text=case["text"], member_names=case["members"]),
+        RecordedModel(row["attempts"][0]["output"]),
+        date(2026, 10, 24),
     )
     assert all(c["passed"] for c in grade(case, result)), grade(case, result)
 
@@ -182,3 +202,16 @@ def test_impossible_calendar_date_is_not_silently_repaired():
     draft = ExtractedTrip(travel_date=date(2026, 2, 28))
     ground_dates(draft, "31 февраля 2026", "31 февраля 2026", True, date(2026, 1, 1))
     assert draft.travel_date is None
+
+
+@pytest.mark.parametrize("field", ["mandatory_names", "excluded_names"])
+def test_participant_names_cannot_silently_become_place_constraints(field):
+    result = parse_request(
+        ParseInput(
+            text="Аня и Борис едут в Лиссабон. Посетим Oceanário.", member_names=["Аня", "Борис"]
+        ),
+        RecordedModel({field: ["Аня", "Борис", "Oceanário"]}),
+        date(2026, 10, 24),
+    )
+    assert getattr(result.draft, field) == ["Oceanário"]
+    assert field in {question.field for question in result.questions}

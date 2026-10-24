@@ -7,6 +7,7 @@ from decimal import Decimal
 from app.integrations.llama_cpp import LlamaCpp
 from app.nlp.grounding import (
     destination_supported,
+    discard_supported_conditions,
     ground_dates,
     ground_interests,
     name_present,
@@ -126,8 +127,8 @@ def parse_request(payload: ParseInput, llm=None, today=None):
             "interests",
             "Уточните, кому относятся предпочтения и отрицания; используйте имена участников.",
         )
-    draft.unsupported = list(
-        dict.fromkeys([*unsupported_conditions(payload.text), *draft.unsupported])
+    draft.unsupported = discard_supported_conditions(
+        list(dict.fromkeys([*unsupported_conditions(payload.text), *draft.unsupported]))
     )[:12]
     if draft.destination is None:
         ask("destination", "Куда отправляемся? Сейчас доступны Лиссабон и демо-город.")
@@ -148,8 +149,15 @@ def parse_request(payload: ParseInput, llm=None, today=None):
         and (draft.end_date - draft.travel_date).days + 1 != draft.duration_days
     ):
         ask("end_date", "Указанные даты и длительность поездки различаются — уточните период.")
+    participant_names = {normalized(m.name) for m in draft.participants} | {
+        normalized(name) for name in payload.member_names
+    }
     for field in ("mandatory_names", "excluded_names"):
         values = getattr(draft, field)
+        if any(normalized(value) in participant_names for value in values):
+            values = [value for value in values if normalized(value) not in participant_names]
+            setattr(draft, field, values)
+            ask(field, "Название места совпало с именем участника. Уточните название места.")
         if any(normalized(value) not in normalized(payload.text) for value in values):
             setattr(draft, field, [])
             ask(field, "Уточните названия обязательных и исключённых мест своими словами.")

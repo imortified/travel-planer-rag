@@ -208,6 +208,19 @@ def unsupported_conditions(text):
     return found
 
 
+def discard_supported_conditions(conditions):
+    supported = {
+        "автомобильный маршрут",
+        "автомобильные маршруты",
+        "автомобильный транспорт",
+        "автомобильные переезды",
+        "на автомобиле",
+        "на машине",
+        "driving",
+    }
+    return [value for value in conditions if normalize(value).strip(" .:;") not in supported]
+
+
 def polarity(clause, match):
     if re.search(r"\bне\s*$", clause[: match.start()], re.I):
         return 0
@@ -234,7 +247,7 @@ def ground_interests(draft, text, known_names):
     people = {normalize(p.name): p for p in draft.participants}
     names = {normalize(name) for name in known_names} | set(people)
     common, individual, personal_categories = {}, {}, set()
-    uncertain = False
+    uncertain, complete = False, True
     # Decimal commas and time dots remain intact. Contrastive clauses have their own polarity.
     separators = list(re.finditer(r"(?<!\d)[,;.!?\n](?!\d)|\s+(?:но|а)\s+", text))
     clauses, start, leading = [], 0, ""
@@ -244,6 +257,9 @@ def ground_interests(draft, text, known_names):
     clauses.append((text[start:], leading))
     previous_owners = set()
     for clause, leading in clauses:
+        has_category = any(re.search(pattern, clause, re.I) for pattern in CATEGORIES.values())
+        if re.search(POSITIVE + "|" + NEGATIVE, clause, re.I) and not has_category:
+            complete = False  # Preserve model interpretation of nonliteral interests for review.
         owners = {name for name in names if name_present(name, clause)}
         collective = bool(
             re.search(r"\b(?:всем|все|нам|мы|любим|хотим|предпочитаем)\b", clause, re.I)
@@ -282,6 +298,7 @@ def ground_interests(draft, text, known_names):
                 if personal:
                     personal_categories.add(category)
                 if value is None:
+                    complete = False
                     continue
                 targets = (
                     [individual.setdefault(owner, {}) for owner in owners] if personal else [common]
@@ -296,9 +313,15 @@ def ground_interests(draft, text, known_names):
             previous_owners = owners
         elif collective:
             previous_owners = set()
-    for category in personal_categories - set(common):
-        draft.common_interests.pop(category, None)
-    draft.common_interests.update(common)
+    if complete and not uncertain and (common or individual):
+        # Fully recognized preference clauses define the scope. Extra model weights have no source.
+        draft.common_interests = common
+        for owner, person in people.items():
+            person.interests = individual.get(owner, {})
+    else:
+        for category in personal_categories - set(common):
+            draft.common_interests.pop(category, None)
+        draft.common_interests.update(common)
     for owner, values in individual.items():
         if owner in people:
             people[owner].interests.update(values)
