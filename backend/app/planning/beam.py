@@ -2,6 +2,7 @@
 
 from dataclasses import replace
 
+from app.planning.costs import group_cost
 from app.planning.models import Place, Request, Result, Visit
 from app.planning.objective import Objective
 from app.planning.pace import fits_pace
@@ -65,7 +66,7 @@ def beam_plan(
                 rest = request.pace.break_minutes if request.pace and state.visits else 0
                 begins = max(arrival + rest, place.opens)
                 ends = begins + place.duration
-                cost = state.total_cost + place.cost_per_person * len(request.participants)
+                cost = state.total_cost + group_cost(place, request.participants)
                 if (
                     ends > min(place.closes, request.end)
                     or cost > request.budget

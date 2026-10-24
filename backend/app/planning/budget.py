@@ -1,5 +1,6 @@
 """Account once for reference-priced stops and separately labelled user estimates."""
 
+from app.planning.costs import group_cost
 from app.schemas.trip_costs import BudgetSettings
 
 
@@ -17,10 +18,13 @@ def breakdown(trip, result, inputs):
     settings = settings_for(trip)
     schedule = [day.visits for day in result.days] if result.days else [result.visits]
     food = 0
+    participants = [
+        str(row.get("user_id", index)) for index, row in enumerate(trip.participants_snapshot)
+    ]
     for visits, data in zip(schedule, inputs, strict=True):
         by_id = {p.id: p for p in data.places}
         food += sum(
-            by_id[v.place_id].cost_per_person * len(trip.participants_snapshot)
+            group_cost(by_id[v.place_id], participants)
             for v in visits
             if v.place_id in by_id and by_id[v.place_id].category == "food"
         )

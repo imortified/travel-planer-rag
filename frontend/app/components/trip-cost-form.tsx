@@ -22,7 +22,7 @@ export function TripCostForm({value,onChange,destination,budget}:{value:CostDraf
         <label className="cost-toggle"><input type="checkbox" checked={slot.enabled} onChange={e=>change({enabled:e.target.checked})}/>{mealNames[type]}</label>
         {slot.enabled && <><div className="two"><label>{mealNames[type]}: с<input type="time" value={slot.start} onChange={e=>change({start:e.target.value})}/></label><label>{mealNames[type]}: до<input type="time" value={slot.end} onChange={e=>change({end:e.target.value})}/></label></div><div className="two"><label>{mealNames[type]}: минимум минут<input type="number" min="15" max="180" value={slot.duration} onChange={e=>change({duration:e.target.value})}/></label><label>{mealNames[type]}: лимит на человека, EUR<input type="number" min="0" max="10000000" step="0.01" value={slot.maxCost} onChange={e=>change({maxCost:e.target.value})}/></label></div></>}
       </div>})}
-      <p className="hint">Цена — за указанный заказ, не за любое меню. Очереди, наличие столиков и диетические условия не подтверждены. При отсутствии подходящего заведения система попросит изменить параметры; питание не будет молча пропущено. Для ужина может потребоваться более позднее окончание дня.</p>
+      <p className="hint">Каждому участнику, включая детей, пока назначается одинаковый указанный заказ. Детские порции и меню ещё не подключены. Очереди, наличие столиков и диетические условия не подтверждены. При отсутствии подходящего заведения система попросит изменить параметры. Для ужина может потребоваться более позднее окончание дня.</p>
     </>}
   </section>;
 }

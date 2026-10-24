@@ -395,7 +395,7 @@ def test_lisbon_snapshot_saved_and_source_failure_does_not_create_route(client, 
         },
     ).json()
     assert trip["travel_date"] == "2026-10-23"
-    context = {"source": "test-osm", "pois": [{"name": "Real fixture museum"}]}
+    context = {"source": "test-osm", "pois": [{"id": "osm:node:1", "name": "Real fixture museum"}]}
     monkeypatch.setattr(
         "app.api.groups.CityProvider.dataset",
         lambda *_: (
@@ -406,7 +406,11 @@ def test_lisbon_snapshot_saved_and_source_failure_does_not_create_route(client, 
     )
     saved = client.post(f"/api/v1/trips/{trip['id']}/routes?algorithm=beam").json()
     assert saved["data_source"] == "osm-osrm-lisbon-v2"
-    assert saved["result"]["data_context"] == context
+    stored = saved["result"]["data_context"]
+    assert stored["source"] == context["source"]
+    assert stored["pois"][0]["name"] == context["pois"][0]["name"]
+    assert stored["pricing_policy"] == "individual-age-pricing-v1"
+    assert [row["cost"] for row in stored["pois"][0]["participant_prices"]] == [0, 0]
     assert client.get(f"/api/v1/routes/{saved['id']}").json() == saved
 
     def fail(*args):

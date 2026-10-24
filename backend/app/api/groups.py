@@ -1,6 +1,6 @@
 import logging
 from dataclasses import asdict, replace
-from datetime import timedelta
+from datetime import date, timedelta
 from typing import Annotated, Literal
 
 from fastapi import APIRouter, Depends, HTTPException, Query
@@ -21,6 +21,7 @@ from app.planning.pace import PROFILES, planning_summary, profile_snapshot
 from app.planning.period import plan_period
 from app.planning.pricing import with_visit_prices
 from app.planning.service import checked_plan
+from app.schemas.ages import AgeProfile
 from app.schemas.groups import (
     GroupOutput,
     MemberInput,
@@ -66,6 +67,7 @@ def members(session, group_id):
             name=u.name,
             interests=m.interests,
             travel_profile=TravelProfile.model_validate(m.travel_profile or {}),
+            age_profile=AgeProfile.model_validate(m.age_profile or {}),
         )
         for m, u in rows
     ]
@@ -140,6 +142,7 @@ def update_preferences(group_id: int, user_id: int, payload: PreferencesInput, s
         name=user.name,
         interests=member.interests,
         travel_profile=TravelProfile.model_validate(member.travel_profile or {}),
+        age_profile=AgeProfile.model_validate(member.age_profile or {}),
     )
 
 
@@ -155,7 +158,31 @@ def update_travel_profile(group_id: int, user_id: int, payload: TravelProfile, s
     user = require(session, User, user_id)
     session.commit()
     return MemberOutput(
-        user_id=user_id, name=user.name, interests=member.interests, travel_profile=payload
+        user_id=user_id,
+        name=user.name,
+        interests=member.interests,
+        travel_profile=payload,
+        age_profile=AgeProfile.model_validate(member.age_profile or {}),
+    )
+
+
+@router.put("/groups/{group_id}/members/{user_id}/age-profile", response_model=MemberOutput)
+def update_age_profile(group_id: int, user_id: int, payload: AgeProfile, session: DB):
+    lock_group(session, group_id)
+    member = session.scalar(
+        select(Membership).where(Membership.group_id == group_id, Membership.user_id == user_id)
+    )
+    if member is None:
+        raise HTTPException(404, "Membership not found")
+    member.age_profile = payload.model_dump(mode="json")
+    user = require(session, User, user_id)
+    session.commit()
+    return MemberOutput(
+        user_id=user_id,
+        name=user.name,
+        interests=member.interests,
+        travel_profile=TravelProfile.model_validate(member.travel_profile or {}),
+        age_profile=payload,
     )
 
 
@@ -190,6 +217,20 @@ def create_trip(group_id: int, payload: TripInput, session: DB):
     participants = members(session, group_id)
     if not participants:
         raise HTTPException(409, "Add participants before creating a trip")
+    from app.planning.costs import age_at
+
+    for member in participants:
+        person = Participant(
+            str(member.user_id),
+            member.interests,
+            member.age_profile.age_on_start,
+            member.age_profile.birth_date,
+        )
+        try:
+            age_at(person, payload.travel_date or date.today())
+            age_at(person, payload.end_date or payload.travel_date or date.today())
+        except ValueError as exc:
+            raise HTTPException(422, str(exc)) from exc
     trip = TripRequest(
         budget_settings=payload.budget_settings.model_dump() if payload.budget_settings else None,
         meal_settings=payload.meal_settings.model_dump() if payload.meal_settings else None,
@@ -206,7 +247,7 @@ def create_trip(group_id: int, payload: TripInput, session: DB):
         excluded=sorted(payload.excluded),
         semantic_query=payload.semantic_query.strip() if payload.semantic_query else None,
         pace_settings=profile_snapshot(payload.pace),
-        participants_snapshot=[p.model_dump() for p in participants],
+        participants_snapshot=[p.model_dump(mode="json") for p in participants],
     )
     session.add(trip)
     session.commit()
@@ -237,7 +278,13 @@ def planning_request(trip):
     return Request(
         pace=Pace(**pace) if pace else None,
         participants=[
-            Participant(str(p["user_id"]), p["interests"]) for p in trip.participants_snapshot
+            Participant(
+                str(p["user_id"]),
+                p["interests"],
+                AgeProfile.model_validate(p.get("age_profile") or {}).age_on_start,
+                AgeProfile.model_validate(p.get("age_profile") or {}).birth_date,
+            )
+            for p in trip.participants_snapshot
         ],
         budget=activity_budget(trip),
         start=trip.start,
@@ -318,7 +365,7 @@ def planning_inputs(trip, request):
 
 
 def with_overview(result, inputs, request, trip=None):
-    result = with_visit_prices(result, inputs, len(request.participants))
+    result = with_visit_prices(result, inputs, len(request.participants), request.participants)
     if trip is not None:
         from app.planning.budget import breakdown
 
@@ -330,6 +377,9 @@ def with_overview(result, inputs, request, trip=None):
         return replace(result, data_context=inputs[0].data_context)
     pois = {p["id"]: p for data in inputs for p in data.data_context["pois"]}
     context = {**inputs[0].data_context, "pois": list(pois.values())}
+    context["age_exclusions"] = [
+        row for data in inputs for row in data.data_context.get("age_exclusions", [])
+    ]
     retrievals = [
         data.data_context.get("retrieval") for data in inputs if data.data_context.get("retrieval")
     ]
@@ -343,10 +393,12 @@ def with_overview(result, inputs, request, trip=None):
 
 
 def prepared_inputs(trip, request):
+    from app.planning.age_pricing import prepare_age_pricing
     from app.planning.meals import prepare_meals
 
     inputs, multi_day, source = planning_inputs(trip, request)
     try:
+        inputs = prepare_age_pricing(request, inputs)
         request, inputs = prepare_meals(request, inputs, getattr(trip, "meal_settings", None))
     except ValueError as exc:
         raise HTTPException(422, str(exc)) from exc

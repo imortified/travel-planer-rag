@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from datetime import date
 from math import isfinite
 
+from app.planning.costs import group_cost
 from app.planning.models import DayInput, ObjectiveReport, Request
 
 VERSION = "normalized-group-objective-v1"
@@ -83,7 +84,7 @@ class Objective:
                     raise ValueError("Negative travel duration")
                 travel += leg  # Waiting (start-arrival) is not driving time.
                 previous_end = visit.end
-                cost += place.cost_per_person * len(totals)
+                cost += group_cost(place, self.request.participants)
                 for person in self.request.participants:
                     totals[person.id] += person.interests.get(place.category, 0)
         mean = sum(totals.values()) / len(totals)

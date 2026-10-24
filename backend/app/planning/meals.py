@@ -8,6 +8,7 @@ retain their original identity and the no-repeat rule. No prices or road legs in
 from dataclasses import asdict, replace
 
 from app.planning.candidates import PERIOD_POOL_LIMIT, select_candidates
+from app.planning.costs import group_cost
 from app.schemas.trip_costs import MealSettings
 
 LABELS = {"breakfast": "Завтрак", "lunch": "Обед", "dinner": "Ужин"}
@@ -49,8 +50,9 @@ def prepare_meals(request, inputs, settings):
                     "или отключите этот приём пищи."
                 )
             slots.append((index, kind, choices))
-    group_size = len(request.participants)
-    minimum = sum(min(p.cost_per_person for p in options) * group_size for _, _, options in slots)
+    minimum = sum(
+        min(group_cost(p, request.participants) for p in options) for _, _, options in slots
+    )
     if minimum > request.budget:
         raise ValueError(
             f"На выбранное питание по доступным кандидатам нужно от {minimum / 100:.2f} EUR; "
@@ -60,9 +62,11 @@ def prepare_meals(request, inputs, settings):
     spent = 0
     for index, kind, options in slots:
         data = inputs[index]
-        minimum -= min(p.cost_per_person for p in options) * group_size
+        minimum -= min(group_cost(p, request.participants) for p in options)
         affordable = [
-            p for p in options if spent + p.cost_per_person * group_size + minimum <= request.budget
+            p
+            for p in options
+            if spent + group_cost(p, request.participants) + minimum <= request.budget
         ]
         if not affordable:
             raise ValueError("Не удалось распределить бюджет питания между днями")
@@ -70,13 +74,13 @@ def prepare_meals(request, inputs, settings):
             affordable,
             key=lambda p: (
                 p.id not in required_food - covered,
-                p.cost_per_person,
+                group_cost(p, request.participants),
                 data.travel["start", p.id],
                 p.id,
             ),
         )
         covered.add(chosen.id)
-        spent += chosen.cost_per_person * group_size
+        spent += group_cost(chosen, request.participants)
         identifier = f"meal:{data.travel_date}:{kind}:{chosen.id}"
         meal_ids.add(identifier)
         selected.setdefault(index, []).append((kind, chosen, identifier))

@@ -16,6 +16,8 @@ from pydantic import (
     model_validator,
 )
 
+from app.catalog.age_rules import AgeRules
+
 
 class FactModel(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True, allow_inf_nan=False)
@@ -71,6 +73,7 @@ class PoiFact(FactModel):
     meal_types: list[Literal["breakfast", "lunch", "dinner"]] | None = Field(
         default=None, exclude_if=lambda value: value is None
     )
+    age_rules: AgeRules | None = Field(default=None, exclude_if=lambda value: value is None)
     location_kind: Literal["mapped_node", "mapped_way_bbox_centre"] | None = Field(
         default=None, exclude_if=lambda value: value is None
     )
@@ -123,6 +126,14 @@ class SnapshotData(FactModel):
         if [p.id for p in self.pois] != sorted(p.id for p in self.pois):
             raise ValueError("Catalog records must be sorted")
         for p in self.pois:
+            if (
+                p.age_rules
+                and not self.manifest.curated_checked_on
+                <= p.age_rules.checked_on
+                <= p.age_rules.valid_until
+                <= self.manifest.curated_valid_until
+            ):
+                raise ValueError("Age tariff review is outside catalog review bounds")
             if p.provenance and (
                 p.provenance.version != self.manifest.catalog_version
                 or not self.manifest.curated_checked_on

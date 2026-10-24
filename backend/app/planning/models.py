@@ -6,6 +6,8 @@ from datetime import date
 class Participant:
     id: str
     interests: dict[str, float]
+    age_on_start: int | None = None
+    birth_date: date | None = None
 
 
 @dataclass(frozen=True)
@@ -16,6 +18,7 @@ class Place:
     duration: int
     opens: int
     closes: int
+    participant_costs: dict[str, int] | None = None
 
 
 @dataclass(frozen=True)
@@ -61,6 +64,7 @@ class Visit:
     end: int
     cost_per_person: int | None = None
     group_cost: int | None = None
+    participant_prices: list[dict] | None = None
 
 
 @dataclass(frozen=True)

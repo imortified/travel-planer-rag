@@ -2,6 +2,7 @@
 
 from dataclasses import dataclass, replace
 
+from app.planning.costs import group_cost
 from app.planning.models import (
     DayInput,
     DayResult,
@@ -120,7 +121,7 @@ def plan_period(
         greedy = State(index, tuple(visits), greedy.cost + outcome.total_cost)
     spread = spread_visits(request, greedy.visits, inputs, objective)
     spread_cost = sum(
-        objective.places[i][v.place_id].cost_per_person * len(request.participants)
+        group_cost(objective.places[i][v.place_id], request.participants)
         for i, day in enumerate(spread)
         for v in day
     )
@@ -145,7 +146,7 @@ def plan_period(
                     rest = request.pace.break_minutes if request.pace and today else 0
                     begins = max(arrival + rest, place.opens)
                     ends = begins + place.duration
-                    cost = state.cost + place.cost_per_person * len(request.participants)
+                    cost = state.cost + group_cost(place, request.participants)
                     if (
                         ends > min(place.closes, request.end)
                         or cost > request.budget
@@ -179,7 +180,7 @@ def plan_period(
             best = min([best, *frontier], key=rank)
     visits = spread_visits(request, best.visits, inputs, objective)
     cost = sum(
-        objective.places[i][v.place_id].cost_per_person * len(request.participants)
+        group_cost(objective.places[i][v.place_id], request.participants)
         for i, day in enumerate(visits)
         for v in day
     )

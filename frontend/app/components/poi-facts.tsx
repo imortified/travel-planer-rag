@@ -7,7 +7,7 @@ export function PoiFacts({poi, sources=false}: {poi: Poi; sources?: boolean}) {
   const range=poiPriceRange(poi);
   const varies=range && range.min!==range.max;
   return <div className="poi-facts">
-    <small>{range ? `${money(range.min)}${varies?`–${money(range.max)}`:""} / человек` : "Цена не указана"}
+    <small>{range ? `${poi.category==="food"?"Заказ":"Обычный тариф"}: ${money(range.min)}${varies?`–${money(range.max)}`:""} / человек` : "Цена не указана"}
       {poi.category ? ` · ${categories[poi.category] || poi.category}` : ""}
       {poi.duration ? ` · ${poi.duration} мин` : ""}</small>
     {varies && <small>Цена зависит от даты; точная сумма указана у посещения в маршруте.</small>}

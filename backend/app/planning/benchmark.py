@@ -26,6 +26,12 @@ class Instance:
         request = asdict(self.request)
         request["mandatory"] = sorted(request["mandatory"])
         request["excluded"] = sorted(request["excluded"])
+        for person in request["participants"]:
+            for key in ("age_on_start", "birth_date"):
+                if person[key] is None:
+                    person.pop(key)
+                elif key == "birth_date":
+                    person[key] = person[key].isoformat()
         if request["meal_ids"]:
             request["meal_ids"] = sorted(request["meal_ids"])
         else:
@@ -39,7 +45,14 @@ class Instance:
             "inputs": [
                 {
                     "date": str(d.travel_date),
-                    "places": [asdict(p) for p in d.places],
+                    "places": [
+                        {
+                            key: value
+                            for key, value in asdict(p).items()
+                            if key != "participant_costs" or value is not None
+                        }
+                        for p in d.places
+                    ],
                     "travel": [[a, b, t] for (a, b), t in sorted(d.travel.items())],
                 }
                 for d in self.inputs

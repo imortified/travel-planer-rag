@@ -15,13 +15,16 @@ import { CatalogStatus } from "./components/catalog-status";
 import { destinationName, type DestinationInfo } from "../lib/destinations";
 import { TripCostForm } from "./components/trip-cost-form";
 import { BudgetBreakdown } from "./components/budget-breakdown";
+import { MemberAge } from "./components/member-age";
+import { AgePricingNotice } from "./components/age-pricing-notice";
+import { ageProfile } from "../lib/ages";
 import { costPayload, defaultCostDraft } from "../lib/trip-costs";
 import { RoutePace, paceNames } from "./components/route-pace";
-import type { PaceMode, PaceSettings } from "../lib/api";
+import type { AgeProfile, PaceMode, PaceSettings } from "../lib/api";
 import type { CatalogSnapshot, CatalogResponse } from "../lib/api";
 import { api, clock, money, minutes, type Group, type Trip, type Route, type RouteSet, type Poi, type Interests, type ParseOutput, type TravelProfile, type VisaReport as VisaData } from "../lib/api";
 
-type Draft = {key: number; name: string; interests: Interests; userId?: number; joined?: boolean; travel_profile?:TravelProfile};
+type Draft = {key: number; name: string; interests: Interests; userId?: number; joined?: boolean; travel_profile?:TravelProfile; age_profile?:AgeProfile};
 type PendingConstraint = {key:string;name:string;kind:"mandatory"|"excluded"};
 const normalized=(text:string)=>text.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLocaleLowerCase().trim();
 const categories = [["history", "История"], ["nature", "Природа"], ["food", "Еда"], ["art", "Искусство"]];
@@ -99,6 +102,7 @@ export default function Home() {
   }
   async function saveGroup() {
     if (!name.trim() || members.some(m=>!m.name.trim())) throw new Error("Введите название группы и имена всех участников.");
+    const ages=members.map(m=>ageProfile(m.age_profile));
     let id = gid;
     if (!id) {
       const group = await api<Group>("/groups","POST",{name:name.trim()});
@@ -110,6 +114,7 @@ export default function Home() {
       if (!m.joined) {await api(`/groups/${id}/members`,"POST",{user_id:m.userId}); m.joined=true; changeMember(i,{joined:true});}
       await api(`/groups/${id}/members/${m.userId}/preferences`,"PUT",{interests:m.interests});
       await api(`/groups/${id}/members/${m.userId}/travel-profile`,"PUT",m.travel_profile || emptyProfile);
+      await api(`/groups/${id}/members/${m.userId}/age-profile`,"PUT",ages[i]);
     }
     return id;
   }
@@ -117,7 +122,7 @@ export default function Home() {
     const id=Number(loadId); if (!Number.isInteger(id) || id<=0) throw new Error("Укажите положительный ID группы.");
     const group = await api<Group>(`/groups/${id}`);
     const history = await api<Trip[]>(`/groups/${id}/trips`);
-    setGid(id); setName(group.name); setMembers(group.members.map(m=>({key:key.current++,name:m.name,userId:m.user_id,joined:true,interests:m.interests,travel_profile:m.travel_profile})));
+    setGid(id); setName(group.name); setMembers(group.members.map(m=>({key:key.current++,name:m.name,userId:m.user_id,joined:true,interests:m.interests,travel_profile:m.travel_profile,age_profile:m.age_profile})));
     setTrips(history); setShown(undefined); setComparison(undefined); setSemanticQuery(""); pendingTrip.current=undefined;
     localStorage.setItem("travel-group-id",String(id)); setNotice(`Группа №${id} загружена`);
   }
@@ -134,7 +139,7 @@ export default function Home() {
     const id = await saveGroup();
     const payload={...costPayload(costDraft,destination),destination, purpose, pace, travel_date:date || null, end_date:endDate || null, semantic_query:destination!=="Demo City" && semanticQuery?semanticQuery:null, budget:Math.round(Number(budget)*100), start:minutes(start), end:minutes(end),
       mandatory:Object.keys(choices).filter(k=>choices[k]==="mandatory"), excluded:Object.keys(choices).filter(k=>choices[k]==="excluded")};
-    const signature=JSON.stringify({id,payload,members:members.map(m=>({interests:m.interests,profile:m.travel_profile || emptyProfile}))});
+    const signature=JSON.stringify({id,payload,members:members.map(m=>({interests:m.interests,profile:m.travel_profile || emptyProfile,age_profile:ageProfile(m.age_profile)}))});
     let trip = pendingTrip.current?.signature===signature ? pendingTrip.current.trip : undefined;
     if (!trip) {trip = await api<Trip>(`/groups/${id}/trips`,"POST",payload); pendingTrip.current={signature,trip}; setTrips(old=>[...old,trip!]);}
     const data = await api<RouteSet>(`/trips/${trip.id}/route-sets?algorithm=${algorithm}${algorithm==="cp-sat"?`&time_limit_seconds=${Number(solverLimit)}`:""}`,"POST");
@@ -203,6 +208,7 @@ export default function Home() {
             <div className="member-heading"><span className="avatar">{i+1}</span><label className="member-name"><span className="sr-only">Имя участника {i+1}</span><input placeholder={`Имя участника ${i+1}`} value={m.name} disabled={!!m.userId} maxLength={100} onChange={e=>changeMember(i,{name:e.target.value})}/></label>{!m.userId && <button type="button" className="text-button" aria-label={`Удалить участника ${i+1}`} onClick={()=>setMembers(ms=>ms.filter(x=>x.key!==m.key))}>×</button>}</div>
             <div className="interests">{categories.map(([id,label])=><label key={id}>{label}<output>{Math.round((m.interests[id] || 0)*100)}%</output><input type="range" aria-label={`${label}, участник ${i+1}`} min="0" max="1" step="0.1" value={m.interests[id] || 0} onChange={e=>changeMember(i,{interests:{...m.interests,[id]:Number(e.target.value)}})} /></label>)}</div>
             <TravelDocuments profile={m.travel_profile} index={i} onChange={travel_profile=>changeMember(i,{travel_profile})}/>
+            <MemberAge key={m.key} value={m.age_profile} index={i} onChange={age_profile=>changeMember(i,{age_profile})}/>
           </div>)}
           <div className="actions"><button type="button" className="secondary" disabled={members.length>=6} onClick={()=>setMembers(ms=>[...ms,{key:key.current++,name:"",interests:{history:0.5,nature:0.5,food:0.5,art:0.5}}])}>＋ Участник</button><button className="text-button" onClick={()=>task("Сохраняем группу…",async()=>{const id=await saveGroup();setNotice(`Группа №${id} и предпочтения сохранены`);})}>Сохранить группу</button><small>{members.length} / 6</small></div>
           <details className="load"><summary>Продолжить с существующей группой</summary><div className="actions"><label>ID группы<input type="number" min="1" value={loadId} onChange={e=>setLoadId(e.target.value)}/></label><button className="secondary" onClick={()=>task("Загружаем группу…",loadGroup)}>Загрузить</button></div></details>
@@ -217,7 +223,7 @@ export default function Home() {
           <div className="two"><label>Начало дня<input type="time" value={start} onChange={e=>setStart(e.target.value)}/></label><label>Окончание дня<input type="time" value={end} onChange={e=>setEnd(e.target.value)}/></label></div>
           <TripCostForm value={costDraft} onChange={setCostDraft} destination={destination} budget={budget}/>
           {destination!=="Demo City" && <div className="visa-preview"><label>Цель въезда<select value={purpose} onChange={e=>setPurpose(e.target.value)}><option value="tourism">Туризм</option><option value="other">Иная цель</option><option value="unknown">Не уточнена</option></select></label><p className="hint">Визовый справочник: семь гражданств, краткосрочный туризм в Португалии. Документы заполняются у каждого участника.</p><button className="secondary" disabled={!members.length} onClick={()=>task("Проверяем визовые условия…",async()=>{if(members.some(m=>!m.name.trim())) throw new Error("Введите имена участников.");const report=await api<VisaData>("/visa-check","POST",visaInput);setVisaPreview({signature:visaSignature,report});})}>Проверить визовые условия</button>{visaPreview?.signature===visaSignature && <VisaReport report={visaPreview.report}/>}</div>}
-          <p className="hint">{destination!=="Demo City"?`Португалия · ${destinationName(destination)}. Старт — ${destinationInfo?.origin?.name || "точка города"}. Автомобильные переезды по доступным дорогам. Один город на поездку. Стоимость остановок включает обычные взрослые билеты и указанные заказы. Оценки жилья и транспорта учитываются отдельно, если заданы. Прочее питание, дополнения и скидки не включены в стоимость остановок. Бронирование и доступность билетов не подтверждаются. Время — местное.`:"Синтетические музей, рынок и парк для проверки сценария. Бюджет учитывает входные билеты на всех участников."}</p>
+          <p className="hint">{destination!=="Demo City"?`Португалия · ${destinationName(destination)}. Старт — ${destinationInfo?.origin?.name || "точка города"}. Автомобильные переезды по доступным дорогам. Один город на поездку. Билеты рассчитываются по возрасту каждого участника; при непроверенной льготе используется обычный тариф. Питание — указанные заказы. Оценки жилья и транспорта учитываются отдельно, если заданы. Прочее питание, дополнения и неподтверждённые скидки не включены в стоимость остановок. Бронирование и доступность билетов не подтверждаются. Время — местное.`:"Синтетические музей, рынок и парк для проверки сценария. Бюджет учитывает входные билеты на всех участников."}</p>
           {destination!=="Demo City" && <button className="secondary" disabled={!date} onClick={()=>task("Загружаем каталог…",async()=>{const c=await api<CatalogResponse>(`/destinations/${destination}/pois?travel_date=${date}${endDate?`&end_date=${endDate}`:""}`);setPois(c.pois);setCatalogSnapshot(c.catalog_snapshot);setCatalogKey(`${destination}:${date}:${endDate || date}`);setNotice(`Найдено ${c.pois.length} мест, подходят для расчёта: ${c.pois.filter(p=>p.eligible).length}`);})}>Загрузить места на период</button>}
           {destination!=="Demo City" && <CatalogStatus snapshot={catalogSnapshot}/>}
           {!!pois.length && <details className="places"><summary>Места и ограничения <span>{pois.filter(p=>p.eligible).length} доступны</span></summary><label>Поиск места<input value={poiFilter} onChange={e=>setPoiFilter(e.target.value)} placeholder="Название музея или парка"/></label><label><input type="checkbox" checked={onlyEligible} onChange={e=>setOnlyEligible(e.target.checked)}/> Только доступные на выбранные даты</label><p className="hint">Показано {visiblePois.length} из {pois.length}. Неизвестные цены и часы исключают место из расчёта.</p>{visiblePois.map(p=><div className="poi" key={p.id}><div><b>{p.name}</b><PoiFacts poi={p} sources/>{p.eligible && p.available_dates && <small>Открыто: {p.available_dates.join(", ")}</small>}{!p.eligible && <small>{p.issues.map(x=>issueNames[x]||x).join(" · ")}</small>}</div><select aria-label={`Ограничение: ${p.name}`} value={choices[p.id]||"optional"} onChange={e=>setChoices(c=>({...c,[p.id]:e.target.value}))}><option value="optional">По желанию</option><option value="mandatory" disabled={!p.eligible}>Обязательно</option><option value="excluded">Исключить</option></select></div>)}</details>}
@@ -237,6 +243,7 @@ export default function Home() {
           {result!.is_feasible && <RouteObjective report={result!.objective} trip={shown.trip}/>}
           <SolverStatus report={result!.solver}/>
           <BudgetBreakdown value={result!.budget_breakdown}/>
+          <AgePricingNotice route={shown.route}/>
           <RoutePace summary={result!.planning_summary}/>
           <CatalogStatus snapshot={result!.data_context?.catalog_snapshot} saved/>
           <RouteMap key={shown.route.id} route={shown.route} trip={shown.trip} names={resultPois}/>
@@ -246,7 +253,7 @@ export default function Home() {
           <p className="hint">Средний интерес к категориям посещённых мест. Это оценка предпочтений, а не гарантия впечатлений.</p>
           {shown.trip.destination!=="Demo City" && <VisaReport report={shown.route.visa_report}/>}
           {result!.is_feasible && result!.validation?.is_valid && <RouteExplanation route={shown.route} disabled={!!busy} onBusy={setBusy} onGenerated={value=>{setShown(old=>old?{...old,route:{...old.route,explanation:value}}:old);setComparison(old=>old?{...old,data:{...old.data,options:old.data.options.map(r=>r.id===shown.route.id?{...r,explanation:value}:r)}}:old);}}/>}
-          <details className="checks"><summary>Проверки и происхождение данных</summary><p>{result!.validation?`${result!.validation.is_valid?"Пройдены":"Есть нарушения"} · пересчитанная стоимость ${money(result!.validation.computed_cost)}`:"Для старого результата отчёт отсутствует"}</p>{result!.validation?.violations.map((v,i)=><p key={i}>{reasonNames[v.code] || v.message}{v.place_id?` · ${resultPois[v.place_id]||v.place_id}`:""}</p>)}<p>{shown.route.data_source}</p><p>{result!.data_context?"Автомобильные переезды OSRM. Данные OSM могут быть неполными. Длительность посещений — правило планирования. Стоимость включает обычные взрослые билеты и явно описанные заказы в кафе. Остальное питание, дополнительные заказы, скидки и сборы не включены в стоимость остановок. Жильё и транспорт учитываются отдельно, если введены оценки; бронирование и наличие мест не подтверждены. Возвращение к жилью не моделируется.":"Демонстрационные места и время переездов."}</p>{result!.data_context && <p>{result!.data_context.attribution} · Данные получены {new Date(result!.data_context.fetched_at).toLocaleString("ru-RU")}</p>}{result!.data_context?.pois.filter(p=>p.provenance).map(p=><div key={p.id}><b>{p.name}</b><PoiFacts poi={p} sources/></div>)}</details>
+          <details className="checks"><summary>Проверки и происхождение данных</summary><p>{result!.validation?`${result!.validation.is_valid?"Пройдены":"Есть нарушения"} · пересчитанная стоимость ${money(result!.validation.computed_cost)}`:"Для старого результата отчёт отсутствует"}</p>{result!.validation?.violations.map((v,i)=><p key={i}>{reasonNames[v.code] || v.message}{v.place_id?` · ${resultPois[v.place_id]||v.place_id}`:""}</p>)}<p>{shown.route.data_source}</p><p>{result!.data_context?"Автомобильные переезды OSRM. Данные OSM могут быть неполными. Длительность посещений — правило планирования. Стоимость билетов рассчитана по сохранённым условиям; индивидуальные тарифы приведены у посещений. Питание — явно описанные заказы в кафе. Остальное питание, дополнительные заказы, неподтверждённые скидки и сборы не включены в стоимость остановок. Жильё и транспорт учитываются отдельно, если введены оценки; бронирование и наличие мест не подтверждены. Возвращение к жилью не моделируется.":"Демонстрационные места и время переездов."}</p>{result!.data_context && <p>{result!.data_context.attribution} · Данные получены {new Date(result!.data_context.fetched_at).toLocaleString("ru-RU")}</p>}{result!.data_context?.pois.filter(p=>p.provenance).map(p=><div key={p.id}><b>{p.name}</b><PoiFacts poi={p} sources/></div>)}</details>
         </>}
       </section>}
       {!!trips.length && <section className="card history"><h3>Сохранённые запросы</h3><p className="hint">Открывается последний расчёт со всеми вариантами. Для старых запросов — одиночный маршрут.</p>{[...trips].reverse().map(t=><button key={t.id} disabled={!!busy} onClick={()=>task("Открываем маршрут…",()=>showTrip(t))}><span>№{t.id} · {destinationName(t.destination)}<small>{t.travel_date||"Без даты"}{t.end_date && t.end_date!==t.travel_date ? ` — ${t.end_date}` : ""} · {money(t.budget)}</small></span><span>↗</span></button>)}</section>}

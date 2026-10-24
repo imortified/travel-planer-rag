@@ -41,6 +41,7 @@ class Membership(Base):
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
     interests: Mapped[dict] = mapped_column(JSON, default=dict)
     travel_profile: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    age_profile: Mapped[dict | None] = mapped_column(JSON, nullable=True)
 
 
 class TripRequest(Base):

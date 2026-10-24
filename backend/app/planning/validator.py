@@ -1,5 +1,6 @@
 """Independent feasibility check. Does not import or trust any planning algorithm."""
 
+from app.planning.costs import group_cost
 from app.planning.models import Place, Request, ValidationReport, Violation, Visit
 
 
@@ -33,6 +34,8 @@ def validate_route(
     ):
         raise ValueError("Invalid request")
     violations: list[Violation] = []
+    for place in places:
+        group_cost(place, request.participants)
 
     def add(code, message, pid=None, index=None):
         violations.append(Violation(code, message, pid, index))
@@ -73,7 +76,24 @@ def validate_route(
         if place is None:
             add("unknown_place", "Visited place is absent from reference data", pid, index)
         else:
-            cost += place.cost_per_person * len(request.participants)
+            expected_cost = group_cost(place, request.participants)
+            cost += expected_cost
+            if visit.group_cost is not None and visit.group_cost != expected_cost:
+                add("visit_price_mismatch", "Saved group price differs from reference", pid, index)
+            if visit.participant_prices is not None:
+                expected = place.participant_costs or {
+                    p.id: place.cost_per_person for p in request.participants
+                }
+                actual = {
+                    row.get("participant_id"): row.get("cost") for row in visit.participant_prices
+                }
+                if len(visit.participant_prices) != len(expected) or actual != expected:
+                    add(
+                        "participant_price_mismatch",
+                        "Individual prices differ from reference",
+                        pid,
+                        index,
+                    )
             if visit.start < place.opens or visit.end > place.closes:
                 add("outside_opening_hours", "Visit does not fit opening hours", pid, index)
             if visit.end - visit.start < place.duration:

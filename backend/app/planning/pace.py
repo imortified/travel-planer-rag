@@ -2,6 +2,7 @@
 
 from dataclasses import asdict
 
+from app.planning.costs import group_cost
 from app.planning.models import Pace, Visit
 
 PROFILES = {
@@ -84,8 +85,7 @@ def spread_visits(request, schedule, inputs, objective):
                         candidate = list(current)
                         candidate[source], candidate[target] = donor, receiver
                         cost = sum(
-                            objective.places[i][v.place_id].cost_per_person
-                            * len(request.participants)
+                            group_cost(objective.places[i][v.place_id], request.participants)
                             for i, values in enumerate(candidate)
                             for v in values
                         )

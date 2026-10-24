@@ -6,6 +6,7 @@ from pydantic import BaseModel, ConfigDict, Field, model_validator
 from app.core.destinations import Destination
 from app.planning.alternatives import ComparisonMetrics
 from app.planning.models import Result
+from app.schemas.ages import AgeProfile
 from app.schemas.assistant import ExplanationOutput
 from app.schemas.trip_costs import BudgetSettings, MealSettings
 from app.schemas.visa import TravelProfile
@@ -36,6 +37,7 @@ class MemberOutput(BaseModel):
     name: str
     interests: dict[str, float]
     travel_profile: TravelProfile = Field(default_factory=TravelProfile)
+    age_profile: AgeProfile = Field(default_factory=AgeProfile)
 
 
 class GroupOutput(NamedOutput):

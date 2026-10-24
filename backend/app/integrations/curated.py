@@ -7,6 +7,7 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, HttpUrl, StrictInt, model_validator
 
+from app.catalog.age_rules import AgeRules
 from app.core.config import ROOT
 
 
@@ -30,6 +31,7 @@ class Entry(BaseModel):
     free_weekdays: list[Literal[0, 1, 2, 3, 4, 5, 6]] | None = None
     free_dates: list[date] | None = None
     meal_types: list[Literal["breakfast", "lunch", "dinner"]] | None = None
+    age_rules: AgeRules | None = None
     restricted_access: bool = False
 
     @model_validator(mode="after")
@@ -40,6 +42,8 @@ class Entry(BaseModel):
             raise ValueError("Food POI requires an explicit priced order and notes")
         if self.meal_types and self.category != "food":
             raise ValueError("Meal types require a food POI")
+        if self.age_rules is not None and self.category == "food":
+            raise ValueError("Meal orders do not use attraction age tariffs")
         if self.id.startswith("curated:") and (
             self.latitude is None or self.longitude is None or self.coordinates_source is None
         ):
@@ -60,6 +64,13 @@ class Catalog(BaseModel):
         if self.valid_until < self.checked_on or len({p.id for p in self.pois}) != len(self.pois):
             raise ValueError("Invalid curated validity range or duplicate ID")
         for entry in self.pois:
+            if entry.age_rules is not None and not (
+                self.checked_on
+                <= entry.age_rules.checked_on
+                <= entry.age_rules.valid_until
+                <= self.valid_until
+            ):
+                raise ValueError("Age-rule review dates must be inside catalog review bounds")
             if entry.checked_on is not None and not (
                 self.checked_on <= entry.checked_on <= entry.valid_until <= self.valid_until
             ):
@@ -142,5 +153,7 @@ def enrich(
             poi["free_dates"] = [str(day) for day in entry.free_dates]
         if entry.meal_types is not None:
             poi["meal_types"] = entry.meal_types
+        if entry.age_rules is not None:
+            poi["age_rules"] = entry.age_rules.model_dump(mode="json")
         records[entry.id] = poi
     return sorted(records.values(), key=lambda p: p["id"]), catalog.version

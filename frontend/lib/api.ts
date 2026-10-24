@@ -2,6 +2,8 @@ import { validRequestId } from "./request-id";
 import type { Destination } from "./destinations";
 
 export type Interests = Record<string, number>;
+export type AgeProfile = {age_on_start:number|null;birth_date:string|null};
+export type ParticipantPrice = {participant_id:string;age:number|null;cost:number;label:string;reason:string;source_url?:string|null};
 export type BudgetSettings = {version?:string;lodging:number|null;transport:number|null;reserve:number};
 export type MealSlot = {start:number;end:number;duration:number;max_cost_per_person:number};
 export type MealSettings = {version?:string;breakfast?:MealSlot|null;lunch?:MealSlot|null;dinner?:MealSlot|null};
@@ -33,7 +35,7 @@ export type ParseOutput = {model:string;prompt_version:string;reference_date:str
     common_interests:Interests;mandatory_names:string[];excluded_names:string[]}};
 export type TravelProfile = {citizenship:string|null;passport_kind:"unknown"|"ordinary"|"special";biometric:boolean|null;special_entry_basis:boolean|null;visa_status:"unknown"|"held"|"not_held"};
 export type VisaReport = {version:string;assessed_on:string;checked_on:string;review_by:string;status:string;travel_date:string|null;end_date:string|null;limitations:string[];participants:{name:string;citizenship_name:string|null;requirement:string;status:string;summary:string;reasons:string[];sources:{title:string;url:string}[];timing:null|{days_until_trip:number;application_notice_days:number;recommended_apply_by:string;processing_days:number|null;extended_processing_days:number|null;source_url:string}}[]};
-export type Member = {user_id: number; name: string; interests: Interests;travel_profile?:TravelProfile};
+export type Member = {user_id: number; name: string; interests: Interests;travel_profile?:TravelProfile;age_profile?:AgeProfile};
 export type Group = {id: number; name: string; members: Member[]};
 export type Trip = {id: number; group_id: number; destination: string; travel_date: string | null; end_date?: string | null;
   budget_settings?:BudgetSettings|null;meal_settings?:MealSettings|null;
@@ -41,14 +43,16 @@ export type Trip = {id: number; group_id: number; destination: string; travel_da
   budget: number; start: number; end: number; participants_snapshot: Member[];semantic_query?:string|null;purpose?:string};
 export type Poi = {id: string; name: string; eligible: boolean; issues: string[]; source_url?: string; available_dates?: string[];
   meal_types?:string[];meal_type?:string;venue_id?:string;
+  participant_prices?:ParticipantPrice[];group_cost?:number;
   prices_by_date?:Record<string,number>;
   latitude?:number|null; longitude?:number|null;
   cost_per_person?: number | null; category?: string; duration?: number;
   provenance?: {checked_on: string; valid_until: string; price_source: string; hours_source: string; notes: string;price_policy?:string}};
 export type CatalogSnapshot = {version_id:number;content_sha256:string;published_at:string;fetched_at:string;fresh_until:string;curated_version:string;curated_review_until:string;source_upstream_asof?:string;status:"ready"|"expired"};
 export type CatalogResponse = {pois:Poi[];catalog_snapshot:CatalogSnapshot};
-export type DataContext = {pois:Poi[];places_snapshot?:{id:string;cost_per_person?:number|null}[]; origin?:{id:string;name:string;latitude:number;longitude:number}; transport:string; fetched_at:string; attribution:string;catalog_snapshot?:CatalogSnapshot};
-export type Visit = {place_id:string;arrival:number;start:number;end:number;cost_per_person?:number|null;group_cost?:number|null};
+export type DataContext = {pois:Poi[];places_snapshot?:{id:string;cost_per_person?:number|null}[]; origin?:{id:string;name:string;latitude:number;longitude:number}; transport:string; fetched_at:string; attribution:string;catalog_snapshot?:CatalogSnapshot;
+  pricing_policy?:string;pricing_assessed_on?:string;age_exclusions?:{id:string;name:string;reason:string;travel_date:string}[]};
+export type Visit = {place_id:string;arrival:number;start:number;end:number;cost_per_person?:number|null;group_cost?:number|null;participant_prices?:ParticipantPrice[]|null};
 export type Day = {travel_date: string; total_cost: number; visits: Visit[];data_context?:DataContext|null};
 export type Route = {id: number; trip_request_id: number; algorithm: string; data_source: string; created_at: string;
   route_set_id?: number | null;

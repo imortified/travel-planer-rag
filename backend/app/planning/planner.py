@@ -1,5 +1,6 @@
 """Pure Python greedy baseline; times are local minutes, costs are integer cents."""
 
+from app.planning.costs import group_cost
 from app.planning.models import Place, Request, Result, Visit
 from app.planning.objective import Objective
 from app.planning.pace import fits_pace
@@ -35,6 +36,8 @@ def plan(
         return Result(False, [], 0, {}, ["unknown_mandatory_place"])
 
     objective = objective or Objective.single(request, places)
+    for place in places:
+        group_cost(place, request.participants)
     base = [list(day) for day in prefix] if prefix is not None else [[] for _ in objective.places]
 
     def schedule(visits):
@@ -56,7 +59,7 @@ def plan(
             rest = request.pace.break_minutes if request.pace and visits else 0
             begins = max(arrival + rest, place.opens)
             ends = begins + place.duration
-            price = place.cost_per_person * len(request.participants)
+            price = group_cost(place, request.participants)
             extension = visits + [Visit(place.id, arrival, begins, ends)]
             if (
                 ends <= min(place.closes, request.end)
@@ -85,7 +88,7 @@ def plan(
                 and (c[0].id, meal.id) in travel
                 and max(c[3] + travel[c[0].id, meal.id] + rest, meal.opens) + meal.duration
                 <= min(meal.closes, request.end)
-                and cost + c[4] + meal.cost_per_person * len(request.participants) <= request.budget
+                and cost + c[4] + group_cost(meal, request.participants) <= request.budget
                 and fits_pace(
                     request,
                     visits

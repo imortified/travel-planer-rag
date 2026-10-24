@@ -6,6 +6,7 @@ from time import perf_counter
 import ortools
 from ortools.sat.python import cp_model
 
+from app.planning.costs import group_cost
 from app.planning.models import Result, SolverReport, Visit
 from app.planning.objective import Objective
 from app.planning.period import plan_period, validate_period
@@ -38,7 +39,7 @@ def cp_sat_plan(request, inputs, objective=None, time_limit=5.0, seed=42, scale=
             p
             for p in sorted(data.places, key=lambda p: p.id)
             if p.id not in request.excluded
-            and p.cost_per_person * len(request.participants) <= request.budget
+            and group_cost(p, request.participants) <= request.budget
             and max(request.start, p.opens) + p.duration <= min(request.end, p.closes)
         ]
         chosen, starts = {}, {}
@@ -60,7 +61,7 @@ def cp_sat_plan(request, inputs, objective=None, time_limit=5.0, seed=42, scale=
                 x
             )
             model.add(starts[i] == request.start).only_enforce_if(x.Not())
-            cost = place.cost_per_person * len(request.participants)
+            cost = group_cost(place, request.participants)
             all_cost.append(cost * x)
             reward = sum(p.interests.get(place.category, 0) for p in request.participants)
             reward = (
@@ -214,7 +215,7 @@ def cp_sat_plan(request, inputs, objective=None, time_limit=5.0, seed=42, scale=
                 schedule[d].append(Visit(place.id, arrival, begins, now))
                 previous, node = place.id, successors[node]
     cost = sum(
-        objective.places[d][v.place_id].cost_per_person * len(request.participants)
+        group_cost(objective.places[d][v.place_id], request.participants)
         for d, visits in enumerate(schedule)
         for v in visits
     )

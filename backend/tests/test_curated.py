@@ -37,7 +37,7 @@ def test_enrichment_adds_paid_and_nature_pois_with_sources():
     assert not next(p for p in pois if p["id"] == "osm:node:1301526823")["eligible"]
     assert {p["category"] for p in pois} == {"history", "art", "nature", "food"}
     assert len([p for p in pois if p["cost_per_person"] > 0]) >= 30
-    assert version == "lisbon-curated-2026-10-25-meals-v1"
+    assert version == "lisbon-curated-2026-10-25-age-v1"
     assert all(p["provenance"]["price_source"].startswith("https://") for p in pois)
 
 

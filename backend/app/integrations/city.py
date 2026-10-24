@@ -173,6 +173,7 @@ class CityProvider:
                 or str(travel_date) in (poi.get("free_dates") or [])
             ):
                 poi["cost_per_person"] = 0
+                poi["date_free_admission"] = True
         return catalog
 
     def fetch_catalog(self, travel_date, *, curated_catalog=None, force=False):

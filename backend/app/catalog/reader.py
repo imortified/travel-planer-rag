@@ -65,6 +65,7 @@ class CatalogReader:
                 or travel_date in (fact.free_dates or [])
             ):
                 poi["cost_per_person"] = 0
+                poi["date_free_admission"] = True
             poi["opening_hours"] = fact.opening_hours
             window = opening_window(fact.opening_hours, travel_date)
             issues = list(fact.issues)

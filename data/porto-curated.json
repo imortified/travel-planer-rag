@@ -1,8 +1,8 @@
 {
-  "version": "porto-curated-2026-10-25-meals-v1",
+  "version": "porto-curated-2026-10-25-age-v1",
   "checked_on": "2026-10-24",
   "valid_until": "2026-11-22",
-  "price_policy": "Standard adult admission. Individual official sources apply. Discounts, guided services, transport and other meals excluded.",
+  "price_policy": "Ordinary admission is the fallback. Verified individual age tariffs are applied separately for each visit date; missing age or an unverified band uses the ordinary tariff with an explicit warning. Food costs cover the same explicit order per participant, including children; child portions are not modeled. Proof-dependent, family, birthday and online promotions are excluded.",
   "pois": [
     {
       "id": "osm:node:6541145458",
@@ -18,10 +18,40 @@
       "coordinates_source": "https://www.openstreetmap.org/node/6541145458",
       "checked_on": "2026-10-24",
       "valid_until": "2026-11-22",
-      "notes": "Municipal museum station standard ticket; free Sundays. Joint museum pass not used. Duration is planning policy. Mapped location; routing snaps to public road points.",
+      "notes": "Municipal museum station standard ticket; free Sundays. Joint museum pass not used. Duration is planning policy. Mapped location; routing snaps to public road points. Age tariff scope: Museum network station admission: under 18 free; over 65 discounted. Exact >65 boundary is used, so age 65 uses the ordinary fare. Sunday free admission takes precedence. Other proof-dependent concessions are not inferred.",
       "free_weekdays": [
         6
-      ]
+      ],
+      "age_rules": {
+        "version": "age-tariffs-v1",
+        "checked_on": "2026-10-25",
+        "valid_until": "2026-11-22",
+        "source_url": "https://museudoporto.pt/info-util/",
+        "bands": [
+          {
+            "id": "under18",
+            "label": "До 18 лет · бесплатный вход",
+            "min_age": 0,
+            "max_age": 17,
+            "cost": 0
+          },
+          {
+            "id": "regular",
+            "label": "Обычный билет · 18–65 лет",
+            "min_age": 18,
+            "max_age": 65,
+            "cost": 400
+          },
+          {
+            "id": "over65",
+            "label": "Старше 65 лет",
+            "min_age": 66,
+            "max_age": 120,
+            "cost": 200
+          }
+        ],
+        "notes": "Museum network station admission: under 18 free; over 65 discounted. Exact >65 boundary is used, so age 65 uses the ordinary fare. Sunday free admission takes precedence. Other proof-dependent concessions are not inferred."
+      }
     },
     {
       "id": "osm:node:1652873556",
@@ -37,10 +67,40 @@
       "coordinates_source": "https://www.openstreetmap.org/node/1652873556",
       "checked_on": "2026-10-24",
       "valid_until": "2026-11-22",
-      "notes": "Municipal museum station standard ticket; free Sundays. Joint museum pass not used. Duration is planning policy. Mapped location; routing snaps to public road points.",
+      "notes": "Municipal museum station standard ticket; free Sundays. Joint museum pass not used. Duration is planning policy. Mapped location; routing snaps to public road points. Age tariff scope: Museum network station admission: under 18 free; over 65 discounted. Exact >65 boundary is used, so age 65 uses the ordinary fare. Sunday free admission takes precedence. Other proof-dependent concessions are not inferred.",
       "free_weekdays": [
         6
-      ]
+      ],
+      "age_rules": {
+        "version": "age-tariffs-v1",
+        "checked_on": "2026-10-25",
+        "valid_until": "2026-11-22",
+        "source_url": "https://museudoporto.pt/info-util/",
+        "bands": [
+          {
+            "id": "under18",
+            "label": "До 18 лет · бесплатный вход",
+            "min_age": 0,
+            "max_age": 17,
+            "cost": 0
+          },
+          {
+            "id": "regular",
+            "label": "Обычный билет · 18–65 лет",
+            "min_age": 18,
+            "max_age": 65,
+            "cost": 400
+          },
+          {
+            "id": "over65",
+            "label": "Старше 65 лет",
+            "min_age": 66,
+            "max_age": 120,
+            "cost": 200
+          }
+        ],
+        "notes": "Museum network station admission: under 18 free; over 65 discounted. Exact >65 boundary is used, so age 65 uses the ordinary fare. Sunday free admission takes precedence. Other proof-dependent concessions are not inferred."
+      }
     },
     {
       "id": "osm:way:255778741",
@@ -56,10 +116,40 @@
       "coordinates_source": "https://www.openstreetmap.org/way/255778741",
       "checked_on": "2026-10-24",
       "valid_until": "2026-11-22",
-      "notes": "Municipal museum station standard ticket; free Sundays. Joint museum pass not used. Duration is planning policy. Mapped area representative point; not a verified visitor entrance.",
+      "notes": "Municipal museum station standard ticket; free Sundays. Joint museum pass not used. Duration is planning policy. Mapped area representative point; not a verified visitor entrance. Age tariff scope: Museum network station admission: under 18 free; over 65 discounted. Exact >65 boundary is used, so age 65 uses the ordinary fare. Sunday free admission takes precedence. Other proof-dependent concessions are not inferred.",
       "free_weekdays": [
         6
-      ]
+      ],
+      "age_rules": {
+        "version": "age-tariffs-v1",
+        "checked_on": "2026-10-25",
+        "valid_until": "2026-11-22",
+        "source_url": "https://museudoporto.pt/info-util/",
+        "bands": [
+          {
+            "id": "under18",
+            "label": "До 18 лет · бесплатный вход",
+            "min_age": 0,
+            "max_age": 17,
+            "cost": 0
+          },
+          {
+            "id": "regular",
+            "label": "Обычный билет · 18–65 лет",
+            "min_age": 18,
+            "max_age": 65,
+            "cost": 400
+          },
+          {
+            "id": "over65",
+            "label": "Старше 65 лет",
+            "min_age": 66,
+            "max_age": 120,
+            "cost": 200
+          }
+        ],
+        "notes": "Museum network station admission: under 18 free; over 65 discounted. Exact >65 boundary is used, so age 65 uses the ordinary fare. Sunday free admission takes precedence. Other proof-dependent concessions are not inferred."
+      }
     },
     {
       "id": "osm:way:210461454",
@@ -75,10 +165,40 @@
       "coordinates_source": "https://www.openstreetmap.org/way/210461454",
       "checked_on": "2026-10-24",
       "valid_until": "2026-11-22",
-      "notes": "Municipal museum station standard ticket; free Sundays. Joint museum pass not used. Duration is planning policy. Mapped area representative point; not a verified visitor entrance.",
+      "notes": "Municipal museum station standard ticket; free Sundays. Joint museum pass not used. Duration is planning policy. Mapped area representative point; not a verified visitor entrance. Age tariff scope: Museum network station admission: under 18 free; over 65 discounted. Exact >65 boundary is used, so age 65 uses the ordinary fare. Sunday free admission takes precedence. Other proof-dependent concessions are not inferred.",
       "free_weekdays": [
         6
-      ]
+      ],
+      "age_rules": {
+        "version": "age-tariffs-v1",
+        "checked_on": "2026-10-25",
+        "valid_until": "2026-11-22",
+        "source_url": "https://museudoporto.pt/info-util/",
+        "bands": [
+          {
+            "id": "under18",
+            "label": "До 18 лет · бесплатный вход",
+            "min_age": 0,
+            "max_age": 17,
+            "cost": 0
+          },
+          {
+            "id": "regular",
+            "label": "Обычный билет · 18–65 лет",
+            "min_age": 18,
+            "max_age": 65,
+            "cost": 400
+          },
+          {
+            "id": "over65",
+            "label": "Старше 65 лет",
+            "min_age": 66,
+            "max_age": 120,
+            "cost": 200
+          }
+        ],
+        "notes": "Museum network station admission: under 18 free; over 65 discounted. Exact >65 boundary is used, so age 65 uses the ordinary fare. Sunday free admission takes precedence. Other proof-dependent concessions are not inferred."
+      }
     },
     {
       "id": "osm:way:210571326",
@@ -94,10 +214,40 @@
       "coordinates_source": "https://www.openstreetmap.org/way/210571326",
       "checked_on": "2026-10-24",
       "valid_until": "2026-11-22",
-      "notes": "Municipal museum station standard ticket; free Sundays. Joint museum pass not used. Duration is planning policy. Mapped area representative point; not a verified visitor entrance.",
+      "notes": "Municipal museum station standard ticket; free Sundays. Joint museum pass not used. Duration is planning policy. Mapped area representative point; not a verified visitor entrance. Age tariff scope: Museum network station admission: under 18 free; over 65 discounted. Exact >65 boundary is used, so age 65 uses the ordinary fare. Sunday free admission takes precedence. Other proof-dependent concessions are not inferred.",
       "free_weekdays": [
         6
-      ]
+      ],
+      "age_rules": {
+        "version": "age-tariffs-v1",
+        "checked_on": "2026-10-25",
+        "valid_until": "2026-11-22",
+        "source_url": "https://museudoporto.pt/info-util/",
+        "bands": [
+          {
+            "id": "under18",
+            "label": "До 18 лет · бесплатный вход",
+            "min_age": 0,
+            "max_age": 17,
+            "cost": 0
+          },
+          {
+            "id": "regular",
+            "label": "Обычный билет · 18–65 лет",
+            "min_age": 18,
+            "max_age": 65,
+            "cost": 400
+          },
+          {
+            "id": "over65",
+            "label": "Старше 65 лет",
+            "min_age": 66,
+            "max_age": 120,
+            "cost": 200
+          }
+        ],
+        "notes": "Museum network station admission: under 18 free; over 65 discounted. Exact >65 boundary is used, so age 65 uses the ordinary fare. Sunday free admission takes precedence. Other proof-dependent concessions are not inferred."
+      }
     },
     {
       "id": "osm:node:6540216045",

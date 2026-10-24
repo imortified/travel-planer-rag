@@ -1,8 +1,8 @@
 {
-  "version": "lisbon-curated-2026-10-25-meals-v1",
+  "version": "lisbon-curated-2026-10-25-age-v1",
   "checked_on": "2026-10-23",
   "valid_until": "2026-11-22",
-  "price_policy": "Regular adult admission; food costs cover only the explicit order per participant. Discounts, extra orders, transport and other meals are excluded.",
+  "price_policy": "Ordinary admission is the fallback. Verified individual age tariffs are applied separately for each visit date; missing age or an unverified band uses the ordinary tariff with an explicit warning. Food costs cover the same explicit order per participant, including children; child portions are not modeled. Proof-dependent, family, birthday and online promotions are excluded.",
   "pois": [
     {
       "id": "osm:node:4419041593",
@@ -223,7 +223,32 @@
       "coordinates_source": "https://www.openstreetmap.org/node/5150663698",
       "checked_on": "2026-10-24",
       "valid_until": "2026-11-22",
-      "notes": "Regular non-resident adult ticket; both buildings included. Discounts excluded. Duration is planning policy. Mapped location; routing snaps to public road points."
+      "notes": "Regular non-resident adult ticket; both buildings included. Discounts excluded. Duration is planning policy. Mapped location; routing snaps to public road points. Age tariff scope: Ordinary non-resident admission; children through age 12 free. Student/residency/senior-resident discounts require unmodeled proof and are not applied. Operator requires children to be accompanied by adults. Conservative planner policy: all under-18s require a group companion aged 18+; these numerical accompaniment thresholds are project policy, not a quoted operator age boundary. Kinship, admission and documents are not confirmed.",
+      "age_rules": {
+        "version": "age-tariffs-v1",
+        "checked_on": "2026-10-25",
+        "valid_until": "2026-11-22",
+        "source_url": "https://www.maat.pt/pt/planear-visita",
+        "bands": [
+          {
+            "id": "child",
+            "label": "До 13 лет · бесплатный вход",
+            "min_age": 0,
+            "max_age": 12,
+            "cost": 0
+          },
+          {
+            "id": "regular",
+            "label": "Обычный билет · без льготы резидента",
+            "min_age": 13,
+            "max_age": 120,
+            "cost": 1600
+          }
+        ],
+        "notes": "Ordinary non-resident admission; children through age 12 free. Student/residency/senior-resident discounts require unmodeled proof and are not applied. Operator requires children to be accompanied by adults. Conservative planner policy: all under-18s require a group companion aged 18+; these numerical accompaniment thresholds are project policy, not a quoted operator age boundary. Kinship, admission and documents are not confirmed.",
+        "accompanied_under": 18,
+        "companion_min_age": 18
+      }
     },
     {
       "id": "osm:node:4711868424",
@@ -617,7 +642,44 @@
       "coordinates_source": "https://www.openstreetmap.org/way/30104081",
       "checked_on": "2026-10-24",
       "valid_until": "2026-11-22",
-      "notes": "Standard adult 13–64 ticket. Conservative 10–18 window, matching winter review interval; zoo train surcharge excluded. Duration is planning policy. Mapped area representative point; not a verified visitor entrance."
+      "notes": "Standard adult 13–64 ticket. Conservative 10–18 window, matching winter review interval; zoo train surcharge excluded. Duration is planning policy. Mapped area representative point; not a verified visitor entrance. Age tariff scope: Regular 2026 entrance tariffs; proof of age may be required. Birthday promotions, online/group/student offers and optional cable-car restrictions are not modeled. Group offers start at 15 visitors, outside the planner's group size.",
+      "age_rules": {
+        "version": "age-tariffs-v1",
+        "checked_on": "2026-10-25",
+        "valid_until": "2026-11-22",
+        "source_url": "https://www.zoo.pt/pt/visitar/precos/",
+        "bands": [
+          {
+            "id": "infant",
+            "label": "До 3 лет · бесплатный вход",
+            "min_age": 0,
+            "max_age": 2,
+            "cost": 0
+          },
+          {
+            "id": "child",
+            "label": "Детский билет · 3–12 лет",
+            "min_age": 3,
+            "max_age": 12,
+            "cost": 1900
+          },
+          {
+            "id": "adult",
+            "label": "Обычный билет · 13–64 года",
+            "min_age": 13,
+            "max_age": 64,
+            "cost": 3100
+          },
+          {
+            "id": "senior",
+            "label": "Билет 65+",
+            "min_age": 65,
+            "max_age": 120,
+            "cost": 2200
+          }
+        ],
+        "notes": "Regular 2026 entrance tariffs; proof of age may be required. Birthday promotions, online/group/student offers and optional cable-car restrictions are not modeled. Group offers start at 15 visitors, outside the planner's group size."
+      }
     },
     {
       "id": "osm:node:1301526823",
