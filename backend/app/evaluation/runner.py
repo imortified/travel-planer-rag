@@ -61,6 +61,7 @@ def metadata(corpus_path):
             ROOT / "backend" / file
             for file in (
                 "app/nlp/parser.py",
+                "app/nlp/grounding.py",
                 "app/nlp/explanations.py",
                 "app/integrations/llama_cpp.py",
                 "app/schemas/assistant.py",

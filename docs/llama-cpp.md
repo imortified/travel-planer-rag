@@ -147,6 +147,8 @@ $env:RUN_DB_TESTS='1'
 отчёт `llm-quality-evaluation.json`. Скрипт теперь пишет в `.local/evaluations/`;
 для публикации задаются явные `--output` и `--ragas-output`. Это acceptance-проверки,
 не оценка точности на произвольных запросах.
+Исправленная версия разбора `trip-extract-v2-grounded` дополнена серверными
+проверками города, дат и области предпочтений: [llm-parser-grounding.md](llm-parser-grounding.md).
 
 Сквозной сценарий через интерфейс также проверен: русский текст → просмотр →
 заполнение формы → 3 варианта Lisbon на 3 дня → объяснение mode=llm, verified=true →

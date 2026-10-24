@@ -1,0 +1,301 @@
+{
+  "version": "ru-trip-additional-2026-10-24-v1",
+  "reference_date": "2026-10-24",
+  "provenance": "Additional human-authored synthetic regression wording, frozen before live v2 evaluation. Not an independent blind test set.",
+  "cases": [
+    {
+      "id": "rome-is-unsupported",
+      "text": "Едем вдвоём в Рим 4 ноября 2026. Общий бюджет 88 евро.",
+      "members": [
+        "Аня",
+        "Борис"
+      ],
+      "expected": {
+        "draft.destination": null,
+        "draft.travel_date": "2026-11-04",
+        "group_budget": 8800
+      },
+      "questions_required": [
+        "destination"
+      ],
+      "questions_allowed": [
+        "destination"
+      ],
+      "nonempty": [
+        "draft.unsupported"
+      ],
+      "tags": [
+        "additional-regression"
+      ]
+    },
+    {
+      "id": "negated-supported-city",
+      "text": "Аня едет не в Лиссабон, а в Париж 4 ноября 2026. Общий бюджет 80 евро.",
+      "members": [],
+      "expected": {
+        "draft.destination": null,
+        "draft.travel_date": "2026-11-04",
+        "group_budget": 8000,
+        "names": [
+          "Аня"
+        ]
+      },
+      "questions_required": [
+        "destination"
+      ],
+      "questions_allowed": [
+        "destination"
+      ],
+      "nonempty": [],
+      "tags": [
+        "additional-regression"
+      ]
+    },
+    {
+      "id": "budget-is-not-date-year",
+      "text": "Едем вдвоём в Лиссабон 4 ноября. Общий бюджет 2026 евро.",
+      "members": [
+        "Аня",
+        "Борис"
+      ],
+      "expected": {
+        "draft.destination": "Lisbon",
+        "draft.travel_date": null,
+        "group_budget": 202600
+      },
+      "questions_required": [
+        "travel_date"
+      ],
+      "questions_allowed": [
+        "travel_date"
+      ],
+      "nonempty": [],
+      "tags": [
+        "additional-regression"
+      ]
+    },
+    {
+      "id": "nearest-weekday",
+      "text": "Аня едет в Лиссабон в ближайшую среду. Общий бюджет 75 евро.",
+      "members": [],
+      "expected": {
+        "draft.destination": "Lisbon",
+        "draft.travel_date": "2026-10-28",
+        "group_budget": 7500,
+        "names": [
+          "Аня"
+        ]
+      },
+      "questions_required": [],
+      "questions_allowed": [],
+      "nonempty": [],
+      "tags": [
+        "additional-regression"
+      ]
+    },
+    {
+      "id": "duration-crosses-year",
+      "text": "Едем вдвоём в Лиссабон 30 декабря 2026 на пять дней. Общий бюджет 1000 евро.",
+      "members": [
+        "Аня",
+        "Борис"
+      ],
+      "expected": {
+        "draft.destination": "Lisbon",
+        "draft.travel_date": "2026-12-30",
+        "draft.end_date": "2027-01-03",
+        "group_budget": 100000
+      },
+      "questions_required": [],
+      "questions_allowed": [],
+      "nonempty": [],
+      "tags": [
+        "additional-regression"
+      ]
+    },
+    {
+      "id": "personal-dislikes",
+      "text": "Пётр и Даша едут в Лиссабон 4 ноября 2026. Общий бюджет 120 евро. Пётр не интересуется историей, Даша любит природу.",
+      "members": [],
+      "expected": {
+        "draft.destination": "Lisbon",
+        "draft.travel_date": "2026-11-04",
+        "draft.end_date": null,
+        "group_budget": 12000,
+        "names": [
+          "Даша",
+          "Пётр"
+        ],
+        "draft.common_interests": {},
+        "individual_interests": {
+          "Пётр": {
+            "history": 0
+          },
+          "Даша": {
+            "nature": 1
+          }
+        }
+      },
+      "questions_required": [],
+      "questions_allowed": [],
+      "nonempty": [],
+      "tags": [
+        "additional-regression"
+      ]
+    },
+    {
+      "id": "negative-food-positive-art",
+      "text": "Едем вдвоём в Лиссабон 4 ноября 2026. Общий бюджет 120 евро. Гастрономию не любим, живопись нравится.",
+      "members": [
+        "Аня",
+        "Борис"
+      ],
+      "expected": {
+        "draft.destination": "Lisbon",
+        "draft.travel_date": "2026-11-04",
+        "draft.end_date": null,
+        "group_budget": 12000,
+        "draft.common_interests": {
+          "food": 0,
+          "art": 1
+        }
+      },
+      "questions_required": [],
+      "questions_allowed": [],
+      "nonempty": [],
+      "tags": [
+        "additional-regression"
+      ]
+    },
+    {
+      "id": "personal-contrast",
+      "text": "Варя и Пётр едут в Лиссабон 4 ноября 2026. Общий бюджет 100 евро. Варя любит историю, но не искусство. Пётр любит природу.",
+      "members": [],
+      "expected": {
+        "draft.destination": "Lisbon",
+        "draft.travel_date": "2026-11-04",
+        "draft.end_date": null,
+        "group_budget": 10000,
+        "names": [
+          "Варя",
+          "Пётр"
+        ],
+        "draft.common_interests": {},
+        "individual_interests": {
+          "Варя": {
+            "history": 1,
+            "art": 0
+          },
+          "Пётр": {
+            "nature": 1
+          }
+        }
+      },
+      "questions_required": [],
+      "questions_allowed": [],
+      "nonempty": [],
+      "tags": [
+        "additional-regression"
+      ]
+    },
+    {
+      "id": "inflected-names",
+      "text": "Ольга и Иван едут в Лиссабон 4 ноября 2026. Общий бюджет 100 евро. Ольге история не интересна, Ивану нравится природа.",
+      "members": [],
+      "expected": {
+        "draft.destination": "Lisbon",
+        "draft.travel_date": "2026-11-04",
+        "draft.end_date": null,
+        "group_budget": 10000,
+        "names": [
+          "Иван",
+          "Ольга"
+        ],
+        "draft.common_interests": {},
+        "individual_interests": {
+          "Ольга": {
+            "history": 0
+          },
+          "Иван": {
+            "nature": 1
+          }
+        }
+      },
+      "questions_required": [],
+      "questions_allowed": [],
+      "nonempty": [],
+      "tags": [
+        "additional-regression"
+      ]
+    },
+    {
+      "id": "whole-name",
+      "text": "Жанна едет в Лиссабон 4 ноября 2026. Общий бюджет 30 евро.",
+      "members": [],
+      "expected": {
+        "draft.destination": "Lisbon",
+        "draft.travel_date": "2026-11-04",
+        "draft.end_date": null,
+        "group_budget": 3000,
+        "names": [
+          "Жанна"
+        ]
+      },
+      "questions_required": [],
+      "questions_allowed": [],
+      "nonempty": [],
+      "tags": [
+        "additional-regression"
+      ]
+    },
+    {
+      "id": "supported-car-mode",
+      "text": "Едем вдвоём в Лиссабон 4 ноября 2026. Общий бюджет 100 евро. Нужен автомобильный маршрут. Предпочитаем природу.",
+      "members": [
+        "Аня",
+        "Борис"
+      ],
+      "expected": {
+        "draft.destination": "Lisbon",
+        "draft.travel_date": "2026-11-04",
+        "draft.end_date": null,
+        "group_budget": 10000,
+        "draft.unsupported": [],
+        "draft.common_interests": {
+          "nature": 1
+        }
+      },
+      "questions_required": [],
+      "questions_allowed": [],
+      "nonempty": [],
+      "tags": [
+        "additional-regression"
+      ]
+    },
+    {
+      "id": "ambiguous-pronoun",
+      "text": "Аня и Вера едут в Лиссабон 4 ноября 2026. Общий бюджет 100 евро. Ей не нравится история.",
+      "members": [],
+      "expected": {
+        "draft.destination": "Lisbon",
+        "draft.travel_date": "2026-11-04",
+        "draft.end_date": null,
+        "group_budget": 10000,
+        "names": [
+          "Аня",
+          "Вера"
+        ]
+      },
+      "questions_required": [
+        "interests"
+      ],
+      "questions_allowed": [
+        "interests"
+      ],
+      "nonempty": [],
+      "tags": [
+        "additional-regression"
+      ]
+    }
+  ]
+}

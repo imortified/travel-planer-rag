@@ -1,6 +1,8 @@
 # Воспроизводимая оценка локального помощника
 
 Ветка `feature/llm-quality-evaluation` основана на `feature/lisbon-food-catalog`.
+Этот файл фиксирует исходную оценку. Исправления и новые отчёты описаны отдельно
+в [llm-parser-grounding.md](llm-parser-grounding.md); baseline ниже не переписан.
 Выбранные модели сохранены: Qwen3-4B Q4_K_M для текста и Qwen3-Embedding-0.6B Q8_0
 для поиска. Генератор работает через установленный llama.cpp b11840, порт 8081.
 
