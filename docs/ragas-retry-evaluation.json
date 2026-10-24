@@ -1,0 +1,179 @@
+{
+  "schema_version": 1,
+  "completed": true,
+  "started_at": "2026-10-24T13:14:00.720277+00:00",
+  "input_sha256": "f2eb95685207395e2502fc202e546168d04eba670c9ec1df116617f96927c0bb",
+  "runner_sha256": "de5808a0ce0c830c8a897121894db1af5eded4e45265c9255331cdabe7d0ff9d",
+  "lock_sha256": "16d18bf4f509612a86091b2480dc7d67694d6be1d6e3323ad74b5b304a512eb8",
+  "python": "3.13.3",
+  "judge": {
+    "model": "Qwen3-8B-Q4_K_M",
+    "backend": "llama-cpp",
+    "identity_note": "revision=7c41481f57cb95916b40956ab2f0b139b296d974; sha256=d98cdcbd03e17ce47681435b5150e34c1417f50b5c0019dd560e4882c5745785; llama=b11840; gpu_layers=18; context=8192",
+    "same_model_as_generator": false,
+    "identity_verification": "API alias checked; weight identity supplied separately",
+    "runtime_manifest": {
+      "checked_on": "2026-10-24",
+      "llama_cpp_version": "b11840",
+      "model": "Qwen3-8B-Q4_K_M",
+      "model_revision": "7c41481f57cb95916b40956ab2f0b139b296d974",
+      "purpose": "Separate local RAGAS judge; selected by user, no paid API. Same Qwen family as generator; not an independent human judge.",
+      "files": [
+        {
+          "name": "Qwen3-8B-Q4_K_M.gguf",
+          "size": 5027783488,
+          "url": "https://huggingface.co/Qwen/Qwen3-8B-GGUF/resolve/7c41481f57cb95916b40956ab2f0b139b296d974/Qwen3-8B-Q4_K_M.gguf",
+          "sha256": "d98cdcbd03e17ce47681435b5150e34c1417f50b5c0019dd560e4882c5745785",
+          "directory": "models"
+        }
+      ]
+    },
+    "server_settings": {
+      "default_generation_settings": {
+        "params": {
+          "seed": 4294967295,
+          "temperature": 0.800000011920929,
+          "dynatemp_range": 0.0,
+          "dynatemp_exponent": 1.0,
+          "top_k": 40,
+          "top_p": 0.949999988079071,
+          "min_p": 0.05000000074505806,
+          "top_n_sigma": -1.0,
+          "xtc_probability": 0.0,
+          "xtc_threshold": 0.10000000149011612,
+          "typical_p": 1.0,
+          "repeat_last_n": 64,
+          "repeat_penalty": 1.0,
+          "presence_penalty": 0.0,
+          "frequency_penalty": 0.0,
+          "dry_multiplier": 0.0,
+          "dry_base": 1.75,
+          "dry_allowed_length": 2,
+          "dry_penalty_last_n": 64,
+          "mirostat": 0,
+          "mirostat_tau": 5.0,
+          "mirostat_eta": 0.10000000149011612,
+          "adaptive_target": -1.0,
+          "adaptive_decay": 0.8999999761581421,
+          "max_tokens": -1,
+          "n_predict": -1,
+          "n_keep": 0,
+          "n_discard": 0,
+          "ignore_eos": false,
+          "stream": false,
+          "n_probs": 0,
+          "min_keep": 0,
+          "chat_format": "Content-only",
+          "reasoning_format": "none",
+          "reasoning_in_content": false,
+          "generation_prompt": "",
+          "samplers": [
+            "penalties",
+            "dry",
+            "top_n_sigma",
+            "top_k",
+            "typ_p",
+            "top_p",
+            "min_p",
+            "xtc",
+            "temperature"
+          ],
+          "speculative.types": "none",
+          "timings_per_token": false,
+          "post_sampling_probs": false,
+          "backend_sampling": false,
+          "lora": []
+        },
+        "n_ctx": 8192
+      },
+      "total_slots": 1
+    }
+  },
+  "ragas_version": "0.4.3",
+  "openai_client_version": "2.54.0",
+  "generation": {
+    "temperature": 0,
+    "max_tokens": 2048,
+    "seed": 42,
+    "enable_thinking": false
+  },
+  "metric_timeout_seconds": 720,
+  "http_timeout_seconds": 360,
+  "rows": [
+    {
+      "case_id": "rag-09",
+      "kind": "explanation",
+      "mode": "llm",
+      "metrics": {
+        "faithfulness": {
+          "status": "ok",
+          "value": 1.0,
+          "reason": null,
+          "seconds": 242.8376
+        }
+      }
+    }
+  ],
+  "http_calls": [
+    {
+      "status_code": 200,
+      "metric": "faithfulness",
+      "case_id": "rag-09",
+      "prompt_sha256": "f5e8e30efc1d1441b448dc197bfd05d6f6e7f89beeb2aac9ddd89b9c1ac9fadb",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 374,
+        "prompt_tokens": 869,
+        "total_tokens": 1243,
+        "prompt_tokens_details": {
+          "cached_tokens": 484
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"statements\": [\n        \"Маршрут включает 3 посещения и не включает повторных мест.\",\n        \"Расходы на посещения для 2 участников составляют 52,00 EUR при общем бюджете 100,00 EUR.\",\n        \"Остаток бюджета составляет 48,00 EUR.\",\n        \"Ограничения по сохранённым данным были проверены.\",\n        \"Жильё, питание вне POI, транспортные расходы и обратный путь не включены в маршрут.\",\n        \"Визы и погода не проверялись.\",\n        \"Общая оценка маршрута составляет 0,9203.\",\n        \"Вклад интересов составляет 1,0000.\",\n        \"Вклад стоимости составляет -0,0780.\",\n        \"Вклад переездов составляет -0,0017.\",\n        \"Неравенство покрытия интересов составляет 0,0000.\",\n        \"Шкалы и коэффициенты сохранены в отчёте оценки.\",\n        \"Даты поездки указаны как 2026-10-27 — 2026-10-27, расписание дано по местному времени.\",\n        \"Посещения по категориям включают искусство — 3.\",\n        \"Museu Nacional de Arte Contemporânea (MNAC) представляет португальское искусство с середины XIX века до современности, включая живопись и скульптуру.\"\n    ]\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "faithfulness",
+      "case_id": "rag-09",
+      "prompt_sha256": "e61bbadc8677b93f875140b923bd947e7fb2fedf93e3929a7725739cdc6bbbe6",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 1171,
+        "prompt_tokens": 1731,
+        "total_tokens": 2902,
+        "prompt_tokens_details": {
+          "cached_tokens": 1048
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"statements\": [\n        {\n            \"statement\": \"Маршрут включает 3 посещения и не включает повторных мест.\",\n            \"reason\": \"Первое утверждение точно отражает информацию из контекста, где говорится, что маршрут включает 3 посещения и нет повторных мест.\",\n            \"verdict\": 1\n        },\n        {\n            \"statement\": \"Расходы на посещения для 2 участников составляют 52,00 EUR при общем бюджете 100,00 EUR.\",\n            \"reason\": \"Контекст прямо указывает на расходы на посещения для 2 участников в размере 52,00 EUR при общем бюджете 100,00 EUR.\",\n            \"verdict\": 1\n        },\n        {\n            \"statement\": \"Остаток бюджета составляет 48,00 EUR.\",\n            \"reason\": \"Контекст упоминает, что остаток бюджета составляет 48,00 EUR, что соответствует утверждению.\",\n            \"verdict\": 1\n        },\n        {\n            \"statement\": \"Ограничения по сохранённым данным были проверены.\",\n            \"reason\": \"Контекст прямо упоминает, что ограничения по сохранённым данным были проверены.\",\n            \"verdict\": 1\n        },\n        {\n            \"statement\": \"Жильё, питание вне POI, транспортные расходы и обратный путь не включены в маршрут.\",\n            \"reason\": \"Контекст указывает, что жильё, питание вне POI, транспортные расходы и обратный путь не включены в маршрут.\",\n            \"verdict\": 1\n        },\n        {\n            \"statement\": \"Визы и погода не проверялись.\",\n            \"reason\": \"Контекст прямо упоминает, что визы и погода не проверялись.\",\n            \"verdict\": 1\n        },\n        {\n            \"statement\": \"Общая оценка маршрута составляет 0,9203.\",\n            \"reason\": \"Контекст указывает, что общая оценка маршрута составляет 0,9203.\",\n            \"verdict\": 1\n        },\n        {\n            \"statement\": \"Вклад интересов составляет 1,0000.\",\n            \"reason\": \"Контекст прямо упоминает, что вклад интересов составляет 1,0000.\",\n            \"verdict\": 1\n        },\n        {\n            \"statement\": \"Вклад стоимости составляет -0,0780.\",\n            \"reason\": \"Контекст указывает, что вклад стоимости составляет -0,0780.\",\n            \"verdict\": 1\n        },\n        {\n            \"statement\": \"Вклад переездов составляет -0,0017.\",\n            \"reason\": \"Контекст прямо упоминает, что вклад переездов составляет -0,0017.\",\n            \"verdict\": 1\n        },\n        {\n            \"statement\": \"Неравенство покрытия интересов составляет 0,0000.\",\n            \"reason\": \"Контекст указывает, что неравенство покрытия интересов составляет 0,0000.\",\n            \"verdict\": 1\n        },\n        {\n            \"statement\": \"Шкалы и коэффициенты сохранены в отчёте оценки.\",\n            \"reason\": \"Контекст прямо упоминает, что шкалы и коэффициенты сохранены в отчёте оценки.\",\n            \"verdict\": 1\n        },\n        {\n            \"statement\": \"Даты поездки указаны как 2026-10-27 — 2026-10-27, расписание дано по местному времени.\",\n            \"reason\": \"Контекст указывает, что даты поездки указаны как 2026-10-27 — 2026-10-27, расписание дано по местному времени.\",\n            \"verdict\": 1\n        },\n        {\n            \"statement\": \"Посещения по категориям включают искусство — 3.\",\n            \"reason\": \"Контекст прямо упоминает, что посещения по категориям включают искусство — 3.\",\n            \"verdict\": 1\n        },\n        {\n            \"statement\": \"Museu Nacional de Arte Contemporânea (MNAC) представляет португальское искусство с середины XIX века до современности, включая живопись и скульптуру.\",\n            \"reason\": \"Контекст прямо упоминает, что Museu Nacional de Arte Contemporânea (MNAC) представляет португальское искусство с середины XIX века до современности, включая живопись и скульптуру.\",\n            \"verdict\": 1\n        }\n    ]\n}"
+          }
+        }
+      ]
+    }
+  ],
+  "scope": "Saved public RAG samples",
+  "summary": {
+    "explanation:llm:faithfulness": {
+      "scored": 1,
+      "errors": 0,
+      "mean": 1.0
+    }
+  },
+  "finished_at": "2026-10-24T13:18:04.277864+00:00",
+  "inputs_unchanged": true
+}

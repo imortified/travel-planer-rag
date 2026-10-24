@@ -1,0 +1,3342 @@
+{
+  "schema_version": 1,
+  "completed": true,
+  "started_at": "2026-10-24T11:49:20.923467+00:00",
+  "input_sha256": "1857e24688935093f33952f1c8fe643873d4561c2f98fd6eab5b4e53b196a29f",
+  "runner_sha256": "de5808a0ce0c830c8a897121894db1af5eded4e45265c9255331cdabe7d0ff9d",
+  "lock_sha256": "16d18bf4f509612a86091b2480dc7d67694d6be1d6e3323ad74b5b304a512eb8",
+  "python": "3.13.3",
+  "judge": {
+    "model": "Qwen3-8B-Q4_K_M",
+    "backend": "llama-cpp",
+    "identity_note": "revision=7c41481f57cb95916b40956ab2f0b139b296d974; sha256=d98cdcbd03e17ce47681435b5150e34c1417f50b5c0019dd560e4882c5745785; llama=b11840; gpu_layers=18; context=8192",
+    "same_model_as_generator": false,
+    "identity_verification": "API alias checked; weight identity supplied separately",
+    "runtime_manifest": {
+      "checked_on": "2026-10-24",
+      "llama_cpp_version": "b11840",
+      "model": "Qwen3-8B-Q4_K_M",
+      "model_revision": "7c41481f57cb95916b40956ab2f0b139b296d974",
+      "purpose": "Separate local RAGAS judge; selected by user, no paid API. Same Qwen family as generator; not an independent human judge.",
+      "files": [
+        {
+          "name": "Qwen3-8B-Q4_K_M.gguf",
+          "size": 5027783488,
+          "url": "https://huggingface.co/Qwen/Qwen3-8B-GGUF/resolve/7c41481f57cb95916b40956ab2f0b139b296d974/Qwen3-8B-Q4_K_M.gguf",
+          "sha256": "d98cdcbd03e17ce47681435b5150e34c1417f50b5c0019dd560e4882c5745785",
+          "directory": "models"
+        }
+      ]
+    },
+    "server_settings": {
+      "default_generation_settings": {
+        "params": {
+          "seed": 4294967295,
+          "temperature": 0.800000011920929,
+          "dynatemp_range": 0.0,
+          "dynatemp_exponent": 1.0,
+          "top_k": 40,
+          "top_p": 0.949999988079071,
+          "min_p": 0.05000000074505806,
+          "top_n_sigma": -1.0,
+          "xtc_probability": 0.0,
+          "xtc_threshold": 0.10000000149011612,
+          "typical_p": 1.0,
+          "repeat_last_n": 64,
+          "repeat_penalty": 1.0,
+          "presence_penalty": 0.0,
+          "frequency_penalty": 0.0,
+          "dry_multiplier": 0.0,
+          "dry_base": 1.75,
+          "dry_allowed_length": 2,
+          "dry_penalty_last_n": 64,
+          "mirostat": 0,
+          "mirostat_tau": 5.0,
+          "mirostat_eta": 0.10000000149011612,
+          "adaptive_target": -1.0,
+          "adaptive_decay": 0.8999999761581421,
+          "max_tokens": -1,
+          "n_predict": -1,
+          "n_keep": 0,
+          "n_discard": 0,
+          "ignore_eos": false,
+          "stream": false,
+          "n_probs": 0,
+          "min_keep": 0,
+          "chat_format": "Content-only",
+          "reasoning_format": "none",
+          "reasoning_in_content": false,
+          "generation_prompt": "",
+          "samplers": [
+            "penalties",
+            "dry",
+            "top_n_sigma",
+            "top_k",
+            "typ_p",
+            "top_p",
+            "min_p",
+            "xtc",
+            "temperature"
+          ],
+          "speculative.types": "none",
+          "timings_per_token": false,
+          "post_sampling_probs": false,
+          "backend_sampling": false,
+          "lora": []
+        },
+        "n_ctx": 8192
+      },
+      "total_slots": 1
+    }
+  },
+  "ragas_version": "0.4.3",
+  "openai_client_version": "2.54.0",
+  "generation": {
+    "temperature": 0,
+    "max_tokens": 2048,
+    "seed": 42,
+    "enable_thinking": false
+  },
+  "metric_timeout_seconds": 360,
+  "http_timeout_seconds": 180,
+  "rows": [
+    {
+      "case_id": "rag-01",
+      "kind": "retrieval",
+      "mode": "live_qdrant",
+      "metrics": {
+        "context_precision": {
+          "status": "ok",
+          "value": 0.9999999999,
+          "reason": null,
+          "seconds": 17.0707
+        },
+        "context_recall": {
+          "status": "ok",
+          "value": 1.0,
+          "reason": null,
+          "seconds": 31.8494
+        }
+      }
+    },
+    {
+      "case_id": "rag-02",
+      "kind": "retrieval",
+      "mode": "live_qdrant",
+      "metrics": {
+        "context_precision": {
+          "status": "ok",
+          "value": 0.9999999999,
+          "reason": null,
+          "seconds": 30.8341
+        },
+        "context_recall": {
+          "status": "ok",
+          "value": 1.0,
+          "reason": null,
+          "seconds": 21.9484
+        }
+      }
+    },
+    {
+      "case_id": "rag-03",
+      "kind": "retrieval",
+      "mode": "live_qdrant",
+      "metrics": {
+        "context_precision": {
+          "status": "ok",
+          "value": 0.0,
+          "reason": null,
+          "seconds": 10.3085
+        },
+        "context_recall": {
+          "status": "ok",
+          "value": 0.5,
+          "reason": null,
+          "seconds": 27.9821
+        }
+      }
+    },
+    {
+      "case_id": "rag-04",
+      "kind": "retrieval",
+      "mode": "live_qdrant",
+      "metrics": {
+        "context_precision": {
+          "status": "ok",
+          "value": 0.9999999999,
+          "reason": null,
+          "seconds": 31.0205
+        },
+        "context_recall": {
+          "status": "ok",
+          "value": 1.0,
+          "reason": null,
+          "seconds": 21.7746
+        }
+      }
+    },
+    {
+      "case_id": "rag-05",
+      "kind": "retrieval",
+      "mode": "live_qdrant",
+      "metrics": {
+        "context_precision": {
+          "status": "ok",
+          "value": 0.9999999999,
+          "reason": null,
+          "seconds": 9.6126
+        },
+        "context_recall": {
+          "status": "ok",
+          "value": 1.0,
+          "reason": null,
+          "seconds": 17.5116
+        }
+      }
+    },
+    {
+      "case_id": "rag-06",
+      "kind": "retrieval",
+      "mode": "live_qdrant",
+      "metrics": {
+        "context_precision": {
+          "status": "ok",
+          "value": 0.9999999999,
+          "reason": null,
+          "seconds": 8.1593
+        },
+        "context_recall": {
+          "status": "ok",
+          "value": 1.0,
+          "reason": null,
+          "seconds": 20.1423
+        }
+      }
+    },
+    {
+      "case_id": "rag-07",
+      "kind": "retrieval",
+      "mode": "live_qdrant",
+      "metrics": {
+        "context_precision": {
+          "status": "ok",
+          "value": 0.9999999999,
+          "reason": null,
+          "seconds": 25.5218
+        },
+        "context_recall": {
+          "status": "ok",
+          "value": 0.5,
+          "reason": null,
+          "seconds": 58.0423
+        }
+      }
+    },
+    {
+      "case_id": "rag-08",
+      "kind": "retrieval",
+      "mode": "live_qdrant",
+      "metrics": {
+        "context_precision": {
+          "status": "ok",
+          "value": 0.9999999999666667,
+          "reason": null,
+          "seconds": 32.1748
+        },
+        "context_recall": {
+          "status": "ok",
+          "value": 0.75,
+          "reason": null,
+          "seconds": 66.1753
+        }
+      }
+    },
+    {
+      "case_id": "rag-09",
+      "kind": "retrieval",
+      "mode": "live_qdrant",
+      "metrics": {
+        "context_precision": {
+          "status": "ok",
+          "value": 0.9999999999,
+          "reason": null,
+          "seconds": 21.5961
+        },
+        "context_recall": {
+          "status": "ok",
+          "value": 1.0,
+          "reason": null,
+          "seconds": 22.984
+        }
+      }
+    },
+    {
+      "case_id": "rag-10",
+      "kind": "retrieval",
+      "mode": "live_qdrant",
+      "metrics": {
+        "context_precision": {
+          "status": "ok",
+          "value": 0.9999999999,
+          "reason": null,
+          "seconds": 19.3011
+        },
+        "context_recall": {
+          "status": "ok",
+          "value": 1.0,
+          "reason": null,
+          "seconds": 22.6085
+        }
+      }
+    },
+    {
+      "case_id": "rag-11",
+      "kind": "retrieval",
+      "mode": "live_qdrant",
+      "metrics": {
+        "context_precision": {
+          "status": "ok",
+          "value": 0.9999999999,
+          "reason": null,
+          "seconds": 17.3075
+        },
+        "context_recall": {
+          "status": "ok",
+          "value": 1.0,
+          "reason": null,
+          "seconds": 19.0964
+        }
+      }
+    },
+    {
+      "case_id": "rag-12",
+      "kind": "retrieval",
+      "mode": "live_qdrant",
+      "metrics": {
+        "context_precision": {
+          "status": "ok",
+          "value": 0.9999999999,
+          "reason": null,
+          "seconds": 31.126
+        },
+        "context_recall": {
+          "status": "ok",
+          "value": 1.0,
+          "reason": null,
+          "seconds": 23.1149
+        }
+      }
+    },
+    {
+      "case_id": "rag-13",
+      "kind": "retrieval",
+      "mode": "live_qdrant",
+      "metrics": {
+        "context_precision": {
+          "status": "ok",
+          "value": 0.9999999999,
+          "reason": null,
+          "seconds": 7.8365
+        },
+        "context_recall": {
+          "status": "ok",
+          "value": 1.0,
+          "reason": null,
+          "seconds": 16.5509
+        }
+      }
+    },
+    {
+      "case_id": "rag-14",
+      "kind": "retrieval",
+      "mode": "live_qdrant",
+      "metrics": {
+        "context_precision": {
+          "status": "ok",
+          "value": 0.9999999999,
+          "reason": null,
+          "seconds": 18.239
+        },
+        "context_recall": {
+          "status": "ok",
+          "value": 1.0,
+          "reason": null,
+          "seconds": 18.3316
+        }
+      }
+    },
+    {
+      "case_id": "rag-15",
+      "kind": "retrieval",
+      "mode": "live_qdrant",
+      "metrics": {
+        "context_precision": {
+          "status": "ok",
+          "value": 0.9999999999666667,
+          "reason": null,
+          "seconds": 27.9505
+        },
+        "context_recall": {
+          "status": "ok",
+          "value": 1.0,
+          "reason": null,
+          "seconds": 41.4156
+        }
+      }
+    },
+    {
+      "case_id": "rag-16",
+      "kind": "retrieval",
+      "mode": "live_qdrant",
+      "metrics": {
+        "context_precision": {
+          "status": "ok",
+          "value": 0.49999999995,
+          "reason": null,
+          "seconds": 30.8827
+        },
+        "context_recall": {
+          "status": "ok",
+          "value": 0.6666666666666666,
+          "reason": null,
+          "seconds": 45.8122
+        }
+      }
+    },
+    {
+      "case_id": "rag-17",
+      "kind": "retrieval",
+      "mode": "live_qdrant",
+      "metrics": {
+        "context_precision": {
+          "status": "ok",
+          "value": 0.9999999999,
+          "reason": null,
+          "seconds": 7.5231
+        },
+        "context_recall": {
+          "status": "ok",
+          "value": 1.0,
+          "reason": null,
+          "seconds": 23.2255
+        }
+      }
+    },
+    {
+      "case_id": "rag-18",
+      "kind": "retrieval",
+      "mode": "live_qdrant",
+      "metrics": {
+        "context_precision": {
+          "status": "ok",
+          "value": 0.9999999999,
+          "reason": null,
+          "seconds": 36.61
+        },
+        "context_recall": {
+          "status": "ok",
+          "value": 1.0,
+          "reason": null,
+          "seconds": 20.0697
+        }
+      }
+    },
+    {
+      "case_id": "rag-19",
+      "kind": "retrieval",
+      "mode": "live_qdrant",
+      "metrics": {
+        "context_precision": {
+          "status": "ok",
+          "value": 0.9999999999,
+          "reason": null,
+          "seconds": 10.4465
+        },
+        "context_recall": {
+          "status": "ok",
+          "value": 1.0,
+          "reason": null,
+          "seconds": 20.0263
+        }
+      }
+    },
+    {
+      "case_id": "rag-20",
+      "kind": "retrieval",
+      "mode": "live_qdrant",
+      "metrics": {
+        "context_precision": {
+          "status": "ok",
+          "value": 0.9999999999,
+          "reason": null,
+          "seconds": 8.354
+        },
+        "context_recall": {
+          "status": "ok",
+          "value": 1.0,
+          "reason": null,
+          "seconds": 31.5398
+        }
+      }
+    },
+    {
+      "case_id": "rag-21",
+      "kind": "retrieval",
+      "mode": "live_qdrant",
+      "metrics": {
+        "context_precision": {
+          "status": "ok",
+          "value": 0.9999999999,
+          "reason": null,
+          "seconds": 22.849
+        },
+        "context_recall": {
+          "status": "ok",
+          "value": 1.0,
+          "reason": null,
+          "seconds": 36.7417
+        }
+      }
+    },
+    {
+      "case_id": "rag-22",
+      "kind": "retrieval",
+      "mode": "live_qdrant",
+      "metrics": {
+        "context_precision": {
+          "status": "ok",
+          "value": 0.9999999999,
+          "reason": null,
+          "seconds": 22.1231
+        },
+        "context_recall": {
+          "status": "ok",
+          "value": 1.0,
+          "reason": null,
+          "seconds": 36.572
+        }
+      }
+    },
+    {
+      "case_id": "rag-23",
+      "kind": "retrieval",
+      "mode": "live_qdrant",
+      "metrics": {
+        "context_precision": {
+          "status": "ok",
+          "value": 0.99999999995,
+          "reason": null,
+          "seconds": 23.8024
+        },
+        "context_recall": {
+          "status": "ok",
+          "value": 0.6666666666666666,
+          "reason": null,
+          "seconds": 72.7911
+        }
+      }
+    },
+    {
+      "case_id": "rag-24",
+      "kind": "retrieval",
+      "mode": "live_qdrant",
+      "metrics": {
+        "context_precision": {
+          "status": "ok",
+          "value": 0.99999999995,
+          "reason": null,
+          "seconds": 25.9503
+        },
+        "context_recall": {
+          "status": "ok",
+          "value": 0.6666666666666666,
+          "reason": null,
+          "seconds": 70.2153
+        }
+      }
+    },
+    {
+      "case_id": "rag-25",
+      "kind": "retrieval",
+      "mode": "live_qdrant",
+      "metrics": {
+        "context_precision": {
+          "status": "ok",
+          "value": 0.9999999999,
+          "reason": null,
+          "seconds": 8.3462
+        },
+        "context_recall": {
+          "status": "ok",
+          "value": 1.0,
+          "reason": null,
+          "seconds": 35.2323
+        }
+      }
+    },
+    {
+      "case_id": "rag-26",
+      "kind": "retrieval",
+      "mode": "live_qdrant",
+      "metrics": {
+        "context_precision": {
+          "status": "ok",
+          "value": 0.99999999995,
+          "reason": null,
+          "seconds": 16.0124
+        },
+        "context_recall": {
+          "status": "ok",
+          "value": 1.0,
+          "reason": null,
+          "seconds": 25.0537
+        }
+      }
+    },
+    {
+      "case_id": "rag-27",
+      "kind": "retrieval",
+      "mode": "live_qdrant",
+      "metrics": {
+        "context_precision": {
+          "status": "ok",
+          "value": 0.9999999999,
+          "reason": null,
+          "seconds": 18.4723
+        },
+        "context_recall": {
+          "status": "ok",
+          "value": 1.0,
+          "reason": null,
+          "seconds": 31.5333
+        }
+      }
+    },
+    {
+      "case_id": "rag-28",
+      "kind": "retrieval",
+      "mode": "live_qdrant",
+      "metrics": {
+        "context_precision": {
+          "status": "ok",
+          "value": 0.9999999999,
+          "reason": null,
+          "seconds": 8.7974
+        },
+        "context_recall": {
+          "status": "ok",
+          "value": 1.0,
+          "reason": null,
+          "seconds": 32.5612
+        }
+      }
+    },
+    {
+      "case_id": "rag-29",
+      "kind": "retrieval",
+      "mode": "live_qdrant",
+      "metrics": {
+        "context_precision": {
+          "status": "ok",
+          "value": 0.9999999999,
+          "reason": null,
+          "seconds": 8.8269
+        },
+        "context_recall": {
+          "status": "ok",
+          "value": 1.0,
+          "reason": null,
+          "seconds": 32.4195
+        }
+      }
+    },
+    {
+      "case_id": "rag-30",
+      "kind": "retrieval",
+      "mode": "live_qdrant",
+      "metrics": {
+        "context_precision": {
+          "status": "ok",
+          "value": 0.9999999999,
+          "reason": null,
+          "seconds": 11.7088
+        },
+        "context_recall": {
+          "status": "ok",
+          "value": 1.0,
+          "reason": null,
+          "seconds": 30.2023
+        }
+      }
+    },
+    {
+      "case_id": "rag-31",
+      "kind": "retrieval",
+      "mode": "live_qdrant",
+      "metrics": {
+        "context_precision": {
+          "status": "ok",
+          "value": 0.9999999999666667,
+          "reason": null,
+          "seconds": 32.3227
+        },
+        "context_recall": {
+          "status": "ok",
+          "value": 1.0,
+          "reason": null,
+          "seconds": 66.6065
+        }
+      }
+    },
+    {
+      "case_id": "rag-32",
+      "kind": "retrieval",
+      "mode": "live_qdrant",
+      "metrics": {
+        "context_precision": {
+          "status": "ok",
+          "value": 0.99999999995,
+          "reason": null,
+          "seconds": 20.1493
+        },
+        "context_recall": {
+          "status": "ok",
+          "value": 0.6666666666666666,
+          "reason": null,
+          "seconds": 70.9876
+        }
+      }
+    },
+    {
+      "case_id": "rag-33",
+      "kind": "retrieval",
+      "mode": "live_qdrant",
+      "metrics": {},
+      "skipped": "empty_context"
+    },
+    {
+      "case_id": "rag-34",
+      "kind": "retrieval",
+      "mode": "live_qdrant",
+      "metrics": {},
+      "skipped": "empty_context"
+    },
+    {
+      "case_id": "rag-35",
+      "kind": "retrieval",
+      "mode": "live_qdrant",
+      "metrics": {},
+      "skipped": "empty_context"
+    },
+    {
+      "case_id": "rag-36",
+      "kind": "retrieval",
+      "mode": "live_qdrant",
+      "metrics": {},
+      "skipped": "no_reference_evidence"
+    },
+    {
+      "case_id": "rag-37",
+      "kind": "retrieval",
+      "mode": "live_qdrant",
+      "metrics": {},
+      "skipped": "no_reference_evidence"
+    },
+    {
+      "case_id": "rag-38",
+      "kind": "retrieval",
+      "mode": "live_qdrant",
+      "metrics": {},
+      "skipped": "empty_context"
+    },
+    {
+      "case_id": "rag-39",
+      "kind": "retrieval",
+      "mode": "live_qdrant",
+      "metrics": {},
+      "skipped": "empty_context"
+    },
+    {
+      "case_id": "rag-40",
+      "kind": "retrieval",
+      "mode": "live_qdrant",
+      "metrics": {},
+      "skipped": "empty_context"
+    },
+    {
+      "case_id": "rag-01",
+      "kind": "explanation",
+      "mode": "llm",
+      "metrics": {
+        "faithfulness": {
+          "status": "ok",
+          "value": 1.0,
+          "reason": null,
+          "seconds": 210.9272
+        }
+      }
+    },
+    {
+      "case_id": "rag-09",
+      "kind": "explanation",
+      "mode": "llm",
+      "metrics": {
+        "faithfulness": {
+          "status": "error",
+          "value": null,
+          "error": "InstructorRetryException",
+          "seconds": 232.5487
+        }
+      }
+    },
+    {
+      "case_id": "rag-17",
+      "kind": "explanation",
+      "mode": "llm",
+      "metrics": {
+        "faithfulness": {
+          "status": "ok",
+          "value": 1.0,
+          "reason": null,
+          "seconds": 229.8923
+        }
+      }
+    },
+    {
+      "case_id": "rag-25",
+      "kind": "explanation",
+      "mode": "llm",
+      "metrics": {
+        "faithfulness": {
+          "status": "ok",
+          "value": 1.0,
+          "reason": null,
+          "seconds": 140.0807
+        }
+      }
+    }
+  ],
+  "http_calls": [
+    {
+      "status_code": 200,
+      "metric": "context_precision",
+      "case_id": "rag-01",
+      "prompt_sha256": "fa196bcc05914496cadfc5d9276cf0bbb7c3286db5ae63070be752fc423994fb",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 53,
+        "prompt_tokens": 1230,
+        "total_tokens": 1283,
+        "prompt_tokens_details": {
+          "cached_tokens": 35
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"reason\": \"The provided context was useful in arriving at the given answer. The context directly mentions the Archaeological Museum of Carmo located among the ruins of the monastery, which matches the answer exactly.\",\n    \"verdict\": 1\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_precision",
+      "case_id": "rag-01",
+      "prompt_sha256": "b08168f0adc4313afc0519f9b89fd10d8eae35bd3bc499d75a15b42ffc5c4656",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 44,
+        "prompt_tokens": 1229,
+        "total_tokens": 1273,
+        "prompt_tokens_details": {
+          "cached_tokens": 1109
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"reason\": \"The context does not mention anything about archaeological finds or ruins of a monastery, and therefore could not be used to arrive at the given answer.\",\n    \"verdict\": 0\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_recall",
+      "case_id": "rag-01",
+      "prompt_sha256": "0f4c1d05a7908042126f46b1c72db31e3d32a8e2398964b5ecdffd0b4fd5b0d5",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 169,
+        "prompt_tokens": 1822,
+        "total_tokens": 1991,
+        "prompt_tokens_details": {
+          "cached_tokens": 35
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"classifications\": [\n        {\n            \"statement\": \"Museu Arqueológico do Carmo: Археологический музей Карму расположен среди руин монастыря.\",\n            \"reason\": \"The statement is directly taken from the context, which mentions that the Archaeological Museum of Carmo is located among the ruins of the monastery.\",\n            \"attributed\": 1\n        },\n        {\n            \"statement\": \"Его коллекция включает археологические и исторические предметы разных эпох.\",\n            \"reason\": \"The statement is directly taken from the context, which describes the collection of the Archaeological Museum of Carmo as including archaeological and historical items from different eras.\",\n            \"attributed\": 1\n        }\n    ]\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_precision",
+      "case_id": "rag-02",
+      "prompt_sha256": "444de69d07a5362f379bbbb1049907aff4b2d77702480b9af1e453bf20a3d8c2",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 61,
+        "prompt_tokens": 1225,
+        "total_tokens": 1286,
+        "prompt_tokens_details": {
+          "cached_tokens": 1078
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"reason\": \"The provided context was useful in arriving at the given answer. The context directly mentions the Museu Arqueológico do Carmo and states that its collection includes archaeological and historical items from different eras, which matches the answer.\",\n    \"verdict\": 1\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_precision",
+      "case_id": "rag-02",
+      "prompt_sha256": "3e6c99f734096d3b9904358bee46b3f44b5badb6420adc4726dce5e615502da2",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 94,
+        "prompt_tokens": 1224,
+        "total_tokens": 1318,
+        "prompt_tokens_details": {
+          "cached_tokens": 1104
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"reason\": \"The context provided information about the Museu de São Roque, which is a museum of religious art, but the answer refers to the Museu Arqueológico do Carmo, which is a different museum. The context does not mention the Museu Arqueológico do Carmo or its collection of artifacts from different eras, so it was not useful in arriving at the given answer.\",\n    \"verdict\": 0\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_precision",
+      "case_id": "rag-02",
+      "prompt_sha256": "db33e19c8abf92c1a66e6e5fa9ae19c39f3f81b4d21bd70e5f014d83b05c3e5d",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 71,
+        "prompt_tokens": 1195,
+        "total_tokens": 1266,
+        "prompt_tokens_details": {
+          "cached_tokens": 1104
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"reason\": \"The context provided mentions the Museu Nacional do Desporto, which is categorized under history, but the answer refers to the Museu Arqueológico do Carmo, which is not mentioned in the context. Therefore, the context is not useful in arriving at the given answer.\",\n    \"verdict\": 0\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_recall",
+      "case_id": "rag-02",
+      "prompt_sha256": "17c7645c120e0cb439f1436bbf2ce1cd1bc28eb4130edd1b68551e0db866bfc1",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 141,
+        "prompt_tokens": 1841,
+        "total_tokens": 1982,
+        "prompt_tokens_details": {
+          "cached_tokens": 1617
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"classifications\": [\n        {\n            \"statement\": \"Museu Arqueológico do Carmo: Археологический музей Карму расположен среди руин монастыря.\",\n            \"reason\": \"Это точное утверждение присутствует в контексте.\",\n            \"attributed\": 1\n        },\n        {\n            \"statement\": \"Его коллекция включает археологические и исторические предметы разных эпох.\",\n            \"reason\": \"Это утверждение прямо указано в контексте.\",\n            \"attributed\": 1\n        }\n    ]\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_precision",
+      "case_id": "rag-03",
+      "prompt_sha256": "7dd641140e24cd1ba50e1ee78a27e99bf430b86b84e2154fff3531b4f15a10f7",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 73,
+        "prompt_tokens": 1252,
+        "total_tokens": 1325,
+        "prompt_tokens_details": {
+          "cached_tokens": 1078
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"reason\": \"The context provides information about the Archaeological Museum of Carmo and mentions archaeological and historical artifacts, which aligns with the question about ancient civilizations and archaeology. However, the answer is a direct copy of the context, which does not demonstrate any reasoning or evaluation of the information provided.\",\n    \"verdict\": 0\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_recall",
+      "case_id": "rag-03",
+      "prompt_sha256": "ca6d8f7742668d4be91ca57606d54e4ce46da7b9f2f86fb51e41a4510488c60c",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 183,
+        "prompt_tokens": 1791,
+        "total_tokens": 1974,
+        "prompt_tokens_details": {
+          "cached_tokens": 1617
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"classifications\": [\n        {\n            \"statement\": \"Museu Arqueológico do Carmo: Археологический музей Карму расположен среди руин монастыря. Его коллекция включает археологические и исторические предметы разных эпох.\",\n            \"reason\": \"The statement is directly taken from the context and describes the location and collection of the Archaeological Museum of Carmo.\",\n            \"attributed\": 1\n        },\n        {\n            \"statement\": \"Casa dos Bicos - núcleo arqueológico (piso 0): Категория каталога: history\",\n            \"reason\": \"The context does not mention anything about Casa dos Bicos or its catalog category, so this statement cannot be attributed to the context.\",\n            \"attributed\": 0\n        }\n    ]\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_precision",
+      "case_id": "rag-04",
+      "prompt_sha256": "7bf87ae138cb4fdf8d6c3a75caf7ef14a984ca0995a9caf275d9994d7655b611",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 78,
+        "prompt_tokens": 1254,
+        "total_tokens": 1332,
+        "prompt_tokens_details": {
+          "cached_tokens": 1078
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"reason\": \"The provided context directly answers the question by mentioning the Museu do Aljube, which is dedicated to the resistance against the Portuguese dictatorship, freedom struggle, and memory of political prisoners in Portugal. The answer is a direct copy of the context, indicating that the context was useful in arriving at the given answer.\",\n    \"verdict\": 1\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_precision",
+      "case_id": "rag-04",
+      "prompt_sha256": "a5f2341427b0f85108e014414c34a50502f66626b3b0b9e25bef54e2c1c79b1d",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 76,
+        "prompt_tokens": 1250,
+        "total_tokens": 1326,
+        "prompt_tokens_details": {
+          "cached_tokens": 1109
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"reason\": \"The context mentions the Museu Nacional de Arte Contemporânea (MNAC) and its focus on Portuguese art, but it does not directly mention anything about resistance to the Portuguese dictatorship or the Museu do Aljube. Therefore, the context is not useful in arriving at the given answer.\",\n    \"verdict\": 0\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_precision",
+      "case_id": "rag-04",
+      "prompt_sha256": "39d53d5be6cd73b57977a61c645febddd59ee01f8772dd6598ca446b22ab5f1c",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 58,
+        "prompt_tokens": 1262,
+        "total_tokens": 1320,
+        "prompt_tokens_details": {
+          "cached_tokens": 1106
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"reason\": \"The context does not mention anything about resistance to the Portuguese dictatorship or the Museu do Aljube. It only talks about a pastry shop in Belém and its offerings, which is unrelated to the question.\",\n    \"verdict\": 0\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_recall",
+      "case_id": "rag-04",
+      "prompt_sha256": "dfff2b49b2120fb98e830a4c6dcbc52615ca9fa65f137d19766dd9bf94932899",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 137,
+        "prompt_tokens": 1929,
+        "total_tokens": 2066,
+        "prompt_tokens_details": {
+          "cached_tokens": 1617
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"classifications\": [\n        {\n            \"statement\": \"Museu do Aljube - Resistência e Liberdade: Музей Алжубе посвящён сопротивлению диктатуре, борьбе за свободу и памяти политических заключённых в Португалии.\",\n            \"reason\": \"The statement is directly taken from the context, which mentions the Museu do Aljube and its focus on resistance to the dictatorship, struggle for freedom, and memory of political prisoners in Portugal.\",\n            \"attributed\": 1\n        }\n    ]\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_precision",
+      "case_id": "rag-05",
+      "prompt_sha256": "9ffc6df4dadddf4043e9d7a74bec6e9c2a61396ec07198557872ac2a389a3899",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 68,
+        "prompt_tokens": 1251,
+        "total_tokens": 1319,
+        "prompt_tokens_details": {
+          "cached_tokens": 1078
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"reason\": \"The provided context directly matches the answer and addresses the question about political prisoners and the struggle for freedom. The context mentions the Museum of Aljube, which is dedicated to resistance against dictatorship, the fight for freedom, and the memory of political prisoners in Portugal.\",\n    \"verdict\": 1\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_recall",
+      "case_id": "rag-05",
+      "prompt_sha256": "a1fd812caad63daaf0666295932a49074674791e6d01b6afc155f65125b8a850",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 112,
+        "prompt_tokens": 1790,
+        "total_tokens": 1902,
+        "prompt_tokens_details": {
+          "cached_tokens": 1617
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"classifications\": [\n        {\n            \"statement\": \"Museu do Aljube - Resistência e Liberdade: Музей Алжубе посвящён сопротивлению диктатуре, борьбе за свободу и памяти политических заключённых в Португалии.\",\n            \"reason\": \"The statement is directly taken from the context and matches the content exactly.\",\n            \"attributed\": 1\n        }\n    ]\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_precision",
+      "case_id": "rag-06",
+      "prompt_sha256": "20fd8bb86a7d9d7a869650d89ae1fe3a9edb27e547b0fce3ba4215bf0c2d660d",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 57,
+        "prompt_tokens": 1255,
+        "total_tokens": 1312,
+        "prompt_tokens_details": {
+          "cached_tokens": 1078
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"reason\": \"The provided context directly matches the answer, as it contains the exact information about the Museum of Aljube focusing on resistance to dictatorship, the struggle for freedom, and the memory of political prisoners in Portugal.\",\n    \"verdict\": 1\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_recall",
+      "case_id": "rag-06",
+      "prompt_sha256": "dfe489a3652504582170f261a7f19ecfdf8e632674f690a4070db26a65230629",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 129,
+        "prompt_tokens": 1794,
+        "total_tokens": 1923,
+        "prompt_tokens_details": {
+          "cached_tokens": 1617
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"classifications\": [\n        {\n            \"statement\": \"Museu do Aljube - Resistência e Liberdade: Музей Алжубе посвящён сопротивлению диктатуре, борьбе за свободу и памяти политических заключённых в Португалии.\",\n            \"reason\": \"The statement is directly taken from the context and matches the information provided about the museum's focus on resistance, freedom, and memory of political prisoners in Portugal.\",\n            \"attributed\": 1\n        }\n    ]\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_precision",
+      "case_id": "rag-07",
+      "prompt_sha256": "91251e3166a45d2ad335657090751fbbe0c354bf137dec4ed474267da401ac4b",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 76,
+        "prompt_tokens": 1303,
+        "total_tokens": 1379,
+        "prompt_tokens_details": {
+          "cached_tokens": 1078
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"reason\": \"The context provides information about several historical museums in Lisbon, including Museu Arqueológico do Carmo and Museu do Aljube - Resistência e Liberdade, which are relevant to the question. The answer lists these museums, so the context was useful in arriving at the given answer.\",\n    \"verdict\": 1\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_precision",
+      "case_id": "rag-07",
+      "prompt_sha256": "f08ffdce99ad73daa39d3b9623be9adddc3d70fb4715fe87208c68c278ac4b54",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 95,
+        "prompt_tokens": 1345,
+        "total_tokens": 1440,
+        "prompt_tokens_details": {
+          "cached_tokens": 1103
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"reason\": \"The context provides information about several museums in Lisbon, including Museu do Aljube - Resistência e Liberdade, which is directly mentioned in the answer. However, the answer includes additional museums not mentioned in the context, such as Museu Arqueológico do Carmo and Museu Nacional do Desporto. Therefore, the context is partially useful but does not fully support the answer.\",\n    \"verdict\": 0\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_recall",
+      "case_id": "rag-07",
+      "prompt_sha256": "5a57e8166cd8bc933f01ecfad428ee04c0ab1db65de63b8314a2343a1b4a0bd2",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 357,
+        "prompt_tokens": 1908,
+        "total_tokens": 2265,
+        "prompt_tokens_details": {
+          "cached_tokens": 1617
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"classifications\": [\n        {\n            \"statement\": \"Museu Arqueológico do Carmo: Археологический музей Карму расположен среди руин монастыря. Его коллекция включает археологические и исторические предметы разных эпох.\",\n            \"reason\": \"The statement about the Museu Arqueológico do Carmo is not present in the context provided. The context does not mention this museum or its location and collection.\",\n            \"attributed\": 0\n        },\n        {\n            \"statement\": \"Museu do Aljube - Resistência e Liberdade: Музей Алжубе посвящён сопротивлению диктатуре, борьбе за свободу и памяти политических заключённых в Португалии.\",\n            \"reason\": \"The exact statement is present in the context, describing the Museu do Aljube.\",\n            \"attributed\": 1\n        },\n        {\n            \"statement\": \"Casa dos Bicos - núcleo arqueológico (piso 0): Категория каталога: history\",\n            \"reason\": \"The statement about Casa dos Bicos is not present in the context provided. The context does not mention this location or its category.\",\n            \"attributed\": 0\n        },\n        {\n            \"statement\": \"Museu Nacional do Desporto: Категория каталога: history\",\n            \"reason\": \"The exact statement is present in the context, describing the Museu Nacional do Desporto and its category.\",\n            \"attributed\": 1\n        }\n    ]\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_precision",
+      "case_id": "rag-08",
+      "prompt_sha256": "26f6c22d13b04755a89b9ba787b3db99b3d657fcea26f42ad490e3d2e89ad7e3",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 78,
+        "prompt_tokens": 1329,
+        "total_tokens": 1407,
+        "prompt_tokens_details": {
+          "cached_tokens": 1078
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"reason\": \"The context provided contains specific information about museums related to history and archaeology, including details about the Museu Arqueológico do Carmo and other museums. The answer directly references the Museu Arqueológico do Carmo, which is mentioned in the context, making the context useful in arriving at the answer.\",\n    \"verdict\": 1\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_precision",
+      "case_id": "rag-08",
+      "prompt_sha256": "d053df4008147b716b256aa47708bda5396ac84ae99a4af71a0d1723cc635387",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 67,
+        "prompt_tokens": 1299,
+        "total_tokens": 1366,
+        "prompt_tokens_details": {
+          "cached_tokens": 1099
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"reason\": \"The context provided contains relevant information about museums related to history and archaeology, including specific details about the Museu Arqueológico do Carmo and other museums mentioned. These details align with the answer provided, which lists museums related to archaeology and history.\",\n    \"verdict\": 1\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_precision",
+      "case_id": "rag-08",
+      "prompt_sha256": "4cbec9f2f4a1826073e7a1346524ac4a935a49ccf6e9db26108c2e18b3985184",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 73,
+        "prompt_tokens": 1328,
+        "total_tokens": 1401,
+        "prompt_tokens_details": {
+          "cached_tokens": 1099
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"reason\": \"The context provides information about several museums, including the Archaeological Museum of Carmo, which is relevant to the question about museums of history and archaeology. However, the context does not explicitly mention the museums of history and archaeology that the user is seeking, making it somewhat indirect.\",\n    \"verdict\": 1\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_recall",
+      "case_id": "rag-08",
+      "prompt_sha256": "842a7ce17337c78fa221d424277dba96255f13cfcce699bcecdbea8801bbd0f0",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 398,
+        "prompt_tokens": 1945,
+        "total_tokens": 2343,
+        "prompt_tokens_details": {
+          "cached_tokens": 1617
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"classifications\": [\n        {\n            \"statement\": \"Museu Arqueológico do Carmo: Археологический музей Карму расположен среди руин монастыря. Его коллекция включает археологические и исторические предметы разных эпох.\",\n            \"reason\": \"The statement is directly taken from the context and describes the Museu Arqueológico do Carmo, which is relevant to the question about museums of history and archaeology.\",\n            \"attributed\": 1\n        },\n        {\n            \"statement\": \"Museu do Aljube - Resistência e Liberdade: Музей Алжубе посвящён сопротивлению диктатуре, борьбе за свободу и памяти политических заключённых в Португалии.\",\n            \"reason\": \"This statement is not present in the context provided. The context does not mention the Museu do Aljube or its subject matter.\",\n            \"attributed\": 0\n        },\n        {\n            \"statement\": \"Casa dos Bicos - núcleo arqueológico (piso 0): Категория каталога: history\",\n            \"reason\": \"The context mentions 'Casa dos Bicos - núcleo arqueológico (piso 0)' and categorizes it under 'history', which aligns with the question about museums of history and archaeology.\",\n            \"attributed\": 1\n        },\n        {\n            \"statement\": \"Museu Nacional do Desporto: Категория каталога: history\",\n            \"reason\": \"The context mentions 'Museu Nacional do Desporto' and categorizes it under 'history', which is relevant to the question about museums of history and archaeology.\",\n            \"attributed\": 1\n        }\n    ]\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_precision",
+      "case_id": "rag-09",
+      "prompt_sha256": "980c56ed2c8a2b0996e5f5d4005d9a1ff13498a5b2f2b593d62a54beb64c2338",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 73,
+        "prompt_tokens": 1244,
+        "total_tokens": 1317,
+        "prompt_tokens_details": {
+          "cached_tokens": 1078
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"reason\": \"The context was useful in arriving at the given answer. It directly mentions the Museu Nacional de Arte Contemporânea (MNAC) as a place where Portuguese art from the 19th century to the present, including painting, can be viewed, which matches the answer.\",\n    \"verdict\": 1\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_precision",
+      "case_id": "rag-09",
+      "prompt_sha256": "0a1ff8660193c9cf379058624496843bee83df564d3c04ed89be48cbaf5ae59d",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 75,
+        "prompt_tokens": 1248,
+        "total_tokens": 1323,
+        "prompt_tokens_details": {
+          "cached_tokens": 1107
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"reason\": \"The context provided is about the Museu do Aljube, which focuses on resistance and freedom, not on Portuguese art from the 19th century to the present. Therefore, it is not directly relevant to the question about where to see Portuguese 19th-century and modern art.\",\n    \"verdict\": 0\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_recall",
+      "case_id": "rag-09",
+      "prompt_sha256": "71f391ec6905f4336176602dda086f0f2c86f236f74e7851a38dcbe0116ba7e0",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 142,
+        "prompt_tokens": 1849,
+        "total_tokens": 1991,
+        "prompt_tokens_details": {
+          "cached_tokens": 1617
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"classifications\": [\n        {\n            \"statement\": \"Museu Nacional de Arte Contemporânea (MNAC): Национальный музей современного искусства представляет португальское искусство с середины XIX века до современности, в том числе живопись и скульптуру.\",\n            \"reason\": \"Это точное совпадение с контекстом, где указано, что MNAC представляет португальское искусство с середины XIX века до современности, включая живопись.\",\n            \"attributed\": 1\n        }\n    ]\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_precision",
+      "case_id": "rag-10",
+      "prompt_sha256": "54309e2f8e5682c12f0ea9d907a93eca220d2ba806d02c11400784db91e922a2",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 70,
+        "prompt_tokens": 1241,
+        "total_tokens": 1311,
+        "prompt_tokens_details": {
+          "cached_tokens": 1078
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"reason\": \"The provided context was useful in arriving at the given answer. The context directly mentions the Museu Nacional de Arte Contemporânea (MNAC) and describes it as representing Portuguese art from the mid-19th century to the present, which matches the answer.\",\n    \"verdict\": 1\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_precision",
+      "case_id": "rag-10",
+      "prompt_sha256": "acb1971d815ae50dd3ea9260f1f520e7a703e62c2d6dd27f581dcc344f498521",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 61,
+        "prompt_tokens": 1245,
+        "total_tokens": 1306,
+        "prompt_tokens_details": {
+          "cached_tokens": 1104
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"reason\": \"The provided context does not mention the National Museum of Contemporary Art (MNAC) or any information about modern art in Portugal that is reflected in the answer. Therefore, the context was not useful in arriving at the given answer.\",\n    \"verdict\": 0\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_recall",
+      "case_id": "rag-10",
+      "prompt_sha256": "1a6ac589366a817f147aec2fe85f137303cb742ca6fe4669fb2e660abb8e67b7",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 142,
+        "prompt_tokens": 1846,
+        "total_tokens": 1988,
+        "prompt_tokens_details": {
+          "cached_tokens": 1617
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"classifications\": [\n        {\n            \"statement\": \"Museu Nacional de Arte Contemporânea (MNAC): Национальный музей современного искусства представляет португальское искусство с середины XIX века до современности, в том числе живопись и скульптуру.\",\n            \"reason\": \"Это точное утверждение присутствует в контексте, где говорится о том, что музей представляет португальское искусство с середины XIX века до современности.\",\n            \"attributed\": 1\n        }\n    ]\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_precision",
+      "case_id": "rag-11",
+      "prompt_sha256": "ecc553eaa7ab69c554d6f21466f0adee13d9cc5fe8d68c585243f3b83ebb2147",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 68,
+        "prompt_tokens": 1242,
+        "total_tokens": 1310,
+        "prompt_tokens_details": {
+          "cached_tokens": 1078
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"reason\": \"The provided context was useful in arriving at the given answer. The context directly provides the information about the National Museum of Contemporary Art (MNAC), including its name in Portuguese and its focus on Portuguese art from the mid-19th century to the present.\",\n    \"verdict\": 1\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_precision",
+      "case_id": "rag-11",
+      "prompt_sha256": "1b5514140a024075a61d25d0e5afdebbae456e1c7440cd1fe83e592320bd2f20",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 52,
+        "prompt_tokens": 1233,
+        "total_tokens": 1285,
+        "prompt_tokens_details": {
+          "cached_tokens": 1105
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"reason\": \"The provided context does not mention the National Museum of Contemporary Art (MNAC) or any information related to it. Therefore, it was not useful in arriving at the given answer.\",\n    \"verdict\": 0\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_recall",
+      "case_id": "rag-11",
+      "prompt_sha256": "18a78f460c26e0fa2fb2cdebe73ccb8cdb23415fa3c328f10e64cc82cefc2e3d",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 119,
+        "prompt_tokens": 1834,
+        "total_tokens": 1953,
+        "prompt_tokens_details": {
+          "cached_tokens": 1617
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"classifications\": [\n        {\n            \"statement\": \"Museu Nacional de Arte Contemporânea (MNAC): Национальный музей современного искусства представляет португальское искусство с середины XIX века до современности, в том числе живопись и скульптуру.\",\n            \"reason\": \"Это точное совпадение с контекстом, где описывается MNAC и его коллекция.\",\n            \"attributed\": 1\n        }\n    ]\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_precision",
+      "case_id": "rag-12",
+      "prompt_sha256": "c1bd56e99031face2f9ea407ef7dbfc64af6d6dec654349d7da018c8523709fd",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 45,
+        "prompt_tokens": 1222,
+        "total_tokens": 1267,
+        "prompt_tokens_details": {
+          "cached_tokens": 1078
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"reason\": \"The provided context directly answers the question by mentioning that the Museu de São Roque contains relics and religious art, which matches the answer exactly.\",\n    \"verdict\": 1\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_precision",
+      "case_id": "rag-12",
+      "prompt_sha256": "18d8035124da4ff35ff9edf3d26d7f1ddf0773948f2ac2868f7ec0352ab4c587",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 80,
+        "prompt_tokens": 1223,
+        "total_tokens": 1303,
+        "prompt_tokens_details": {
+          "cached_tokens": 1103
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"reason\": \"The context mentions the Archaeological Museum of Carmo and its collection of archaeological and historical items, but it does not directly mention reliquaries or religious art. The answer refers to the Museum of São Roque, which is not mentioned in the context, so the context was not useful in arriving at the given answer.\",\n    \"verdict\": 0\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_precision",
+      "case_id": "rag-12",
+      "prompt_sha256": "6ecfb421cd36f73bad93bbcd48eb19d771a9fff9c017acb422a98dfa94779c47",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 93,
+        "prompt_tokens": 1231,
+        "total_tokens": 1324,
+        "prompt_tokens_details": {
+          "cached_tokens": 1103
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"reason\": \"The context mentions the Museu Nacional de Arte Contemporânea (MNAC) and its collection of Portuguese art from the mid-19th century to the present, including painting and sculpture. However, it does not mention religious art or reliquaries, which are central to the question and the answer. Therefore, the context is not useful in arriving at the given answer.\",\n    \"verdict\": 0\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_recall",
+      "case_id": "rag-12",
+      "prompt_sha256": "17b92ee442396cdee6aa6d7fb00545e96b3158123712a83fa73e63edac588083",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 137,
+        "prompt_tokens": 1877,
+        "total_tokens": 2014,
+        "prompt_tokens_details": {
+          "cached_tokens": 1617
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"classifications\": [\n        {\n            \"statement\": \"Museu de São Roque: Музей Сан-Роке хранит коллекцию религиозного искусства: живопись, скульптуру, реликварии и ткани.\",\n            \"reason\": \"Это точное совпадение с контекстом, где упоминается, что Музей Сан-Роке хранит коллекцию религиозного искусства, включая реликварии.\",\n            \"attributed\": 1\n        }\n    ]\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_precision",
+      "case_id": "rag-13",
+      "prompt_sha256": "48252ba308fd6f013a207602d2029b922a2c35c42eab21f5ef324e74d8ee8686",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 46,
+        "prompt_tokens": 1231,
+        "total_tokens": 1277,
+        "prompt_tokens_details": {
+          "cached_tokens": 1078
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"reason\": \"The provided context directly matches the answer and contains the exact information needed to answer the question about where to view religious art and sculpture of São Roque.\",\n    \"verdict\": 1\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_recall",
+      "case_id": "rag-13",
+      "prompt_sha256": "d4008023d1cb24b5397a1446f33268f67d6cdcd5b8d58c3b8263a3e477fd7c49",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 99,
+        "prompt_tokens": 1770,
+        "total_tokens": 1869,
+        "prompt_tokens_details": {
+          "cached_tokens": 1617
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"classifications\": [\n        {\n            \"statement\": \"Museu de São Roque: Музей Сан-Роке хранит коллекцию религиозного искусства: живопись, скульптуру, реликварии и ткани.\",\n            \"reason\": \"The statement is identical to the context, so it is directly attributable.\",\n            \"attributed\": 1\n        }\n    ]\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_precision",
+      "case_id": "rag-14",
+      "prompt_sha256": "4628aaa540df0c1e35b18602559b2a9e54aa157413ccb457b27f8378dbd2835c",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 46,
+        "prompt_tokens": 1224,
+        "total_tokens": 1270,
+        "prompt_tokens_details": {
+          "cached_tokens": 1078
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"reason\": \"The provided context directly matches the answer and contains the exact information about the collection of religious art, including textiles, which is the focus of the question.\",\n    \"verdict\": 1\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_precision",
+      "case_id": "rag-14",
+      "prompt_sha256": "260966528c81e3cab8f10856e9ba3821b79be1300b3f374405bfb62e41074879",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 80,
+        "prompt_tokens": 1225,
+        "total_tokens": 1305,
+        "prompt_tokens_details": {
+          "cached_tokens": 1105
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"reason\": \"The context provided mentions the Archaeological Museum of Carmo and its collection of archaeological and historical items, but it does not directly mention religious art or textiles. The answer refers to the Museum of São Roque, which is not discussed in the context. Therefore, the context is not useful in arriving at the given answer.\",\n    \"verdict\": 0\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_recall",
+      "case_id": "rag-14",
+      "prompt_sha256": "27d0aab965acfda45c40ffa0e1549a1c8a32e93384484974bfefbb442d9cf127",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 112,
+        "prompt_tokens": 1817,
+        "total_tokens": 1929,
+        "prompt_tokens_details": {
+          "cached_tokens": 1617
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"classifications\": [\n        {\n            \"statement\": \"Museu de São Roque: Музей Сан-Роке хранит коллекцию религиозного искусства: живопись, скульптуру, реликварии и ткани.\",\n            \"reason\": \"The statement is directly taken from the context, which mentions that Museu de São Roque holds a collection of religious art including textiles.\",\n            \"attributed\": 1\n        }\n    ]\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_precision",
+      "case_id": "rag-15",
+      "prompt_sha256": "87303fbc7d22ff9e842ffb5d79431faeac0614f5bb9a64d3f6597aa00aedf8b1",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 45,
+        "prompt_tokens": 1296,
+        "total_tokens": 1341,
+        "prompt_tokens_details": {
+          "cached_tokens": 1078
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"reason\": \"The context was useful in arriving at the given answer. It provides specific information about museums that exhibit painting and sculpture, which directly answers the question.\",\n    \"verdict\": 1\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_precision",
+      "case_id": "rag-15",
+      "prompt_sha256": "6c4f55eb9d679e41c1ffdda6e837bfbde674bde2e64b4249f1fe66da0e92bd98",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 73,
+        "prompt_tokens": 1287,
+        "total_tokens": 1360,
+        "prompt_tokens_details": {
+          "cached_tokens": 1106
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"reason\": \"The context was useful in arriving at the given answer. It mentions Museu de São Roque, which is included in the answer, and provides information about the types of art it houses, such as painting and sculpture, which aligns with the question about museums of painting and sculpture.\",\n    \"verdict\": 1\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_precision",
+      "case_id": "rag-15",
+      "prompt_sha256": "2c037dfb1298620bf7b53812d1811b8b68e5fe2d3f248bd2acd4834d3450dc81",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 67,
+        "prompt_tokens": 1258,
+        "total_tokens": 1325,
+        "prompt_tokens_details": {
+          "cached_tokens": 1106
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"reason\": \"The context provided contains information about museums that include paintings and sculptures, specifically mentioning Museu Nacional de Arte Contemporânea (MNAC) and Museu de São Roque. These museums are directly relevant to the question about museums of painting and sculpture.\",\n    \"verdict\": 1\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_recall",
+      "case_id": "rag-15",
+      "prompt_sha256": "de45e77e17bc7d5b50b1ad9d1c998181ae6ff3358efcb3b9fd3e056bde69bb26",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 249,
+        "prompt_tokens": 1912,
+        "total_tokens": 2161,
+        "prompt_tokens_details": {
+          "cached_tokens": 1617
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"classifications\": [\n        {\n            \"statement\": \"Museu Nacional de Arte Contemporânea (MNAC): Национальный музей современного искусства представляет португальское искусство с середины XIX века до современности, в том числе живопись и скульптуру.\",\n            \"reason\": \"Это утверждение полностью совпадает с контекстом, где говорится о музеях живописи и скульптуры.\",\n            \"attributed\": 1\n        },\n        {\n            \"statement\": \"Museu de São Roque: Музей Сан-Роке хранит коллекцию религиозного искусства: живопись, скульптуру, реликварии и ткани.\",\n            \"reason\": \"Это утверждение также полностью совпадает с контекстом, где упоминается музей, хранящий коллекцию живописи и скульптуры.\",\n            \"attributed\": 1\n        }\n    ]\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_precision",
+      "case_id": "rag-16",
+      "prompt_sha256": "937543dece1e84776470cfb79f39f7a3e401690be96cd4da6256b9ec160c4d84",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 90,
+        "prompt_tokens": 1303,
+        "total_tokens": 1393,
+        "prompt_tokens_details": {
+          "cached_tokens": 1078
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"reason\": \"The provided context includes information about Museu de São Roque, which is mentioned in the answer. However, the answer refers to Museu Nacional de Arte Contemporânea (MNAC) and Casa Ásia - Coleção Francisco Capelo, which are not discussed in the context. Therefore, the context is not fully useful in arriving at the given answer.\",\n    \"verdict\": 0\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_precision",
+      "case_id": "rag-16",
+      "prompt_sha256": "4e79dcc462da80181056f42d2d89f8cc24831765b859deb43218394c5604e065",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 70,
+        "prompt_tokens": 1312,
+        "total_tokens": 1382,
+        "prompt_tokens_details": {
+          "cached_tokens": 1101
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"reason\": \"The context provided contains information about several art museums, including the Museu Nacional de Arte Contemporânea (MNAC), which directly matches the answer. The answer is a direct copy of the context, indicating that the context was useful in arriving at the given answer.\",\n    \"verdict\": 1\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_precision",
+      "case_id": "rag-16",
+      "prompt_sha256": "a356aaff798c436513a1aba51c126cc7242bc55df013737f7bf0eea6770fb7f8",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 49,
+        "prompt_tokens": 1274,
+        "total_tokens": 1323,
+        "prompt_tokens_details": {
+          "cached_tokens": 1102
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"reason\": \"The provided context does not contain any information about art museums, which are the focus of the question. The context only mentions a sports museum and some other unrelated categories.\",\n    \"verdict\": 0\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_recall",
+      "case_id": "rag-16",
+      "prompt_sha256": "ba75071adfb0d630e07b81ddfe38158e987f55626d8762d90896577ba1ca857e",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 275,
+        "prompt_tokens": 1928,
+        "total_tokens": 2203,
+        "prompt_tokens_details": {
+          "cached_tokens": 1617
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"classifications\": [\n        {\n            \"statement\": \"Museu Nacional de Arte Contemporânea (MNAC): Национальный музей современного искусства представляет португальское искусство с середины XIX века до современности, в том числе живопись и скульптуру.\",\n            \"reason\": \"Это точное утверждение присутствует в контексте.\",\n            \"attributed\": 1\n        },\n        {\n            \"statement\": \"Museu de São Roque: Музей Сан-Роке хранит коллекцию религиозного искусства: живопись, скульптуру, реликварии и ткани.\",\n            \"reason\": \"Это точное утверждение присутствует в контексте.\",\n            \"attributed\": 1\n        },\n        {\n            \"statement\": \"Casa Ásia - Coleção Francisco Capelo: Категория каталога: art\",\n            \"reason\": \"В контексте нет упоминания о категории каталога \\\"art\\\" для Casa Ásia - Coleção Francisco Capelo.\",\n            \"attributed\": 0\n        }\n    ]\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_precision",
+      "case_id": "rag-17",
+      "prompt_sha256": "b0ffd8829e2adbc8ade55253e55db168b5519a8c988fceb332225fb2515f3c4a",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 50,
+        "prompt_tokens": 1248,
+        "total_tokens": 1298,
+        "prompt_tokens_details": {
+          "cached_tokens": 1078
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"reason\": \"The provided context directly matches the answer and contains the exact information about the botanical garden with a collection of plants and terraces, which is what the question is asking for.\",\n    \"verdict\": 1\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_recall",
+      "case_id": "rag-17",
+      "prompt_sha256": "2e3d9b7f2ec9729aa5182b88aa5a8bf2942c342c9f7dd70f0edce2e91a2fc71e",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 145,
+        "prompt_tokens": 1787,
+        "total_tokens": 1932,
+        "prompt_tokens_details": {
+          "cached_tokens": 1617
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"classifications\": [\n        {\n            \"statement\": \"Jardim Botânico da Ajuda: Ботанический сад Ажуда знакомит с коллекцией растений.\",\n            \"reason\": \"The statement is directly taken from the context and matches the information provided.\",\n            \"attributed\": 1\n        },\n        {\n            \"statement\": \"Террасы, фонтаны и зелёные пространства подходят для прогулки среди природы.\",\n            \"reason\": \"The statement is directly taken from the context and matches the information provided.\",\n            \"attributed\": 1\n        }\n    ]\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_precision",
+      "case_id": "rag-18",
+      "prompt_sha256": "1dd300034f38d78769128cac4e064d47aaa921b91e84fbb409d88693932ec2b0",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 47,
+        "prompt_tokens": 1248,
+        "total_tokens": 1295,
+        "prompt_tokens_details": {
+          "cached_tokens": 1078
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"reason\": \"The provided context directly matches the answer and provides relevant information about the Botanical Garden of Ajuda, including its features that make it suitable for a walk.\",\n    \"verdict\": 1\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_precision",
+      "case_id": "rag-18",
+      "prompt_sha256": "c35486e721943f1a409a4a8f3273a7b5293c94eefa7f5b1821321e902b55f511",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 97,
+        "prompt_tokens": 1256,
+        "total_tokens": 1353,
+        "prompt_tokens_details": {
+          "cached_tokens": 1106
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"reason\": \"The context provides information about the Estufa Fria de Lisboa, which is part of the Eduardo VII Park, and mentions a walk among plants, water features, and cascades. However, it does not directly mention the Jardim Botânico da Ajuda or its features, which are described in the answer. Therefore, the context is not directly useful in arriving at the given answer.\",\n    \"verdict\": 0\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_precision",
+      "case_id": "rag-18",
+      "prompt_sha256": "9abfea16c66520977906f952bf02d360327c0e61a1b50dcd8c716bf87974ebcb",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 95,
+        "prompt_tokens": 1264,
+        "total_tokens": 1359,
+        "prompt_tokens_details": {
+          "cached_tokens": 1106
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"reason\": \"The context provided information about Jardim Gulbenkian, which is a botanical garden, and mentions elements like trees, plants, a lake, and birds, which are relevant to the question about walking in the Ajuda Botanical Garden. However, the context does not directly mention the Ajuda Botanical Garden or its specific features, making it less useful for arriving at the given answer.\",\n    \"verdict\": 0\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_recall",
+      "case_id": "rag-18",
+      "prompt_sha256": "43b8e0480455edc846ea9a000794fa09bdf17da7714b09edf3e92d5bf4370382",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 119,
+        "prompt_tokens": 1937,
+        "total_tokens": 2056,
+        "prompt_tokens_details": {
+          "cached_tokens": 1617
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"classifications\": [\n        {\n            \"statement\": \"Jardim Botânico da Ajuda: Ботанический сад Ажуда знакомит с коллекцией растений. Террасы, фонтаны и зелёные пространства подходят для прогулки среди природы.\",\n            \"reason\": \"The statement is directly taken from the context, describing the Jardim Botânico da Ajuda and its features.\",\n            \"attributed\": 1\n        }\n    ]\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_precision",
+      "case_id": "rag-19",
+      "prompt_sha256": "156614da508cb999ff84196ea948017dabd23041295014cde3188538d8fa8558",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 70,
+        "prompt_tokens": 1265,
+        "total_tokens": 1335,
+        "prompt_tokens_details": {
+          "cached_tokens": 1078
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"reason\": \"The provided context was useful in arriving at the given answer. The context directly mentions the location (Estufa Fria de Lisboa) and specifies that it includes the required zones (cold, warm, and succulent areas), which matches the question and answer exactly.\",\n    \"verdict\": 1\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_recall",
+      "case_id": "rag-19",
+      "prompt_sha256": "6c46edd28432e26f8e3c00c195bdaf9a58d9f147ffcc9d29d2fbffcb6d17c6ee",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 123,
+        "prompt_tokens": 1804,
+        "total_tokens": 1927,
+        "prompt_tokens_details": {
+          "cached_tokens": 1617
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"classifications\": [\n        {\n            \"statement\": \"Estufa Fria de Lisboa: Оранжерейный комплекс Estufa Fria в парке Эдуарда VII. Прогулка среди растений, водоёмов и каскадов; включает холодную, тёплую и суккулентную зоны.\",\n            \"reason\": \"The entire statement is directly present in the context, describing the location and features of the greenhouse complex.\",\n            \"attributed\": 1\n        }\n    ]\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_precision",
+      "case_id": "rag-20",
+      "prompt_sha256": "71c9ad51aef26afac58eb62238e3f722013f33f2ce3b1529225a2d340af6892b",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 56,
+        "prompt_tokens": 1262,
+        "total_tokens": 1318,
+        "prompt_tokens_details": {
+          "cached_tokens": 1078
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"reason\": \"The provided context was useful in arriving at the given answer. The context directly describes Estufa Fria, including the mention of plants and cascades, which are exactly what the question asks about.\",\n    \"verdict\": 1\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_recall",
+      "case_id": "rag-20",
+      "prompt_sha256": "927a3237a73e41d2df60444a867847987ebb1c19cd7d830971d329313f41726c",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 197,
+        "prompt_tokens": 1801,
+        "total_tokens": 1998,
+        "prompt_tokens_details": {
+          "cached_tokens": 1617
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"classifications\": [\n        {\n            \"statement\": \"Estufa Fria de Lisboa: Оранжерейный комплекс Estufa Fria в парке Эдуарда VII.\",\n            \"reason\": \"The statement is directly taken from the context and describes the location of Estufa Fria.\",\n            \"attributed\": 1\n        },\n        {\n            \"statement\": \"Прогулка среди растений, водоёмов и каскадов;\",\n            \"reason\": \"The context explicitly mentions walking among plants, water features, and waterfalls.\",\n            \"attributed\": 1\n        },\n        {\n            \"statement\": \"включает холодную, тёплую и суккулентную зоны.\",\n            \"reason\": \"The context states that the complex includes cold, warm, and succulent zones.\",\n            \"attributed\": 1\n        }\n    ]\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_precision",
+      "case_id": "rag-21",
+      "prompt_sha256": "541d84ade1dbd4fe2d048053e2d71c3f6fd7dad34ee8fb610b9d40b3188a1e56",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 64,
+        "prompt_tokens": 1276,
+        "total_tokens": 1340,
+        "prompt_tokens_details": {
+          "cached_tokens": 1078
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"reason\": \"The provided context was indeed useful in arriving at the given answer. The context directly mentions the Jardim Gulbenkian as a free garden with trees, plants, a lake, and birds, which matches the question and the answer.\",\n    \"verdict\": 1\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_precision",
+      "case_id": "rag-21",
+      "prompt_sha256": "1f4095d7935081fb31a041be04808e55a5d1ec1c9ebb6d9c06743093f5b90c3f",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 86,
+        "prompt_tokens": 1260,
+        "total_tokens": 1346,
+        "prompt_tokens_details": {
+          "cached_tokens": 1105
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"reason\": \"The context provided information about the Jardim Botânico da Ajuda, which includes terraces, fountains, and green spaces suitable for walking among nature. However, the answer refers to Jardim Gulbenkian, which is not mentioned in the context. Therefore, the context is not directly useful in arriving at the given answer.\",\n    \"verdict\": 0\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_recall",
+      "case_id": "rag-21",
+      "prompt_sha256": "8ee4e74d9eca7bb49a0265686f46beee498a3894d8966a60a6ecbc1ce0727935",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 226,
+        "prompt_tokens": 1878,
+        "total_tokens": 2104,
+        "prompt_tokens_details": {
+          "cached_tokens": 1617
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"classifications\": [\n        {\n            \"statement\": \"Jardim Gulbenkian — прогулка по саду: Бесплатный сад фонда Гулбенкяна.\",\n            \"reason\": \"Это точное утверждение присутствует в контексте.\",\n            \"attributed\": 1\n        },\n        {\n            \"statement\": \"Деревья, растения, озеро и птицы для спокойной прогулки на открытом воздухе.\",\n            \"reason\": \"Эти элементы упоминаются в контексте как характеристики сада Jardim Gulbenkian.\",\n            \"attributed\": 1\n        },\n        {\n            \"statement\": \"Посещение музеев в эту остановку не входит.\",\n            \"reason\": \"Это утверждение присутствует в контексте как дополнительная информация о саде.\",\n            \"attributed\": 1\n        }\n    ]\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_precision",
+      "case_id": "rag-22",
+      "prompt_sha256": "d9fcc12325f62ceef5d84972613845cd1835029f776d618f387e00983b7597ec",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 56,
+        "prompt_tokens": 1281,
+        "total_tokens": 1337,
+        "prompt_tokens_details": {
+          "cached_tokens": 1078
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"reason\": \"The provided context was indeed useful in arriving at the given answer. The context directly describes the Jardim Gulbenkian as a peaceful place for a walk, which matches the question's intent.\",\n    \"verdict\": 1\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_precision",
+      "case_id": "rag-22",
+      "prompt_sha256": "d91f7a48bea95058fe6f4e74e1f2ca58beecb6bc6d95c478484fc6b8af7b4a92",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 88,
+        "prompt_tokens": 1265,
+        "total_tokens": 1353,
+        "prompt_tokens_details": {
+          "cached_tokens": 1110
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"reason\": \"The context provided does not mention Jardim Gulbenkian or any information about a peaceful walk in that garden. The answer refers to Jardim Gulbenkian, but the context only talks about Jardim Botânico da Ajuda, which is a different location. Therefore, the context was not useful in arriving at the given answer.\",\n    \"verdict\": 0\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_recall",
+      "case_id": "rag-22",
+      "prompt_sha256": "8a1eccd39ca53d8c936f937fd99e121fb7ebbfab47f53f206966fe7150edc03e",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 220,
+        "prompt_tokens": 1883,
+        "total_tokens": 2103,
+        "prompt_tokens_details": {
+          "cached_tokens": 1617
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"classifications\": [\n        {\n            \"statement\": \"Jardim Gulbenkian — прогулка по саду: Бесплатный сад фонда Гулбенкяна.\",\n            \"reason\": \"Это точное утверждение присутствует в контексте.\",\n            \"attributed\": 1\n        },\n        {\n            \"statement\": \"Деревья, растения, озеро и птицы для спокойной прогулки на открытом воздухе.\",\n            \"reason\": \"Это описание элементов сада, присутствующее в контексте.\",\n            \"attributed\": 1\n        },\n        {\n            \"statement\": \"Посещение музеев в эту остановку не входит.\",\n            \"reason\": \"Это утверждение описывает дополнительную информацию, которая также присутствует в контексте.\",\n            \"attributed\": 1\n        }\n    ]\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_precision",
+      "case_id": "rag-23",
+      "prompt_sha256": "ea6a18a8db804faa802151bd90ec4128b35d22e085350339f0c9c42985b98560",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 80,
+        "prompt_tokens": 1394,
+        "total_tokens": 1474,
+        "prompt_tokens_details": {
+          "cached_tokens": 1078
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"reason\": \"The context provided includes information about Jardim Botânico da Ajuda, which mentions green spaces suitable for walking, directly answering the question about whether plants and green spaces are liked for walking. The answer also includes additional details from other locations, but the core information about green spaces for walking is present in the context.\",\n    \"verdict\": 1\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_precision",
+      "case_id": "rag-23",
+      "prompt_sha256": "8010567ad46a04c0cef419f95e1f04a3ecda5abea54c222a5ce6c7617092c28d",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 72,
+        "prompt_tokens": 1410,
+        "total_tokens": 1482,
+        "prompt_tokens_details": {
+          "cached_tokens": 1105
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"reason\": \"The context provided includes information about Jardim Gulbenkian, which mentions trees, plants, lakes, and birds for a peaceful walk outdoors. This directly supports the answer, which refers to green spaces and plants suitable for walking. The context is useful in confirming the answer.\",\n    \"verdict\": 1\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_recall",
+      "case_id": "rag-23",
+      "prompt_sha256": "9e3b5679fc8cfd05cf5d75b966655f6d22d56c189abc873e48f02f2ccb264433",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 424,
+        "prompt_tokens": 2012,
+        "total_tokens": 2436,
+        "prompt_tokens_details": {
+          "cached_tokens": 1617
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"classifications\": [\n        {\n            \"statement\": \"Jardim Botânico da Ajuda: Ботанический сад Ажуда знакомит с коллекцией растений. Террасы, фонтаны и зелёные пространства подходят для прогулки среди природы.\",\n            \"reason\": \"Это прямое упоминание из контекста о Jardim Botânico da Ajuda, включая информацию о растениях и зелёных пространствах для прогулок.\",\n            \"attributed\": 1\n        },\n        {\n            \"statement\": \"Estufa Fria de Lisboa: Оранжерейный комплекс Estufa Fria в парке Эдуарда VII. Прогулка среди растений, водоёмов и каскадов; включает холодную, тёплую и суккулентную зоны.\",\n            \"reason\": \"Это упоминание о Estufa Fria de Lisboa, которое не присутствует в исходном контексте. Контекст не содержит информации о данном месте.\",\n            \"attributed\": 0\n        },\n        {\n            \"statement\": \"Jardim Gulbenkian — прогулка по саду: Бесплатный сад фонда Гулбенкяна. Деревья, растения, озеро и птицы для спокойной прогулки на открытом воздухе. Посещение музеев в эту остановку не входит.\",\n            \"reason\": \"Это прямое упоминание из контекста о Jardim Gulbenkian, включая информацию о растениях и зелёных пространствах для прогулок.\",\n            \"attributed\": 1\n        }\n    ]\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_precision",
+      "case_id": "rag-24",
+      "prompt_sha256": "cab3afc6bcd3037546d93e3998e5621f0ecc484ae8ea684b5c4feeb891c5cad8",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 79,
+        "prompt_tokens": 1392,
+        "total_tokens": 1471,
+        "prompt_tokens_details": {
+          "cached_tokens": 1078
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"reason\": \"The context provided multiple locations that offer nature walks among trees and greenery, including Jardim Botânico da Ajuda, Estufa Fria de Lisboa, and Jardim Gulbenkian. These details directly support the answer, which lists these places as suitable for the requested nature walk.\",\n    \"verdict\": 1\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_precision",
+      "case_id": "rag-24",
+      "prompt_sha256": "a04cf4e76ec3c9df65c4f4f7b437817522f4becb6d694e9aa78a21958fbd3675",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 88,
+        "prompt_tokens": 1408,
+        "total_tokens": 1496,
+        "prompt_tokens_details": {
+          "cached_tokens": 1103
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"reason\": \"The context provided includes information about Jardim Gulbenkian, which is a garden offering a walk among trees and greenery, directly matching the user's request for a walk in nature among trees and greenery. The answer also mentions Jardim Gulbenkian as one of the options, confirming that the context was useful in forming the answer.\",\n    \"verdict\": 1\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_recall",
+      "case_id": "rag-24",
+      "prompt_sha256": "775062d43168cb4a9e1ef8387ad99f67fd2552fd2ef9f3c6a90ff79f3ff9cc54",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 410,
+        "prompt_tokens": 2010,
+        "total_tokens": 2420,
+        "prompt_tokens_details": {
+          "cached_tokens": 1617
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"classifications\": [\n        {\n            \"statement\": \"Jardim Botânico da Ajuda: Ботанический сад Ажуда знакомит с коллекцией растений. Террасы, фонтаны и зелёные пространства подходят для прогулки среди природы.\",\n            \"reason\": \"Это прямое упоминание из контекста о Jardim Botânico da Ajuda, где упоминается прогулка среди природы.\",\n            \"attributed\": 1\n        },\n        {\n            \"statement\": \"Estufa Fria de Lisboa: Оранжерейный комплекс Estufa Fria в парке Эдуарда VII. Прогулка среди растений, водоёмов и каскадов; включает холодную, тёплую и суккулентную зоны.\",\n            \"reason\": \"Это упоминание о Estufa Fria de Lisboa, которое не присутствует в исходном контексте. Контекст не включает информацию о данном месте.\",\n            \"attributed\": 0\n        },\n        {\n            \"statement\": \"Jardim Gulbenkian — прогулка по саду: Бесплатный сад фонда Гулбенкяна. Деревья, растения, озеро и птицы для спокойной прогулки на открытом воздухе. Посещение музеев в эту остановку не входит.\",\n            \"reason\": \"Это прямое упоминание из контекста о Jardim Gulbenkian, где упоминается прогулка на открытом воздухе.\",\n            \"attributed\": 1\n        }\n    ]\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_precision",
+      "case_id": "rag-25",
+      "prompt_sha256": "6d02d5c4c24b3667953da99bf2c1b15ec24d2489a96d6dcb1eee6bd41fc5e053",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 55,
+        "prompt_tokens": 1269,
+        "total_tokens": 1324,
+        "prompt_tokens_details": {
+          "cached_tokens": 1078
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"reason\": \"The provided context was useful in arriving at the given answer. The context includes detailed information about the brunch options available at Nicolau in the Baysha area, which is directly reflected in the answer.\",\n    \"verdict\": 1\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_recall",
+      "case_id": "rag-25",
+      "prompt_sha256": "c050ab12ffe6ae6674ad5b22f6d5d16db3fec11c408d31ea9c412249f45ba1df",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 218,
+        "prompt_tokens": 1808,
+        "total_tokens": 2026,
+        "prompt_tokens_details": {
+          "cached_tokens": 1617
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"classifications\": [\n        {\n            \"statement\": \"Nicolau Lisboa — Brunch Nicolau: Кафе Nicolau в районе Байша.\",\n            \"reason\": \"The statement is directly mentioned in the context, specifying the location of the cafe in the Baysha area.\",\n            \"attributed\": 1\n        },\n        {\n            \"statement\": \"Бранч из яиц, сока, кофе или чая и йогурта с гранолой либо панкейков.\",\n            \"reason\": \"The context explicitly lists the brunch items available, so this statement is attributable to the context.\",\n            \"attributed\": 1\n        },\n        {\n            \"statement\": \"Гастрономическая остановка с конкретным набором из меню.\",\n            \"reason\": \"The context mentions that Nicolau is a gastronomic stop with a specific menu set, so this statement is attributable to the context.\",\n            \"attributed\": 1\n        }\n    ]\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_precision",
+      "case_id": "rag-26",
+      "prompt_sha256": "f5327fe3e301b84ad6469c6dafd3f7e03f49a31dc86fac8a081255f85ee27c69",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 50,
+        "prompt_tokens": 1270,
+        "total_tokens": 1320,
+        "prompt_tokens_details": {
+          "cached_tokens": 1078
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"reason\": \"The provided context directly mentions the brunch with eggs and granola at Nicolau Lisboa, which matches the answer. The context was useful in arriving at the given answer.\",\n    \"verdict\": 1\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_precision",
+      "case_id": "rag-26",
+      "prompt_sha256": "61e5b962db7294a4291986a14bfc7023e61762d78951b127c76be26b6f66d9fb",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 57,
+        "prompt_tokens": 1274,
+        "total_tokens": 1331,
+        "prompt_tokens_details": {
+          "cached_tokens": 1100
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"reason\": \"The context was useful in arriving at the given answer. The context mentions a brunch with eggs and granola at a café in the area of Bairro do Almada, which matches the answer provided.\",\n    \"verdict\": 1\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_recall",
+      "case_id": "rag-26",
+      "prompt_sha256": "d5a949922ee3f4f5414f1eb658d097407357a6dd5b3b9c0366b1575aae768f7f",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 145,
+        "prompt_tokens": 1890,
+        "total_tokens": 2035,
+        "prompt_tokens_details": {
+          "cached_tokens": 1617
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"classifications\": [\n        {\n            \"statement\": \"Nicolau Lisboa — Brunch Nicolau: Кафе Nicolau в районе Байша. Бранч из яиц, сока, кофе или чая и йогурта с гранолой либо панкейков. Гастрономическая остановка с конкретным набором из меню.\",\n            \"reason\": \"The statement is directly taken from the context, which describes the brunch menu at Nicolau Lisboa, including eggs, juice, coffee, tea, yogurt with granola or pancakes.\",\n            \"attributed\": 1\n        }\n    ]\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_precision",
+      "case_id": "rag-27",
+      "prompt_sha256": "6c3e79cfbc50f0d50b9cc26f863898a1cee3071d298e77515dc0a9da5c66d0ee",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 51,
+        "prompt_tokens": 1284,
+        "total_tokens": 1335,
+        "prompt_tokens_details": {
+          "cached_tokens": 1078
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"reason\": \"The provided context was directly used to form the answer. The answer is a verbatim copy of the context, indicating that the context was useful in arriving at the given answer.\",\n    \"verdict\": 1\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_precision",
+      "case_id": "rag-27",
+      "prompt_sha256": "d4f82c6776abe811ff8ea395a9471dc01edd48b9c696e96b2036da144f1a0f16",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 72,
+        "prompt_tokens": 1280,
+        "total_tokens": 1352,
+        "prompt_tokens_details": {
+          "cached_tokens": 1106
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"reason\": \"The context provided information about a brunch at Nicolau Lisboa, which is different from the question about Amélia in Campanha de Orike. The answer refers to Amélia Lisboa and its brunch menu, which is not directly mentioned or supported by the context.\",\n    \"verdict\": 0\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_recall",
+      "case_id": "rag-27",
+      "prompt_sha256": "08df2c1d802962ea97dde79a7c9cf5046a7f62a216ec6e92d541cbd660a330e9",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 187,
+        "prompt_tokens": 1900,
+        "total_tokens": 2087,
+        "prompt_tokens_details": {
+          "cached_tokens": 1617
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"classifications\": [\n        {\n            \"statement\": \"Amélia Lisboa — Brunch Amélia: Кафе Amélia в Кампу-де-Орике.\",\n            \"reason\": \"The exact statement is present in the given context.\",\n            \"attributed\": 1\n        },\n        {\n            \"statement\": \"В меню бранч с яйцами, соком, йогуртом или панкейками и горячим напитком.\",\n            \"reason\": \"The exact statement is present in the given context.\",\n            \"attributed\": 1\n        },\n        {\n            \"statement\": \"Стоимость относится к одному набору на человека.\",\n            \"reason\": \"The exact statement is present in the given context.\",\n            \"attributed\": 1\n        }\n    ]\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_precision",
+      "case_id": "rag-28",
+      "prompt_sha256": "2f88b32c07c95420c764d8a1041a029c17bd6e5d7221e99fac8ae253d6440421",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 56,
+        "prompt_tokens": 1277,
+        "total_tokens": 1333,
+        "prompt_tokens_details": {
+          "cached_tokens": 1078
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"reason\": \"The provided context was useful in arriving at the given answer. The context mentions that the brunch at Amélia includes eggs, which directly answers the request for a breakfast with eggs at Amélia.\",\n    \"verdict\": 1\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_recall",
+      "case_id": "rag-28",
+      "prompt_sha256": "964c2e68882f3296cc6a4237d3ceacb390acee3b2510d76322bfc54e3177cfa3",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 203,
+        "prompt_tokens": 1816,
+        "total_tokens": 2019,
+        "prompt_tokens_details": {
+          "cached_tokens": 1617
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"classifications\": [\n        {\n            \"statement\": \"Amélia Lisboa — Brunch Amélia: Кафе Amélia в Кампу-де-Орике.\",\n            \"reason\": \"The statement about the location of Café Amélia is explicitly mentioned in the context.\",\n            \"attributed\": 1\n        },\n        {\n            \"statement\": \"В меню бранч с яйцами, соком, йогуртом или панкейками и горячим напитком.\",\n            \"reason\": \"The menu items, including eggs, are explicitly mentioned in the context.\",\n            \"attributed\": 1\n        },\n        {\n            \"statement\": \"Стоимость относится к одному набору на человека.\",\n            \"reason\": \"The information about the cost being per person is explicitly mentioned in the context.\",\n            \"attributed\": 1\n        }\n    ]\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_precision",
+      "case_id": "rag-29",
+      "prompt_sha256": "6a38f98c528507d3c1562b04a5885f4f12533d2e5969e0213c42f784fe81b948",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 59,
+        "prompt_tokens": 1264,
+        "total_tokens": 1323,
+        "prompt_tokens_details": {
+          "cached_tokens": 1078
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"reason\": \"The provided context was directly used to form the answer. The context mentions Pastéis de Belém and espresso, which are the exact elements asked in the question, and the answer is a direct copy of the context.\",\n    \"verdict\": 1\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_recall",
+      "case_id": "rag-29",
+      "prompt_sha256": "d65e90c84fe6fa436df2779a226b764b34c318cf4f013f2034640a17f7c7fecf",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 202,
+        "prompt_tokens": 1803,
+        "total_tokens": 2005,
+        "prompt_tokens_details": {
+          "cached_tokens": 1617
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"classifications\": [\n        {\n            \"statement\": \"Pastéis de Belém — pastel и эспрессо: Историческая кондитерская в Белене.\",\n            \"reason\": \"Это прямое упоминание из контекста о Pastéis de Belém как исторической кондитерской в Белене.\",\n            \"attributed\": 1\n        },\n        {\n            \"statement\": \"Гастрономическая остановка: португальская выпечка Pastel de Belém и эспрессо; другие заказы не входят в рассчитанную стоимость.\",\n            \"reason\": \"Это прямое упоминание из контекста о гастрономической остановке, связанной с Pastel de Belém и эспрессо.\",\n            \"attributed\": 1\n        }\n    ]\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_precision",
+      "case_id": "rag-30",
+      "prompt_sha256": "722d3d357686ad06ab9947a5c9b0b52d96d5f6d1e3a2b224e7c49d88d359d988",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 79,
+        "prompt_tokens": 1264,
+        "total_tokens": 1343,
+        "prompt_tokens_details": {
+          "cached_tokens": 1078
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"reason\": \"The provided context directly answers the question by mentioning 'Историческая кондитерская в Белене' and provides additional details about the establishment, such as the type of products offered. The answer is a direct copy of the context, indicating that the context was useful in arriving at the answer.\",\n    \"verdict\": 1\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_recall",
+      "case_id": "rag-30",
+      "prompt_sha256": "4c123219cc4214c23f1080fe7be166808c05cd5ebb9cc58a43bb132abb118fea",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 192,
+        "prompt_tokens": 1803,
+        "total_tokens": 1995,
+        "prompt_tokens_details": {
+          "cached_tokens": 1617
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"classifications\": [\n        {\n            \"statement\": \"Pastéis de Belém — pastel и эспрессо: Историческая кондитерская в Белене.\",\n            \"reason\": \"Это точное утверждение присутствует в контексте, где говорится о исторической кондитерской в Белене.\",\n            \"attributed\": 1\n        },\n        {\n            \"statement\": \"Гастрономическая остановка: португальская выпечка Pastel de Belém и эспрессо; другие заказы не входят в рассчитанную стоимость.\",\n            \"reason\": \"Это утверждение также присутствует в контексте, описывающем кондитерскую и её предложения.\",\n            \"attributed\": 1\n        }\n    ]\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_precision",
+      "case_id": "rag-31",
+      "prompt_sha256": "14f7dc6ec5b78ff602de4099fa1c32694cc856e1e5bd43cfa9e43d4be65650e0",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 78,
+        "prompt_tokens": 1431,
+        "total_tokens": 1509,
+        "prompt_tokens_details": {
+          "cached_tokens": 1078
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"reason\": \"The context provides information about different gastronomic stops, including options for brunch and Portuguese pastries. The answer lists three specific options, two of which are brunches and one is a Portuguese pastry stop. The context was useful in identifying the available options for a gastronomic stop, which are reflected in the answer.\",\n    \"verdict\": 1\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_precision",
+      "case_id": "rag-31",
+      "prompt_sha256": "50d13921b7e9a8fe505858015f0c3f610bf20cd10579a77ac870592e6f8e4921",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 61,
+        "prompt_tokens": 1434,
+        "total_tokens": 1495,
+        "prompt_tokens_details": {
+          "cached_tokens": 1109
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"reason\": \"The context provided includes specific information about Nicolau Lisboa and Pastéis de Belém, which directly answer the question by offering both a brunch option and a Portuguese pastry option. The answer is a direct reflection of the context.\",\n    \"verdict\": 1\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_precision",
+      "case_id": "rag-31",
+      "prompt_sha256": "9bed0a40ad46218bae084c8ce96e807ce761b6e19006487c3b1b640aaf0d417d",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 66,
+        "prompt_tokens": 1438,
+        "total_tokens": 1504,
+        "prompt_tokens_details": {
+          "cached_tokens": 1109
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"reason\": \"The context provided includes information about different gastronomic stops, including brunch options at Amélia Lisboa and a Portuguese pastry option at Pastéis de Belém. The answer lists both brunch and Portuguese pastry options, which are directly supported by the context.\",\n    \"verdict\": 1\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_recall",
+      "case_id": "rag-31",
+      "prompt_sha256": "16d4b56ea697f6ef02cd43266318cc32430a476cd300b4e4cd495b9736beb902",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 384,
+        "prompt_tokens": 2128,
+        "total_tokens": 2512,
+        "prompt_tokens_details": {
+          "cached_tokens": 1617
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"classifications\": [\n        {\n            \"statement\": \"Nicolau Lisboa — Brunch Nicolau: Кафе Nicolau в районе Байша. Бранч из яиц, сока, кофе или чая и йогурта с гранолой либо панкейков. Гастрономическая остановка с конкретным набором из меню.\",\n            \"reason\": \"Эта информация присутствует в контексте как описание бранча в кафе Nicolau.\",\n            \"attributed\": 1\n        },\n        {\n            \"statement\": \"Amélia Lisboa — Brunch Amélia: Кафе Amélia в Кампу-де-Орике. В меню бранч с яйцами, соком, йогуртом или панкейками и горячим напитком. Стоимость относится к одному набору на человека.\",\n            \"reason\": \"Эта информация присутствует в контексте как описание бранча в кафе Amélia.\",\n            \"attributed\": 1\n        },\n        {\n            \"statement\": \"Pastéis de Belém — pastel и эспрессо: Историческая кондитерская в Белене. Гастрономическая остановка: португальская выпечка Pastel de Belém и эспрессо; другие заказы не входят в рассчитанную стоимость.\",\n            \"reason\": \"Эта информация присутствует в контексте как описание гастрономической остановки с португальской выпечкой.\",\n            \"attributed\": 1\n        }\n    ]\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_precision",
+      "case_id": "rag-32",
+      "prompt_sha256": "a67bb2e03273016b743c15632865af7e2f1136520d90a5b37ad4224f3fa5884e",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 70,
+        "prompt_tokens": 1421,
+        "total_tokens": 1491,
+        "prompt_tokens_details": {
+          "cached_tokens": 1078
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"reason\": \"The context provided specific information about multiple cafes and their brunch options, which directly supports the answer by listing places for food and coffee. The answer includes details from the context, such as the names of the cafes, their locations, and the types of food and coffee available.\",\n    \"verdict\": 1\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_precision",
+      "case_id": "rag-32",
+      "prompt_sha256": "7bafb455b1e275fc22d3699fb18b29d534d8518229d2e8712546f135425206a5",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 57,
+        "prompt_tokens": 1425,
+        "total_tokens": 1482,
+        "prompt_tokens_details": {
+          "cached_tokens": 1096
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"reason\": \"The context provided includes specific information about several cafes and their brunch options, which directly supports the answer by listing places for food and coffee. The answer references the same cafes and their offerings mentioned in the context.\",\n    \"verdict\": 1\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "context_recall",
+      "case_id": "rag-32",
+      "prompt_sha256": "fcc35e5f438927cc8bfdb0aa1e6f3fe6e265968d2df4bb2e106ecfc4f1c37a02",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 418,
+        "prompt_tokens": 2041,
+        "total_tokens": 2459,
+        "prompt_tokens_details": {
+          "cached_tokens": 1617
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"classifications\": [\n        {\n            \"statement\": \"Nicolau Lisboa — Brunch Nicolau: Кафе Nicolau в районе Байша. Бранч из яиц, сока, кофе или чая и йогурта с гранолой либо панкейков. Гастрономическая остановка с конкретным набором из меню.\",\n            \"reason\": \"Все детали этого утверждения присутствуют в контексте, включая название места, район, меню и описание бранча.\",\n            \"attributed\": 1\n        },\n        {\n            \"statement\": \"Amélia Lisboa — Brunch Amélia: Кафе Amélia в Кампу-де-Орике. В меню бранч с яйцами, соком, йогуртом или панкейками и горячим напитком. Стоимость относится к одному набору на человека.\",\n            \"reason\": \"Все детали этого утверждения присутствуют в контексте, включая название места, район, меню и описание бранча.\",\n            \"attributed\": 1\n        },\n        {\n            \"statement\": \"Pastéis de Belém — pastel и эспрессо: Историческая кондитерская в Белене. Гастрономическая остановка: португальская выпечка Pastel de Belém и эспрессо; другие заказы не входят в рассчитанную стоимость.\",\n            \"reason\": \"Это утверждение не присутствует в контексте. Контекст не упоминает Pastéis de Belém или связанные с ним детали.\",\n            \"attributed\": 0\n        }\n    ]\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "faithfulness",
+      "case_id": "rag-01",
+      "prompt_sha256": "8f64c5ab65aba9eb070d8f79b21fbe11efe85c4a363c4a2e9fe9e398bac0b624",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 362,
+        "prompt_tokens": 862,
+        "total_tokens": 1224,
+        "prompt_tokens_details": {
+          "cached_tokens": 475
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"statements\": [\n        \"Маршрут включает 4 посещения, повторных мест нет.\",\n        \"Расходы на посещения для 2 участников составляют 22,00 EUR при общем бюджете 100,00 EUR, остаток составляет 78,00 EUR.\",\n        \"Ограничения по сохранённым данным были проверены.\",\n        \"Жильё, питание вне POI, транспортные расходы и обратный путь не включены в маршрут.\",\n        \"Визы и погода не проверялись.\",\n        \"Общая оценка маршрута составляет 0,9639.\",\n        \"Вклад интересов составляет 1,0000, стоимость — -0,0330, переездов — -0,0031, неравенства покрытия интересов — 0,0000.\",\n        \"Шкалы и коэффициенты сохранены в отчёте оценки.\",\n        \"Даты поездки указаны как 2026-10-27 — 2026-10-27, расписание дано по местному времени.\",\n        \"Посещения по категориям: история — 4.\",\n        \"Археологический музей Карму расположен среди руин монастыря.\",\n        \"Коллекция Археологического музея Карму включает археологические и исторические предметы разных эпох.\"\n    ]\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "faithfulness",
+      "case_id": "rag-01",
+      "prompt_sha256": "6c7e33352faea97ec8adad1b226ec130506aedcde7ebed2dc12db7fd5872858c",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 943,
+        "prompt_tokens": 1710,
+        "total_tokens": 2653,
+        "prompt_tokens_details": {
+          "cached_tokens": 1009
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"statements\": [\n        {\n            \"statement\": \"Маршрут включает 4 посещения, повторных мест нет.\",\n            \"reason\": \"Первое предложение контекста прямо утверждает, что маршрут включает 4 посещения и нет повторных мест.\",\n            \"verdict\": 1\n        },\n        {\n            \"statement\": \"Расходы на посещения для 2 участников составляют 22,00 EUR при общем бюджете 100,00 EUR, остаток составляет 78,00 EUR.\",\n            \"reason\": \"Контекст указывает, что учтены расходы на посещения для 2 участников — 22,00 EUR при общем бюджете 100,00 EUR, что подтверждает остаток 78,00 EUR.\",\n            \"verdict\": 1\n        },\n        {\n            \"statement\": \"Ограничения по сохранённым данным были проверены.\",\n            \"reason\": \"Контекст упоминает, что проверены ограничения по сохранённым данным.\",\n            \"verdict\": 1\n        },\n        {\n            \"statement\": \"Жильё, питание вне POI, транспортные расходы и обратный путь не включены в маршрут.\",\n            \"reason\": \"Контекст прямо указывает, что эти категории не включены в маршрут.\",\n            \"verdict\": 1\n        },\n        {\n            \"statement\": \"Визы и погода не проверялись.\",\n            \"reason\": \"Контекст упоминает, что визы и погода не проверялись.\",\n            \"verdict\": 1\n        },\n        {\n            \"statement\": \"Общая оценка маршрута составляет 0,9639.\",\n            \"reason\": \"Контекст прямо указывает на общую оценку маршрута — 0,9639.\",\n            \"verdict\": 1\n        },\n        {\n            \"statement\": \"Вклад интересов составляет 1,0000, стоимость — -0,0330, переездов — -0,0031, неравенства покрытия интересов — 0,0000.\",\n            \"reason\": \"Контекст предоставляет эти числовые значения как часть оценки маршрута.\",\n            \"verdict\": 1\n        },\n        {\n            \"statement\": \"Шкалы и коэффициенты сохранены в отчёте оценки.\",\n            \"reason\": \"Контекст упоминает, что шкалы и коэффициенты сохранены в отчёте оценки.\",\n            \"verdict\": 1\n        },\n        {\n            \"statement\": \"Даты поездки указаны как 2026-10-27 — 2026-10-27, расписание дано по местному времени.\",\n            \"reason\": \"Контекст прямо указывает на даты поездки и расписание по местному времени.\",\n            \"verdict\": 1\n        },\n        {\n            \"statement\": \"Посещения по категориям: история — 4.\",\n            \"reason\": \"Контекст упоминает, что посещения по категориям: история — 4.\",\n            \"verdict\": 1\n        },\n        {\n            \"statement\": \"Археологический музей Карму расположен среди руин монастыря.\",\n            \"reason\": \"Контекст прямо утверждает, что Археологический музей Карму расположен среди руин монастыря.\",\n            \"verdict\": 1\n        },\n        {\n            \"statement\": \"Коллекция Археологического музея Карму включает археологические и исторические предметы разных эпох.\",\n            \"reason\": \"Контекст указывает, что коллекция музея включает археологические и исторические предметы разных эпох.\",\n            \"verdict\": 1\n        }\n    ]\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "faithfulness",
+      "case_id": "rag-09",
+      "prompt_sha256": "f5e8e30efc1d1441b448dc197bfd05d6f6e7f89beeb2aac9ddd89b9c1ac9fadb",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 374,
+        "prompt_tokens": 869,
+        "total_tokens": 1243,
+        "prompt_tokens_details": {
+          "cached_tokens": 484
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"statements\": [\n        \"Маршрут включает 3 посещения и не включает повторных мест.\",\n        \"Расходы на посещения для 2 участников составляют 52,00 EUR при общем бюджете 100,00 EUR.\",\n        \"Остаток бюджета составляет 48,00 EUR.\",\n        \"Ограничения по сохранённым данным были проверены.\",\n        \"Жильё, питание вне POI, транспортные расходы и обратный путь не включены в маршрут.\",\n        \"Визы и погода не проверялись.\",\n        \"Общая оценка маршрута составляет 0,9203.\",\n        \"Вклад интересов составляет 1,0000.\",\n        \"Вклад стоимости составляет -0,0780.\",\n        \"Вклад переездов составляет -0,0017.\",\n        \"Неравенство покрытия интересов составляет 0,0000.\",\n        \"Шкалы и коэффициенты сохранены в отчёте оценки.\",\n        \"Даты поездки указаны как 2026-10-27 — 2026-10-27, расписание дано по местному времени.\",\n        \"Посещения по категориям включают искусство — 3.\",\n        \"Museu Nacional de Arte Contemporânea (MNAC) представляет португальское искусство с середины XIX века до современности, включая живопись и скульптуру.\"\n    ]\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "faithfulness",
+      "case_id": "rag-17",
+      "prompt_sha256": "128910ca108bf3166b83d1933db7330bbbe1eef0010f207c9c779b167ee30261",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 370,
+        "prompt_tokens": 873,
+        "total_tokens": 1243,
+        "prompt_tokens_details": {
+          "cached_tokens": 484
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"statements\": [\n        \"Маршрут включает 3 посещения, повторных мест нет.\",\n        \"Расходы на посещения для 2 участников составляют 11,40 EUR, общая сумма бюджета составляет 100,00 EUR, остаток составляет 88,60 EUR.\",\n        \"Ограничения по сохранённым данным были проверены.\",\n        \"Жильё, питание вне POI, транспортные расходы и обратный путь не включены в маршрут.\",\n        \"Визы и погода не проверялись.\",\n        \"Общая оценка маршрута составляет 0,9757.\",\n        \"Вклад интересов составляет 1,0000, вклад стоимости составляет -0,0171, вклад переездов составляет -0,0072, вклад неравенства покрытия интересов составляет 0,0000.\",\n        \"Шкалы и коэффициенты сохранены в отчёте оценки.\",\n        \"Даты поездки указаны как 2026-10-27 до 2026-10-27, расписание дано по местному времени.\",\n        \"Посещения по категориям: природа — 3.\",\n        \"Ботанический сад Ажуда знакомит с коллекцией растений.\",\n        \"Террасы, фонтаны и зелёные пространства подходят для прогулки среди природы.\"\n    ]\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "faithfulness",
+      "case_id": "rag-17",
+      "prompt_sha256": "3568e58453b56550fec9fe9a675388bdb8be7c67e9753fb18f88b5e091ad096e",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 1023,
+        "prompt_tokens": 1729,
+        "total_tokens": 2752,
+        "prompt_tokens_details": {
+          "cached_tokens": 1048
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"statements\": [\n        {\n            \"statement\": \"Маршрут включает 3 посещения, повторных мест нет.\",\n            \"reason\": \"В контексте прямо указано, что маршрут включает 3 посещения и повторных мест нет.\",\n            \"verdict\": 1\n        },\n        {\n            \"statement\": \"Расходы на посещения для 2 участников составляют 11,40 EUR, общая сумма бюджета составляет 100,00 EUR, остаток составляет 88,60 EUR.\",\n            \"reason\": \"В контексте указано, что учтены расходы на посещения для 2 участников — 11,40 EUR при общем бюджете 100,00 EUR, остаток — 88,60 EUR.\",\n            \"verdict\": 1\n        },\n        {\n            \"statement\": \"Ограничения по сохранённым данным были проверены.\",\n            \"reason\": \"В контексте указано, что проверены ограничения по сохранённым данным.\",\n            \"verdict\": 1\n        },\n        {\n            \"statement\": \"Жильё, питание вне POI, транспортные расходы и обратный путь не включены в маршрут.\",\n            \"reason\": \"В контексте указано, что жильё, питание вне POI, транспортные расходы и обратный путь не включены.\",\n            \"verdict\": 1\n        },\n        {\n            \"statement\": \"Визы и погода не проверялись.\",\n            \"reason\": \"В контексте указано, что визы и погода не проверялись.\",\n            \"verdict\": 1\n        },\n        {\n            \"statement\": \"Общая оценка маршрута составляет 0,9757.\",\n            \"reason\": \"В контексте указано, что общая оценка маршрута — 0,9757.\",\n            \"verdict\": 1\n        },\n        {\n            \"statement\": \"Вклад интересов составляет 1,0000, вклад стоимости составляет -0,0171, вклад переездов составляет -0,0072, вклад неравенства покрытия интересов составляет 0,0000.\",\n            \"reason\": \"В контексте указано, что вклад интересов: 1,0000; стоимости: -0,0171; переездов: -0,0072; неравенства покрытия интересов: 0,0000.\",\n            \"verdict\": 1\n        },\n        {\n            \"statement\": \"Шкалы и коэффициенты сохранены в отчёте оценки.\",\n            \"reason\": \"В контексте указано, что шкалы и коэффициенты сохранены в отчёте оценки.\",\n            \"verdict\": 1\n        },\n        {\n            \"statement\": \"Даты поездки указаны как 2026-10-27 до 2026-10-27, расписание дано по местному времени.\",\n            \"reason\": \"В контексте указано, что даты поездки: 2026-10-27 — 2026-10-27; расписание дано по местному времени.\",\n            \"verdict\": 1\n        },\n        {\n            \"statement\": \"Посещения по категориям: природа — 3.\",\n            \"reason\": \"В контексте указано, что посещения по категориям: природа — 3.\",\n            \"verdict\": 1\n        },\n        {\n            \"statement\": \"Ботанический сад Ажуда знакомит с коллекцией растений.\",\n            \"reason\": \"В контексте указано, что Ботанический сад Ажуда знакомит с коллекцией растений.\",\n            \"verdict\": 1\n        },\n        {\n            \"statement\": \"Террасы, фонтаны и зелёные пространства подходят для прогулки среди природы.\",\n            \"reason\": \"В контексте указано, что террасы, фонтаны и зелёные пространства подходят для прогулки среди природы.\",\n            \"verdict\": 1\n        }\n    ]\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "faithfulness",
+      "case_id": "rag-25",
+      "prompt_sha256": "af2fb3154263d71da986d2954048acd4ba4989c1daea727d104c3075ec5030fe",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 287,
+        "prompt_tokens": 879,
+        "total_tokens": 1166,
+        "prompt_tokens_details": {
+          "cached_tokens": 484
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"statements\": [\n        \"The route includes 3 visits with no repeat locations.\",\n        \"The cost for 2 participants for the visits is 81.60 EUR, with a total budget of 100.00 EUR. The remaining amount is 18.40 EUR.\",\n        \"The constraints based on saved data have been checked. Accommodation, food outside POI, transportation costs, and return trip are not included. Visas and weather have not been checked.\",\n        \"The overall route rating is 0.8712. Contribution of interests: 1.0000; cost: -0.1224; transfers: -0.0064; inequality of coverage of interests: 0.0000. Scales and coefficients are saved in the evaluation report.\",\n        \"The travel dates are from 2026-10-27 to 2026-10-27, with the schedule given in local time.\",\n        \"Visits are categorized as food — 3.\",\n        \"Nicolau Lisboa — Brunch Nicolau: The Nicolau cafe in the Baysha area. The brunch includes eggs, juice, coffee or tea, and yogurt with granola or pancakes. It is a gastronomic stop with a specific set from the menu.\"\n    ]\n}"
+          }
+        }
+      ]
+    },
+    {
+      "status_code": 200,
+      "metric": "faithfulness",
+      "case_id": "rag-25",
+      "prompt_sha256": "690dc9fa2c37c42df6c9bc8099603c6835710acb4872fc876f6c2b2e72ad1d06",
+      "model": "Qwen3-8B-Q4_K_M",
+      "usage": {
+        "completion_tokens": 610,
+        "prompt_tokens": 1659,
+        "total_tokens": 2269,
+        "prompt_tokens_details": {
+          "cached_tokens": 1048
+        }
+      },
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n    \"statements\": [\n        {\n            \"statement\": \"The route includes 3 visits with no repeat locations.\",\n            \"reason\": \"The context explicitly states that the route includes 3 visits and there are no repeat locations.\",\n            \"verdict\": 1\n        },\n        {\n            \"statement\": \"The cost for 2 participants for the visits is 81.60 EUR, with a total budget of 100.00 EUR. The remaining amount is 18.40 EUR.\",\n            \"reason\": \"The context mentions the cost for 2 participants as 81.60 EUR and the total budget as 100.00 EUR, with the remaining amount being 18.40 EUR.\",\n            \"verdict\": 1\n        },\n        {\n            \"statement\": \"The constraints based on saved data have been checked. Accommodation, food outside POI, transportation costs, and return trip are not included. Visas and weather have not been checked.\",\n            \"reason\": \"The context states that constraints based on saved data have been checked and specifies that accommodation, food outside POI, transportation costs, and return trip are not included, along with the fact that visas and weather have not been checked.\",\n            \"verdict\": 1\n        },\n        {\n            \"statement\": \"The overall route rating is 0.8712. Contribution of interests: 1.0000; cost: -0.1224; transfers: -0.0064; inequality of coverage of interests: 0.0000. Scales and coefficients are saved in the evaluation report.\",\n            \"reason\": \"The context provides the overall route rating and the specific contributions and scales mentioned, which are directly stated.\",\n            \"verdict\": 1\n        },\n        {\n            \"statement\": \"The travel dates are from 2026-10-27 to 2026-10-27, with the schedule given in local time.\",\n            \"reason\": \"The context explicitly states the travel dates and that the schedule is given in local time.\",\n            \"verdict\": 1\n        },\n        {\n            \"statement\": \"Visits are categorized as food — 3.\",\n            \"reason\": \"The context mentions that visits are categorized as food with a count of 3.\",\n            \"verdict\": 1\n        },\n        {\n            \"statement\": \"Nicolau Lisboa — Brunch Nicolau: The Nicolau cafe in the Baysha area. The brunch includes eggs, juice, coffee or tea, and yogurt with granola or pancakes. It is a gastronomic stop with a specific set from the menu.\",\n            \"reason\": \"The context provides a detailed description of the Nicolau cafe, the brunch items, and the nature of the stop.\",\n            \"verdict\": 1\n        }\n    ]\n}"
+          }
+        }
+      ]
+    }
+  ],
+  "scope": "Saved public RAG samples",
+  "summary": {
+    "retrieval:live_qdrant:context_precision": {
+      "scored": 32,
+      "errors": 0,
+      "mean": 0.9531249999171875
+    },
+    "retrieval:live_qdrant:context_recall": {
+      "scored": 32,
+      "errors": 0,
+      "mean": 0.9192708333333334
+    },
+    "explanation:llm:faithfulness": {
+      "scored": 3,
+      "errors": 1,
+      "mean": 1.0
+    }
+  },
+  "finished_at": "2026-10-24T12:31:47.367404+00:00",
+  "inputs_unchanged": true
+}

@@ -294,10 +294,10 @@ def main():
     parser.add_argument("--allow-self-judge", action="store_true")
     parser.add_argument("--case-id", action="append")
     parser.add_argument(
-        "--http-timeout", type=int, choices=range(1, 601), default=180, metavar="SECONDS"
+        "--http-timeout", type=int, choices=range(1, 601), default=360, metavar="SECONDS"
     )
     parser.add_argument(
-        "--metric-timeout", type=int, choices=range(1, 901), default=360, metavar="SECONDS"
+        "--metric-timeout", type=int, choices=range(1, 901), default=720, metavar="SECONDS"
     )
     args = parser.parse_args()
     report = asyncio.run(run(args))
