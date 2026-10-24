@@ -29,7 +29,7 @@ def load_minutes(request, visits, travel):
 
 def fits_pace(request, visits, travel):
     return request.pace is None or (
-        len(visits) <= request.pace.max_visits
+        sum(v.place_id not in request.meal_ids for v in visits) <= request.pace.max_visits
         and sum(load_minutes(request, visits, travel)) <= request.pace.max_active_minutes
     )
 
@@ -73,23 +73,27 @@ def spread_visits(request, schedule, inputs, objective):
                 if donor is None:
                     continue
                 for target, day in enumerate(current):
-                    if day:
+                    if any(v.place_id not in request.meal_ids for v in day):
                         continue
-                    receiver = schedule_order(request, [removed.place_id], inputs[target])
-                    if receiver is None:
-                        continue
-                    candidate = list(current)
-                    candidate[source], candidate[target] = donor, receiver
-                    cost = sum(
-                        objective.places[i][v.place_id].cost_per_person * len(request.participants)
-                        for i, day in enumerate(candidate)
-                        for v in day
-                    )
-                    if cost > request.budget:
-                        continue
-                    key = objective.key(candidate)
-                    if key < best_key:
-                        best, best_key = candidate, key
+                    for position in range(len(day) + 1):
+                        ids = [v.place_id for v in day]
+                        ids.insert(position, removed.place_id)
+                        receiver = schedule_order(request, ids, inputs[target])
+                        if receiver is None:
+                            continue
+                        candidate = list(current)
+                        candidate[source], candidate[target] = donor, receiver
+                        cost = sum(
+                            objective.places[i][v.place_id].cost_per_person
+                            * len(request.participants)
+                            for i, values in enumerate(candidate)
+                            for v in values
+                        )
+                        if cost > request.budget:
+                            continue
+                        key = objective.key(candidate)
+                        if key < best_key:
+                            best, best_key = candidate, key
         if best is current:
             break
         current = best
@@ -102,7 +106,9 @@ def coverage_upper_bound(request, inputs):
     It is an upper bound, never a promise of a feasible schedule. Merely counting
     distinct POIs misses periods whose many early dates share only two candidates.
     """
-    candidates = [sorted({p.id for p in day.places} - request.excluded) for day in inputs]
+    candidates = [
+        sorted({p.id for p in day.places} - request.excluded - request.meal_ids) for day in inputs
+    ]
     assigned = {}
 
     def augment(day, seen):
@@ -129,6 +135,8 @@ def planning_summary(request, result, inputs):
             {
                 "travel_date": str(data.travel_date),
                 "visit_count": len(visits),
+                "meal_count": sum(v.place_id in request.meal_ids for v in visits),
+                "attraction_count": sum(v.place_id not in request.meal_ids for v in visits),
                 "activity_minutes": activity,
                 "drive_minutes": drive,
                 "rest_minutes": rest,
@@ -154,7 +162,7 @@ def planning_summary(request, result, inputs):
         warnings.append("catalog_smaller_than_period")
     if any(not day["eligible_count"] for day in days):
         warnings.append("dates_without_candidates")
-    if any(not day["visit_count"] for day in days):
+    if any(not day["attraction_count"] for day in days):
         warnings.append("unscheduled_days")
     if candidates and selected == candidates:
         warnings.append("all_candidates_scheduled")
@@ -168,6 +176,7 @@ def planning_summary(request, result, inputs):
         "pace": asdict(request.pace) if request.pace else None,
         "total_days": len(inputs),
         "active_days": sum(bool(d["visit_count"]) for d in days),
+        "attraction_days": sum(bool(d["attraction_count"]) for d in days),
         "candidate_count": len(candidates),
         "coverage_upper_bound": coverage_bound,
         "scheduled_count": len(selected),

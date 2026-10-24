@@ -80,7 +80,7 @@ def validate_route(
                 add("insufficient_visit_duration", "Visit is shorter than required", pid, index)
         previous_id, previous_end = pid, visit.end
     if request.pace:
-        if len(visits) > request.pace.max_visits:
+        if sum(v.place_id not in request.meal_ids for v in visits) > request.pace.max_visits:
             add("daily_visit_limit", "Daily visit limit exceeded")
         load = sum(v.end - v.start for v in visits) + drive_minutes
         load += max(0, len(visits) - 1) * request.pace.break_minutes

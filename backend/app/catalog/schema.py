@@ -68,6 +68,9 @@ class PoiFact(FactModel):
         default=None, exclude_if=lambda value: value is None
     )
     free_dates: list[date] | None = Field(default=None, exclude_if=lambda value: value is None)
+    meal_types: list[Literal["breakfast", "lunch", "dinner"]] | None = Field(
+        default=None, exclude_if=lambda value: value is None
+    )
     location_kind: Literal["mapped_node", "mapped_way_bbox_centre"] | None = Field(
         default=None, exclude_if=lambda value: value is None
     )

@@ -43,8 +43,9 @@ def cp_sat_plan(request, inputs, objective=None, time_limit=5.0, seed=42, scale=
         ]
         chosen, starts = {}, {}
         used = model.new_bool_var(f"day_{d}")
+        excursion_day = model.new_bool_var(f"excursion_day_{d}") if request.meal_ids else used
         if request.pace:
-            reward_terms.append(integer(objective.weights.spread / len(inputs)) * used)
+            reward_terms.append(integer(objective.weights.spread / len(inputs)) * excursion_day)
         day_drive = []
         arcs, edge_vars = [(0, 0, used.Not())], {}
         for i, place in enumerate(places, 1):
@@ -111,8 +112,16 @@ def cp_sat_plan(request, inputs, objective=None, time_limit=5.0, seed=42, scale=
                 ) + target.duration <= min(request.end, target.closes):
                     edge(i, j, travel)
         model.add(sum(chosen.values()) >= used)
+        if request.meal_ids:
+            excursions = [x for i, x in chosen.items() if places[i - 1].id not in request.meal_ids]
+            model.add(sum(excursions) >= excursion_day)
+            for x in excursions:
+                model.add(x <= excursion_day)
         if request.pace:
-            model.add(sum(chosen.values()) <= request.pace.max_visits)
+            model.add(
+                sum(x for i, x in chosen.items() if places[i - 1].id not in request.meal_ids)
+                <= request.pace.max_visits
+            )
             model.add(
                 sum(places[i - 1].duration * x for i, x in chosen.items())
                 + sum(day_drive)

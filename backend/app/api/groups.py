@@ -162,6 +162,8 @@ def update_travel_profile(group_id: int, user_id: int, payload: TravelProfile, s
 def trip_output(trip):
     pace = getattr(trip, "pace_settings", None)
     return TripOutput(
+        budget_settings=getattr(trip, "budget_settings", None),
+        meal_settings=getattr(trip, "meal_settings", None),
         pace=pace["mode"] if pace else "unrestricted",
         pace_settings=pace,
         id=trip.id,
@@ -189,6 +191,8 @@ def create_trip(group_id: int, payload: TripInput, session: DB):
     if not participants:
         raise HTTPException(409, "Add participants before creating a trip")
     trip = TripRequest(
+        budget_settings=payload.budget_settings.model_dump() if payload.budget_settings else None,
+        meal_settings=payload.meal_settings.model_dump() if payload.meal_settings else None,
         group_id=group_id,
         destination=payload.destination,
         currency=payload.currency,
@@ -227,13 +231,15 @@ def get_trip(trip_id: int, session: DB):
 
 
 def planning_request(trip):
+    from app.planning.budget import activity_budget
+
     pace = getattr(trip, "pace_settings", None)
     return Request(
         pace=Pace(**pace) if pace else None,
         participants=[
             Participant(str(p["user_id"]), p["interests"]) for p in trip.participants_snapshot
         ],
-        budget=trip.budget,
+        budget=activity_budget(trip),
         start=trip.start,
         end=trip.end_time,
         mandatory=frozenset(trip.mandatory),
@@ -311,8 +317,12 @@ def planning_inputs(trip, request):
     return inputs, multi_day, source
 
 
-def with_overview(result, inputs, request):
+def with_overview(result, inputs, request, trip=None):
     result = with_visit_prices(result, inputs, len(request.participants))
+    if trip is not None:
+        from app.planning.budget import breakdown
+
+        result = replace(result, budget_breakdown=breakdown(trip, result, inputs))
     result = replace(result, planning_summary=planning_summary(request, result, inputs))
     if inputs[0].data_context is None:
         return result
@@ -330,6 +340,17 @@ def with_overview(result, inputs, request):
             "matches": sorted(matches.values(), key=lambda m: (-m["score"], m["place_id"])),
         }
     return replace(result, data_context=context)
+
+
+def prepared_inputs(trip, request):
+    from app.planning.meals import prepare_meals
+
+    inputs, multi_day, source = planning_inputs(trip, request)
+    try:
+        request, inputs = prepare_meals(request, inputs, getattr(trip, "meal_settings", None))
+    except ValueError as exc:
+        raise HTTPException(422, str(exc)) from exc
+    return request, inputs, multi_day, source
 
 
 def algorithm_name(algorithm, beam_width, multi_day):
@@ -351,7 +372,7 @@ def calculate_route(
     trip = require(session, TripRequest, trip_id)
     request = planning_request(trip)
     with span(logger, "planning.data", operation="single", trip_id=trip.id) as details:
-        inputs, multi_day, source = planning_inputs(trip, request)
+        request, inputs, multi_day, source = prepared_inputs(trip, request)
         details.update(
             days=len(inputs),
             candidate_count=len({p.id for d in inputs for p in d.places}),
@@ -388,7 +409,7 @@ def calculate_route(
         trip_request_id=trip.id,
         algorithm=algorithm_name(algorithm, beam_width, multi_day),
         data_source=source,
-        result=asdict(with_overview(result, inputs, request)),
+        result=asdict(with_overview(result, inputs, request, trip)),
         visa_report=assess_visas(
             trip.destination,
             trip.travel_date,
@@ -431,7 +452,7 @@ def calculate_route_set(
     trip = require(session, TripRequest, trip_id)
     request = planning_request(trip)
     with span(logger, "planning.data", operation="alternatives", trip_id=trip.id) as details:
-        inputs, multi_day, source = planning_inputs(trip, request)
+        request, inputs, multi_day, source = prepared_inputs(trip, request)
         details.update(
             days=len(inputs),
             candidate_count=len({p.id for d in inputs for p in d.places}),
@@ -466,7 +487,7 @@ def calculate_route_set(
         else f"diverse-v2:{algorithm}:w{beam_width}",
         search_info=outcome.search_info,
         visa_report=visa_report,
-        diagnostic=asdict(with_overview(outcome.diagnostic, inputs, request))
+        diagnostic=asdict(with_overview(outcome.diagnostic, inputs, request, trip))
         if outcome.diagnostic
         else None,
     )
@@ -481,7 +502,7 @@ def calculate_route_set(
                 visa_report=visa_report,
                 algorithm=algorithm_name(algorithm, beam_width, multi_day),
                 data_source=source,
-                result=asdict(with_overview(candidate.result, inputs, request)),
+                result=asdict(with_overview(candidate.result, inputs, request, trip)),
             )
         )
     # One transaction: a comparison cannot be persisted only partially.

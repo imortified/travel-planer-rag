@@ -66,10 +66,52 @@ def plan(
                 candidates.append((place, arrival, begins, ends, price))
         if not candidates:
             break
+        # A required lunch must not force waiting all morning if an earlier stop
+        # fits and its onward road leg still leaves room for the meal service.
+        waiting = [
+            c
+            for c in candidates
+            if c[0].id in request.meal_ids
+            and c[2] > c[1] + (request.pace.break_minutes if request.pace and visits else 0)
+        ]
+        fill = set()
+        if waiting:
+            meal = min(waiting, key=lambda c: (c[0].closes, c[0].id))[0]
+            rest = request.pace.break_minutes if request.pace else 0
+            fill = {
+                c[0].id
+                for c in candidates
+                if c[0].id not in request.mandatory
+                and (c[0].id, meal.id) in travel
+                and max(c[3] + travel[c[0].id, meal.id] + rest, meal.opens) + meal.duration
+                <= min(meal.closes, request.end)
+                and cost + c[4] + meal.cost_per_person * len(request.participants) <= request.budget
+                and fits_pace(
+                    request,
+                    visits
+                    + [
+                        Visit(c[0].id, c[1], c[2], c[3]),
+                        Visit(
+                            meal.id,
+                            c[3] + travel[c[0].id, meal.id],
+                            max(c[3] + travel[c[0].id, meal.id] + rest, meal.opens),
+                            max(c[3] + travel[c[0].id, meal.id] + rest, meal.opens) + meal.duration,
+                        ),
+                    ],
+                    travel,
+                )
+            }
+        deferred = {c[0].id for c in waiting} if fill else set()
         place, arrival, begins, ends, price = min(
             candidates,
             key=lambda c: (
-                c[0].id not in request.mandatory,
+                0
+                if c[0].id in request.mandatory - deferred
+                else 1
+                if c[0].id in fill
+                else 2
+                if c[0].id in deferred
+                else 3,
                 objective.key(schedule(visits + [Visit(c[0].id, c[1], c[2], c[3])])),
             ),
         )

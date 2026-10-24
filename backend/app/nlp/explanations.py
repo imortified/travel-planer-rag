@@ -8,7 +8,7 @@ from app.integrations.demo import load_demo
 from app.integrations.llama_cpp import InvalidLlmOutput, LlamaCpp, LlmUnavailable
 from app.schemas.assistant import ExplanationDraft, ExplanationOutput
 
-PROMPT_VERSION = "grounded-explanation-v5-catalog-costs"
+PROMPT_VERSION = "grounded-explanation-v6-meals-budget"
 REQUIRED = {"summary", "budget", "limitations"}
 logger = logging.getLogger(__name__)
 CATEGORIES = {"history": "история", "nature": "природа", "art": "искусство", "food": "еда"}
@@ -79,6 +79,36 @@ def facts_for(route, trip, primary=None, option_count=1):
             "Проверены бюджет и расписание по сохранённым данным. Визовый отчёт справочный. "
             "Жильё, питание вне POI, визовые сборы, транспортные расходы и обратный путь "
             "не включены; погода не проверялась."
+        )
+    costs = result.get("budget_breakdown")
+    if costs:
+        facts["budget"] = (
+            f"Посещения для {count} участников — {money(costs['admissions'])}; "
+            f"выбранные заказы питания — {money(costs['food'])}. "
+        )
+        if costs["scope"] == "trip_estimate":
+            facts["budget"] += (
+                f"Учтённая сумма с пользовательскими оценками жилья и транспорта — "
+                f"{money(costs['known_total'])} при общем бюджете {money(costs['budget'])}. "
+                f"Резерв — {money(costs['reserve'])}; свободно после резерва — "
+                f"{money(costs['unallocated_after_reserve'])}. "
+                "Неуказанные расходы не считаются подтверждёнными."
+            )
+            facts["limitations"] = (
+                "Билеты и выбранные заказы учтены по сохранённым данным. "
+                "Жильё и транспорт — пользовательские оценки, не предложения бронирования; "
+                "неуказанные расходы и дополнительные заказы не включены. "
+                "Визовый отчёт справочный; погода и наличие мест не подтверждены."
+            )
+        else:
+            facts["budget"] += (
+                f"Итого остановки — {money(costs['stops_total'])} при бюджете на остановки "
+                f"{money(costs['budget'])}. Жильё и транспорт отдельно не учтены."
+            )
+    if getattr(trip, "meal_settings", None):
+        facts["summary"] = (
+            f"Маршрут включает {len(visits)} остановок с запланированным питанием. "
+            "Достопримечательности не повторяются; заведения питания могут повторяться."
         )
     if trip.travel_date:
         last = trip.end_date or trip.travel_date

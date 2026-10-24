@@ -7,6 +7,7 @@ from app.core.destinations import Destination
 from app.planning.alternatives import ComparisonMetrics
 from app.planning.models import Result
 from app.schemas.assistant import ExplanationOutput
+from app.schemas.trip_costs import BudgetSettings, MealSettings
 from app.schemas.visa import TravelProfile
 
 Name = Annotated[str, Field(min_length=1, max_length=100, pattern=r"\S")]
@@ -42,6 +43,8 @@ class GroupOutput(NamedOutput):
 
 
 class TripInput(BaseModel):
+    budget_settings: BudgetSettings | None = None
+    meal_settings: MealSettings | None = None
     pace: Literal["unrestricted", "relaxed", "balanced", "intensive"] = "unrestricted"
     destination: Destination = "Demo City"
     travel_date: date | None = None
@@ -57,6 +60,14 @@ class TripInput(BaseModel):
 
     @model_validator(mode="after")
     def check_interval(self):
+        if self.budget_settings and self.budget_settings.committed > self.budget:
+            raise ValueError("Жильё, транспорт и резерв превышают общий бюджет поездки")
+        if self.meal_settings:
+            if self.destination == "Demo City":
+                raise ValueError("Планирование питания требует каталога реального города")
+            for name, slot in self.meal_settings.slots():
+                if min(self.end, slot.end) - max(self.start, slot.start) < slot.duration:
+                    raise ValueError(f"Окно {name} не помещается в выбранное время дня")
         if self.semantic_query and self.destination == "Demo City":
             raise ValueError("Semantic retrieval requires a real city")
         if self.end_date is not None:

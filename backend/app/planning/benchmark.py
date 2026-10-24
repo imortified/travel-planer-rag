@@ -26,6 +26,10 @@ class Instance:
         request = asdict(self.request)
         request["mandatory"] = sorted(request["mandatory"])
         request["excluded"] = sorted(request["excluded"])
+        if request["meal_ids"]:
+            request["meal_ids"] = sorted(request["meal_ids"])
+        else:
+            request.pop("meal_ids")  # Keep historical benchmark instance hashes stable.
         return {
             "generator": GENERATOR_VERSION,
             "name": self.name,

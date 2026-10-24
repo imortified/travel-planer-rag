@@ -50,6 +50,7 @@ class Request:
     mandatory: frozenset[str] = field(default_factory=frozenset)
     excluded: frozenset[str] = field(default_factory=frozenset)
     pace: Pace | None = None
+    meal_ids: frozenset[str] = field(default_factory=frozenset)
 
 
 @dataclass(frozen=True)
@@ -151,3 +152,4 @@ class Result:
     objective: ObjectiveReport | None = None
     solver: SolverReport | None = None
     planning_summary: dict | None = None
+    budget_breakdown: dict | None = None

@@ -8,6 +8,7 @@ from app.planning.models import DayInput, ObjectiveReport, Request
 
 VERSION = "normalized-group-objective-v1"
 PACE_VERSION = "normalized-group-objective-v2-pace"
+MEAL_VERSION = "normalized-group-objective-v3-meals"
 
 
 @dataclass(frozen=True)
@@ -43,7 +44,9 @@ class Objective:
         if request.budget < 0:
             raise ValueError("Budget cannot be negative")
         self.request, self.weights = request, weights
-        self.version = PACE_VERSION if request.pace else VERSION
+        self.version = (
+            MEAL_VERSION if request.meal_ids else PACE_VERSION if request.pace else VERSION
+        )
         self.places = [{p.id: p for p in day.places} for day in inputs]
         ids = set().union(*(set(day) for day in self.places)) - request.excluded
         self.candidate_count = len(ids)
@@ -101,7 +104,9 @@ class Objective:
             "travel": -self.weights.travel * travel_ratio,
             "fairness": -self.weights.fairness * gap,
         }
-        day_coverage = sum(bool(day) for day in visits_by_day) / len(self.places)
+        day_coverage = sum(
+            any(v.place_id not in self.request.meal_ids for v in day) for day in visits_by_day
+        ) / len(self.places)
         if self.request.pace:
             contributions["spread"] = self.weights.spread * day_coverage
         return ObjectiveReport(
@@ -133,7 +138,9 @@ class Objective:
             not ids or bool(self.request.mandatory - ids),
             -len(self.request.mandatory & ids),
             -round(report.value, 12),
-            -sum(bool(day) for day in visits_by_day),
+            -sum(
+                any(v.place_id not in self.request.meal_ids for v in day) for day in visits_by_day
+            ),
             max(len(day) for day in visits_by_day),
             report.cost_ratio,
             report.travel_minutes,
