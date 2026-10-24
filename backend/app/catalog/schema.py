@@ -67,6 +67,10 @@ class PoiFact(FactModel):
     free_weekdays: list[Literal[0, 1, 2, 3, 4, 5, 6]] | None = Field(
         default=None, exclude_if=lambda value: value is None
     )
+    free_dates: list[date] | None = Field(default=None, exclude_if=lambda value: value is None)
+    location_kind: Literal["mapped_node", "mapped_way_bbox_centre"] | None = Field(
+        default=None, exclude_if=lambda value: value is None
+    )
 
 
 class Manifest(FactModel):
@@ -83,11 +87,19 @@ class Manifest(FactModel):
     curated_checked_on: date
     curated_valid_until: date
     attribution: str
+    source_upstream_asof: AwareDatetime | None = Field(
+        default=None, exclude_if=lambda value: value is None
+    )
 
     @model_validator(mode="after")
     def validity(self):
         if not self.fetched_at < self.fresh_until <= self.fetched_at + timedelta(days=7):
             raise ValueError("Invalid catalog freshness interval")
+        if self.source_upstream_asof and (
+            self.source_upstream_asof > self.fetched_at
+            or self.fresh_until > self.source_upstream_asof + timedelta(days=7)
+        ):
+            raise ValueError("Catalog freshness cannot outlive upstream snapshot freshness")
         if (
             self.curated_valid_until < self.curated_checked_on
             or self.source.username

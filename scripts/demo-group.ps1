@@ -2,13 +2,13 @@ param(
     [string]$BaseUrl = 'http://127.0.0.1:8000',
     [ValidateSet('greedy', 'beam')][string]$Algorithm = 'greedy',
     [ValidateRange(1, 128)][int]$BeamWidth = 32,
-    [ValidateSet('Demo City', 'Lisbon')][string]$Destination = 'Demo City',
+    [ValidateSet('Demo City', 'Lisbon', 'Porto', 'Sintra')][string]$Destination = 'Demo City',
     [string]$TravelDate,
     [string]$EndDate
 )
 $ErrorActionPreference = 'Stop'
-if ($Destination -eq 'Lisbon' -and -not $TravelDate) {
-    throw 'For Lisbon pass -TravelDate YYYY-MM-DD'
+if ($Destination -ne 'Demo City' -and -not $TravelDate) {
+    throw 'For a real city pass -TravelDate YYYY-MM-DD'
 }
 
 function Send-Api([string]$Method, [string]$Path, $Payload) {

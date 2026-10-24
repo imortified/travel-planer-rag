@@ -1,6 +1,12 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { visitPrice } from "../lib/visit-prices.ts";
+import { poiPriceRange, visitPrice } from "../lib/visit-prices.ts";
+
+test("period catalog keeps free Sunday and paid weekday as a price range",()=>{
+  assert.deepEqual(poiPriceRange({cost_per_person:0,prices_by_date:{"2026-10-24":400,"2026-10-25":0}}),{min:0,max:400});
+  assert.deepEqual(poiPriceRange({cost_per_person:1500}),{min:1500,max:1500});
+  assert.equal(poiPriceRange({cost_per_person:null}),null);
+});
 
 const visit={place_id:"museum",arrival:600,start:600,end:660};
 const context=cost=>({pois:[{id:"museum",cost_per_person:cost}]});

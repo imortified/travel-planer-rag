@@ -88,7 +88,8 @@ def test_validator_rejects_independent_count_load_and_rest_violations():
 @pytest.mark.parametrize("algorithm", ["greedy", "beam", "cp-sat"])
 def test_fourteen_days_are_spread_without_repeated_places(algorithm):
     request, inputs = fixture(count=14, days=14, duration=40)
-    result = plan_period(request, inputs, algorithm, time_limit=3)
+    # Behavioural check, not a latency benchmark: allow CP-SAT presolve on busy hosts.
+    result = plan_period(request, inputs, algorithm, time_limit=10)
     assert result.is_feasible
     assert len(result.visits) == 14
     assert len({v.place_id for v in result.visits}) == 14

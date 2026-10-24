@@ -17,7 +17,13 @@ def select_candidates(
     for category in categories:
         candidates = sorted(
             (p for p in pois if p["category"] == category and p["id"] not in mandatory),
-            key=lambda p: (-relevance.get(p["id"], -1), p["id"]),
+            key=lambda p: (
+                -relevance.get(p["id"], -1),
+                not bool(p.get("provenance")),
+                p.get("cost_per_person") is None,
+                not bool(p.get("opening_hours")),
+                p["id"],
+            ),
         )
         # Keep the strongest semantic matches, rotate the remainder across dates.
         keep = min(2, len(candidates)) if relevance else 0

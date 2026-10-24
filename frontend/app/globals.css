@@ -55,3 +55,5 @@
 @media(max-width:650px){.map-canvas {height:320px}.map-heading h3 {font-size:17px}}
 
 .timeline .visit-price{margin:10px 0 0;color:var(--green)}.visit-price strong{font-size:12px;font-weight:600}.visit-price small{display:block;margin-top:3px}
+.places label:has(input[type=checkbox]){display:flex;align-items:center;gap:8px;margin:12px 0}
+.places input[type=checkbox]{width:16px;min-height:16px;height:16px;margin:0;padding:0;flex-shrink:0;accent-color:var(--green)}

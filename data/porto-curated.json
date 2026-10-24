@@ -1,0 +1,183 @@
+{
+  "version": "porto-curated-2026-10-24-v1",
+  "checked_on": "2026-10-24",
+  "valid_until": "2026-11-22",
+  "price_policy": "Standard adult admission. Individual official sources apply. Discounts, guided services, transport and other meals excluded.",
+  "pois": [
+    {
+      "id": "osm:node:6541145458",
+      "name": "Reservatório",
+      "category": "history",
+      "cost_per_person": 400,
+      "duration": 60,
+      "opening_hours": "Tu-Su 10:00-17:30; Nov 01 off; Jan 01,Apr 25,May 01,Jun 10,Jun 24,Aug 15,Oct 05,Dec 01,Dec 08,Dec 24-25,Dec 31 off",
+      "price_source": "https://museudoporto.pt/info-util/",
+      "hours_source": "https://museudoporto.pt/info-util/",
+      "latitude": 41.1518141,
+      "longitude": -8.6621739,
+      "coordinates_source": "https://www.openstreetmap.org/node/6541145458",
+      "checked_on": "2026-10-24",
+      "valid_until": "2026-11-22",
+      "notes": "Municipal museum station standard ticket; free Sundays. Joint museum pass not used. Duration is planning policy. Mapped location; routing snaps to public road points.",
+      "free_weekdays": [
+        6
+      ]
+    },
+    {
+      "id": "osm:node:1652873556",
+      "name": "Museu Aurélia e Sofia de Souza",
+      "category": "art",
+      "cost_per_person": 400,
+      "duration": 60,
+      "opening_hours": "Tu-Su 10:00-17:30; Nov 01 off; Jan 01,Apr 25,May 01,Jun 10,Jun 24,Aug 15,Oct 05,Dec 01,Dec 08,Dec 24-25,Dec 31 off",
+      "price_source": "https://museudoporto.pt/info-util/",
+      "hours_source": "https://museudoporto.pt/info-util/",
+      "latitude": 41.1594273,
+      "longitude": -8.6255051,
+      "coordinates_source": "https://www.openstreetmap.org/node/1652873556",
+      "checked_on": "2026-10-24",
+      "valid_until": "2026-11-22",
+      "notes": "Municipal museum station standard ticket; free Sundays. Joint museum pass not used. Duration is planning policy. Mapped location; routing snaps to public road points.",
+      "free_weekdays": [
+        6
+      ]
+    },
+    {
+      "id": "osm:way:255778741",
+      "name": "Museu do Romântico",
+      "category": "history",
+      "cost_per_person": 400,
+      "duration": 60,
+      "opening_hours": "Tu-Su 10:00-17:30; Nov 01 off; Jan 01,Apr 25,May 01,Jun 10,Jun 24,Aug 15,Oct 05,Dec 01,Dec 08,Dec 24-25,Dec 31 off",
+      "price_source": "https://museudoporto.pt/info-util/",
+      "hours_source": "https://museudoporto.pt/info-util/",
+      "latitude": 41.14762165,
+      "longitude": -8.6284451,
+      "coordinates_source": "https://www.openstreetmap.org/way/255778741",
+      "checked_on": "2026-10-24",
+      "valid_until": "2026-11-22",
+      "notes": "Municipal museum station standard ticket; free Sundays. Joint museum pass not used. Duration is planning policy. Mapped area representative point; not a verified visitor entrance.",
+      "free_weekdays": [
+        6
+      ]
+    },
+    {
+      "id": "osm:way:210461454",
+      "name": "Casa-Museu Guerra Junqueiro",
+      "category": "art",
+      "cost_per_person": 400,
+      "duration": 60,
+      "opening_hours": "Tu-Su 10:00-17:30; Nov 01 off; Jan 01,Apr 25,May 01,Jun 10,Jun 24,Aug 15,Oct 05,Dec 01,Dec 08,Dec 24-25,Dec 31 off",
+      "price_source": "https://museudoporto.pt/info-util/",
+      "hours_source": "https://museudoporto.pt/info-util/",
+      "latitude": 41.1424467,
+      "longitude": -8.61079385,
+      "coordinates_source": "https://www.openstreetmap.org/way/210461454",
+      "checked_on": "2026-10-24",
+      "valid_until": "2026-11-22",
+      "notes": "Municipal museum station standard ticket; free Sundays. Joint museum pass not used. Duration is planning policy. Mapped area representative point; not a verified visitor entrance.",
+      "free_weekdays": [
+        6
+      ]
+    },
+    {
+      "id": "osm:way:210571326",
+      "name": "Museu do Vinho do Porto",
+      "category": "history",
+      "cost_per_person": 400,
+      "duration": 60,
+      "opening_hours": "Tu-Su 10:00-17:30; Nov 01 off; Jan 01,Apr 25,May 01,Jun 10,Jun 24,Aug 15,Oct 05,Dec 01,Dec 08,Dec 24-25,Dec 31 off",
+      "price_source": "https://museudoporto.pt/info-util/",
+      "hours_source": "https://museudoporto.pt/info-util/",
+      "latitude": 41.1401097,
+      "longitude": -8.615299799999999,
+      "coordinates_source": "https://www.openstreetmap.org/way/210571326",
+      "checked_on": "2026-10-24",
+      "valid_until": "2026-11-22",
+      "notes": "Municipal museum station standard ticket; free Sundays. Joint museum pass not used. Duration is planning policy. Mapped area representative point; not a verified visitor entrance.",
+      "free_weekdays": [
+        6
+      ]
+    },
+    {
+      "id": "osm:node:6540216045",
+      "name": "Banco de Materiais — Museu do Porto",
+      "category": "art",
+      "cost_per_person": 0,
+      "duration": 60,
+      "opening_hours": "Tu-Su 10:00-17:30; Nov 01 off; Jan 01,Dec 24-25,Dec 31 off",
+      "price_source": "https://museudoporto.pt/info-util/",
+      "hours_source": "https://museudoporto.pt/info-util/",
+      "latitude": 41.1490872,
+      "longitude": -8.6156716,
+      "coordinates_source": "https://www.openstreetmap.org/node/6540216045",
+      "checked_on": "2026-10-24",
+      "valid_until": "2026-11-22",
+      "notes": "Free admission to the materials collection. Duration is planning policy. Mapped location; routing snaps to public road points."
+    },
+    {
+      "id": "osm:way:332479849",
+      "name": "Museu do Carro Eléctrico",
+      "category": "history",
+      "cost_per_person": 800,
+      "duration": 90,
+      "opening_hours": "Tu-Su 10:00-18:00; Jan 01,Dec 25 off; Dec 24 10:00-13:00; easter 10:00-13:00",
+      "price_source": "https://www.museudocarroelectrico.pt/visitar/",
+      "hours_source": "https://www.museudocarroelectrico.pt/visitar/",
+      "latitude": 41.14801955,
+      "longitude": -8.63265945,
+      "coordinates_source": "https://www.openstreetmap.org/way/332479849",
+      "checked_on": "2026-10-24",
+      "valid_until": "2026-11-22",
+      "notes": " Duration is planning policy. Mapped area representative point; not a verified visitor entrance."
+    },
+    {
+      "id": "osm:way:450874936",
+      "name": "Jardim Botânico do Porto",
+      "category": "nature",
+      "cost_per_person": 0,
+      "duration": 90,
+      "opening_hours": "Nov-Mar 09:00-18:00; Apr-Oct 09:00-19:00; Jan 01,Dec 25 off",
+      "price_source": "https://mhnc.up.pt/pt/gca/index.php?id=142",
+      "hours_source": "https://mhnc.up.pt/pt/gca/index.php?id=142",
+      "latitude": 41.1530001,
+      "longitude": -8.6432385,
+      "coordinates_source": "https://www.openstreetmap.org/way/450874936",
+      "checked_on": "2026-10-24",
+      "valid_until": "2026-11-22",
+      "notes": " Duration is planning policy. Mapped area representative point; not a verified visitor entrance."
+    },
+    {
+      "id": "osm:node:2729914235",
+      "name": "Museu de História Natural e da Ciência da Universidade do Porto - Polo Central",
+      "category": "nature",
+      "cost_per_person": 0,
+      "duration": 90,
+      "opening_hours": "Tu-Su 14:00-18:00; Jan 01,Dec 25 off; easter off",
+      "price_source": "https://mhnc.up.pt/pt/gca/index.php?id=46",
+      "hours_source": "https://mhnc.up.pt/pt/gca/index.php?id=46",
+      "latitude": 41.1461669,
+      "longitude": -8.6158404,
+      "coordinates_source": "https://www.openstreetmap.org/node/2729914235",
+      "checked_on": "2026-10-24",
+      "valid_until": "2026-11-22",
+      "notes": "Free autonomous visit to currently accessible exhibitions; afternoon component of split opening only. Ongoing rehabilitation may limit rooms. Duration is planning policy. Mapped location; routing snaps to public road points."
+    },
+    {
+      "id": "osm:way:261265893",
+      "name": "Museu Nacional Soares dos Reis",
+      "category": "art",
+      "cost_per_person": 1000,
+      "duration": 120,
+      "opening_hours": "Tu-Su 10:00-18:00; Jan 01,May 01,Jun 24,Dec 25 off; easter off",
+      "price_source": "https://museusoaresdosreis.gov.pt/wp-content/uploads/2025/03/Despacho-13793_2024-Bilhetica-MMP.pdf",
+      "hours_source": "https://museusoaresdosreis.gov.pt/wp-content/uploads/2025/03/MNSR_Planta-digital_PT_site.pdf",
+      "latitude": 41.14830095,
+      "longitude": -8.621845149999999,
+      "coordinates_source": "https://www.openstreetmap.org/way/261265893",
+      "checked_on": "2026-10-24",
+      "valid_until": "2026-11-22",
+      "notes": " Duration is planning policy. Mapped area representative point; not a verified visitor entrance."
+    }
+  ]
+}

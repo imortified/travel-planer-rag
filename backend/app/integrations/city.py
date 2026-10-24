@@ -6,6 +6,7 @@ import xml.etree.ElementTree as ET
 from dataclasses import asdict
 from datetime import date, datetime, timedelta
 from datetime import time as day_time
+from functools import lru_cache
 
 import httpx
 from opening_hours import OpeningHours, ParserError
@@ -26,6 +27,12 @@ class IncompleteData(Exception):
 
 
 def opening_window(expression, travel_date):
+    result = cached_opening_window(expression, travel_date)
+    return list(result) if result else None
+
+
+@lru_cache(maxsize=8192)
+def cached_opening_window(expression, travel_date):
     if not expression:
         return None
     try:
@@ -35,7 +42,7 @@ def opening_window(expression, travel_date):
         opened = [m for m in range(1440) if hours.is_open(midnight + timedelta(minutes=m))]
         if not opened or opened != list(range(opened[0], opened[-1] + 1)):
             return None  # Split or unknown windows cannot be flattened safely.
-        return [opened[0], opened[-1] + 1]
+        return (opened[0], opened[-1] + 1)
     except (ValueError, TypeError, ParserError):
         return None
 
@@ -161,7 +168,10 @@ class CityProvider:
             return self.catalog_source.catalog(travel_date)
         catalog = self.fetch_catalog(travel_date)
         for poi in catalog["pois"]:
-            if poi.get("provenance") and travel_date.weekday() in (poi.get("free_weekdays") or []):
+            if poi.get("provenance") and (
+                travel_date.weekday() in (poi.get("free_weekdays") or [])
+                or str(travel_date) in (poi.get("free_dates") or [])
+            ):
                 poi["cost_per_person"] = 0
         return catalog
 

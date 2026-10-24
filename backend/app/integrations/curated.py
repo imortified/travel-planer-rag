@@ -28,6 +28,7 @@ class Entry(BaseModel):
     valid_until: date | None = None
     price_policy: str | None = Field(default=None, min_length=1, pattern=r"\S")
     free_weekdays: list[Literal[0, 1, 2, 3, 4, 5, 6]] | None = None
+    free_dates: list[date] | None = None
     restricted_access: bool = False
 
     @model_validator(mode="after")
@@ -134,5 +135,7 @@ def enrich(
         )
         if entry.free_weekdays is not None:
             poi["free_weekdays"] = entry.free_weekdays
+        if entry.free_dates is not None:
+            poi["free_dates"] = [str(day) for day in entry.free_dates]
         records[entry.id] = poi
     return sorted(records.values(), key=lambda p: p["id"]), catalog.version

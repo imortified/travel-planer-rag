@@ -1,8 +1,9 @@
-"""Publish Lisbon POI facts; does not update official facts' checked_on or extend their validity."""
+"""Publish city POI facts; does not update official facts' checked_on or extend their validity."""
 
 import argparse
 import json
 from datetime import datetime, timezone
+from pathlib import Path
 from uuid import uuid4
 
 from sqlalchemy import select
@@ -19,6 +20,7 @@ from app.db.session import engine
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--city", choices=list(CITIES), default="Lisbon")
+    parser.add_argument("--extract", type=Path, help="Normalized local Portugal PBF extract")
     parser.add_argument(
         "--curated-only",
         action="store_true",
@@ -61,7 +63,9 @@ def main():
                     ],
                 }
         else:
-            snapshot, reused = refresh(destination=args.city, curated_only=args.curated_only)
+            snapshot, reused = refresh(
+                destination=args.city, curated_only=args.curated_only, extract_path=args.extract
+            )
             result = {
                 "published": True,
                 "version_id": snapshot.version_id,

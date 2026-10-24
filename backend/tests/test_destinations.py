@@ -1,5 +1,6 @@
 import json
 from datetime import date, timedelta
+from types import SimpleNamespace
 
 import pytest
 from catalog_helpers import NOW, snapshot
@@ -147,3 +148,23 @@ def test_free_weekday_prices_are_derived_without_changing_saved_regular_price():
     assert reader.catalog(date(2026, 10, 25))["pois"][0]["cost_per_person"] == 0
     assert reviewed.pois[0].cost_per_person == 400
     assert "free_weekdays" not in data.pois[0].model_dump()
+
+
+def test_period_catalog_exposes_daily_prices_instead_of_implying_all_days_are_free(monkeypatch):
+    data = snapshot(curated=True)
+    fact = data.pois[0].model_copy(update={"cost_per_person": 400, "free_weekdays": [6]})
+    reviewed = data.model_copy(update={"pois": (fact,)})
+    reader = CatalogReader(
+        loader=lambda: PublishedSnapshot(1, NOW, reviewed, reviewed.digest()), clock=lambda: NOW
+    )
+    monkeypatch.setattr(
+        "app.api.destinations.CityProvider", lambda: SimpleNamespace(catalog=reader.catalog)
+    )
+    response = TestClient(app).get(
+        "/api/v1/destinations/Lisbon/pois?travel_date=2026-10-24&end_date=2026-10-25"
+    )
+    assert response.status_code == 200
+    assert response.json()["pois"][0]["prices_by_date"] == {
+        "2026-10-24": 400,
+        "2026-10-25": 0,
+    }

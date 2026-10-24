@@ -60,10 +60,9 @@ class CatalogReader:
         for fact in snapshot.data.pois:
             poi = fact.model_dump(mode="json", exclude_none=True)
             poi["cost_per_person"] = fact.cost_per_person
-            if (
-                fact.provenance
-                and fact.free_weekdays
-                and travel_date.weekday() in fact.free_weekdays
+            if fact.provenance and (
+                travel_date.weekday() in (fact.free_weekdays or [])
+                or travel_date in (fact.free_dates or [])
             ):
                 poi["cost_per_person"] = 0
             poi["opening_hours"] = fact.opening_hours
@@ -92,6 +91,8 @@ class CatalogReader:
             "curated_review_until": str(manifest.curated_valid_until),
             "status": "ready" if fresh else "expired",
         }
+        if manifest.source_upstream_asof:
+            metadata["source_upstream_asof"] = manifest.source_upstream_asof.isoformat()
         return {
             "destination": manifest.destination,
             "currency": manifest.currency,

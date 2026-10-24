@@ -8,6 +8,7 @@ from zoneinfo import ZoneInfo
 
 from sqlalchemy.orm import Session
 
+from app.catalog.extract import extracted_source
 from app.catalog.repository import publish
 from app.catalog.schema import SnapshotData
 from app.core.config import settings
@@ -26,7 +27,12 @@ DYNAMIC_ISSUES = {
 
 
 def collect_snapshot(
-    provider=None, curated_path=None, now=None, destination="Lisbon", curated_only=False
+    provider=None,
+    curated_path=None,
+    now=None,
+    destination="Lisbon",
+    curated_only=False,
+    extract_path=None,
 ):
     city = city_for(destination)
     path = curated_path or city.curated_path
@@ -36,7 +42,11 @@ def collect_snapshot(
     if max([curated.checked_on, *[p.checked_on for p in curated.pois if p.checked_on]]) > today:
         raise ValueError("Curated facts are dated in the future")
     # Refresh means actual upstream fetch, not a new timestamp on an old Redis response.
-    if curated_only:
+    if curated_only and extract_path is not None:
+        raise ValueError("Choose either a PBF extract or reviewed-only source")
+    if extract_path is not None:
+        source = extracted_source(extract_path, city, curated, today, opening_window)
+    elif curated_only:
         if any(
             p.latitude is None or p.longitude is None or p.coordinates_source is None
             for p in curated.pois
@@ -63,6 +73,13 @@ def collect_snapshot(
         if source["osm_poi_count"] < 1:
             raise ValueError("Empty OSM source cannot replace the published catalog")
     fetched = datetime.fromisoformat(source["fetched_at"])
+    fresh_until = fetched + timedelta(seconds=settings.catalog_max_age_seconds)
+    upstream = source.get("source_upstream_asof")
+    if upstream:
+        fresh_until = min(
+            fresh_until,
+            datetime.fromisoformat(upstream) + timedelta(seconds=settings.catalog_max_age_seconds),
+        )
     facts = []
     for poi in source["pois"]:
         record = {k: v for k, v in poi.items() if k not in {"window", "eligible"}}
@@ -74,9 +91,10 @@ def collect_snapshot(
                 "destination": source["destination"],
                 "origin": source["origin"],
                 "source": source["source"],
-                "bbox": city.bbox,
+                "bbox": source.get("bbox", city.bbox),
                 "fetched_at": source["fetched_at"],
-                "fresh_until": fetched + timedelta(seconds=settings.catalog_max_age_seconds),
+                "fresh_until": fresh_until,
+                **({"source_upstream_asof": upstream} if upstream else {}),
                 "catalog_version": curated.version,
                 "curated_checked_on": curated.checked_on,
                 "curated_valid_until": curated.valid_until,
@@ -94,10 +112,13 @@ def refresh(
     now=None,
     destination="Lisbon",
     curated_only=False,
+    extract_path=None,
 ):
     started = perf_counter()
     try:
-        data = collect_snapshot(provider, curated_path, now, destination, curated_only)
+        data = collect_snapshot(
+            provider, curated_path, now, destination, curated_only, extract_path
+        )
         factory = session_factory or (lambda: Session(engine))
         with factory() as session, session.begin():
             published, reused = publish(session, data, now)

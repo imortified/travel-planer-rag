@@ -7,15 +7,12 @@ Mapped way centres are labelled representative points, never entrances.
 import argparse
 import hashlib
 import json
+from datetime import datetime, timezone
 from pathlib import Path
 
 import osmium
 
-REGIONS = {
-    "Lisbon": (-9.26, 38.68, -9.08, 38.81),
-    "Porto": (-8.70, 41.13, -8.55, 41.20),
-    "Sintra": (-9.50, 38.74, -9.20, 38.87),
-}
+from app.core.destinations import EXTRACT_REGIONS as REGIONS
 
 
 def interesting(tags):
@@ -84,15 +81,25 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--input", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--settlements-output", type=Path, help="Optional country reference JSON")
     args = parser.parse_args()
     handler = Extract()
+    with osmium.io.Reader(str(args.input), osmium.osm.NOTHING) as reader:
+        source_timestamp = reader.header().get("osmosis_replication_timestamp")
+    if not source_timestamp:
+        raise ValueError("PBF header must contain osmosis_replication_timestamp")
     handler.apply_file(str(args.input), locations=True, idx="flex_mem")
     with args.input.open("rb") as stream:
         digest = hashlib.file_digest(stream, "sha256").hexdigest()
     data = {
         "source": "https://download.geofabrik.de/europe/portugal.html",
         "input_sha256": digest,
+        "source_timestamp": source_timestamp,
+        "downloaded_at": datetime.fromtimestamp(
+            args.input.stat().st_mtime, timezone.utc
+        ).isoformat(),
         "country": "PT",
+        "regions": REGIONS,
         "limitations": [
             "Named mapped nodes/ways; not a complete list of cities or POI",
             "Way centres are representative map points, not visitor entrances",
@@ -103,6 +110,26 @@ def main():
     }
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    if args.settlements_output:
+        reference = {
+            key: data[key]
+            for key in (
+                "source",
+                "input_sha256",
+                "source_timestamp",
+                "downloaded_at",
+                "country",
+                "settlements",
+            )
+        }
+        reference.update(
+            version=f"portugal-settlements-{source_timestamp[:10]}",
+            note="Mapped OSM city/town nodes; reference list, not complete planning coverage.",
+        )
+        args.settlements_output.parent.mkdir(parents=True, exist_ok=True)
+        args.settlements_output.write_text(
+            json.dumps(reference, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+        )
     print(
         json.dumps(
             {

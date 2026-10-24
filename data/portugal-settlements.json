@@ -1,0 +1,4595 @@
+{
+  "version": "portugal-settlements-2026-10-24",
+  "source": "https://download.geofabrik.de/europe/portugal.html",
+  "input_sha256": "1f424c95bb7b2da6530fec47ef3f97b74d46827c9e48d6837ab317be8a440988",
+  "country": "PT",
+  "source_timestamp": "2026-10-23T20:20:51Z",
+  "downloaded_at": "2026-10-24T15:33:48.961648+00:00",
+  "note": "Mapped OSM city/town nodes; reference list, not complete or supported planning coverage.",
+  "settlements": [
+    {
+      "name": "A dos Cunhados",
+      "osm_id": 287284209,
+      "latitude": 39.1519962,
+      "longitude": -9.2979195
+    },
+    {
+      "name": "A dos Francos",
+      "osm_id": 2923882542,
+      "latitude": 39.3224808,
+      "longitude": -9.0527851
+    },
+    {
+      "name": "Abragão",
+      "osm_id": 3978966765,
+      "latitude": 41.1583743,
+      "longitude": -8.2247687
+    },
+    {
+      "name": "Abrantes",
+      "osm_id": 25615646,
+      "latitude": 39.4630269,
+      "longitude": -8.1975227
+    },
+    {
+      "name": "Aguada de Cima",
+      "osm_id": 1345924873,
+      "latitude": 40.5169467,
+      "longitude": -8.4158179
+    },
+    {
+      "name": "Agualva-Cacém",
+      "osm_id": 12981527203,
+      "latitude": 38.7702617,
+      "longitude": -9.3007219
+    },
+    {
+      "name": "Aguiar da Beira",
+      "osm_id": 25277730,
+      "latitude": 40.81718,
+      "longitude": -7.54312
+    },
+    {
+      "name": "Aguçadoura",
+      "osm_id": 3983105008,
+      "latitude": 41.4286825,
+      "longitude": -8.777095
+    },
+    {
+      "name": "Alandroal",
+      "osm_id": 25269567,
+      "latitude": 38.7020061,
+      "longitude": -7.4038313
+    },
+    {
+      "name": "Albergaria-a-Velha",
+      "osm_id": 1325870037,
+      "latitude": 40.6906888,
+      "longitude": -8.4792205
+    },
+    {
+      "name": "Albufeira",
+      "osm_id": 1429439599,
+      "latitude": 37.088241,
+      "longitude": -8.2526339
+    },
+    {
+      "name": "Alcains",
+      "osm_id": 385254174,
+      "latitude": 39.9151369,
+      "longitude": -7.4614654
+    },
+    {
+      "name": "Alcanena",
+      "osm_id": 25615630,
+      "latitude": 39.4585519,
+      "longitude": -8.6697497
+    },
+    {
+      "name": "Alcanhões",
+      "osm_id": 973800867,
+      "latitude": 39.2958027,
+      "longitude": -8.6583378
+    },
+    {
+      "name": "Alcantarilha",
+      "osm_id": 1069590029,
+      "latitude": 37.1300756,
+      "longitude": -8.3478593
+    },
+    {
+      "name": "Alcobaça",
+      "osm_id": 2942663922,
+      "latitude": 39.5519199,
+      "longitude": -8.9763396
+    },
+    {
+      "name": "Alcobertas",
+      "osm_id": 681261091,
+      "latitude": 39.4189942,
+      "longitude": -8.9067339
+    },
+    {
+      "name": "Alcochete",
+      "osm_id": 25619063,
+      "latitude": 38.7560499,
+      "longitude": -8.9608437
+    },
+    {
+      "name": "Alcoutim",
+      "osm_id": 25277563,
+      "latitude": 37.4700144,
+      "longitude": -7.4725535
+    },
+    {
+      "name": "Alcácer do Sal",
+      "osm_id": 25619074,
+      "latitude": 38.3729735,
+      "longitude": -8.5122705
+    },
+    {
+      "name": "Alenquer",
+      "osm_id": 1261373147,
+      "latitude": 39.056633,
+      "longitude": -9.0076057
+    },
+    {
+      "name": "Alfarelos",
+      "osm_id": 3374919492,
+      "latitude": 40.1498521,
+      "longitude": -8.6533065
+    },
+    {
+      "name": "Alfeizerão",
+      "osm_id": 758006770,
+      "latitude": 39.5003118,
+      "longitude": -9.1036247
+    },
+    {
+      "name": "Alfena",
+      "osm_id": 650795492,
+      "latitude": 41.237635,
+      "longitude": -8.5277489
+    },
+    {
+      "name": "Alfândega da Fé",
+      "osm_id": 25268786,
+      "latitude": 41.3419743,
+      "longitude": -6.9611439
+    },
+    {
+      "name": "Algoz",
+      "osm_id": 1160992703,
+      "latitude": 37.1640795,
+      "longitude": -8.302334
+    },
+    {
+      "name": "Algueirão-Mem Martins",
+      "osm_id": 4366097113,
+      "latitude": 38.7999099,
+      "longitude": -9.3397834
+    },
+    {
+      "name": "Algés",
+      "osm_id": 1148841917,
+      "latitude": 38.7027915,
+      "longitude": -9.2287735
+    },
+    {
+      "name": "Alhadas",
+      "osm_id": 4382084168,
+      "latitude": 40.1898767,
+      "longitude": -8.7838465
+    },
+    {
+      "name": "Alhandra",
+      "osm_id": 1536421679,
+      "latitude": 38.9287073,
+      "longitude": -9.0077932
+    },
+    {
+      "name": "Alhos Vedros",
+      "osm_id": 2777064792,
+      "latitude": 38.6561131,
+      "longitude": -9.0246288
+    },
+    {
+      "name": "Alijó",
+      "osm_id": 25278433,
+      "latitude": 41.2768619,
+      "longitude": -7.4753795
+    },
+    {
+      "name": "Aljezur",
+      "osm_id": 4163980589,
+      "latitude": 37.3151549,
+      "longitude": -8.8040533
+    },
+    {
+      "name": "Aljubarrota",
+      "osm_id": 2089921401,
+      "latitude": 39.5663818,
+      "longitude": -8.9305256
+    },
+    {
+      "name": "Aljustrel",
+      "osm_id": 1667120361,
+      "latitude": 37.8770563,
+      "longitude": -8.164752
+    },
+    {
+      "name": "Almada",
+      "osm_id": 25619073,
+      "latitude": 38.6831302,
+      "longitude": -9.1576301
+    },
+    {
+      "name": "Almancil",
+      "osm_id": 2089328881,
+      "latitude": 37.0870572,
+      "longitude": -8.0298056
+    },
+    {
+      "name": "Almeida",
+      "osm_id": 25277740,
+      "latitude": 40.7260772,
+      "longitude": -6.9065743
+    },
+    {
+      "name": "Almeirim",
+      "osm_id": 25615631,
+      "latitude": 39.2091925,
+      "longitude": -8.6291035
+    },
+    {
+      "name": "Almendra",
+      "osm_id": 1075614472,
+      "latitude": 41.0011057,
+      "longitude": -7.0555221
+    },
+    {
+      "name": "Almodôvar",
+      "osm_id": 25264848,
+      "latitude": 37.511607,
+      "longitude": -8.0603168
+    },
+    {
+      "name": "Alpendurada",
+      "osm_id": 431481497,
+      "latitude": 41.0866803,
+      "longitude": -8.2483748
+    },
+    {
+      "name": "Alpiarça",
+      "osm_id": 25615648,
+      "latitude": 39.2599352,
+      "longitude": -8.5845144
+    },
+    {
+      "name": "Alter do Chão",
+      "osm_id": 25612851,
+      "latitude": 39.2001177,
+      "longitude": -7.659037
+    },
+    {
+      "name": "Alvaiázere",
+      "osm_id": 25278382,
+      "latitude": 39.8247866,
+      "longitude": -8.3820737
+    },
+    {
+      "name": "Alvalade",
+      "osm_id": 6960821131,
+      "latitude": 37.9381865,
+      "longitude": -8.3926221
+    },
+    {
+      "name": "Alvares",
+      "osm_id": 1763979488,
+      "latitude": 40.0176126,
+      "longitude": -8.0994536
+    },
+    {
+      "name": "Alvarães",
+      "osm_id": 3303519842,
+      "latitude": 41.642535,
+      "longitude": -8.7428802
+    },
+    {
+      "name": "Alverca do Ribatejo",
+      "osm_id": 1297322484,
+      "latitude": 38.8935253,
+      "longitude": -9.0396136
+    },
+    {
+      "name": "Alvite",
+      "osm_id": 1569228971,
+      "latitude": 40.9797663,
+      "longitude": -7.7114931
+    },
+    {
+      "name": "Alvito",
+      "osm_id": 25264846,
+      "latitude": 38.255967,
+      "longitude": -7.9918028
+    },
+    {
+      "name": "Alvor",
+      "osm_id": 3258699644,
+      "latitude": 37.129109,
+      "longitude": -8.5929383
+    },
+    {
+      "name": "Amadora",
+      "osm_id": 1605395097,
+      "latitude": 38.758959,
+      "longitude": -9.2365233
+    },
+    {
+      "name": "Amarante",
+      "osm_id": 25613461,
+      "latitude": 41.2699316,
+      "longitude": -8.0804563
+    },
+    {
+      "name": "Amareleja",
+      "osm_id": 966601461,
+      "latitude": 38.2071102,
+      "longitude": -7.2263606
+    },
+    {
+      "name": "Amares",
+      "osm_id": 25264992,
+      "latitude": 41.6309663,
+      "longitude": -8.3510599
+    },
+    {
+      "name": "Amiais de Baixo",
+      "osm_id": 3012053676,
+      "latitude": 39.443308,
+      "longitude": -8.7317219
+    },
+    {
+      "name": "Amora",
+      "osm_id": 1603859366,
+      "latitude": 38.6297097,
+      "longitude": -9.1160023
+    },
+    {
+      "name": "Anadia",
+      "osm_id": 3623253300,
+      "latitude": 40.4426833,
+      "longitude": -8.4359581
+    },
+    {
+      "name": "Ancede",
+      "osm_id": 3512884395,
+      "latitude": 41.1046709,
+      "longitude": -8.0614156
+    },
+    {
+      "name": "Angeja",
+      "osm_id": 880402877,
+      "latitude": 40.6786703,
+      "longitude": -8.5563816
+    },
+    {
+      "name": "Angra do Heroísmo",
+      "osm_id": 25255070,
+      "latitude": 38.6593167,
+      "longitude": -27.2195578
+    },
+    {
+      "name": "Ansião",
+      "osm_id": 430350649,
+      "latitude": 39.9113771,
+      "longitude": -8.4359857
+    },
+    {
+      "name": "Anta",
+      "osm_id": 4037024204,
+      "latitude": 41.0061739,
+      "longitude": -8.62344
+    },
+    {
+      "name": "Ançã",
+      "osm_id": 1325904863,
+      "latitude": 40.2723549,
+      "longitude": -8.5191581
+    },
+    {
+      "name": "Apúlia",
+      "osm_id": 3133927438,
+      "latitude": 41.4824433,
+      "longitude": -8.7651879
+    },
+    {
+      "name": "Arazede",
+      "osm_id": 1107873110,
+      "latitude": 40.2817583,
+      "longitude": -8.6520337
+    },
+    {
+      "name": "Arco de Baúlhe",
+      "osm_id": 3174866824,
+      "latitude": 41.4802363,
+      "longitude": -7.9607068
+    },
+    {
+      "name": "Arcos de Valdevez",
+      "osm_id": 25278424,
+      "latitude": 41.8471981,
+      "longitude": -8.417882
+    },
+    {
+      "name": "Arcozelo",
+      "osm_id": 3547499182,
+      "latitude": 41.0550094,
+      "longitude": -8.6399166
+    },
+    {
+      "name": "Arcozelo",
+      "osm_id": 3667575007,
+      "latitude": 41.7694482,
+      "longitude": -8.5985635
+    },
+    {
+      "name": "Arganil",
+      "osm_id": 25269219,
+      "latitude": 40.2174725,
+      "longitude": -8.0544548
+    },
+    {
+      "name": "Argoncilhe",
+      "osm_id": 3814284657,
+      "latitude": 41.0183885,
+      "longitude": -8.5477254
+    },
+    {
+      "name": "Argozelo",
+      "osm_id": 1536797114,
+      "latitude": 41.6424891,
+      "longitude": -6.6002798
+    },
+    {
+      "name": "Armamar",
+      "osm_id": 1107637847,
+      "latitude": 41.1077323,
+      "longitude": -7.691601
+    },
+    {
+      "name": "Armação de Pêra",
+      "osm_id": 1204295377,
+      "latitude": 37.1042384,
+      "longitude": -8.3627308
+    },
+    {
+      "name": "Arouca",
+      "osm_id": 1207711237,
+      "latitude": 40.9289214,
+      "longitude": -8.2441746
+    },
+    {
+      "name": "Arraiolos",
+      "osm_id": 25269566,
+      "latitude": 38.7227289,
+      "longitude": -7.9853053
+    },
+    {
+      "name": "Arranhó",
+      "osm_id": 2159484047,
+      "latitude": 38.9533255,
+      "longitude": -9.1349729
+    },
+    {
+      "name": "Arrifana",
+      "osm_id": 1922913476,
+      "latitude": 40.9116856,
+      "longitude": -8.4952939
+    },
+    {
+      "name": "Arronches",
+      "osm_id": 25612846,
+      "latitude": 39.122106,
+      "longitude": -7.2853362
+    },
+    {
+      "name": "Arruda dos Vinhos",
+      "osm_id": 25611741,
+      "latitude": 38.98303,
+      "longitude": -9.07763
+    },
+    {
+      "name": "Arões (São Romão)",
+      "osm_id": 3173777652,
+      "latitude": 41.45615,
+      "longitude": -8.2175346
+    },
+    {
+      "name": "Avanca",
+      "osm_id": 2329258529,
+      "latitude": 40.8062105,
+      "longitude": -8.5729444
+    },
+    {
+      "name": "Aveiras de Cima",
+      "osm_id": 1665929581,
+      "latitude": 39.1389557,
+      "longitude": -8.8999055
+    },
+    {
+      "name": "Aveiro",
+      "osm_id": 2912652994,
+      "latitude": 40.640496,
+      "longitude": -8.6537841
+    },
+    {
+      "name": "Avelar",
+      "osm_id": 7499133926,
+      "latitude": 39.9236793,
+      "longitude": -8.3576363
+    },
+    {
+      "name": "Aver-o-Mar",
+      "osm_id": 3983105011,
+      "latitude": 41.4037531,
+      "longitude": -8.7695279
+    },
+    {
+      "name": "Avintes",
+      "osm_id": 3547387403,
+      "latitude": 41.1054014,
+      "longitude": -8.5507083
+    },
+    {
+      "name": "Avis",
+      "osm_id": 25612855,
+      "latitude": 39.0559501,
+      "longitude": -7.8897441
+    },
+    {
+      "name": "Avô",
+      "osm_id": 1121986465,
+      "latitude": 40.2931081,
+      "longitude": -7.9052593
+    },
+    {
+      "name": "Ayamonte",
+      "osm_id": 1460569469,
+      "latitude": 37.215797,
+      "longitude": -7.4060169
+    },
+    {
+      "name": "Azambuja",
+      "osm_id": 25611745,
+      "latitude": 39.0689884,
+      "longitude": -8.8684921
+    },
+    {
+      "name": "Azueira",
+      "osm_id": 4361779958,
+      "latitude": 39.0063355,
+      "longitude": -9.2790355
+    },
+    {
+      "name": "Baixa da Banheira",
+      "osm_id": 2766890744,
+      "latitude": 38.6569048,
+      "longitude": -9.0440862
+    },
+    {
+      "name": "Baião",
+      "osm_id": 25613472,
+      "latitude": 41.1616306,
+      "longitude": -8.0355439
+    },
+    {
+      "name": "Baltar",
+      "osm_id": 4425308418,
+      "latitude": 41.1927312,
+      "longitude": -8.388552
+    },
+    {
+      "name": "Barcelos",
+      "osm_id": 25264991,
+      "latitude": 41.5314496,
+      "longitude": -8.6192306
+    },
+    {
+      "name": "Barcouço",
+      "osm_id": 1474174227,
+      "latitude": 40.3042232,
+      "longitude": -8.4730435
+    },
+    {
+      "name": "Barrancos",
+      "osm_id": 25623865,
+      "latitude": 38.1315902,
+      "longitude": -6.9779893
+    },
+    {
+      "name": "Barreiro",
+      "osm_id": 25619069,
+      "latitude": 38.6642226,
+      "longitude": -9.07651
+    },
+    {
+      "name": "Barrosas",
+      "osm_id": 4162185080,
+      "latitude": 41.3288819,
+      "longitude": -8.2659048
+    },
+    {
+      "name": "Barroselas",
+      "osm_id": 2635944865,
+      "latitude": 41.6471968,
+      "longitude": -8.7014513
+    },
+    {
+      "name": "Batalha",
+      "osm_id": 25278387,
+      "latitude": 39.6578998,
+      "longitude": -8.8243713
+    },
+    {
+      "name": "Beja",
+      "osm_id": 260140539,
+      "latitude": 38.0154479,
+      "longitude": -7.8650368
+    },
+    {
+      "name": "Belas",
+      "osm_id": 1366277543,
+      "latitude": 38.7759227,
+      "longitude": -9.2639227
+    },
+    {
+      "name": "Belmonte",
+      "osm_id": 25269014,
+      "latitude": 40.3583264,
+      "longitude": -7.3512742
+    },
+    {
+      "name": "Benavente",
+      "osm_id": 25615642,
+      "latitude": 38.9826508,
+      "longitude": -8.8095788
+    },
+    {
+      "name": "Benedita",
+      "osm_id": 1538877034,
+      "latitude": 39.4257209,
+      "longitude": -8.9800702
+    },
+    {
+      "name": "Benfica do Ribatejo",
+      "osm_id": 430759158,
+      "latitude": 39.1439901,
+      "longitude": -8.6858417
+    },
+    {
+      "name": "Bensafrim",
+      "osm_id": 88089339,
+      "latitude": 37.1558674,
+      "longitude": -8.7355615
+    },
+    {
+      "name": "Beringel",
+      "osm_id": 811280684,
+      "latitude": 38.0565476,
+      "longitude": -7.9835201
+    },
+    {
+      "name": "Bobadela",
+      "osm_id": 503346790,
+      "latitude": 38.8081283,
+      "longitude": -9.0992649
+    },
+    {
+      "name": "Boidobra",
+      "osm_id": 3670583899,
+      "latitude": 40.254211,
+      "longitude": -7.4921904
+    },
+    {
+      "name": "Boliqueime",
+      "osm_id": 430930373,
+      "latitude": 37.1337939,
+      "longitude": -8.1579243
+    },
+    {
+      "name": "Bombarral",
+      "osm_id": 25278375,
+      "latitude": 39.2670652,
+      "longitude": -9.1584324
+    },
+    {
+      "name": "Borba",
+      "osm_id": 25269563,
+      "latitude": 38.8057942,
+      "longitude": -7.4542105
+    },
+    {
+      "name": "Boticas",
+      "osm_id": 25624118,
+      "latitude": 41.6881921,
+      "longitude": -7.6645346
+    },
+    {
+      "name": "Botão",
+      "osm_id": 4345154698,
+      "latitude": 40.3066564,
+      "longitude": -8.4029644
+    },
+    {
+      "name": "Braga",
+      "osm_id": 24960107,
+      "latitude": 41.5510583,
+      "longitude": -8.4280045
+    },
+    {
+      "name": "Bragança",
+      "osm_id": 25254935,
+      "latitude": 41.8071182,
+      "longitude": -6.7589839
+    },
+    {
+      "name": "Branca",
+      "osm_id": 1801720689,
+      "latitude": 40.7540788,
+      "longitude": -8.4862112
+    },
+    {
+      "name": "Britiande",
+      "osm_id": 1319893180,
+      "latitude": 41.0632596,
+      "longitude": -7.7926335
+    },
+    {
+      "name": "Brito",
+      "osm_id": 3122920198,
+      "latitude": 41.4547553,
+      "longitude": -8.3655247
+    },
+    {
+      "name": "Bucelas",
+      "osm_id": 1297372113,
+      "latitude": 38.9016248,
+      "longitude": -9.118728
+    },
+    {
+      "name": "Bustos",
+      "osm_id": 822324451,
+      "latitude": 40.4970165,
+      "longitude": -8.5967215
+    },
+    {
+      "name": "Cabanas de Tavira",
+      "osm_id": 921789458,
+      "latitude": 37.1354946,
+      "longitude": -7.5997004
+    },
+    {
+      "name": "Cabanas de Viriato",
+      "osm_id": 1426985473,
+      "latitude": 40.4756647,
+      "longitude": -7.9734987
+    },
+    {
+      "name": "Cabeceiras de Basto",
+      "osm_id": 1564087922,
+      "latitude": 41.5136392,
+      "longitude": -7.9878132
+    },
+    {
+      "name": "Cacia",
+      "osm_id": 3374971735,
+      "latitude": 40.6837054,
+      "longitude": -8.5974274
+    },
+    {
+      "name": "Cadaval",
+      "osm_id": 4347515652,
+      "latitude": 39.242859,
+      "longitude": -9.1026628
+    },
+    {
+      "name": "Caldas da Rainha",
+      "osm_id": 2905742464,
+      "latitude": 39.4071857,
+      "longitude": -9.1346004
+    },
+    {
+      "name": "Caldas das Taipas",
+      "osm_id": 3122920199,
+      "latitude": 41.4868794,
+      "longitude": -8.3439223
+    },
+    {
+      "name": "Caldas de São Jorge",
+      "osm_id": 2682307071,
+      "latitude": 40.9663636,
+      "longitude": -8.5044593
+    },
+    {
+      "name": "Caldelas",
+      "osm_id": 3170850632,
+      "latitude": 41.668624,
+      "longitude": -8.3759934
+    },
+    {
+      "name": "Calheta",
+      "osm_id": 25269574,
+      "latitude": 32.7219412,
+      "longitude": -17.1782577
+    },
+    {
+      "name": "Calheta",
+      "osm_id": 25270687,
+      "latitude": 38.6055151,
+      "longitude": -28.0187906
+    },
+    {
+      "name": "Camarate",
+      "osm_id": 4361088134,
+      "latitude": 38.8031305,
+      "longitude": -9.1309898
+    },
+    {
+      "name": "Cambres",
+      "osm_id": 4263743085,
+      "latitude": 41.128261,
+      "longitude": -7.8003803
+    },
+    {
+      "name": "Caminha",
+      "osm_id": 25278425,
+      "latitude": 41.8757598,
+      "longitude": -8.8388375
+    },
+    {
+      "name": "Campelos",
+      "osm_id": 2281724686,
+      "latitude": 39.1972954,
+      "longitude": -9.2359745
+    },
+    {
+      "name": "Campo (São Martinho)",
+      "osm_id": 451995417,
+      "latitude": 41.3601452,
+      "longitude": -8.3663576
+    },
+    {
+      "name": "Campo Maior",
+      "osm_id": 25612852,
+      "latitude": 39.0125063,
+      "longitude": -7.0692822
+    },
+    {
+      "name": "Campo de Besteiros",
+      "osm_id": 1205596396,
+      "latitude": 40.5554918,
+      "longitude": -8.1341027
+    },
+    {
+      "name": "Canas de Santa Maria",
+      "osm_id": 3958444552,
+      "latitude": 40.5528608,
+      "longitude": -8.0355727
+    },
+    {
+      "name": "Canas de Senhorim",
+      "osm_id": 1899891174,
+      "latitude": 40.5033219,
+      "longitude": -7.9011873
+    },
+    {
+      "name": "Canedo",
+      "osm_id": 4037560997,
+      "latitude": 41.017568,
+      "longitude": -8.4518566
+    },
+    {
+      "name": "Canelas",
+      "osm_id": 3971605942,
+      "latitude": 41.0805427,
+      "longitude": -8.6006594
+    },
+    {
+      "name": "Caneças",
+      "osm_id": 4361852427,
+      "latitude": 38.8159778,
+      "longitude": -9.2219504
+    },
+    {
+      "name": "Caniçal",
+      "osm_id": 1832777802,
+      "latitude": 32.7391038,
+      "longitude": -16.739309
+    },
+    {
+      "name": "Caniço",
+      "osm_id": 314916142,
+      "latitude": 32.65238,
+      "longitude": -16.8409696
+    },
+    {
+      "name": "Cantanhede",
+      "osm_id": 3657201436,
+      "latitude": 40.3461879,
+      "longitude": -8.5940128
+    },
+    {
+      "name": "Capelas",
+      "osm_id": 5825663971,
+      "latitude": 37.8370218,
+      "longitude": -25.6888676
+    },
+    {
+      "name": "Caramulo",
+      "osm_id": 1124861015,
+      "latitude": 40.5723037,
+      "longitude": -8.1668801
+    },
+    {
+      "name": "Caranguejeira",
+      "osm_id": 658948610,
+      "latitude": 39.7438071,
+      "longitude": -8.7084194
+    },
+    {
+      "name": "Carapinheira",
+      "osm_id": 1385013546,
+      "latitude": 40.2057995,
+      "longitude": -8.6483241
+    },
+    {
+      "name": "Caria",
+      "osm_id": 1723097830,
+      "latitude": 40.2950487,
+      "longitude": -7.3639902
+    },
+    {
+      "name": "Carnaxide",
+      "osm_id": 1493262320,
+      "latitude": 38.7255312,
+      "longitude": -9.2463156
+    },
+    {
+      "name": "Carrazeda de Ansiães",
+      "osm_id": 25268778,
+      "latitude": 41.2435491,
+      "longitude": -7.3054015
+    },
+    {
+      "name": "Carrazedo de Montenegro",
+      "osm_id": 3188737662,
+      "latitude": 41.5636722,
+      "longitude": -7.427089
+    },
+    {
+      "name": "Carregado",
+      "osm_id": 284414008,
+      "latitude": 39.0230782,
+      "longitude": -8.9768885
+    },
+    {
+      "name": "Carregal do Sal",
+      "osm_id": 1107469629,
+      "latitude": 40.4334074,
+      "longitude": -8.0030203
+    },
+    {
+      "name": "Carregosa",
+      "osm_id": 3777617742,
+      "latitude": 40.8832957,
+      "longitude": -8.4150805
+    },
+    {
+      "name": "Cartaxo",
+      "osm_id": 25615637,
+      "latitude": 39.1619462,
+      "longitude": -8.7863222
+    },
+    {
+      "name": "Carvalhos",
+      "osm_id": 4179789289,
+      "latitude": 41.0662456,
+      "longitude": -8.5725298
+    },
+    {
+      "name": "Carvalhosa",
+      "osm_id": 1798316291,
+      "latitude": 41.2999643,
+      "longitude": -8.3625207
+    },
+    {
+      "name": "Carvoeiro",
+      "osm_id": 1121314090,
+      "latitude": 37.0970567,
+      "longitude": -8.4711093
+    },
+    {
+      "name": "Casal de Cambra",
+      "osm_id": 4267118589,
+      "latitude": 38.8005207,
+      "longitude": -9.2307698
+    },
+    {
+      "name": "Cascais",
+      "osm_id": 25611736,
+      "latitude": 38.6968919,
+      "longitude": -9.4204495
+    },
+    {
+      "name": "Castanheira de Pera",
+      "osm_id": 2505390107,
+      "latitude": 40.0047265,
+      "longitude": -8.2091368
+    },
+    {
+      "name": "Castanheira do Ribatejo",
+      "osm_id": 284412545,
+      "latitude": 38.9930986,
+      "longitude": -8.9715412
+    },
+    {
+      "name": "Castelo Branco",
+      "osm_id": 5414768270,
+      "latitude": 39.8266322,
+      "longitude": -7.4919318
+    },
+    {
+      "name": "Castelo de Paiva",
+      "osm_id": 2736113015,
+      "latitude": 41.0410042,
+      "longitude": -8.271775
+    },
+    {
+      "name": "Castelo de Vide",
+      "osm_id": 3799576050,
+      "latitude": 39.4152274,
+      "longitude": -7.4554188
+    },
+    {
+      "name": "Castelo do Neiva",
+      "osm_id": 2412200313,
+      "latitude": 41.6245031,
+      "longitude": -8.8001678
+    },
+    {
+      "name": "Castro Daire",
+      "osm_id": 24934622,
+      "latitude": 40.9014091,
+      "longitude": -7.9311761
+    },
+    {
+      "name": "Castro Laboreiro",
+      "osm_id": 1942595682,
+      "latitude": 42.0305322,
+      "longitude": -8.1593375
+    },
+    {
+      "name": "Castro Marim",
+      "osm_id": 25277555,
+      "latitude": 37.2179367,
+      "longitude": -7.4457102
+    },
+    {
+      "name": "Castro Verde",
+      "osm_id": 25264850,
+      "latitude": 37.697995,
+      "longitude": -8.082275
+    },
+    {
+      "name": "Castêlo da Maia",
+      "osm_id": 1977148581,
+      "latitude": 41.2618834,
+      "longitude": -8.6153235
+    },
+    {
+      "name": "Cavez",
+      "osm_id": 3174866828,
+      "latitude": 41.5068404,
+      "longitude": -7.9121414
+    },
+    {
+      "name": "Caxarias",
+      "osm_id": 3374911981,
+      "latitude": 39.7131426,
+      "longitude": -8.5358346
+    },
+    {
+      "name": "Caxias",
+      "osm_id": 891706121,
+      "latitude": 38.6983608,
+      "longitude": -9.2716765
+    },
+    {
+      "name": "Cedovim",
+      "osm_id": 4162143999,
+      "latitude": 41.0272729,
+      "longitude": -7.3102777
+    },
+    {
+      "name": "Ceira",
+      "osm_id": 249494310,
+      "latitude": 40.1719847,
+      "longitude": -8.3914739
+    },
+    {
+      "name": "Cela",
+      "osm_id": 2940783476,
+      "latitude": 39.5398754,
+      "longitude": -9.0355054
+    },
+    {
+      "name": "Celorico da Beira",
+      "osm_id": 4162218889,
+      "latitude": 40.6358841,
+      "longitude": -7.3928446
+    },
+    {
+      "name": "Celorico de Basto",
+      "osm_id": 25264996,
+      "latitude": 41.3878295,
+      "longitude": -8.0002415
+    },
+    {
+      "name": "Cercal do Alentejo",
+      "osm_id": 652879106,
+      "latitude": 37.8010232,
+      "longitude": -8.6730732
+    },
+    {
+      "name": "Cernache",
+      "osm_id": 1412664037,
+      "latitude": 40.1379404,
+      "longitude": -8.4691011
+    },
+    {
+      "name": "Cernache do Bonjardim",
+      "osm_id": 2701124724,
+      "latitude": 39.8165101,
+      "longitude": -8.1862538
+    },
+    {
+      "name": "Cerva",
+      "osm_id": 3185054605,
+      "latitude": 41.472873,
+      "longitude": -7.8475324
+    },
+    {
+      "name": "Cesar",
+      "osm_id": 2822614022,
+      "latitude": 40.9123659,
+      "longitude": -8.4330609
+    },
+    {
+      "name": "Cete",
+      "osm_id": 3979080669,
+      "latitude": 41.1782871,
+      "longitude": -8.3649391
+    },
+    {
+      "name": "Chamusca",
+      "osm_id": 25615633,
+      "latitude": 39.3560025,
+      "longitude": -8.4802892
+    },
+    {
+      "name": "Charneca de Caparica",
+      "osm_id": 1603884090,
+      "latitude": 38.6285507,
+      "longitude": -9.1974387
+    },
+    {
+      "name": "Chaves",
+      "osm_id": 25624127,
+      "latitude": 41.7399003,
+      "longitude": -7.4715213
+    },
+    {
+      "name": "Cinfães",
+      "osm_id": 1107752013,
+      "latitude": 41.0721651,
+      "longitude": -8.0894728
+    },
+    {
+      "name": "Coimbra",
+      "osm_id": 25623904,
+      "latitude": 40.2111874,
+      "longitude": -8.4291478
+    },
+    {
+      "name": "Colares",
+      "osm_id": 1745996709,
+      "latitude": 38.7991515,
+      "longitude": -9.4469662
+    },
+    {
+      "name": "Condeixa-a-Nova",
+      "osm_id": 25269222,
+      "latitude": 40.1138729,
+      "longitude": -8.4986318
+    },
+    {
+      "name": "Constância",
+      "osm_id": 25615639,
+      "latitude": 39.4750609,
+      "longitude": -8.33819
+    },
+    {
+      "name": "Corroios",
+      "osm_id": 116099086,
+      "latitude": 38.6415327,
+      "longitude": -9.1522335
+    },
+    {
+      "name": "Cortegaça",
+      "osm_id": 3374981537,
+      "latitude": 40.9416701,
+      "longitude": -8.6304376
+    },
+    {
+      "name": "Coruche",
+      "osm_id": 25615636,
+      "latitude": 38.958218,
+      "longitude": -8.5283498
+    },
+    {
+      "name": "Costa da Caparica",
+      "osm_id": 1461563731,
+      "latitude": 38.6445165,
+      "longitude": -9.2336068
+    },
+    {
+      "name": "Couço",
+      "osm_id": 378223168,
+      "latitude": 38.9875126,
+      "longitude": -8.2868981
+    },
+    {
+      "name": "Covilhã",
+      "osm_id": 25269013,
+      "latitude": 40.2804021,
+      "longitude": -7.504191
+    },
+    {
+      "name": "Crato",
+      "osm_id": 25612853,
+      "latitude": 39.2851221,
+      "longitude": -7.6454266
+    },
+    {
+      "name": "Crestuma",
+      "osm_id": 4015684780,
+      "latitude": 41.0647683,
+      "longitude": -8.5010918
+    },
+    {
+      "name": "Cruz Quebrada-Dafundo",
+      "osm_id": 9297065658,
+      "latitude": 38.7005488,
+      "longitude": -9.24567
+    },
+    {
+      "name": "Cuba",
+      "osm_id": 25264847,
+      "latitude": 38.16521,
+      "longitude": -7.89253
+    },
+    {
+      "name": "Cucujães",
+      "osm_id": 2622433948,
+      "latitude": 40.8704631,
+      "longitude": -8.4977106
+    },
+    {
+      "name": "Cumieira",
+      "osm_id": 3191711166,
+      "latitude": 41.2559876,
+      "longitude": -7.7714965
+    },
+    {
+      "name": "Custóias",
+      "osm_id": 3976822514,
+      "latitude": 41.2069227,
+      "longitude": -8.6463005
+    },
+    {
+      "name": "Câmara de Lobos",
+      "osm_id": 1832777805,
+      "latitude": 32.6485492,
+      "longitude": -16.9752409
+    },
+    {
+      "name": "Côja",
+      "osm_id": 1121986294,
+      "latitude": 40.2688082,
+      "longitude": -7.9877553
+    },
+    {
+      "name": "Darque",
+      "osm_id": 257994562,
+      "latitude": 41.683106,
+      "longitude": -8.796185
+    },
+    {
+      "name": "Eixo",
+      "osm_id": 2467748427,
+      "latitude": 40.6294024,
+      "longitude": -8.5655405
+    },
+    {
+      "name": "Elvas",
+      "osm_id": 25612845,
+      "latitude": 38.8806123,
+      "longitude": -7.1637237
+    },
+    {
+      "name": "Entroncamento",
+      "osm_id": 25615640,
+      "latitude": 39.4652196,
+      "longitude": -8.4682137
+    },
+    {
+      "name": "Ericeira",
+      "osm_id": 130035599,
+      "latitude": 38.9632411,
+      "longitude": -9.4170802
+    },
+    {
+      "name": "Ermesinde",
+      "osm_id": 1174117042,
+      "latitude": 41.2170785,
+      "longitude": -8.5515798
+    },
+    {
+      "name": "Ermidas-Sado",
+      "osm_id": 1473511455,
+      "latitude": 38.0079166,
+      "longitude": -8.4126882
+    },
+    {
+      "name": "Ervedosa do Douro",
+      "osm_id": 1198282075,
+      "latitude": 41.1655541,
+      "longitude": -7.4734152
+    },
+    {
+      "name": "Escoural",
+      "osm_id": 371590014,
+      "latitude": 38.5417601,
+      "longitude": -8.1679722
+    },
+    {
+      "name": "Esmoriz",
+      "osm_id": 772915167,
+      "latitude": 40.9602526,
+      "longitude": -8.6228198
+    },
+    {
+      "name": "Espinhal",
+      "osm_id": 4228663724,
+      "latitude": 40.0126841,
+      "longitude": -8.3498424
+    },
+    {
+      "name": "Espinho",
+      "osm_id": 25623864,
+      "latitude": 41.0083643,
+      "longitude": -8.6394111
+    },
+    {
+      "name": "Esposende",
+      "osm_id": 3302768479,
+      "latitude": 41.5315251,
+      "longitude": -8.7792538
+    },
+    {
+      "name": "Estarreja",
+      "osm_id": 1648809570,
+      "latitude": 40.7523494,
+      "longitude": -8.5703455
+    },
+    {
+      "name": "Estreito de Câmara de Lobos",
+      "osm_id": 1832777806,
+      "latitude": 32.6710994,
+      "longitude": -16.9799729
+    },
+    {
+      "name": "Estremoz",
+      "osm_id": 25269565,
+      "latitude": 38.8432944,
+      "longitude": -7.586907
+    },
+    {
+      "name": "Estômbar",
+      "osm_id": 269173413,
+      "latitude": 37.1458603,
+      "longitude": -8.4845958
+    },
+    {
+      "name": "Fafe",
+      "osm_id": 1346179416,
+      "latitude": 41.451406,
+      "longitude": -8.1708502
+    },
+    {
+      "name": "Fajões",
+      "osm_id": 1327820596,
+      "latitude": 40.9173379,
+      "longitude": -8.4234658
+    },
+    {
+      "name": "Famões",
+      "osm_id": 268247140,
+      "latitude": 38.7912413,
+      "longitude": -9.2108576
+    },
+    {
+      "name": "Faro",
+      "osm_id": 25254936,
+      "latitude": 37.0162944,
+      "longitude": -7.935182
+    },
+    {
+      "name": "Favaios",
+      "osm_id": 3192386670,
+      "latitude": 41.2674081,
+      "longitude": -7.5005228
+    },
+    {
+      "name": "Fazendas de Almeirim",
+      "osm_id": 430783627,
+      "latitude": 39.1767872,
+      "longitude": -8.5833777
+    },
+    {
+      "name": "Febres",
+      "osm_id": 483510093,
+      "latitude": 40.4005267,
+      "longitude": -8.6297945
+    },
+    {
+      "name": "Felgueiras",
+      "osm_id": 25613457,
+      "latitude": 41.3648572,
+      "longitude": -8.1989013
+    },
+    {
+      "name": "Fermentelos",
+      "osm_id": 695120627,
+      "latitude": 40.5691209,
+      "longitude": -8.5258311
+    },
+    {
+      "name": "Fermil de Basto",
+      "osm_id": 5161572049,
+      "latitude": 41.4228497,
+      "longitude": -7.9887843
+    },
+    {
+      "name": "Ferragudo",
+      "osm_id": 144973422,
+      "latitude": 37.1235893,
+      "longitude": -8.5198921
+    },
+    {
+      "name": "Ferreira do Alentejo",
+      "osm_id": 374209292,
+      "latitude": 38.0585086,
+      "longitude": -8.1138197
+    },
+    {
+      "name": "Ferreira do Zêzere",
+      "osm_id": 25615634,
+      "latitude": 39.6934308,
+      "longitude": -8.2905545
+    },
+    {
+      "name": "Ferrel",
+      "osm_id": 1676909912,
+      "latitude": 39.3643517,
+      "longitude": -9.3161038
+    },
+    {
+      "name": "Ferro",
+      "osm_id": 2265932151,
+      "latitude": 40.2342622,
+      "longitude": -7.4451731
+    },
+    {
+      "name": "Figueira da Foz",
+      "osm_id": 1548223132,
+      "latitude": 40.1485808,
+      "longitude": -8.855655
+    },
+    {
+      "name": "Figueira de Castelo Rodrigo",
+      "osm_id": 25277738,
+      "latitude": 40.89751,
+      "longitude": -6.96279
+    },
+    {
+      "name": "Figueiró dos Vinhos",
+      "osm_id": 25278380,
+      "latitude": 39.9024537,
+      "longitude": -8.2753006
+    },
+    {
+      "name": "Fiães",
+      "osm_id": 1203937257,
+      "latitude": 40.9945859,
+      "longitude": -8.5247192
+    },
+    {
+      "name": "Fonte Arcada",
+      "osm_id": 1359810340,
+      "latitude": 40.9648303,
+      "longitude": -7.5211145
+    },
+    {
+      "name": "Fontelo",
+      "osm_id": 2638935136,
+      "latitude": 41.1195287,
+      "longitude": -7.7302312
+    },
+    {
+      "name": "Fontes",
+      "osm_id": 3191711167,
+      "latitude": 41.2303735,
+      "longitude": -7.8153926
+    },
+    {
+      "name": "Forjães",
+      "osm_id": 3133927443,
+      "latitude": 41.6047821,
+      "longitude": -8.7431537
+    },
+    {
+      "name": "Fornos de Algodres",
+      "osm_id": 25277742,
+      "latitude": 40.6224919,
+      "longitude": -7.5374913
+    },
+    {
+      "name": "Forte da Casa",
+      "osm_id": 1634151175,
+      "latitude": 38.8727839,
+      "longitude": -9.0593162
+    },
+    {
+      "name": "Foz do Arelho",
+      "osm_id": 679341474,
+      "latitude": 39.4329582,
+      "longitude": -9.2173901
+    },
+    {
+      "name": "Frazão",
+      "osm_id": 650403751,
+      "latitude": 41.2615463,
+      "longitude": -8.4087418
+    },
+    {
+      "name": "Freamunde",
+      "osm_id": 1798338232,
+      "latitude": 41.2885918,
+      "longitude": -8.3401591
+    },
+    {
+      "name": "Freixianda",
+      "osm_id": 3182629274,
+      "latitude": 39.7597878,
+      "longitude": -8.4587486
+    },
+    {
+      "name": "Freixo de Espada à Cinta",
+      "osm_id": 25268780,
+      "latitude": 41.0913764,
+      "longitude": -6.8078692
+    },
+    {
+      "name": "Freixo de Numão",
+      "osm_id": 3552111552,
+      "latitude": 41.0669119,
+      "longitude": -7.221502
+    },
+    {
+      "name": "Fronteira",
+      "osm_id": 25612856,
+      "latitude": 39.0556775,
+      "longitude": -7.6485574
+    },
+    {
+      "name": "Funchal",
+      "osm_id": 25255071,
+      "latitude": 32.6496497,
+      "longitude": -16.9086783
+    },
+    {
+      "name": "Fundão",
+      "osm_id": 3669099216,
+      "latitude": 40.1408065,
+      "longitude": -7.5017521
+    },
+    {
+      "name": "Fuseta",
+      "osm_id": 300893540,
+      "latitude": 37.0551731,
+      "longitude": -7.7461861
+    },
+    {
+      "name": "Fátima",
+      "osm_id": 563655196,
+      "latitude": 39.6255498,
+      "longitude": -8.6659081
+    },
+    {
+      "name": "Fânzeres",
+      "osm_id": 2420317289,
+      "latitude": 41.1666437,
+      "longitude": -8.5313271
+    },
+    {
+      "name": "Fão",
+      "osm_id": 3133927444,
+      "latitude": 41.5123027,
+      "longitude": -8.7729003
+    },
+    {
+      "name": "Gaeiras",
+      "osm_id": 2908350765,
+      "latitude": 39.3735941,
+      "longitude": -9.129059
+    },
+    {
+      "name": "Gafanha da Encarnação",
+      "osm_id": 2329776382,
+      "latitude": 40.6173145,
+      "longitude": -8.7336063
+    },
+    {
+      "name": "Gafanha da Nazaré",
+      "osm_id": 2329767101,
+      "latitude": 40.6376106,
+      "longitude": -8.7136614
+    },
+    {
+      "name": "Gandarela de Basto",
+      "osm_id": 2979078372,
+      "latitude": 41.4590137,
+      "longitude": -8.0328498
+    },
+    {
+      "name": "Gandra",
+      "osm_id": 3398067279,
+      "latitude": 41.1963232,
+      "longitude": -8.4359653
+    },
+    {
+      "name": "Gavião",
+      "osm_id": 25612848,
+      "latitude": 39.46494,
+      "longitude": -7.93679
+    },
+    {
+      "name": "Gerês",
+      "osm_id": 349170851,
+      "latitude": 41.7273612,
+      "longitude": -8.1630891
+    },
+    {
+      "name": "Glória do Ribatejo",
+      "osm_id": 1631325263,
+      "latitude": 39.0425,
+      "longitude": -8.6410739
+    },
+    {
+      "name": "Golegã",
+      "osm_id": 1435696916,
+      "latitude": 39.4017959,
+      "longitude": -8.4867361
+    },
+    {
+      "name": "Gondomar",
+      "osm_id": 25613462,
+      "latitude": 41.1398199,
+      "longitude": -8.5326269
+    },
+    {
+      "name": "Gonçalo",
+      "osm_id": 7043837832,
+      "latitude": 40.4198696,
+      "longitude": -7.3478031
+    },
+    {
+      "name": "Gouveia",
+      "osm_id": 432972947,
+      "latitude": 40.4940078,
+      "longitude": -7.5917814
+    },
+    {
+      "name": "Grijó",
+      "osm_id": 4015684781,
+      "latitude": 41.0301159,
+      "longitude": -8.5783897
+    },
+    {
+      "name": "Grândola",
+      "osm_id": 3673206553,
+      "latitude": 38.1765787,
+      "longitude": -8.5669505
+    },
+    {
+      "name": "Guarda",
+      "osm_id": 1084227094,
+      "latitude": 40.5378408,
+      "longitude": -7.2662964
+    },
+    {
+      "name": "Guia",
+      "osm_id": 814239919,
+      "latitude": 39.9468816,
+      "longitude": -8.7849203
+    },
+    {
+      "name": "Guifões",
+      "osm_id": 100084476,
+      "latitude": 41.2000334,
+      "longitude": -8.6654875
+    },
+    {
+      "name": "Guimarães",
+      "osm_id": 1487887227,
+      "latitude": 41.4417677,
+      "longitude": -8.2955712
+    },
+    {
+      "name": "Góis",
+      "osm_id": 25269221,
+      "latitude": 40.1546195,
+      "longitude": -8.1099454
+    },
+    {
+      "name": "Horta",
+      "osm_id": 25270684,
+      "latitude": 38.5368032,
+      "longitude": -28.630109
+    },
+    {
+      "name": "Idanha-a-Nova",
+      "osm_id": 25269008,
+      "latitude": 39.9260883,
+      "longitude": -7.2436356
+    },
+    {
+      "name": "Izeda",
+      "osm_id": 1482100473,
+      "latitude": 41.5674474,
+      "longitude": -6.721123
+    },
+    {
+      "name": "Joane",
+      "osm_id": 1487605197,
+      "latitude": 41.4395446,
+      "longitude": -8.4171938
+    },
+    {
+      "name": "Juncal",
+      "osm_id": 1704445245,
+      "latitude": 39.6027438,
+      "longitude": -8.9019782
+    },
+    {
+      "name": "Lagares",
+      "osm_id": 1323887612,
+      "latitude": 40.3994523,
+      "longitude": -7.8629709
+    },
+    {
+      "name": "Lagoa",
+      "osm_id": 25270675,
+      "latitude": 37.747009,
+      "longitude": -25.578405
+    },
+    {
+      "name": "Lagoa",
+      "osm_id": 25277559,
+      "latitude": 37.1362908,
+      "longitude": -8.4540842
+    },
+    {
+      "name": "Lagos",
+      "osm_id": 25277577,
+      "latitude": 37.1027964,
+      "longitude": -8.6728689
+    },
+    {
+      "name": "Lajeosa do Dão",
+      "osm_id": 4331146246,
+      "latitude": 40.5326807,
+      "longitude": -7.9920377
+    },
+    {
+      "name": "Lajes",
+      "osm_id": 2781654921,
+      "latitude": 38.7669312,
+      "longitude": -27.1031772
+    },
+    {
+      "name": "Lajes das Flores",
+      "osm_id": 25270679,
+      "latitude": 39.3779504,
+      "longitude": -31.1770926
+    },
+    {
+      "name": "Lajes do Pico",
+      "osm_id": 25270689,
+      "latitude": 38.3944509,
+      "longitude": -28.2522218
+    },
+    {
+      "name": "Lalim",
+      "osm_id": 2058996884,
+      "latitude": 41.0394562,
+      "longitude": -7.8155711
+    },
+    {
+      "name": "Lamego",
+      "osm_id": 25256107,
+      "latitude": 41.098527,
+      "longitude": -7.8105708
+    },
+    {
+      "name": "Lanheses",
+      "osm_id": 3789759890,
+      "latitude": 41.7382855,
+      "longitude": -8.6743377
+    },
+    {
+      "name": "Lavos",
+      "osm_id": 2396794222,
+      "latitude": 40.0941074,
+      "longitude": -8.8285333
+    },
+    {
+      "name": "Lavra",
+      "osm_id": 3514894401,
+      "latitude": 41.2594836,
+      "longitude": -8.7168977
+    },
+    {
+      "name": "Lavradio",
+      "osm_id": 2766890748,
+      "latitude": 38.6671253,
+      "longitude": -9.0542164
+    },
+    {
+      "name": "Lazarim",
+      "osm_id": 2254778039,
+      "latitude": 41.031914,
+      "longitude": -7.8449592
+    },
+    {
+      "name": "Leiria",
+      "osm_id": 25254934,
+      "latitude": 39.7437902,
+      "longitude": -8.8071119
+    },
+    {
+      "name": "Leomil",
+      "osm_id": 4013362127,
+      "latitude": 40.9835919,
+      "longitude": -7.6546211
+    },
+    {
+      "name": "Lever",
+      "osm_id": 4015684783,
+      "latitude": 41.0638919,
+      "longitude": -8.4709989
+    },
+    {
+      "name": "Leça do Balio",
+      "osm_id": 3222763274,
+      "latitude": 41.2129235,
+      "longitude": -8.628658
+    },
+    {
+      "name": "Linda-a-Velha",
+      "osm_id": 1493262326,
+      "latitude": 38.7144913,
+      "longitude": -9.2457005
+    },
+    {
+      "name": "Lisboa",
+      "osm_id": 265958490,
+      "latitude": 38.7077507,
+      "longitude": -9.1365919
+    },
+    {
+      "name": "Lixa",
+      "osm_id": 1712466619,
+      "latitude": 41.3212197,
+      "longitude": -8.1455091
+    },
+    {
+      "name": "Lobão",
+      "osm_id": 3509186793,
+      "latitude": 40.9861377,
+      "longitude": -8.4871403
+    },
+    {
+      "name": "Lordelo",
+      "osm_id": 3131647247,
+      "latitude": 41.3725051,
+      "longitude": -8.3787227
+    },
+    {
+      "name": "Lordelo",
+      "osm_id": 3191001775,
+      "latitude": 41.3185569,
+      "longitude": -7.7663573
+    },
+    {
+      "name": "Lordelo",
+      "osm_id": 3398067275,
+      "latitude": 41.2346057,
+      "longitude": -8.4146751
+    },
+    {
+      "name": "Loriga",
+      "osm_id": 1118457674,
+      "latitude": 40.3246918,
+      "longitude": -7.690258
+    },
+    {
+      "name": "Lorvão",
+      "osm_id": 1583584963,
+      "latitude": 40.2603558,
+      "longitude": -8.3167021
+    },
+    {
+      "name": "Loulé",
+      "osm_id": 25277576,
+      "latitude": 37.1399532,
+      "longitude": -8.023324
+    },
+    {
+      "name": "Loureiro",
+      "osm_id": 1554263391,
+      "latitude": 40.8035491,
+      "longitude": -8.5295254
+    },
+    {
+      "name": "Loures",
+      "osm_id": 25611744,
+      "latitude": 38.8308741,
+      "longitude": -9.1684512
+    },
+    {
+      "name": "Lourinhã",
+      "osm_id": 25611737,
+      "latitude": 39.2433932,
+      "longitude": -9.3119326
+    },
+    {
+      "name": "Louriçal",
+      "osm_id": 988897941,
+      "latitude": 40.0031383,
+      "longitude": -8.7387872
+    },
+    {
+      "name": "Lourosa",
+      "osm_id": 2920823935,
+      "latitude": 40.983541,
+      "longitude": -8.5499188
+    },
+    {
+      "name": "Lousada",
+      "osm_id": 25613471,
+      "latitude": 41.2773789,
+      "longitude": -8.2826293
+    },
+    {
+      "name": "Lousã",
+      "osm_id": 25269216,
+      "latitude": 40.111052,
+      "longitude": -8.2460668
+    },
+    {
+      "name": "Luso",
+      "osm_id": 223497038,
+      "latitude": 40.3839144,
+      "longitude": -8.3760251
+    },
+    {
+      "name": "Luz",
+      "osm_id": 144972169,
+      "latitude": 37.0873628,
+      "longitude": -8.7283673
+    },
+    {
+      "name": "Luz de Tavira",
+      "osm_id": 915855180,
+      "latitude": 37.0920156,
+      "longitude": -7.7044687
+    },
+    {
+      "name": "Maceda",
+      "osm_id": 3442813686,
+      "latitude": 40.9308345,
+      "longitude": -8.6177498
+    },
+    {
+      "name": "Macedo de Cavaleiros",
+      "osm_id": 25268781,
+      "latitude": 41.5362124,
+      "longitude": -6.9560267
+    },
+    {
+      "name": "Maceira",
+      "osm_id": 1523476136,
+      "latitude": 39.6847926,
+      "longitude": -8.8944977
+    },
+    {
+      "name": "Machico",
+      "osm_id": 25269573,
+      "latitude": 32.722875,
+      "longitude": -16.7659069
+    },
+    {
+      "name": "Macieira de Cambra",
+      "osm_id": 4037614173,
+      "latitude": 40.8566414,
+      "longitude": -8.3769951
+    },
+    {
+      "name": "Madalena",
+      "osm_id": 25270683,
+      "latitude": 38.5363166,
+      "longitude": -28.5243488
+    },
+    {
+      "name": "Madalena",
+      "osm_id": 4015684784,
+      "latitude": 41.1063312,
+      "longitude": -8.6429519
+    },
+    {
+      "name": "Mafra",
+      "osm_id": 25611738,
+      "latitude": 38.9369782,
+      "longitude": -9.3282374
+    },
+    {
+      "name": "Maia",
+      "osm_id": 25613459,
+      "latitude": 41.2329846,
+      "longitude": -8.6222375
+    },
+    {
+      "name": "Maiorca",
+      "osm_id": 2987119691,
+      "latitude": 40.1661924,
+      "longitude": -8.755212
+    },
+    {
+      "name": "Malveira",
+      "osm_id": 283501575,
+      "latitude": 38.9322107,
+      "longitude": -9.2568222
+    },
+    {
+      "name": "Mamarrosa",
+      "osm_id": 1651724589,
+      "latitude": 40.4822286,
+      "longitude": -8.5776436
+    },
+    {
+      "name": "Mangualde",
+      "osm_id": 25256114,
+      "latitude": 40.60354,
+      "longitude": -7.7656
+    },
+    {
+      "name": "Manteigas",
+      "osm_id": 25277734,
+      "latitude": 40.4005617,
+      "longitude": -7.5408682
+    },
+    {
+      "name": "Marco de Canaveses",
+      "osm_id": 25613463,
+      "latitude": 41.1835352,
+      "longitude": -8.1493798
+    },
+    {
+      "name": "Marialva",
+      "osm_id": 439657742,
+      "latitude": 40.909642,
+      "longitude": -7.2310275
+    },
+    {
+      "name": "Marinha Grande",
+      "osm_id": 25278381,
+      "latitude": 39.7495952,
+      "longitude": -8.9298895
+    },
+    {
+      "name": "Marinha das Ondas",
+      "osm_id": 4133386338,
+      "latitude": 40.0313594,
+      "longitude": -8.821716
+    },
+    {
+      "name": "Marinhais",
+      "osm_id": 1631323877,
+      "latitude": 39.047325,
+      "longitude": -8.7027214
+    },
+    {
+      "name": "Marmeleira",
+      "osm_id": 1706742908,
+      "latitude": 39.2636681,
+      "longitude": -8.8350815
+    },
+    {
+      "name": "Marvão",
+      "osm_id": 25612849,
+      "latitude": 39.394765,
+      "longitude": -7.3775491
+    },
+    {
+      "name": "Matosinhos",
+      "osm_id": 2662254435,
+      "latitude": 41.1806814,
+      "longitude": -8.6821998
+    },
+    {
+      "name": "Mação",
+      "osm_id": 4072666319,
+      "latitude": 39.554608,
+      "longitude": -7.9957035
+    },
+    {
+      "name": "Mealhada",
+      "osm_id": 3623253301,
+      "latitude": 40.3782338,
+      "longitude": -8.4524337
+    },
+    {
+      "name": "Melgaço",
+      "osm_id": 25278426,
+      "latitude": 42.1130412,
+      "longitude": -8.2593422
+    },
+    {
+      "name": "Melres",
+      "osm_id": 2420296604,
+      "latitude": 41.0676995,
+      "longitude": -8.4011816
+    },
+    {
+      "name": "Mesão Frio",
+      "osm_id": 25624126,
+      "latitude": 41.1604717,
+      "longitude": -7.8883733
+    },
+    {
+      "name": "Mexilhoeira Grande",
+      "osm_id": 3270006875,
+      "latitude": 37.1591882,
+      "longitude": -8.6137373
+    },
+    {
+      "name": "Minde",
+      "osm_id": 362379921,
+      "latitude": 39.5134274,
+      "longitude": -8.687879
+    },
+    {
+      "name": "Mira",
+      "osm_id": 3657201437,
+      "latitude": 40.4284618,
+      "longitude": -8.7372138
+    },
+    {
+      "name": "Mira de Aire",
+      "osm_id": 694526751,
+      "latitude": 39.541847,
+      "longitude": -8.7146709
+    },
+    {
+      "name": "Miranda do Corvo",
+      "osm_id": 25269225,
+      "latitude": 40.0941517,
+      "longitude": -8.3336555
+    },
+    {
+      "name": "Miranda do Douro",
+      "osm_id": 609355095,
+      "latitude": 41.497385,
+      "longitude": -6.2738187
+    },
+    {
+      "name": "Mirandela",
+      "osm_id": 25268784,
+      "latitude": 41.489615,
+      "longitude": -7.1774792
+    },
+    {
+      "name": "Mogadouro",
+      "osm_id": 25268782,
+      "latitude": 41.3418708,
+      "longitude": -6.7121674
+    },
+    {
+      "name": "Moimenta da Beira",
+      "osm_id": 25256109,
+      "latitude": 40.9846411,
+      "longitude": -7.6185527
+    },
+    {
+      "name": "Moita",
+      "osm_id": 2766869564,
+      "latitude": 38.6523995,
+      "longitude": -8.9935314
+    },
+    {
+      "name": "Moita dos Ferreiros",
+      "osm_id": 2282703566,
+      "latitude": 39.2482312,
+      "longitude": -9.2235577
+    },
+    {
+      "name": "Moncarapacho",
+      "osm_id": 965870454,
+      "latitude": 37.0842089,
+      "longitude": -7.7882465
+    },
+    {
+      "name": "Monchique",
+      "osm_id": 25277578,
+      "latitude": 37.3179725,
+      "longitude": -8.5558655
+    },
+    {
+      "name": "Mondim da Beira",
+      "osm_id": 4304808046,
+      "latitude": 41.0233595,
+      "longitude": -7.7425418
+    },
+    {
+      "name": "Mondim de Basto",
+      "osm_id": 25624119,
+      "latitude": 41.4102874,
+      "longitude": -7.9533527
+    },
+    {
+      "name": "Monforte",
+      "osm_id": 25612847,
+      "latitude": 39.0531482,
+      "longitude": -7.4389355
+    },
+    {
+      "name": "Monsanto",
+      "osm_id": 371426674,
+      "latitude": 40.038751,
+      "longitude": -7.1151133
+    },
+    {
+      "name": "Montalegre",
+      "osm_id": 25624121,
+      "latitude": 41.8232206,
+      "longitude": -7.7923142
+    },
+    {
+      "name": "Monte Gordo",
+      "osm_id": 295126996,
+      "latitude": 37.1824461,
+      "longitude": -7.451945
+    },
+    {
+      "name": "Monte Real",
+      "osm_id": 1086486493,
+      "latitude": 39.8508646,
+      "longitude": -8.8646054
+    },
+    {
+      "name": "Monte Redondo",
+      "osm_id": 2087932868,
+      "latitude": 39.8951806,
+      "longitude": -8.833845
+    },
+    {
+      "name": "Monte de Caparica",
+      "osm_id": 2165438361,
+      "latitude": 38.6637429,
+      "longitude": -9.198197
+    },
+    {
+      "name": "Montelavar",
+      "osm_id": 4366097117,
+      "latitude": 38.8605695,
+      "longitude": -9.3325261
+    },
+    {
+      "name": "Montemor-o-Novo",
+      "osm_id": 5378178476,
+      "latitude": 38.6481777,
+      "longitude": -8.2115858
+    },
+    {
+      "name": "Montemor-o-Velho",
+      "osm_id": 5103358891,
+      "latitude": 40.172664,
+      "longitude": -8.6845418
+    },
+    {
+      "name": "Montijo",
+      "osm_id": 254916545,
+      "latitude": 38.7060845,
+      "longitude": -8.9746372
+    },
+    {
+      "name": "Monção",
+      "osm_id": 25278430,
+      "latitude": 42.0787023,
+      "longitude": -8.4813901
+    },
+    {
+      "name": "Mora",
+      "osm_id": 25269564,
+      "latitude": 38.9441885,
+      "longitude": -8.1654674
+    },
+    {
+      "name": "Moreira",
+      "osm_id": 3976601022,
+      "latitude": 41.2474218,
+      "longitude": -8.6468626
+    },
+    {
+      "name": "Moreira de Cónegos",
+      "osm_id": 3131647249,
+      "latitude": 41.3814913,
+      "longitude": -8.3361532
+    },
+    {
+      "name": "Mortágua",
+      "osm_id": 25256113,
+      "latitude": 40.3972486,
+      "longitude": -8.2287169
+    },
+    {
+      "name": "Moscavide",
+      "osm_id": 1148841675,
+      "latitude": 38.7777234,
+      "longitude": -9.1018861
+    },
+    {
+      "name": "Moura",
+      "osm_id": 25264853,
+      "latitude": 38.1409785,
+      "longitude": -7.4500699
+    },
+    {
+      "name": "Mourisca do Vouga",
+      "osm_id": 1030206848,
+      "latitude": 40.6071358,
+      "longitude": -8.4643646
+    },
+    {
+      "name": "Mourão",
+      "osm_id": 25269562,
+      "latitude": 38.3816761,
+      "longitude": -7.3420448
+    },
+    {
+      "name": "Mouçós",
+      "osm_id": 3191001778,
+      "latitude": 41.3139833,
+      "longitude": -7.6956553
+    },
+    {
+      "name": "Mozelos",
+      "osm_id": 3814277802,
+      "latitude": 40.9995263,
+      "longitude": -8.5579985
+    },
+    {
+      "name": "Murtosa",
+      "osm_id": 1520839645,
+      "latitude": 40.7367759,
+      "longitude": -8.638451
+    },
+    {
+      "name": "Murça",
+      "osm_id": 25624125,
+      "latitude": 41.4081543,
+      "longitude": -7.4538949
+    },
+    {
+      "name": "Mértola",
+      "osm_id": 255654259,
+      "latitude": 37.642043,
+      "longitude": -7.6606447
+    },
+    {
+      "name": "Mêda",
+      "osm_id": 3350460250,
+      "latitude": 40.9662962,
+      "longitude": -7.2637352
+    },
+    {
+      "name": "Mões",
+      "osm_id": 1724212525,
+      "latitude": 40.8642533,
+      "longitude": -7.8849214
+    },
+    {
+      "name": "Nazaré",
+      "osm_id": 25278374,
+      "latitude": 39.6029108,
+      "longitude": -9.0701572
+    },
+    {
+      "name": "Negrelos (São Tomé)",
+      "osm_id": 649833857,
+      "latitude": 41.3488993,
+      "longitude": -8.403043
+    },
+    {
+      "name": "Nelas",
+      "osm_id": 25256126,
+      "latitude": 40.5299888,
+      "longitude": -7.8550987
+    },
+    {
+      "name": "Nespereira",
+      "osm_id": 568176457,
+      "latitude": 41.0012055,
+      "longitude": -8.1765373
+    },
+    {
+      "name": "Nisa",
+      "osm_id": 25612857,
+      "latitude": 39.5149978,
+      "longitude": -7.6492263
+    },
+    {
+      "name": "Nogueira da Regedoura",
+      "osm_id": 4028689121,
+      "latitude": 41.0093311,
+      "longitude": -8.5864831
+    },
+    {
+      "name": "Nogueira do Cravo",
+      "osm_id": 1323836724,
+      "latitude": 40.3370788,
+      "longitude": -7.8789156
+    },
+    {
+      "name": "Nogueira do Cravo",
+      "osm_id": 1334016363,
+      "latitude": 40.8884005,
+      "longitude": -8.4531338
+    },
+    {
+      "name": "Nordeste",
+      "osm_id": 25270681,
+      "latitude": 37.8334876,
+      "longitude": -25.1468598
+    },
+    {
+      "name": "Odeceixe",
+      "osm_id": 375857198,
+      "latitude": 37.4332252,
+      "longitude": -8.7701988
+    },
+    {
+      "name": "Odemira",
+      "osm_id": 25264854,
+      "latitude": 37.5976,
+      "longitude": -8.6422
+    },
+    {
+      "name": "Odivelas",
+      "osm_id": 25611742,
+      "latitude": 38.7904338,
+      "longitude": -9.1792617
+    },
+    {
+      "name": "Odiáxere",
+      "osm_id": 144971556,
+      "latitude": 37.1493422,
+      "longitude": -8.6557705
+    },
+    {
+      "name": "Oeiras",
+      "osm_id": 891706103,
+      "latitude": 38.6925777,
+      "longitude": -9.3123076
+    },
+    {
+      "name": "Oiã",
+      "osm_id": 1421307525,
+      "latitude": 40.5457687,
+      "longitude": -8.54097
+    },
+    {
+      "name": "Oleiros",
+      "osm_id": 25269012,
+      "latitude": 39.9188881,
+      "longitude": -7.9140055
+    },
+    {
+      "name": "Olhão",
+      "osm_id": 25277573,
+      "latitude": 37.0270369,
+      "longitude": -7.8411287
+    },
+    {
+      "name": "Olival",
+      "osm_id": 3283023685,
+      "latitude": 39.7117769,
+      "longitude": -8.6024919
+    },
+    {
+      "name": "Olival",
+      "osm_id": 4015684786,
+      "latitude": 41.0649286,
+      "longitude": -8.5273183
+    },
+    {
+      "name": "Olival Basto",
+      "osm_id": 267274799,
+      "latitude": 38.7905853,
+      "longitude": -9.1656584
+    },
+    {
+      "name": "Oliveira de Azeméis",
+      "osm_id": 25264015,
+      "latitude": 40.8390118,
+      "longitude": -8.4777807
+    },
+    {
+      "name": "Oliveira de Frades",
+      "osm_id": 25256128,
+      "latitude": 40.7322108,
+      "longitude": -8.1739059
+    },
+    {
+      "name": "Oliveira do Bairro",
+      "osm_id": 2449642367,
+      "latitude": 40.5138208,
+      "longitude": -8.4928163
+    },
+    {
+      "name": "Oliveira do Hospital",
+      "osm_id": 25269220,
+      "latitude": 40.3595402,
+      "longitude": -7.8617453
+    },
+    {
+      "name": "Oliveirinha",
+      "osm_id": 1621830836,
+      "latitude": 40.6059884,
+      "longitude": -8.5954063
+    },
+    {
+      "name": "Ourique",
+      "osm_id": 25264849,
+      "latitude": 37.651112,
+      "longitude": -8.2237262
+    },
+    {
+      "name": "Ourém",
+      "osm_id": 25615645,
+      "latitude": 39.65679,
+      "longitude": -8.57963
+    },
+    {
+      "name": "Ovar",
+      "osm_id": 3618575072,
+      "latitude": 40.8594819,
+      "longitude": -8.6252174
+    },
+    {
+      "name": "Paião",
+      "osm_id": 823829737,
+      "latitude": 40.0678744,
+      "longitude": -8.8045831
+    },
+    {
+      "name": "Palhaça",
+      "osm_id": 1578139212,
+      "latitude": 40.5259562,
+      "longitude": -8.5999491
+    },
+    {
+      "name": "Palmeira",
+      "osm_id": 3149021115,
+      "latitude": 41.5900033,
+      "longitude": -8.4275262
+    },
+    {
+      "name": "Palmela",
+      "osm_id": 1162458625,
+      "latitude": 38.569601,
+      "longitude": -8.9011653
+    },
+    {
+      "name": "Pampilhosa da Serra",
+      "osm_id": 25269217,
+      "latitude": 40.0462933,
+      "longitude": -7.9506309
+    },
+    {
+      "name": "Pampilhosa do Botão",
+      "osm_id": 251611358,
+      "latitude": 40.3353032,
+      "longitude": -8.4194473
+    },
+    {
+      "name": "Paranhos da Beira",
+      "osm_id": 1424245484,
+      "latitude": 40.4772702,
+      "longitude": -7.7816973
+    },
+    {
+      "name": "Parchal",
+      "osm_id": 269173708,
+      "latitude": 37.1375387,
+      "longitude": -8.5176943
+    },
+    {
+      "name": "Pardilhó",
+      "osm_id": 2560619774,
+      "latitude": 40.7963177,
+      "longitude": -8.6244728
+    },
+    {
+      "name": "Parede",
+      "osm_id": 4359997700,
+      "latitude": 38.6923142,
+      "longitude": -9.3560743
+    },
+    {
+      "name": "Paredes",
+      "osm_id": 1371991341,
+      "latitude": 41.2078862,
+      "longitude": -8.3332321
+    },
+    {
+      "name": "Paredes de Coura",
+      "osm_id": 25278428,
+      "latitude": 41.91106,
+      "longitude": -8.55959
+    },
+    {
+      "name": "Pataias",
+      "osm_id": 5002355083,
+      "latitude": 39.6707242,
+      "longitude": -8.9929023
+    },
+    {
+      "name": "Paul",
+      "osm_id": 249873881,
+      "latitude": 40.2009261,
+      "longitude": -7.6380118
+    },
+    {
+      "name": "Paço de Arcos",
+      "osm_id": 891706111,
+      "latitude": 38.6950425,
+      "longitude": -9.2917507
+    },
+    {
+      "name": "Paço de Sousa",
+      "osm_id": 3978966782,
+      "latitude": 41.1662682,
+      "longitude": -8.3459799
+    },
+    {
+      "name": "Paços de Brandão",
+      "osm_id": 4032088470,
+      "latitude": 40.9738702,
+      "longitude": -8.5915442
+    },
+    {
+      "name": "Paços de Ferreira",
+      "osm_id": 25613456,
+      "latitude": 41.2760977,
+      "longitude": -8.3768913
+    },
+    {
+      "name": "Pedras Salgadas",
+      "osm_id": 918941269,
+      "latitude": 41.5426745,
+      "longitude": -7.6031268
+    },
+    {
+      "name": "Pedroso",
+      "osm_id": 3971569110,
+      "latitude": 41.064143,
+      "longitude": -8.5572235
+    },
+    {
+      "name": "Pedrógão Grande",
+      "osm_id": 25278373,
+      "latitude": 39.9169584,
+      "longitude": -8.145564
+    },
+    {
+      "name": "Penacova",
+      "osm_id": 25269215,
+      "latitude": 40.2702086,
+      "longitude": -8.2810743
+    },
+    {
+      "name": "Penafiel",
+      "osm_id": 3257439640,
+      "latitude": 41.2061892,
+      "longitude": -8.2855653
+    },
+    {
+      "name": "Penalva do Castelo",
+      "osm_id": 25256108,
+      "latitude": 40.67436,
+      "longitude": -7.69997
+    },
+    {
+      "name": "Penamacor",
+      "osm_id": 3669099217,
+      "latitude": 40.168928,
+      "longitude": -7.1712605
+    },
+    {
+      "name": "Penedono",
+      "osm_id": 25256112,
+      "latitude": 40.9899414,
+      "longitude": -7.3941885
+    },
+    {
+      "name": "Penela",
+      "osm_id": 25269213,
+      "latitude": 40.029442,
+      "longitude": -8.3902395
+    },
+    {
+      "name": "Peniche",
+      "osm_id": 25278379,
+      "latitude": 39.3568749,
+      "longitude": -9.3786838
+    },
+    {
+      "name": "Pera",
+      "osm_id": 8283953861,
+      "latitude": 37.1205458,
+      "longitude": -8.3412517
+    },
+    {
+      "name": "Perafita",
+      "osm_id": 3705655222,
+      "latitude": 41.2238494,
+      "longitude": -8.6968605
+    },
+    {
+      "name": "Pereira",
+      "osm_id": 2596249201,
+      "latitude": 40.1868805,
+      "longitude": -8.5848332
+    },
+    {
+      "name": "Pero Pinheiro",
+      "osm_id": 1702494744,
+      "latitude": 38.8570946,
+      "longitude": -9.3250003
+    },
+    {
+      "name": "Perosinho",
+      "osm_id": 4015684787,
+      "latitude": 41.060478,
+      "longitude": -8.5855985
+    },
+    {
+      "name": "Peso da Régua",
+      "osm_id": 25624124,
+      "latitude": 41.1637043,
+      "longitude": -7.7875821
+    },
+    {
+      "name": "Pevidém",
+      "osm_id": 3132314337,
+      "latitude": 41.4272512,
+      "longitude": -8.3540351
+    },
+    {
+      "name": "Pias",
+      "osm_id": 2244809322,
+      "latitude": 38.0209121,
+      "longitude": -7.4746506
+    },
+    {
+      "name": "Pinhal Novo",
+      "osm_id": 258313209,
+      "latitude": 38.6310837,
+      "longitude": -8.9133041
+    },
+    {
+      "name": "Pinheiro da Bemposta",
+      "osm_id": 1780420277,
+      "latitude": 40.7845673,
+      "longitude": -8.4822234
+    },
+    {
+      "name": "Pinhel",
+      "osm_id": 3629411205,
+      "latitude": 40.7747612,
+      "longitude": -7.0650244
+    },
+    {
+      "name": "Pinhão",
+      "osm_id": 3192386672,
+      "latitude": 41.19105,
+      "longitude": -7.5459983
+    },
+    {
+      "name": "Pombal",
+      "osm_id": 25278385,
+      "latitude": 39.9161851,
+      "longitude": -8.6279171
+    },
+    {
+      "name": "Pombeiro da Beira",
+      "osm_id": 3787386374,
+      "latitude": 40.2258112,
+      "longitude": -8.1365959
+    },
+    {
+      "name": "Ponta Delgada",
+      "osm_id": 25270682,
+      "latitude": 37.7393398,
+      "longitude": -25.6689503
+    },
+    {
+      "name": "Ponta do Sol",
+      "osm_id": 25269571,
+      "latitude": 32.6812371,
+      "longitude": -17.1040761
+    },
+    {
+      "name": "Ponte",
+      "osm_id": 3132150502,
+      "latitude": 41.4712798,
+      "longitude": -8.3384362
+    },
+    {
+      "name": "Ponte da Barca",
+      "osm_id": 25278429,
+      "latitude": 41.8076477,
+      "longitude": -8.416428
+    },
+    {
+      "name": "Ponte de Lima",
+      "osm_id": 25278432,
+      "latitude": 41.7675021,
+      "longitude": -8.5830992
+    },
+    {
+      "name": "Ponte de Sor",
+      "osm_id": 25623905,
+      "latitude": 39.2519303,
+      "longitude": -8.008997
+    },
+    {
+      "name": "Pontinha",
+      "osm_id": 3297738798,
+      "latitude": 38.7670657,
+      "longitude": -9.1996189
+    },
+    {
+      "name": "Pontével",
+      "osm_id": 1351251141,
+      "latitude": 39.1490107,
+      "longitude": -8.8379672
+    },
+    {
+      "name": "Porches",
+      "osm_id": 8554508808,
+      "latitude": 37.1255179,
+      "longitude": -8.3994888
+    },
+    {
+      "name": "Portalegre",
+      "osm_id": 25254932,
+      "latitude": 39.2911347,
+      "longitude": -7.4333887
+    },
+    {
+      "name": "Portel",
+      "osm_id": 25270776,
+      "latitude": 38.30859,
+      "longitude": -7.70497
+    },
+    {
+      "name": "Portimão",
+      "osm_id": 3231647966,
+      "latitude": 37.1375808,
+      "longitude": -8.5368426
+    },
+    {
+      "name": "Porto",
+      "osm_id": 2986300166,
+      "latitude": 41.1502195,
+      "longitude": -8.6103497
+    },
+    {
+      "name": "Porto Judeu",
+      "osm_id": 3450882734,
+      "latitude": 38.6546047,
+      "longitude": -27.12224
+    },
+    {
+      "name": "Porto Moniz",
+      "osm_id": 288754326,
+      "latitude": 32.8669649,
+      "longitude": -17.1666328
+    },
+    {
+      "name": "Porto Salvo",
+      "osm_id": 320362237,
+      "latitude": 38.717239,
+      "longitude": -9.3020403
+    },
+    {
+      "name": "Porto da Cruz",
+      "osm_id": 1832777817,
+      "latitude": 32.7725082,
+      "longitude": -16.8286042
+    },
+    {
+      "name": "Porto de Mós",
+      "osm_id": 3671593574,
+      "latitude": 39.6023941,
+      "longitude": -8.8185271
+    },
+    {
+      "name": "Povoação",
+      "osm_id": 25270676,
+      "latitude": 37.7468829,
+      "longitude": -25.2451613
+    },
+    {
+      "name": "Praia da Vitória",
+      "osm_id": 25270688,
+      "latitude": 38.7310419,
+      "longitude": -27.0603487
+    },
+    {
+      "name": "Praia de Mira",
+      "osm_id": 1702585642,
+      "latitude": 40.4556419,
+      "longitude": -8.8026211
+    },
+    {
+      "name": "Prior Velho",
+      "osm_id": 3096011816,
+      "latitude": 38.7915641,
+      "longitude": -9.121544
+    },
+    {
+      "name": "Proença-a-Nova",
+      "osm_id": 25269011,
+      "latitude": 39.74995,
+      "longitude": -7.92494
+    },
+    {
+      "name": "Póvoa de Lanhoso",
+      "osm_id": 2042680132,
+      "latitude": 41.5759516,
+      "longitude": -8.2699521
+    },
+    {
+      "name": "Póvoa de Santa Iria",
+      "osm_id": 1606560920,
+      "latitude": 38.8620887,
+      "longitude": -9.0709905
+    },
+    {
+      "name": "Póvoa de Santo Adrião",
+      "osm_id": 267163613,
+      "latitude": 38.8001801,
+      "longitude": -9.1628074
+    },
+    {
+      "name": "Póvoa de Varzim",
+      "osm_id": 25613458,
+      "latitude": 41.3794188,
+      "longitude": -8.7598689
+    },
+    {
+      "name": "Quarteira",
+      "osm_id": 418986791,
+      "latitude": 37.0712719,
+      "longitude": -8.1022591
+    },
+    {
+      "name": "Queijas",
+      "osm_id": 320381603,
+      "latitude": 38.7194446,
+      "longitude": -9.2633955
+    },
+    {
+      "name": "Queluz",
+      "osm_id": 1806356067,
+      "latitude": 38.7565837,
+      "longitude": -9.2545225
+    },
+    {
+      "name": "Quinta do Conde",
+      "osm_id": 1198407029,
+      "latitude": 38.5655194,
+      "longitude": -9.0412188
+    },
+    {
+      "name": "Rabo de Peixe",
+      "osm_id": 380690733,
+      "latitude": 37.8142769,
+      "longitude": -25.5824158
+    },
+    {
+      "name": "Raiva",
+      "osm_id": 3928262031,
+      "latitude": 41.0360466,
+      "longitude": -8.3443706
+    },
+    {
+      "name": "Ramada",
+      "osm_id": 293026930,
+      "latitude": 38.8053197,
+      "longitude": -9.1875812
+    },
+    {
+      "name": "Rebordosa",
+      "osm_id": 1240982837,
+      "latitude": 41.2202567,
+      "longitude": -8.4112601
+    },
+    {
+      "name": "Rebordões",
+      "osm_id": 493844944,
+      "latitude": 41.3524388,
+      "longitude": -8.4295071
+    },
+    {
+      "name": "Recarei",
+      "osm_id": 1212363364,
+      "latitude": 41.1536564,
+      "longitude": -8.4122951
+    },
+    {
+      "name": "Redondo",
+      "osm_id": 376604600,
+      "latitude": 38.6466891,
+      "longitude": -7.5467636
+    },
+    {
+      "name": "Reguengos de Monsaraz",
+      "osm_id": 25270771,
+      "latitude": 38.4243996,
+      "longitude": -7.5347109
+    },
+    {
+      "name": "Resende",
+      "osm_id": 25256119,
+      "latitude": 41.105831,
+      "longitude": -7.9644114
+    },
+    {
+      "name": "Riachos",
+      "osm_id": 1497975439,
+      "latitude": 39.4411902,
+      "longitude": -8.5115921
+    },
+    {
+      "name": "Riba de Ave",
+      "osm_id": 527355342,
+      "latitude": 41.393597,
+      "longitude": -8.3871072
+    },
+    {
+      "name": "Ribamar",
+      "osm_id": 2282702682,
+      "latitude": 39.2014976,
+      "longitude": -9.3315144
+    },
+    {
+      "name": "Ribeira Brava",
+      "osm_id": 25269577,
+      "latitude": 32.6700921,
+      "longitude": -17.0650395
+    },
+    {
+      "name": "Ribeira Grande",
+      "osm_id": 25270686,
+      "latitude": 37.8225227,
+      "longitude": -25.5194914
+    },
+    {
+      "name": "Ribeira de Pena",
+      "osm_id": 25624117,
+      "latitude": 41.5217103,
+      "longitude": -7.795143
+    },
+    {
+      "name": "Ribeirão",
+      "osm_id": 2771496418,
+      "latitude": 41.3572464,
+      "longitude": -8.5589745
+    },
+    {
+      "name": "Rio Maior",
+      "osm_id": 25615638,
+      "latitude": 39.3365387,
+      "longitude": -8.9364098
+    },
+    {
+      "name": "Rio Meão",
+      "osm_id": 4032069853,
+      "latitude": 40.9581668,
+      "longitude": -8.5826133
+    },
+    {
+      "name": "Rio Tinto",
+      "osm_id": 1198744036,
+      "latitude": 41.1807166,
+      "longitude": -8.5575691
+    },
+    {
+      "name": "Rio de Moinhos",
+      "osm_id": 431481325,
+      "latitude": 41.1074551,
+      "longitude": -8.2650649
+    },
+    {
+      "name": "Rio de Mouro",
+      "osm_id": 3271073961,
+      "latitude": 38.7723657,
+      "longitude": -9.3256751
+    },
+    {
+      "name": "Ronfe",
+      "osm_id": 3132314331,
+      "latitude": 41.4387442,
+      "longitude": -8.3847589
+    },
+    {
+      "name": "Roriz",
+      "osm_id": 669261769,
+      "latitude": 41.3515405,
+      "longitude": -8.3829071
+    },
+    {
+      "name": "Rossas",
+      "osm_id": 3172353429,
+      "latitude": 41.5848975,
+      "longitude": -8.097119
+    },
+    {
+      "name": "Sabrosa",
+      "osm_id": 25624120,
+      "latitude": 41.2663847,
+      "longitude": -7.5757615
+    },
+    {
+      "name": "Sabugal",
+      "osm_id": 25277732,
+      "latitude": 40.3518321,
+      "longitude": -7.0896479
+    },
+    {
+      "name": "Sacavém",
+      "osm_id": 3089482423,
+      "latitude": 38.7948664,
+      "longitude": -9.1047215
+    },
+    {
+      "name": "Sagres",
+      "osm_id": 143908278,
+      "latitude": 37.0078288,
+      "longitude": -8.941924
+    },
+    {
+      "name": "Salir",
+      "osm_id": 6225433908,
+      "latitude": 37.2402028,
+      "longitude": -8.0451062
+    },
+    {
+      "name": "Salir de Matos",
+      "osm_id": 2914688815,
+      "latitude": 39.4325579,
+      "longitude": -9.0955171
+    },
+    {
+      "name": "Salir do Porto",
+      "osm_id": 2914205339,
+      "latitude": 39.4962396,
+      "longitude": -9.1534086
+    },
+    {
+      "name": "Salreu",
+      "osm_id": 2554698786,
+      "latitude": 40.7360953,
+      "longitude": -8.5605852
+    },
+    {
+      "name": "Salto",
+      "osm_id": 1418802901,
+      "latitude": 41.6398076,
+      "longitude": -7.9460595
+    },
+    {
+      "name": "Salvaterra de Magos",
+      "osm_id": 25615647,
+      "latitude": 39.0249942,
+      "longitude": -8.7929278
+    },
+    {
+      "name": "Salvaterra de Miño",
+      "osm_id": 338926390,
+      "latitude": 42.0826719,
+      "longitude": -8.4990303
+    },
+    {
+      "name": "Salzedas",
+      "osm_id": 2797612921,
+      "latitude": 41.0545541,
+      "longitude": -7.7252889
+    },
+    {
+      "name": "Samora Correia",
+      "osm_id": 920003264,
+      "latitude": 38.9348747,
+      "longitude": -8.8689911
+    },
+    {
+      "name": "Samouco",
+      "osm_id": 1654431647,
+      "latitude": 38.720408,
+      "longitude": -9.0031772
+    },
+    {
+      "name": "Sandim",
+      "osm_id": 3810932449,
+      "latitude": 41.0366195,
+      "longitude": -8.512706
+    },
+    {
+      "name": "Sanfins do Douro",
+      "osm_id": 3192386675,
+      "latitude": 41.2918326,
+      "longitude": -7.518336
+    },
+    {
+      "name": "Sangalhos",
+      "osm_id": 1358460185,
+      "latitude": 40.4923703,
+      "longitude": -8.4730124
+    },
+    {
+      "name": "Santa Catarina",
+      "osm_id": 1643060976,
+      "latitude": 39.4469306,
+      "longitude": -9.0155179
+    },
+    {
+      "name": "Santa Catarina da Serra",
+      "osm_id": 4346025220,
+      "latitude": 39.6750169,
+      "longitude": -8.6871329
+    },
+    {
+      "name": "Santa Comba Dão",
+      "osm_id": 25256118,
+      "latitude": 40.3961137,
+      "longitude": -8.1299564
+    },
+    {
+      "name": "Santa Cruz",
+      "osm_id": 5298507481,
+      "latitude": 32.6874768,
+      "longitude": -16.7912062
+    },
+    {
+      "name": "Santa Cruz da Graciosa",
+      "osm_id": 25270685,
+      "latitude": 39.0851917,
+      "longitude": -28.005697
+    },
+    {
+      "name": "Santa Cruz da Trapa",
+      "osm_id": 4307266037,
+      "latitude": 40.7722587,
+      "longitude": -8.1424927
+    },
+    {
+      "name": "Santa Cruz das Flores",
+      "osm_id": 25270673,
+      "latitude": 39.4537806,
+      "longitude": -31.1285157
+    },
+    {
+      "name": "Santa Eulália",
+      "osm_id": 2085657983,
+      "latitude": 41.355457,
+      "longitude": -8.2992289
+    },
+    {
+      "name": "Santa Iria de Azoia",
+      "osm_id": 3089469865,
+      "latitude": 38.8460032,
+      "longitude": -9.0860603
+    },
+    {
+      "name": "Santa Luzia",
+      "osm_id": 2296768867,
+      "latitude": 37.101742,
+      "longitude": -7.6618346
+    },
+    {
+      "name": "Santa Maria da Feira",
+      "osm_id": 25264018,
+      "latitude": 40.9254179,
+      "longitude": -8.5426688
+    },
+    {
+      "name": "Santa Maria de Lamas",
+      "osm_id": 4037561008,
+      "latitude": 40.9794526,
+      "longitude": -8.5715712
+    },
+    {
+      "name": "Santa Maria de Sardoura",
+      "osm_id": 4037007453,
+      "latitude": 41.0487157,
+      "longitude": -8.3016804
+    },
+    {
+      "name": "Santa Maria do Bouro",
+      "osm_id": 3170850629,
+      "latitude": 41.6597029,
+      "longitude": -8.2702215
+    },
+    {
+      "name": "Santa Marinha",
+      "osm_id": 1424200042,
+      "latitude": 40.4511109,
+      "longitude": -7.664593
+    },
+    {
+      "name": "Santa Marinha do Zêzere",
+      "osm_id": 2987456150,
+      "latitude": 41.1418377,
+      "longitude": -7.9500623
+    },
+    {
+      "name": "Santa Marta de Penaguião",
+      "osm_id": 25624122,
+      "latitude": 41.2100446,
+      "longitude": -7.78473
+    },
+    {
+      "name": "Santana",
+      "osm_id": 975761089,
+      "latitude": 32.804907,
+      "longitude": -16.8813015
+    },
+    {
+      "name": "Santar",
+      "osm_id": 4271692973,
+      "latitude": 40.5708793,
+      "longitude": -7.8958696
+    },
+    {
+      "name": "Santarém",
+      "osm_id": 25254933,
+      "latitude": 39.2363637,
+      "longitude": -8.6867081
+    },
+    {
+      "name": "Santiago do Cacém",
+      "osm_id": 536442174,
+      "latitude": 38.018461,
+      "longitude": -8.6937882
+    },
+    {
+      "name": "Santo André",
+      "osm_id": 2777058569,
+      "latitude": 38.6437637,
+      "longitude": -9.0550176
+    },
+    {
+      "name": "Santo António dos Cavaleiros",
+      "osm_id": 267932729,
+      "latitude": 38.812632,
+      "longitude": -9.1613378
+    },
+    {
+      "name": "Santo Estêvão",
+      "osm_id": 3185651497,
+      "latitude": 41.7589782,
+      "longitude": -7.419785
+    },
+    {
+      "name": "Santo Tirso",
+      "osm_id": 493844955,
+      "latitude": 41.3440057,
+      "longitude": -8.4772021
+    },
+    {
+      "name": "Sardoal",
+      "osm_id": 25615632,
+      "latitude": 39.53347,
+      "longitude": -8.16034
+    },
+    {
+      "name": "Seia",
+      "osm_id": 25277736,
+      "latitude": 40.4200998,
+      "longitude": -7.7028054
+    },
+    {
+      "name": "Seixal",
+      "osm_id": 25619071,
+      "latitude": 38.6422246,
+      "longitude": -9.1072662
+    },
+    {
+      "name": "Seixo da Beira",
+      "osm_id": 1325049608,
+      "latitude": 40.4589892,
+      "longitude": -7.8451945
+    },
+    {
+      "name": "Semide",
+      "osm_id": 253231339,
+      "latitude": 40.1599192,
+      "longitude": -8.3362204
+    },
+    {
+      "name": "Sendim",
+      "osm_id": 1198364890,
+      "latitude": 41.040554,
+      "longitude": -7.5403055
+    },
+    {
+      "name": "Sendim",
+      "osm_id": 1687703385,
+      "latitude": 41.3895826,
+      "longitude": -6.4265331
+    },
+    {
+      "name": "Senhora Aparecida",
+      "osm_id": 2374200899,
+      "latitude": 41.2890706,
+      "longitude": -8.2113728
+    },
+    {
+      "name": "Senhora da Hora",
+      "osm_id": 3976822515,
+      "latitude": 41.1853221,
+      "longitude": -8.6513544
+    },
+    {
+      "name": "Sernancelhe",
+      "osm_id": 25256125,
+      "latitude": 40.9001611,
+      "longitude": -7.4947825
+    },
+    {
+      "name": "Serpa",
+      "osm_id": 25264852,
+      "latitude": 37.9436517,
+      "longitude": -7.5966902
+    },
+    {
+      "name": "Serra d'El-Rei",
+      "osm_id": 1676909918,
+      "latitude": 39.3325258,
+      "longitude": -9.2697767
+    },
+    {
+      "name": "Sertã",
+      "osm_id": 5903417046,
+      "latitude": 39.8052145,
+      "longitude": -8.096441
+    },
+    {
+      "name": "Serzedelo",
+      "osm_id": 3132938947,
+      "latitude": 41.4021177,
+      "longitude": -8.3683343
+    },
+    {
+      "name": "Serzedo",
+      "osm_id": 4015684791,
+      "latitude": 41.0486349,
+      "longitude": -8.6110318
+    },
+    {
+      "name": "Sesimbra",
+      "osm_id": 1750333914,
+      "latitude": 38.4436932,
+      "longitude": -9.0996273
+    },
+    {
+      "name": "Setúbal",
+      "osm_id": 25254931,
+      "latitude": 38.5241783,
+      "longitude": -8.8932341
+    },
+    {
+      "name": "Sever do Vouga",
+      "osm_id": 3620379137,
+      "latitude": 40.7341518,
+      "longitude": -8.3700099
+    },
+    {
+      "name": "Silgueiros",
+      "osm_id": 5863325288,
+      "latitude": 40.5704333,
+      "longitude": -7.955393
+    },
+    {
+      "name": "Silvalde",
+      "osm_id": 772915172,
+      "latitude": 40.9925015,
+      "longitude": -8.6347419
+    },
+    {
+      "name": "Silvares",
+      "osm_id": 1078637676,
+      "latitude": 40.1364023,
+      "longitude": -7.671678
+    },
+    {
+      "name": "Silveira",
+      "osm_id": 280148615,
+      "latitude": 39.1113987,
+      "longitude": -9.3632536
+    },
+    {
+      "name": "Silves",
+      "osm_id": 25277557,
+      "latitude": 37.1894106,
+      "longitude": -8.4395781
+    },
+    {
+      "name": "Sines",
+      "osm_id": 25619068,
+      "latitude": 37.956549,
+      "longitude": -8.8689639
+    },
+    {
+      "name": "Sintra",
+      "osm_id": 25611733,
+      "latitude": 38.79846,
+      "longitude": -9.3881
+    },
+    {
+      "name": "Soajo",
+      "osm_id": 433989656,
+      "latitude": 41.8745404,
+      "longitude": -8.262651
+    },
+    {
+      "name": "Soalheira",
+      "osm_id": 888553658,
+      "latitude": 40.0320807,
+      "longitude": -7.4821994
+    },
+    {
+      "name": "Sobrado",
+      "osm_id": 1725611611,
+      "latitude": 41.2115102,
+      "longitude": -8.4652622
+    },
+    {
+      "name": "Sobral de Monte Agraço",
+      "osm_id": 25611739,
+      "latitude": 39.01835,
+      "longitude": -9.15171
+    },
+    {
+      "name": "Sobralinho",
+      "osm_id": 3234153380,
+      "latitude": 38.9173535,
+      "longitude": -9.0260969
+    },
+    {
+      "name": "Sobreda",
+      "osm_id": 1603949155,
+      "latitude": 38.6500889,
+      "longitude": -9.1897214
+    },
+    {
+      "name": "Sobreira",
+      "osm_id": 1417920212,
+      "latitude": 41.1464669,
+      "longitude": -8.388977
+    },
+    {
+      "name": "Sobrosa",
+      "osm_id": 3979080676,
+      "latitude": 41.2497289,
+      "longitude": -8.3552315
+    },
+    {
+      "name": "Soure",
+      "osm_id": 25269212,
+      "latitude": 40.0595032,
+      "longitude": -8.6263897
+    },
+    {
+      "name": "Sousel",
+      "osm_id": 25612850,
+      "latitude": 38.95224,
+      "longitude": -7.67603
+    },
+    {
+      "name": "Souselas",
+      "osm_id": 209291380,
+      "latitude": 40.288987,
+      "longitude": -8.4228229
+    },
+    {
+      "name": "Souselo",
+      "osm_id": 4162200237,
+      "latitude": 41.0697904,
+      "longitude": -8.231169
+    },
+    {
+      "name": "Souto",
+      "osm_id": 4162143998,
+      "latitude": 40.3572969,
+      "longitude": -6.9588448
+    },
+    {
+      "name": "Soza",
+      "osm_id": 1713521073,
+      "latitude": 40.5442612,
+      "longitude": -8.658884
+    },
+    {
+      "name": "Sátão",
+      "osm_id": 25256110,
+      "latitude": 40.7426067,
+      "longitude": -7.7336741
+    },
+    {
+      "name": "São Bartolomeu de Messines",
+      "osm_id": 262951041,
+      "latitude": 37.2560769,
+      "longitude": -8.2869009
+    },
+    {
+      "name": "São Brás de Alportel",
+      "osm_id": 25277556,
+      "latitude": 37.1529622,
+      "longitude": -7.8879138
+    },
+    {
+      "name": "São Cosmado",
+      "osm_id": 4253686348,
+      "latitude": 41.0636512,
+      "longitude": -7.6445191
+    },
+    {
+      "name": "São Félix da Marinha",
+      "osm_id": 4015684792,
+      "latitude": 41.0305323,
+      "longitude": -8.6290322
+    },
+    {
+      "name": "São João",
+      "osm_id": 2832748400,
+      "latitude": 40.8729762,
+      "longitude": -8.5917291
+    },
+    {
+      "name": "São João da Madeira",
+      "osm_id": 25264014,
+      "latitude": 40.9020813,
+      "longitude": -8.4896358
+    },
+    {
+      "name": "São João da Pesqueira",
+      "osm_id": 25256127,
+      "latitude": 41.147872,
+      "longitude": -7.4038806
+    },
+    {
+      "name": "São João da Talha",
+      "osm_id": 503314481,
+      "latitude": 38.8226851,
+      "longitude": -9.0978894
+    },
+    {
+      "name": "São João de Areias",
+      "osm_id": 1427264166,
+      "latitude": 40.3872565,
+      "longitude": -8.0692821
+    },
+    {
+      "name": "São João de Tarouca",
+      "osm_id": 3777441657,
+      "latitude": 40.99704,
+      "longitude": -7.7470818
+    },
+    {
+      "name": "São João de Ver",
+      "osm_id": 3526056906,
+      "latitude": 40.954172,
+      "longitude": -8.5534047
+    },
+    {
+      "name": "São João do Campo",
+      "osm_id": 2966984970,
+      "latitude": 40.2369927,
+      "longitude": -8.5117919
+    },
+    {
+      "name": "São João do Monte",
+      "osm_id": 4187904479,
+      "latitude": 40.5976608,
+      "longitude": -8.2353996
+    },
+    {
+      "name": "São Mamede",
+      "osm_id": 563654845,
+      "latitude": 39.622747,
+      "longitude": -8.7172118
+    },
+    {
+      "name": "São Mamede de Infesta",
+      "osm_id": 292479061,
+      "latitude": 41.1912232,
+      "longitude": -8.6106388
+    },
+    {
+      "name": "São Manços",
+      "osm_id": 2947953091,
+      "latitude": 38.4581325,
+      "longitude": -7.7499609
+    },
+    {
+      "name": "São Martinho de Anta",
+      "osm_id": 3192039412,
+      "latitude": 41.2663992,
+      "longitude": -7.6196707
+    },
+    {
+      "name": "São Martinho de Mouros",
+      "osm_id": 4162200236,
+      "latitude": 41.1025369,
+      "longitude": -7.8977383
+    },
+    {
+      "name": "São Martinho do Campo",
+      "osm_id": 650795222,
+      "latitude": 41.1773425,
+      "longitude": -8.4625916
+    },
+    {
+      "name": "São Martinho do Porto",
+      "osm_id": 1864124506,
+      "latitude": 39.5135311,
+      "longitude": -9.1335905
+    },
+    {
+      "name": "São Mateus da Calheta",
+      "osm_id": 2061262532,
+      "latitude": 38.6572988,
+      "longitude": -27.270471
+    },
+    {
+      "name": "São Miguel de Machede",
+      "osm_id": 2440172045,
+      "latitude": 38.6456123,
+      "longitude": -7.7285478
+    },
+    {
+      "name": "São Miguel de Souto",
+      "osm_id": 1968182396,
+      "latitude": 40.888651,
+      "longitude": -8.5511666
+    },
+    {
+      "name": "São Paio de Oleiros",
+      "osm_id": 4037561009,
+      "latitude": 40.9908653,
+      "longitude": -8.5940565
+    },
+    {
+      "name": "São Pedro",
+      "osm_id": 4382084170,
+      "latitude": 40.1289425,
+      "longitude": -8.8587702
+    },
+    {
+      "name": "São Pedro da Cova",
+      "osm_id": 2420296605,
+      "latitude": 41.1473685,
+      "longitude": -8.5074154
+    },
+    {
+      "name": "São Pedro de Alva",
+      "osm_id": 3466479781,
+      "latitude": 40.3021224,
+      "longitude": -8.1662048
+    },
+    {
+      "name": "São Pedro de Castelões",
+      "osm_id": 4037614175,
+      "latitude": 40.8321421,
+      "longitude": -8.392403
+    },
+    {
+      "name": "São Pedro de Rates",
+      "osm_id": 1958918573,
+      "latitude": 41.4280744,
+      "longitude": -8.6739459
+    },
+    {
+      "name": "São Pedro do Sul",
+      "osm_id": 604385697,
+      "latitude": 40.7610407,
+      "longitude": -8.0657325
+    },
+    {
+      "name": "São Romão",
+      "osm_id": 1723117290,
+      "latitude": 40.400208,
+      "longitude": -7.7134162
+    },
+    {
+      "name": "São Roque",
+      "osm_id": 1554207294,
+      "latitude": 40.877342,
+      "longitude": -8.4715907
+    },
+    {
+      "name": "São Roque do Pico",
+      "osm_id": 25270674,
+      "latitude": 38.5134299,
+      "longitude": -28.3201553
+    },
+    {
+      "name": "São Teotónio",
+      "osm_id": 1111443874,
+      "latitude": 37.5114733,
+      "longitude": -8.7071588
+    },
+    {
+      "name": "São Torcato",
+      "osm_id": 3132314338,
+      "latitude": 41.4812007,
+      "longitude": -8.2589538
+    },
+    {
+      "name": "São Vicente",
+      "osm_id": 25269575,
+      "latitude": 32.8022756,
+      "longitude": -17.0472397
+    },
+    {
+      "name": "Tabuaço",
+      "osm_id": 25256111,
+      "latitude": 41.1173591,
+      "longitude": -7.5662701
+    },
+    {
+      "name": "Tarouca",
+      "osm_id": 25256120,
+      "latitude": 41.01624,
+      "longitude": -7.7752378
+    },
+    {
+      "name": "Tavarede",
+      "osm_id": 3882676797,
+      "latitude": 40.1656123,
+      "longitude": -8.8426827
+    },
+    {
+      "name": "Taveiro",
+      "osm_id": 1266165460,
+      "latitude": 40.2030424,
+      "longitude": -8.5027967
+    },
+    {
+      "name": "Tavira",
+      "osm_id": 25277566,
+      "latitude": 37.1262493,
+      "longitude": -7.6499121
+    },
+    {
+      "name": "Teixoso",
+      "osm_id": 2007054946,
+      "latitude": 40.3134342,
+      "longitude": -7.4580288
+    },
+    {
+      "name": "Tentúgal",
+      "osm_id": 1301476143,
+      "latitude": 40.2226986,
+      "longitude": -8.5833488
+    },
+    {
+      "name": "Terras de Bouro",
+      "osm_id": 25264985,
+      "latitude": 41.7190293,
+      "longitude": -8.3083026
+    },
+    {
+      "name": "Terrugem",
+      "osm_id": 2022135522,
+      "latitude": 38.8470705,
+      "longitude": -9.3778925
+    },
+    {
+      "name": "Tocha",
+      "osm_id": 1299448797,
+      "latitude": 40.3131991,
+      "longitude": -8.7535062
+    },
+    {
+      "name": "Tomar",
+      "osm_id": 25615644,
+      "latitude": 39.6036596,
+      "longitude": -8.4150492
+    },
+    {
+      "name": "Tondela",
+      "osm_id": 25256123,
+      "latitude": 40.51642,
+      "longitude": -8.08053
+    },
+    {
+      "name": "Torre de Dona Chama",
+      "osm_id": 1515071074,
+      "latitude": 41.6539914,
+      "longitude": -7.1270266
+    },
+    {
+      "name": "Torre de Moncorvo",
+      "osm_id": 2294177978,
+      "latitude": 41.1739499,
+      "longitude": -7.0526159
+    },
+    {
+      "name": "Torredeita",
+      "osm_id": 1740449668,
+      "latitude": 40.6440835,
+      "longitude": -8.0152818
+    },
+    {
+      "name": "Torreira",
+      "osm_id": 2021648908,
+      "latitude": 40.7604396,
+      "longitude": -8.7065433
+    },
+    {
+      "name": "Torres Novas",
+      "osm_id": 6508245091,
+      "latitude": 39.47962,
+      "longitude": -8.53955
+    },
+    {
+      "name": "Torres Vedras",
+      "osm_id": 25611743,
+      "latitude": 39.0930856,
+      "longitude": -9.260741
+    },
+    {
+      "name": "Tortosendo",
+      "osm_id": 1727623472,
+      "latitude": 40.2400965,
+      "longitude": -7.5227455
+    },
+    {
+      "name": "Trafaria",
+      "osm_id": 2777030932,
+      "latitude": 38.6720826,
+      "longitude": -9.2334438
+    },
+    {
+      "name": "Tramagal",
+      "osm_id": 1184517812,
+      "latitude": 39.4529445,
+      "longitude": -8.2465518
+    },
+    {
+      "name": "Trancoso",
+      "osm_id": 25277735,
+      "latitude": 40.7784861,
+      "longitude": -7.3490995
+    },
+    {
+      "name": "Tremês",
+      "osm_id": 2824616107,
+      "latitude": 39.3592934,
+      "longitude": -8.7613643
+    },
+    {
+      "name": "Trevões",
+      "osm_id": 1198282089,
+      "latitude": 41.0817236,
+      "longitude": -7.4359839
+    },
+    {
+      "name": "Trofa",
+      "osm_id": 25613464,
+      "latitude": 41.3363471,
+      "longitude": -8.5585061
+    },
+    {
+      "name": "Troviscal",
+      "osm_id": 1920071705,
+      "latitude": 40.5001007,
+      "longitude": -8.5627513
+    },
+    {
+      "name": "Tui",
+      "osm_id": 544485787,
+      "latitude": 42.0501298,
+      "longitude": -8.6465733
+    },
+    {
+      "name": "Turcifal",
+      "osm_id": 283907280,
+      "latitude": 39.0421842,
+      "longitude": -9.2660516
+    },
+    {
+      "name": "Turquel",
+      "osm_id": 1642092112,
+      "latitude": 39.4643031,
+      "longitude": -8.978024
+    },
+    {
+      "name": "Tábua",
+      "osm_id": 25269214,
+      "latitude": 40.3602946,
+      "longitude": -8.0284641
+    },
+    {
+      "name": "Unhais da Serra",
+      "osm_id": 1106325397,
+      "latitude": 40.2602096,
+      "longitude": -7.6238043
+    },
+    {
+      "name": "Vagos",
+      "osm_id": 25264019,
+      "latitude": 40.5538919,
+      "longitude": -8.680915
+    },
+    {
+      "name": "Valadares",
+      "osm_id": 3657740053,
+      "latitude": 41.095291,
+      "longitude": -8.6326514
+    },
+    {
+      "name": "Valado dos Frades",
+      "osm_id": 1744103170,
+      "latitude": 39.5856715,
+      "longitude": -9.0222757
+    },
+    {
+      "name": "Valbom",
+      "osm_id": 1394086786,
+      "latitude": 41.1362281,
+      "longitude": -8.5613183
+    },
+    {
+      "name": "Valdigem",
+      "osm_id": 2638935117,
+      "latitude": 41.1293214,
+      "longitude": -7.7634395
+    },
+    {
+      "name": "Vale de Cambra",
+      "osm_id": 3620175627,
+      "latitude": 40.8498115,
+      "longitude": -8.3939142
+    },
+    {
+      "name": "Vale de Santarém",
+      "osm_id": 1729158720,
+      "latitude": 39.1920544,
+      "longitude": -8.7284633
+    },
+    {
+      "name": "Valença",
+      "osm_id": 25278431,
+      "latitude": 42.0273051,
+      "longitude": -8.6404204
+    },
+    {
+      "name": "Valongo",
+      "osm_id": 688100260,
+      "latitude": 41.1909794,
+      "longitude": -8.4980511
+    },
+    {
+      "name": "Valongo do Vouga",
+      "osm_id": 1233382688,
+      "latitude": 40.6276005,
+      "longitude": -8.4437336
+    },
+    {
+      "name": "Valpaços",
+      "osm_id": 25624123,
+      "latitude": 41.6067883,
+      "longitude": -7.3108525
+    },
+    {
+      "name": "Velas",
+      "osm_id": 25270680,
+      "latitude": 38.6797531,
+      "longitude": -28.2052961
+    },
+    {
+      "name": "Venda do Pinheiro",
+      "osm_id": 283947004,
+      "latitude": 38.9234466,
+      "longitude": -9.2318583
+    },
+    {
+      "name": "Vendas Novas",
+      "osm_id": 25270774,
+      "latitude": 38.6773855,
+      "longitude": -8.4552427
+    },
+    {
+      "name": "Verride",
+      "osm_id": 1338092939,
+      "latitude": 40.1327733,
+      "longitude": -8.7067324
+    },
+    {
+      "name": "Vialonga",
+      "osm_id": 1420843572,
+      "latitude": 38.8735511,
+      "longitude": -9.0785504
+    },
+    {
+      "name": "Viana do Alentejo",
+      "osm_id": 25270773,
+      "latitude": 38.3347679,
+      "longitude": -8.0043972
+    },
+    {
+      "name": "Viana do Castelo",
+      "osm_id": 5057838422,
+      "latitude": 41.6935131,
+      "longitude": -8.828277
+    },
+    {
+      "name": "Vidago",
+      "osm_id": 3186575659,
+      "latitude": 41.6417013,
+      "longitude": -7.5717338
+    },
+    {
+      "name": "Vidigueira",
+      "osm_id": 25264845,
+      "latitude": 38.2101595,
+      "longitude": -7.8014517
+    },
+    {
+      "name": "Vieira de Leiria",
+      "osm_id": 1705303602,
+      "latitude": 39.8695841,
+      "longitude": -8.9338519
+    },
+    {
+      "name": "Vieira do Minho",
+      "osm_id": 25264993,
+      "latitude": 41.6347151,
+      "longitude": -8.1425725
+    },
+    {
+      "name": "Vila Baleira",
+      "osm_id": 839817294,
+      "latitude": 33.0593059,
+      "longitude": -16.3336622
+    },
+    {
+      "name": "Vila Chã de Ourique",
+      "osm_id": 1729158724,
+      "latitude": 39.1768814,
+      "longitude": -8.7647918
+    },
+    {
+      "name": "Vila Cova de Alva",
+      "osm_id": 1121986383,
+      "latitude": 40.2833776,
+      "longitude": -7.9420532
+    },
+    {
+      "name": "Vila Cova à Coelheira",
+      "osm_id": 1649672161,
+      "latitude": 40.8777559,
+      "longitude": -7.802428
+    },
+    {
+      "name": "Vila Flor",
+      "osm_id": 25268783,
+      "latitude": 41.3067941,
+      "longitude": -7.1517712
+    },
+    {
+      "name": "Vila Franca das Naves",
+      "osm_id": 433084772,
+      "latitude": 40.7274509,
+      "longitude": -7.2653276
+    },
+    {
+      "name": "Vila Franca de Xira",
+      "osm_id": 25611735,
+      "latitude": 38.954278,
+      "longitude": -8.9897039
+    },
+    {
+      "name": "Vila Franca do Campo",
+      "osm_id": 25270677,
+      "latitude": 37.7171624,
+      "longitude": -25.4335352
+    },
+    {
+      "name": "Vila Meã",
+      "osm_id": 2584536456,
+      "latitude": 41.2512031,
+      "longitude": -8.1792019
+    },
+    {
+      "name": "Vila Nova da Barquinha",
+      "osm_id": 1368465286,
+      "latitude": 39.4582267,
+      "longitude": -8.4309285
+    },
+    {
+      "name": "Vila Nova da Rainha",
+      "osm_id": 1731903165,
+      "latitude": 39.0392377,
+      "longitude": -8.9326069
+    },
+    {
+      "name": "Vila Nova de Anha",
+      "osm_id": 2412276740,
+      "latitude": 41.6638316,
+      "longitude": -8.7937484
+    },
+    {
+      "name": "Vila Nova de Cacela",
+      "osm_id": 930349647,
+      "latitude": 37.1754658,
+      "longitude": -7.5333882
+    },
+    {
+      "name": "Vila Nova de Cerveira",
+      "osm_id": 25278427,
+      "latitude": 41.9403912,
+      "longitude": -8.7436068
+    },
+    {
+      "name": "Vila Nova de Famalicão",
+      "osm_id": 2452042571,
+      "latitude": 41.4064621,
+      "longitude": -8.5187849
+    },
+    {
+      "name": "Vila Nova de Foz Coa",
+      "osm_id": 1227299962,
+      "latitude": 41.0818397,
+      "longitude": -7.1424138
+    },
+    {
+      "name": "Vila Nova de Gaia",
+      "osm_id": 1904454689,
+      "latitude": 41.1292264,
+      "longitude": -8.6057396
+    },
+    {
+      "name": "Vila Nova de Milfontes",
+      "osm_id": 408401129,
+      "latitude": 37.7252803,
+      "longitude": -8.7822865
+    },
+    {
+      "name": "Vila Nova de Oliveirinha",
+      "osm_id": 1325119561,
+      "latitude": 40.3646538,
+      "longitude": -7.909825
+    },
+    {
+      "name": "Vila Nova de Paiva",
+      "osm_id": 2941712750,
+      "latitude": 40.8522085,
+      "longitude": -7.7289147
+    },
+    {
+      "name": "Vila Nova de Poiares",
+      "osm_id": 25269211,
+      "latitude": 40.2105771,
+      "longitude": -8.2588888
+    },
+    {
+      "name": "Vila Nova de Santo André",
+      "osm_id": 907098534,
+      "latitude": 38.0619858,
+      "longitude": -8.7855011
+    },
+    {
+      "name": "Vila Nova de São Bento",
+      "osm_id": 1632451678,
+      "latitude": 37.9266609,
+      "longitude": -7.4099588
+    },
+    {
+      "name": "Vila Nova de Tazem",
+      "osm_id": 1424239850,
+      "latitude": 40.5027461,
+      "longitude": -7.7027448
+    },
+    {
+      "name": "Vila Pouca de Aguiar",
+      "osm_id": 919031952,
+      "latitude": 41.5007614,
+      "longitude": -7.6442868
+    },
+    {
+      "name": "Vila Praia de Âncora",
+      "osm_id": 1941569182,
+      "latitude": 41.8135365,
+      "longitude": -8.8624681
+    },
+    {
+      "name": "Vila Real",
+      "osm_id": 25254929,
+      "latitude": 41.2976935,
+      "longitude": -7.7457614
+    },
+    {
+      "name": "Vila Real de Santo António",
+      "osm_id": 2686983151,
+      "latitude": 37.1946052,
+      "longitude": -7.4155628
+    },
+    {
+      "name": "Vila Velha de Ródão",
+      "osm_id": 25269009,
+      "latitude": 39.6545418,
+      "longitude": -7.6723114
+    },
+    {
+      "name": "Vila Verde",
+      "osm_id": 25264994,
+      "latitude": 41.6488247,
+      "longitude": -8.4362569
+    },
+    {
+      "name": "Vila Viçosa",
+      "osm_id": 25270772,
+      "latitude": 38.7774063,
+      "longitude": -7.4166909
+    },
+    {
+      "name": "Vila da Praia",
+      "osm_id": 872787704,
+      "latitude": 39.0533185,
+      "longitude": -27.9703933
+    },
+    {
+      "name": "Vila das Aves",
+      "osm_id": 480436639,
+      "latitude": 41.3606851,
+      "longitude": -8.407702
+    },
+    {
+      "name": "Vila de Prado",
+      "osm_id": 3164882730,
+      "latitude": 41.5992077,
+      "longitude": -8.4652652
+    },
+    {
+      "name": "Vila de Punhe",
+      "osm_id": 2634516327,
+      "latitude": 41.6569172,
+      "longitude": -8.7352724
+    },
+    {
+      "name": "Vila de Rei",
+      "osm_id": 25269007,
+      "latitude": 39.6759822,
+      "longitude": -8.1442213
+    },
+    {
+      "name": "Vila de São Sebastião",
+      "osm_id": 3450882733,
+      "latitude": 38.6663328,
+      "longitude": -27.0915823
+    },
+    {
+      "name": "Vila do Bispo",
+      "osm_id": 25277569,
+      "latitude": 37.0829799,
+      "longitude": -8.9096115
+    },
+    {
+      "name": "Vila do Carvalho",
+      "osm_id": 1652962799,
+      "latitude": 40.3075097,
+      "longitude": -7.4924002
+    },
+    {
+      "name": "Vila do Conde",
+      "osm_id": 25613467,
+      "latitude": 41.3540398,
+      "longitude": -8.7435403
+    },
+    {
+      "name": "Vila do Coronado",
+      "osm_id": 650405008,
+      "latitude": 41.2823172,
+      "longitude": -8.5684514
+    },
+    {
+      "name": "Vila do Corvo",
+      "osm_id": 25270672,
+      "latitude": 39.6732365,
+      "longitude": -31.1137067
+    },
+    {
+      "name": "Vila do Porto",
+      "osm_id": 25270678,
+      "latitude": 36.9480734,
+      "longitude": -25.1453503
+    },
+    {
+      "name": "Vila do Topo",
+      "osm_id": 1948932883,
+      "latitude": 38.5462863,
+      "longitude": -27.7658198
+    },
+    {
+      "name": "Vilar Formoso",
+      "osm_id": 861065330,
+      "latitude": 40.6083671,
+      "longitude": -6.8334432
+    },
+    {
+      "name": "Vilar de Maçada",
+      "osm_id": 3192386681,
+      "latitude": 41.3265698,
+      "longitude": -7.5578253
+    },
+    {
+      "name": "Vilar dos Prazeres",
+      "osm_id": 4336284327,
+      "latitude": 39.6305559,
+      "longitude": -8.5696365
+    },
+    {
+      "name": "Vilarandelo",
+      "osm_id": 3188737685,
+      "latitude": 41.6634306,
+      "longitude": -7.3264197
+    },
+    {
+      "name": "Vilarinho",
+      "osm_id": 3983239408,
+      "latitude": 41.3604512,
+      "longitude": -8.3352657
+    },
+    {
+      "name": "Vilela",
+      "osm_id": 3979080679,
+      "latitude": 41.2434728,
+      "longitude": -8.3802017
+    },
+    {
+      "name": "Vimioso",
+      "osm_id": 4162267905,
+      "latitude": 41.5849534,
+      "longitude": -6.5291002
+    },
+    {
+      "name": "Vinhais",
+      "osm_id": 25623866,
+      "latitude": 41.8336062,
+      "longitude": -7.007716
+    },
+    {
+      "name": "Viseu",
+      "osm_id": 24960091,
+      "latitude": 40.6574713,
+      "longitude": -7.9138664
+    },
+    {
+      "name": "Vizela",
+      "osm_id": 25264995,
+      "latitude": 41.3767158,
+      "longitude": -8.3083651
+    },
+    {
+      "name": "Vouzela",
+      "osm_id": 4144212163,
+      "latitude": 40.7226362,
+      "longitude": -8.1097201
+    },
+    {
+      "name": "Válega",
+      "osm_id": 2832748801,
+      "latitude": 40.834947,
+      "longitude": -8.5793345
+    },
+    {
+      "name": "Zebreira",
+      "osm_id": 440173641,
+      "latitude": 39.845592,
+      "longitude": -7.0703366
+    },
+    {
+      "name": "Água de Pau",
+      "osm_id": 293152956,
+      "latitude": 37.7204455,
+      "longitude": -25.5112463
+    },
+    {
+      "name": "Águas Santas",
+      "osm_id": 1733160897,
+      "latitude": 41.2077591,
+      "longitude": -8.5727501
+    },
+    {
+      "name": "Águeda",
+      "osm_id": 2558383539,
+      "latitude": 40.5785006,
+      "longitude": -8.4438017
+    },
+    {
+      "name": "Árvore",
+      "osm_id": 4013844135,
+      "latitude": 41.3348301,
+      "longitude": -8.7198166
+    },
+    {
+      "name": "Évora",
+      "osm_id": 25254928,
+      "latitude": 38.5707742,
+      "longitude": -7.9092808
+    },
+    {
+      "name": "Ílhavo",
+      "osm_id": 2516005789,
+      "latitude": 40.6001108,
+      "longitude": -8.6666667
+    },
+    {
+      "name": "Óbidos",
+      "osm_id": 2620015278,
+      "latitude": 39.3619514,
+      "longitude": -9.157153
+    }
+  ]
+}

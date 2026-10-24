@@ -8,6 +8,13 @@ from app.core.config import ROOT
 Destination = Literal["Demo City", "Lisbon", "Porto", "Sintra"]
 RealDestination = Literal["Lisbon", "Porto", "Sintra"]
 
+# Research rectangles include nearby areas, not administrative city boundaries.
+EXTRACT_REGIONS = {
+    "Lisbon": (-9.26, 38.68, -9.08, 38.81),
+    "Porto": (-8.70, 41.13, -8.55, 41.20),
+    "Sintra": (-9.50, 38.74, -9.20, 38.87),
+}
+
 
 @dataclass(frozen=True)
 class City:

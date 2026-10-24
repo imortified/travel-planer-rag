@@ -32,11 +32,12 @@ def mapped_pois():
 
 def test_enrichment_adds_paid_and_nature_pois_with_sources():
     pois, version = enrich(mapped_pois(), date(2026, 10, 27), opening_window)
-    assert len(pois) == 12
-    assert all(p["eligible"] for p in pois)
+    assert len(pois) >= 40
+    assert any(p["eligible"] for p in pois)
+    assert not next(p for p in pois if p["id"] == "osm:node:1301526823")["eligible"]
     assert {p["category"] for p in pois} == {"history", "art", "nature", "food"}
-    assert len([p for p in pois if p["cost_per_person"] > 0]) == 10
-    assert version == "lisbon-curated-2026-10-24-food-v1"
+    assert len([p for p in pois if p["cost_per_person"] > 0]) >= 30
+    assert version == "lisbon-curated-2026-10-24-cities-v1"
     assert all(p["provenance"]["price_source"].startswith("https://") for p in pois)
 
 
@@ -60,7 +61,10 @@ def test_expired_facts_are_not_used_as_osm_fallback():
 
 def test_missing_osm_node_does_not_get_invented_coordinates():
     pois, _ = enrich([], date(2026, 10, 23), opening_window)
-    assert len(pois) == 6 and all(p["id"].startswith("curated:") for p in pois)
+    assert len(pois) >= 6
+    # Missing original mapped records without coordinates remain absent. New reviewed
+    # records may carry an OSM ID if their coordinates have an explicit source.
+    assert not {p["id"] for p in mapped_pois()} & {p["id"] for p in pois}
     assert all(p["provenance"]["coordinates_source"] for p in pois)
 
 

@@ -1,5 +1,9 @@
 # Темп и заполнение многодневного маршрута
 
+После этапа [portugal-catalogs.md](portugal-catalogs.md) доступно три города,
+до 24 кандидатов на день и до 100 в общем пуле. Упоминания 12 кандидатов ниже
+относятся к исходной проверке темпа; ограничения числа посещений не изменены.
+
 Ветка `feature/comfortable-trip-pace` создана от `fix/semantic-search-evidence`.
 Нужна добавочная миграция **0010**: `python -m alembic upgrade head` из backend.
 Она добавляет nullable JSON `trip_requests.pace_settings`, без изменения истории.

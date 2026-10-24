@@ -1,8 +1,11 @@
+import json
 import logging
+import unicodedata
 from datetime import date, timedelta
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Query
 
+from app.core.config import ROOT
 from app.core.destinations import CITIES, RealDestination
 from app.core.logging import emit
 from app.integrations.city import CityProvider, SourceUnavailable
@@ -33,6 +36,37 @@ def destinations():
     ]
 
 
+@router.get("/reference/portugal")
+def portugal_reference(
+    query: str = Query(default="", max_length=100), limit: int = Query(default=50, ge=1, le=100)
+):
+    data = json.loads((ROOT / "data" / "portugal-settlements.json").read_text(encoding="utf-8"))
+
+    def normalized(text):
+        return "".join(
+            c for c in unicodedata.normalize("NFD", text.casefold()) if not unicodedata.combining(c)
+        )
+
+    needle = normalized(query.strip())
+    matches = [row for row in data["settlements"] if needle in normalized(row["name"])]
+    aliases = {"Lisboa": "Lisbon", "Porto": "Porto", "Sintra": "Sintra"}
+    return {
+        "country": "PT",
+        "country_name": "Португалия",
+        "source": data["source"],
+        "source_timestamp": data.get("source_timestamp"),
+        "total": len(data["settlements"]),
+        "matched": len(matches),
+        "complete_coverage": False,
+        "supported_cities": list(CITIES),
+        "settlements": [
+            {**row, "planning_destination": aliases.get(row["name"])} for row in matches[:limit]
+        ],
+        "note": "Mapped city/town reference only. "
+        "Trip planning is supported for listed cities only.",
+    }
+
+
 @router.get("/Lisbon/pois")
 def lisbon_pois(travel_date: date, end_date: date | None = None):
     return city_pois("Lisbon", travel_date, end_date)
@@ -53,6 +87,7 @@ def city_pois(destination: RealDestination, travel_date: date, end_date: date | 
         ]
         pois = {}
         available = {}
+        prices = {}
         for catalog in catalogs:
             for poi in catalog["pois"]:
                 pid = poi["id"]
@@ -60,6 +95,7 @@ def city_pois(destination: RealDestination, travel_date: date, end_date: date | 
                     pois[pid] = poi
                 if poi["eligible"]:
                     available.setdefault(pid, []).append(catalog["travel_date"])
+                    prices.setdefault(pid, {})[catalog["travel_date"]] = poi["cost_per_person"]
         emit(
             logger,
             "catalog.loaded",
@@ -74,7 +110,11 @@ def city_pois(destination: RealDestination, travel_date: date, end_date: date | 
             **catalogs[0],
             "end_date": str(last),
             "pois": [
-                {**poi, "available_dates": available.get(pid, [])}
+                {
+                    **poi,
+                    "available_dates": available.get(pid, []),
+                    "prices_by_date": prices.get(pid, {}),
+                }
                 for pid, poi in sorted(pois.items())
             ],
         }

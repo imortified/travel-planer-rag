@@ -1,0 +1,277 @@
+{
+  "stage": "portugal-city-catalogs",
+  "checked_at": "2026-10-24T22:44:02.211667+00:00",
+  "source": {
+    "source": "https://download.geofabrik.de/europe/portugal.html",
+    "input_sha256": "1f424c95bb7b2da6530fec47ef3f97b74d46827c9e48d6837ab317be8a440988",
+    "source_timestamp": "2026-10-23T20:20:51Z",
+    "downloaded_at": "2026-10-24T15:33:48.961648+00:00",
+    "country": "PT"
+  },
+  "settlements": 764,
+  "complete_country_coverage": false,
+  "tests": {
+    "backend": 546,
+    "frontend": 18,
+    "postgresql": true,
+    "redis": true,
+    "qdrant": true,
+    "ruff": "passed",
+    "next_build": "passed"
+  },
+  "scenario": {
+    "travel_date": "2026-10-26",
+    "end_date": "2026-11-01",
+    "participants": 6,
+    "budget_eur": 1000,
+    "pace": "balanced",
+    "algorithm": "beam",
+    "beam_width": 32
+  },
+  "cities": [
+    {
+      "city": "Lisbon",
+      "catalog_count": 913,
+      "eligible_union": 45,
+      "snapshot": {
+        "version_id": 270,
+        "content_sha256": "d09f5c6d68e8f290d220d4f1fd6c23b06a714c6c619203f842da1e767a13b1f2",
+        "published_at": "2026-10-24T22:42:57.018225+00:00",
+        "fetched_at": "2026-10-24T15:33:48.961648+00:00",
+        "fresh_until": "2026-10-30T20:20:51+00:00",
+        "curated_version": "lisbon-curated-2026-10-24-cities-v1",
+        "curated_review_until": "2026-11-22",
+        "status": "ready",
+        "source_upstream_asof": "2026-10-23T20:20:51+00:00"
+      },
+      "route_seconds": 6.696,
+      "search": {
+        "seconds": 1.053,
+        "matches": 45,
+        "can_apply": true,
+        "all_matches_belong_to_selected_catalog": true
+      },
+      "reviewed_pois": 40,
+      "options": [
+        {
+          "visits": 21,
+          "cost_eur": 435.0,
+          "visits_per_day": [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          "validated": true
+        },
+        {
+          "visits": 21,
+          "cost_eur": 472.2,
+          "visits_per_day": [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          "validated": true
+        },
+        {
+          "visits": 21,
+          "cost_eur": 520.2,
+          "visits_per_day": [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          "validated": true
+        }
+      ]
+    },
+    {
+      "city": "Porto",
+      "catalog_count": 513,
+      "eligible_union": 25,
+      "snapshot": {
+        "version_id": 271,
+        "content_sha256": "d381423b37a22c032b8827c5fa8f0bb792aba727eb360da5d0870d50a23cc918",
+        "published_at": "2026-10-24T22:42:58.439671+00:00",
+        "fetched_at": "2026-10-24T15:33:48.961648+00:00",
+        "fresh_until": "2026-10-30T20:20:51+00:00",
+        "curated_version": "porto-curated-2026-10-24-v1",
+        "curated_review_until": "2026-11-22",
+        "status": "ready",
+        "source_upstream_asof": "2026-10-23T20:20:51+00:00"
+      },
+      "route_seconds": 6.047,
+      "search": {
+        "seconds": 0.923,
+        "matches": 25,
+        "can_apply": true,
+        "all_matches_belong_to_selected_catalog": true
+      },
+      "reviewed_pois": 10,
+      "options": [
+        {
+          "visits": 20,
+          "cost_eur": 228.0,
+          "visits_per_day": [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            2
+          ],
+          "validated": true
+        },
+        {
+          "visits": 20,
+          "cost_eur": 228.0,
+          "visits_per_day": [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            2
+          ],
+          "validated": true
+        },
+        {
+          "visits": 18,
+          "cost_eur": 48.0,
+          "visits_per_day": [
+            3,
+            3,
+            3,
+            2,
+            2,
+            2,
+            3
+          ],
+          "validated": true
+        }
+      ]
+    },
+    {
+      "city": "Sintra",
+      "catalog_count": 206,
+      "eligible_union": 12,
+      "snapshot": {
+        "version_id": 272,
+        "content_sha256": "c89ab4e8242e8184c27f531cfc15e1dc3e00b728ea806c912fc526ec10151b8f",
+        "published_at": "2026-10-24T22:42:59.756057+00:00",
+        "fetched_at": "2026-10-24T15:33:48.961648+00:00",
+        "fresh_until": "2026-10-30T20:20:51+00:00",
+        "curated_version": "sintra-curated-2026-10-24-v1",
+        "curated_review_until": "2026-11-22",
+        "status": "ready",
+        "source_upstream_asof": "2026-10-23T20:20:51+00:00"
+      },
+      "route_seconds": 5.158,
+      "search": {
+        "seconds": 0.859,
+        "matches": 12,
+        "can_apply": true,
+        "all_matches_belong_to_selected_catalog": true
+      },
+      "reviewed_pois": 10,
+      "options": [
+        {
+          "visits": 12,
+          "cost_eur": 138.0,
+          "visits_per_day": [
+            1,
+            3,
+            3,
+            2,
+            1,
+            1,
+            1
+          ],
+          "validated": true
+        },
+        {
+          "visits": 9,
+          "cost_eur": 138.0,
+          "visits_per_day": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            3
+          ],
+          "validated": true
+        },
+        {
+          "visits": 9,
+          "cost_eur": 138.0,
+          "visits_per_day": [
+            1,
+            3,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "validated": true
+        }
+      ]
+    }
+  ],
+  "llm_city_smoke": [
+    {
+      "expected_city": "Porto",
+      "status": 200,
+      "destination": "Porto",
+      "travel_date": "2026-10-26",
+      "end_date": "2026-11-01",
+      "budget_scope": null,
+      "clarification_fields": [
+        "budget_scope"
+      ],
+      "complete_parse": false
+    },
+    {
+      "expected_city": "Sintra",
+      "status": 200,
+      "destination": "Sintra",
+      "travel_date": "2026-10-26",
+      "end_date": "2026-10-28",
+      "budget_scope": null,
+      "clarification_fields": [
+        "budget_scope"
+      ],
+      "complete_parse": false
+    }
+  ],
+  "limitations": [
+    "Three scenarios, not a p95/quality benchmark",
+    "Mapped representative road points, not verified venue entrances",
+    "Most raw POI lack reviewed fees/hours; unsupported POI excluded",
+    "One city and nearby areas per trip; no nationwide planning coverage"
+  ],
+  "manual_cli_smoke": "PBF extraction, timestamp, checksum and country-reference export passed on a one-node fixture",
+  "final_http_checks": {
+    "health": 200,
+    "docs": 200,
+    "frontend": 200,
+    "proxy_all_cities": true,
+    "date_dependent_price_ranges": 5
+  }
+}

@@ -144,9 +144,12 @@ def test_concurrent_refresh_is_atomic_and_old_writer_cannot_replace_newer():
             session.execute(delete(CatalogVersion).where(CatalogVersion.destination == city))
 
 
-def test_api_reads_offline_catalog_and_freezes_version_in_saved_results(db, monkeypatch):
-    saved, _ = publish(db, snapshot(), NOW)
-    reader = CatalogReader(lambda: load_active(db), lambda: NOW)
+@pytest.mark.parametrize("city", ["Lisbon", "Porto", "Sintra"])
+def test_api_reads_offline_catalog_and_freezes_version_in_saved_results(db, monkeypatch, city):
+    # This fixture transaction is always rolled back; a live catalog may be newer than NOW.
+    db.execute(update(CatalogHead).where(CatalogHead.destination == city).values(version_id=None))
+    saved, _ = publish(db, snapshot(city), NOW)
+    reader = CatalogReader(lambda: load_active(db, city), lambda: NOW)
     calls = []
 
     def matrix(request):
@@ -160,12 +163,14 @@ def test_api_reads_offline_catalog_and_freezes_version_in_saved_results(db, monk
     app.dependency_overrides[get_session] = get_test_session
     try:
         with httpx.Client(transport=httpx.MockTransport(matrix)) as upstream:
-            provider = CityProvider(upstream, RedisHttpCache(MemoryRedis()), catalog_source=reader)
-            monkeypatch.setattr("app.api.destinations.CityProvider", lambda: provider)
-            monkeypatch.setattr("app.api.groups.CityProvider", lambda: provider)
+            provider = CityProvider(
+                upstream, RedisHttpCache(MemoryRedis()), catalog_source=reader, destination=city
+            )
+            monkeypatch.setattr("app.api.destinations.CityProvider", lambda **kwargs: provider)
+            monkeypatch.setattr("app.api.groups.CityProvider", lambda **kwargs: provider)
             with TestClient(app) as client:
                 catalog = client.get(
-                    "/api/v1/destinations/Lisbon/pois?travel_date=2026-10-27&end_date=2026-10-28"
+                    f"/api/v1/destinations/{city}/pois?travel_date=2026-10-27&end_date=2026-10-28"
                 )
                 assert catalog.status_code == 200 and not calls
                 assert catalog.json()["catalog_snapshot"]["version_id"] == saved.version_id
@@ -180,7 +185,7 @@ def test_api_reads_offline_catalog_and_freezes_version_in_saved_results(db, monk
                 trip = client.post(
                     f"/api/v1/groups/{gid}/trips",
                     json={
-                        "destination": "Lisbon",
+                        "destination": city,
                         "travel_date": "2026-10-27",
                         "end_date": "2026-10-28",
                         "budget": 10000,
@@ -197,7 +202,7 @@ def test_api_reads_offline_catalog_and_freezes_version_in_saved_results(db, monk
                             day["data_context"]["catalog_snapshot"]["version_id"]
                             == saved.version_id
                         )
-                publish(db, snapshot(name="Changed after planning"), NOW)
+                publish(db, snapshot(city, name="Changed after planning"), NOW)
                 db.commit()
                 # Reading history neither recomputes facts nor calls upstream services.
                 before = len(calls)

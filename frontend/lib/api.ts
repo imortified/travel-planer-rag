@@ -35,10 +35,11 @@ export type Trip = {id: number; group_id: number; destination: string; travel_da
   pace?:PaceMode;pace_settings?:PaceSettings|null;
   budget: number; start: number; end: number; participants_snapshot: Member[];semantic_query?:string|null;purpose?:string};
 export type Poi = {id: string; name: string; eligible: boolean; issues: string[]; source_url?: string; available_dates?: string[];
+  prices_by_date?:Record<string,number>;
   latitude?:number|null; longitude?:number|null;
   cost_per_person?: number | null; category?: string; duration?: number;
   provenance?: {checked_on: string; valid_until: string; price_source: string; hours_source: string; notes: string;price_policy?:string}};
-export type CatalogSnapshot = {version_id:number;content_sha256:string;published_at:string;fetched_at:string;fresh_until:string;curated_version:string;curated_review_until:string;status:"ready"|"expired"};
+export type CatalogSnapshot = {version_id:number;content_sha256:string;published_at:string;fetched_at:string;fresh_until:string;curated_version:string;curated_review_until:string;source_upstream_asof?:string;status:"ready"|"expired"};
 export type CatalogResponse = {pois:Poi[];catalog_snapshot:CatalogSnapshot};
 export type DataContext = {pois:Poi[];places_snapshot?:{id:string;cost_per_person?:number|null}[]; origin?:{id:string;name:string;latitude:number;longitude:number}; transport:string; fetched_at:string; attribution:string;catalog_snapshot?:CatalogSnapshot};
 export type Visit = {place_id:string;arrival:number;start:number;end:number;cost_per_person?:number|null;group_cost?:number|null};
