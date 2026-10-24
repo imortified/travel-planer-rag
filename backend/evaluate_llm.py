@@ -5,6 +5,7 @@ from datetime import date
 from pathlib import Path
 from time import monotonic
 
+from app.core.logging import configure_logging
 from app.nlp.parser import parse_request
 from app.schemas.assistant import ParseInput
 
@@ -85,6 +86,7 @@ CASES = [
 
 
 def main():
+    configure_logging(file_tag="llm-evaluation")
     results = []
     for case in CASES:
         before = monotonic()

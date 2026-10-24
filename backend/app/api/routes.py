@@ -1,13 +1,16 @@
+import logging
 from typing import Annotated, Literal
 
 from fastapi import APIRouter, Query
 
+from app.core.logging import span
 from app.integrations.demo import load_demo
 from app.planning.models import Participant, Request, Result
 from app.planning.service import checked_plan
 from app.schemas.planning import PlanInput
 
 router = APIRouter()
+logger = logging.getLogger(__name__)
 
 
 @router.get("/health")
@@ -32,6 +35,22 @@ def demo_plan(
         mandatory=frozenset(payload.mandatory),
         excluded=frozenset(payload.excluded),
     )
-    return checked_plan(
-        request, places, travel, algorithm, beam_width, time_limit=time_limit_seconds
-    )
+    with span(
+        logger,
+        "planning.solve",
+        operation="demo",
+        algorithm=algorithm,
+        days=1,
+        participant_count=len(request.participants),
+        candidate_count=len(places),
+    ) as details:
+        result = checked_plan(
+            request, places, travel, algorithm, beam_width, time_limit=time_limit_seconds
+        )
+        details.update(
+            feasible=result.is_feasible,
+            visit_count=len(result.visits),
+            validation_valid=result.validation.is_valid,
+            solver_status=result.solver.status if result.solver else None,
+        )
+    return result

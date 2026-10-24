@@ -17,6 +17,7 @@ from redis.exceptions import RedisError, ResponseError
 from redis.retry import Retry
 
 from app.core.config import settings
+from app.core.logging import emit, error_kind, request_id
 
 logger = logging.getLogger(__name__)
 
@@ -128,20 +129,59 @@ def cached_get(client, url, params, ttl, cache, provider, validate):
                 parsed = validate(entry.body)
             except ValueError:
                 raise InvalidCacheEntry("Cached response failed source validation") from None
+            emit(
+                logger,
+                "cache.read",
+                provider=provider,
+                cache_state="hit",
+                ttl_seconds=ttl,
+                cache_age_seconds=(
+                    datetime.now(timezone.utc) - datetime.fromisoformat(entry.fetched_at)
+                ).total_seconds(),
+            )
             return parsed, entry.fetched_at, {**info, "read": "hit"}
     except InvalidCacheEntry:
         info["read"] = "invalid"
-        logger.warning("Discarding invalid %s Redis cache entry", provider)
+        emit(logger, "cache.read", logging.WARNING, provider=provider, cache_state="invalid")
     except CacheUnavailable:
         info["read"] = "unavailable"
-        logger.warning("Redis cache read unavailable for %s; fetching fresh data", provider)
+        emit(logger, "cache.read", logging.WARNING, provider=provider, cache_state="unavailable")
+
+    if info["read"] == "miss":
+        emit(logger, "cache.read", provider=provider, cache_state="miss", ttl_seconds=ttl)
 
     for attempt in range(2):
+        started = time.perf_counter()
         try:
-            response = client.get(url, params=params)
+            correlation = {"X-Request-ID": request_id.get()} if request_id.get() else {}
+            response = client.get(url, params=params, headers=correlation)
             response.raise_for_status()
+            emit(
+                logger,
+                "upstream.request.completed",
+                provider=provider,
+                method="GET",
+                status_code=response.status_code,
+                attempt=attempt + 1,
+                duration_ms=(time.perf_counter() - started) * 1000,
+            )
             break
         except httpx.HTTPError as exc:
+            emit(
+                logger,
+                "upstream.request.failed",
+                logging.ERROR if attempt else logging.WARNING,
+                exception=exc,
+                provider=provider,
+                method="GET",
+                status_code=exc.response.status_code
+                if isinstance(exc, httpx.HTTPStatusError)
+                else None,
+                attempt=attempt + 1,
+                will_retry=attempt == 0,
+                reason=error_kind(exc),
+                duration_ms=(time.perf_counter() - started) * 1000,
+            )
             if attempt == 1:
                 raise SourceUnavailable(
                     f"{provider.upper()} unavailable; no stale or synthetic fallback"
@@ -151,6 +191,14 @@ def cached_get(client, url, params, ttl, cache, provider, validate):
     try:
         parsed = validate(response.content)
     except ValueError as exc:
+        emit(
+            logger,
+            "upstream.response.rejected",
+            logging.ERROR,
+            exception=exc,
+            provider=provider,
+            reason="invalid_response",
+        )
         raise SourceUnavailable(f"Invalid {provider.upper()} response; not cached") from exc
     if info["read"] == "unavailable":
         info["write"] = "skipped"
@@ -160,5 +208,9 @@ def cached_get(client, url, params, ttl, cache, provider, validate):
             info["write"] = "stored"
         except CacheUnavailable:
             info["write"] = "unavailable"
-            logger.warning("Redis cache write unavailable for %s; using fresh response", provider)
+            emit(
+                logger, "cache.write", logging.WARNING, provider=provider, cache_state="unavailable"
+            )
+    if info["write"] != "unavailable":
+        emit(logger, "cache.write", provider=provider, cache_state=info["write"], ttl_seconds=ttl)
     return parsed, fetched, info

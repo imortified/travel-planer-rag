@@ -5,6 +5,7 @@ import time
 from datetime import date
 
 from app.core.config import ROOT
+from app.core.logging import configure_logging
 from app.integrations.city import CityProvider
 from app.nlp.retrieval import Retrieval
 
@@ -20,6 +21,7 @@ CASES = [
 
 
 def main():
+    configure_logging(file_tag="retrieval-evaluation")
     catalog = CityProvider().catalog(date(2026, 10, 23))
     pois = [p for p in catalog["pois"] if p["eligible"]]
     index, results = Retrieval(), []

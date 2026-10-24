@@ -1,3 +1,4 @@
+import logging
 from dataclasses import asdict, replace
 from datetime import timedelta
 from typing import Annotated, Literal
@@ -6,6 +7,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from app.core.logging import emit, span
 from app.db.models import Group, Membership, RouteOption, RouteSet, TripRequest, User
 from app.db.session import get_session
 from app.integrations.city import CityProvider, IncompleteData, SourceUnavailable
@@ -33,6 +35,7 @@ from app.visa import assess_visas
 
 router = APIRouter(prefix="/api/v1", tags=["Groups and trips"])
 DB = Annotated[Session, Depends(get_session)]
+logger = logging.getLogger(__name__)
 
 
 def require(session, model, identifier):
@@ -316,15 +319,40 @@ def calculate_route(
 ):
     trip = require(session, TripRequest, trip_id)
     request = planning_request(trip)
-    inputs, multi_day, source = planning_inputs(trip, request)
-    data = inputs[0]
-    result = (
-        plan_period(request, inputs, algorithm, beam_width, time_limit=time_limit_seconds)
-        if multi_day
-        else checked_plan(
-            request, data.places, data.travel, algorithm, beam_width, time_limit=time_limit_seconds
+    with span(logger, "planning.data", operation="single", trip_id=trip.id) as details:
+        inputs, multi_day, source = planning_inputs(trip, request)
+        details.update(
+            days=len(inputs),
+            candidate_count=len({p.id for d in inputs for p in d.places}),
+            data_source=source,
         )
-    )
+    data = inputs[0]
+    with span(
+        logger,
+        "planning.solve",
+        operation="single",
+        algorithm=algorithm,
+        days=len(inputs),
+        participant_count=len(request.participants),
+    ) as details:
+        result = (
+            plan_period(request, inputs, algorithm, beam_width, time_limit=time_limit_seconds)
+            if multi_day
+            else checked_plan(
+                request,
+                data.places,
+                data.travel,
+                algorithm,
+                beam_width,
+                time_limit=time_limit_seconds,
+            )
+        )
+        details.update(
+            feasible=result.is_feasible,
+            visit_count=len(result.visits),
+            validation_valid=result.validation.is_valid,
+            solver_status=result.solver.status if result.solver else None,
+        )
     route = RouteOption(
         trip_request_id=trip.id,
         algorithm=algorithm_name(algorithm, beam_width, multi_day),
@@ -341,6 +369,7 @@ def calculate_route(
     session.add(route)
     session.commit()
     session.refresh(route)
+    emit(logger, "route.saved", route_id=route.id, trip_id=trip.id, feasible=result.is_feasible)
     return route
 
 
@@ -370,10 +399,32 @@ def calculate_route_set(
 ):
     trip = require(session, TripRequest, trip_id)
     request = planning_request(trip)
-    inputs, multi_day, source = planning_inputs(trip, request)
-    outcome = alternatives(
-        request, inputs, algorithm, beam_width, multi_day, time_limit=time_limit_seconds
-    )
+    with span(logger, "planning.data", operation="alternatives", trip_id=trip.id) as details:
+        inputs, multi_day, source = planning_inputs(trip, request)
+        details.update(
+            days=len(inputs),
+            candidate_count=len({p.id for d in inputs for p in d.places}),
+            data_source=source,
+        )
+    with span(
+        logger,
+        "planning.solve",
+        operation="alternatives",
+        algorithm=algorithm,
+        days=len(inputs),
+        participant_count=len(request.participants),
+    ) as details:
+        outcome = alternatives(
+            request, inputs, algorithm, beam_width, multi_day, time_limit=time_limit_seconds
+        )
+        details.update(
+            route_count=len(outcome.options),
+            attempt=outcome.search_info["attempts"],
+            feasible=bool(outcome.options),
+            solver_status=outcome.diagnostic.solver.status
+            if outcome.diagnostic and outcome.diagnostic.solver
+            else None,
+        )
     visa_report = assess_visas(
         trip.destination, trip.travel_date, trip.end_date, trip.participants_snapshot, trip.purpose
     )
@@ -405,6 +456,13 @@ def calculate_route_set(
     # One transaction: a comparison cannot be persisted only partially.
     session.commit()
     session.refresh(route_set)
+    emit(
+        logger,
+        "route_set.saved",
+        route_set_id=route_set.id,
+        trip_id=trip.id,
+        route_count=len(outcome.options),
+    )
     return route_set_output(session, route_set)
 
 

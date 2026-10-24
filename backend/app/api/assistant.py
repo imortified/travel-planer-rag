@@ -1,8 +1,11 @@
+import logging
+
 from fastapi import APIRouter, HTTPException
 from sqlalchemy import select
 
 from app.api.destinations import lisbon_pois
 from app.api.groups import DB, require
+from app.core.logging import emit, span
 from app.db.models import RouteOption, TripRequest
 from app.integrations.embeddings import EmbeddingUnavailable
 from app.integrations.llama_cpp import InvalidLlmOutput, LlmUnavailable
@@ -13,13 +16,16 @@ from app.nlp.retrieval import Retrieval
 from app.schemas.assistant import ExplanationOutput, ParseInput, ParseOutput, SemanticInput
 
 router = APIRouter(prefix="/api/v1", tags=["Local LLM assistant"])
+logger = logging.getLogger(__name__)
 
 
 @router.post("/assistant/search")
 def semantic_search(payload: SemanticInput):
     catalog = lisbon_pois(payload.travel_date, payload.end_date)
     try:
-        result = Retrieval().search(payload.text, [p for p in catalog["pois"] if p["eligible"]])
+        with span(logger, "retrieval.search", operation="search") as details:
+            result = Retrieval().search(payload.text, [p for p in catalog["pois"] if p["eligible"]])
+            details.update(poi_count=len(result["matches"]))
         return {
             **result,
             "travel_date": str(payload.travel_date),
@@ -43,7 +49,10 @@ def semantic_search(payload: SemanticInput):
 @router.post("/assistant/parse", response_model=ParseOutput)
 def parse_text(payload: ParseInput):
     try:
-        return parse_request(payload)
+        with span(logger, "assistant.parse", operation="parse") as details:
+            result = parse_request(payload)
+            details.update(question_count=len(result.questions), warning_count=len(result.warnings))
+        return result
     except LlmUnavailable as exc:
         raise HTTPException(
             503,
@@ -61,6 +70,7 @@ def parse_text(payload: ParseInput):
 def route_explanation(route_id: int, session: DB, refresh: bool = False):
     route = require(session, RouteOption, route_id)
     if route.explanation and not refresh:
+        emit(logger, "explanation.loaded", route_id=route.id, reused=True)
         return route.explanation
     result = route.result
     if not result.get("is_feasible") or not (result.get("validation") or {}).get("is_valid"):
@@ -80,4 +90,5 @@ def route_explanation(route_id: int, session: DB, refresh: bool = False):
     output = explain(route, trip, options[0], len(options))
     route.explanation = output.model_dump()
     session.commit()
+    emit(logger, "explanation.saved", route_id=route.id, mode=output.mode)
     return output

@@ -1,11 +1,16 @@
 """Small llama-server adapter; no model, runtime or SDK is embedded in FastAPI."""
 
 import json
+import logging
+from time import perf_counter
 
 import httpx
 from pydantic import BaseModel, ValidationError
 
 from app.core.config import settings
+from app.core.logging import emit, error_kind, request_id
+
+logger = logging.getLogger(__name__)
 
 
 class LlmUnavailable(Exception):
@@ -36,10 +41,15 @@ class LlamaCpp:
             {"role": "user", "content": json.dumps(data, ensure_ascii=False)},
         ]
         # A single repair request is allowed. Do not log user text or raw completions.
+        operation = {"ExtractedTrip": "parse", "ExplanationDraft": "explain"}.get(
+            schema.__name__, "structured"
+        )
         for attempt in range(2):
+            started = perf_counter()
             try:
                 response = self.client.post(
                     f"{settings.llm_base_url.rstrip('/')}/v1/chat/completions",
+                    headers={"X-Request-ID": request_id.get()} if request_id.get() else {},
                     json={
                         "model": settings.llm_model,
                         "messages": messages,
@@ -56,6 +66,21 @@ class LlamaCpp:
                 )
                 response.raise_for_status()
             except httpx.HTTPError as exc:
+                emit(
+                    logger,
+                    "llm.call.failed",
+                    logging.ERROR,
+                    exception=exc,
+                    provider="llama_cpp",
+                    operation=operation,
+                    model=settings.llm_model,
+                    attempt=attempt + 1,
+                    reason=error_kind(exc),
+                    status_code=exc.response.status_code
+                    if isinstance(exc, httpx.HTTPStatusError)
+                    else None,
+                    duration_ms=(perf_counter() - started) * 1000,
+                )
                 raise LlmUnavailable("Local llama.cpp server is unavailable") from exc
             try:
                 body = response.json()
@@ -65,8 +90,34 @@ class LlamaCpp:
                 result = schema.model_validate_json(choice["message"]["content"])
                 if verify is not None:
                     verify(result)
+                usage = body.get("usage")
+                usage = usage if isinstance(usage, dict) else {}
+                emit(
+                    logger,
+                    "llm.call.completed",
+                    provider="llama_cpp",
+                    operation=operation,
+                    model=settings.llm_model,
+                    attempt=attempt + 1,
+                    duration_ms=(perf_counter() - started) * 1000,
+                    prompt_tokens=usage.get("prompt_tokens"),
+                    completion_tokens=usage.get("completion_tokens"),
+                )
                 return result, str(body.get("model") or settings.llm_model)
             except (ValueError, TypeError, KeyError, IndexError, ValidationError) as exc:
+                emit(
+                    logger,
+                    "llm.output.rejected",
+                    logging.WARNING,
+                    exception=exc,
+                    provider="llama_cpp",
+                    operation=operation,
+                    model=settings.llm_model,
+                    attempt=attempt + 1,
+                    will_retry=attempt == 0,
+                    reason="invalid_response",
+                    duration_ms=(perf_counter() - started) * 1000,
+                )
                 if attempt:
                     raise InvalidLlmOutput("Model did not return valid structured data") from exc
                 messages.append(

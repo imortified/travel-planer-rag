@@ -4,6 +4,7 @@ import argparse
 import json
 from datetime import date, timedelta
 
+from app.core.logging import configure_logging
 from app.integrations.city import CityProvider
 from app.nlp.retrieval import Retrieval
 
@@ -13,6 +14,7 @@ def main():
     parser.add_argument("--travel-date", type=date.fromisoformat, required=True)
     parser.add_argument("--end-date", type=date.fromisoformat)
     args = parser.parse_args()
+    configure_logging(file_tag="catalog-index")
     last = args.end_date or args.travel_date
     if not 0 <= (last - args.travel_date).days <= 13:
         parser.error("Period must contain 1-14 days")

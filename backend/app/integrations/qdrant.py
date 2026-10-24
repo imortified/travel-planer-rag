@@ -2,6 +2,7 @@
 
 import hashlib
 import json
+import logging
 import math
 import re
 import time
@@ -10,9 +11,11 @@ from uuid import NAMESPACE_URL, uuid5
 import httpx
 
 from app.core.config import settings
+from app.core.logging import emit, error_kind, request_id
 from app.integrations.embeddings import DIMENSIONS
 
 SCHEMA_VERSION = "v1"
+logger = logging.getLogger(__name__)
 
 
 class VectorStoreUnavailable(Exception):
@@ -52,9 +55,35 @@ class QdrantStore:
 
     def request(self, method, path, body=None):
         headers = {"api-key": settings.qdrant_api_key} if settings.qdrant_api_key else {}
-        return self.client.request(
-            method, f"{settings.qdrant_url.rstrip('/')}{path}", json=body, headers=headers
+        if request_id.get():
+            headers["X-Request-ID"] = request_id.get()
+        started = time.perf_counter()
+        try:
+            response = self.client.request(
+                method, f"{settings.qdrant_url.rstrip('/')}{path}", json=body, headers=headers
+            )
+        except httpx.HTTPError as exc:
+            emit(
+                logger,
+                "qdrant.request.failed",
+                logging.ERROR,
+                exception=exc,
+                provider="qdrant",
+                method=method,
+                reason=error_kind(exc),
+                duration_ms=(time.perf_counter() - started) * 1000,
+            )
+            raise
+        emit(
+            logger,
+            "qdrant.request.completed",
+            logging.ERROR if response.status_code >= 500 else logging.INFO,
+            provider="qdrant",
+            method=method,
+            status_code=response.status_code,
+            duration_ms=(time.perf_counter() - started) * 1000,
         )
+        return response
 
     def collection(self, kind):
         if kind not in ("places", "interests"):
@@ -197,6 +226,15 @@ class QdrantStore:
                 raise ValueError("Incomplete vector search result")
             return [scores[identifier] for identifier in ids]
         except (httpx.HTTPError, KeyError, TypeError, ValueError, IndexError) as exc:
+            emit(
+                logger,
+                "qdrant.search.failed",
+                logging.ERROR,
+                exception=exc,
+                provider="qdrant",
+                operation="search",
+                reason=error_kind(exc),
+            )
             raise VectorStoreUnavailable(
                 "Qdrant unavailable or incompatible response/schema"
             ) from exc
@@ -210,4 +248,13 @@ class QdrantStore:
         try:
             return self.sync(self.collection(kind), documents, embedder)
         except (httpx.HTTPError, KeyError, TypeError, ValueError, IndexError) as exc:
+            emit(
+                logger,
+                "qdrant.index.failed",
+                logging.ERROR,
+                exception=exc,
+                provider="qdrant",
+                operation="index",
+                reason=error_kind(exc),
+            )
             raise VectorStoreUnavailable("Qdrant indexing failed; existing data preserved") from exc

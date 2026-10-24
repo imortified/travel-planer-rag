@@ -1,10 +1,13 @@
+import logging
 from datetime import date, timedelta
 
 from fastapi import APIRouter, HTTPException
 
+from app.core.logging import emit
 from app.integrations.city import ORIGIN, CityProvider, SourceUnavailable
 
 router = APIRouter(prefix="/api/v1/destinations", tags=["Destinations"])
+logger = logging.getLogger(__name__)
 
 
 @router.get("")
@@ -42,6 +45,14 @@ def lisbon_pois(travel_date: date, end_date: date | None = None):
                     pois[pid] = poi
                 if poi["eligible"]:
                     available.setdefault(pid, []).append(catalog["travel_date"])
+        emit(
+            logger,
+            "catalog.loaded",
+            days=len(catalogs),
+            poi_count=len(pois),
+            eligible_count=len(available),
+            data_source="osm-osrm-lisbon-v2",
+        )
         return {
             **catalogs[0],
             "end_date": str(last),

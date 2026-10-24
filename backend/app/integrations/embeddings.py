@@ -1,10 +1,15 @@
 """Validated, normalized embeddings from the separate local llama.cpp server."""
 
+import logging
 import math
+from time import perf_counter
 
 import httpx
 
 from app.core.config import settings
+from app.core.logging import emit, error_kind, request_id
+
+logger = logging.getLogger(__name__)
 
 DIMENSIONS = 1024
 REVISION = "370f27d7550e0def9b39c1f16d3fbaa13aa67728"
@@ -48,9 +53,11 @@ class Embeddings:
             # Bounded batches avoid overflowing the CPU server's token batch.
             vectors = []
             for offset in range(0, len(inputs), 4):
+                started = perf_counter()
                 batch = inputs[offset : offset + 4]
                 response = self.client.post(
                     f"{settings.embedding_base_url.rstrip('/')}/v1/embeddings",
+                    headers={"X-Request-ID": request_id.get()} if request_id.get() else {},
                     json={"model": settings.embedding_model, "input": batch},
                 )
                 response.raise_for_status()
@@ -67,6 +74,26 @@ class Embeddings:
                 vectors.extend(
                     normalize(r["embedding"]) for r in sorted(rows, key=lambda r: r["index"])
                 )
+                emit(
+                    logger,
+                    "embeddings.batch.completed",
+                    provider="embeddings",
+                    model=settings.embedding_model,
+                    query=query,
+                    batch_size=len(batch),
+                    dimensions=DIMENSIONS,
+                    duration_ms=(perf_counter() - started) * 1000,
+                )
             return vectors
         except (httpx.HTTPError, KeyError, TypeError, ValueError) as exc:
+            emit(
+                logger,
+                "embeddings.batch.failed",
+                logging.ERROR,
+                exception=exc,
+                provider="embeddings",
+                model=settings.embedding_model,
+                reason=error_kind(exc),
+                duration_ms=(perf_counter() - started) * 1000,
+            )
             raise EmbeddingUnavailable("Local embeddings unavailable or invalid") from exc

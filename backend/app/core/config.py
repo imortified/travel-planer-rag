@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import Literal
 
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -8,6 +9,10 @@ ROOT = Path(__file__).resolve().parents[3]
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=ROOT / ".env", extra="ignore")
+    log_level: Literal["DEBUG", "INFO", "WARN", "WARNING", "ERROR", "CRITICAL"] = "INFO"
+    log_file: str | None = ".local/logs/backend.log"
+    log_max_bytes: int = Field(default=5_000_000, ge=1024, le=100_000_000)
+    log_backup_count: int = Field(default=3, ge=1, le=20)
     database_url: str = "postgresql+psycopg://travel:local_dev_only@127.0.0.1:55432/travel_planner"
     osm_map_url: str = "https://www.openstreetmap.org/api/0.6/map"
     osrm_url: str = "https://router.project-osrm.org"

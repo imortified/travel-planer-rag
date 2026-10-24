@@ -16,7 +16,7 @@ Next.js App Router, React и TypeScript. Стили локальные, без �
 docker compose up -d --wait
 cd backend
 .\.venv\Scripts\alembic.exe upgrade head
-.\.venv\Scripts\python.exe -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8001
+.\.venv\Scripts\python.exe -m app.run --reload
 ```
 
 В отдельном терминале:
@@ -24,15 +24,17 @@ cd backend
 ```powershell
 cd D:\Diplom\travel-planer-rag\frontend
 npm.cmd ci
-npm.cmd run dev
+npm.cmd run dev -- --port 3001
 ```
 
-Открыть http://127.0.0.1:3000. `npm.cmd` работает и при запрете ps1 в PowerShell.
-При занятом порте остановить другую копию или передать `-- --port 3001`.
+Открыть http://127.0.0.1:3001. `npm.cmd` работает и при запрете ps1 в PowerShell.
+При занятом порте остановить лишнюю копию приложения.
 
 Запросы идут через Next.js на backend, CORS не требуется. По умолчанию backend —
 http://127.0.0.1:8001. Для изменения скопировать `.env.example` в `.env.local`,
 изменить API_BASE_URL и перезапустить Next.js.
+Прокси сохраняет `X-Request-ID` между браузером и backend. Ошибки API показывают
+код запроса, по которому можно найти события в JSON-логах ([logging.md](../docs/logging.md)).
 
 ## Сценарий
 

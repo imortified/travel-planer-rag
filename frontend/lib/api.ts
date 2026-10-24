@@ -1,3 +1,5 @@
+import { validRequestId } from "./request-id";
+
 export type Interests = Record<string, number>;
 export type SolverReport = {backend:string;version:string;status:string;time_limit_seconds:number;search_time_limit_seconds:number;
   elapsed_seconds:number;solver_seconds:number;seed:number;workers:number;scale:number;objective_error_bound:number;
@@ -55,8 +57,10 @@ export async function api<T>(path: string, method = "GET", body?: unknown): Prom
   const data = await response.json();
   if (!response.ok) {
     const detail = data.detail;
-    throw new Error(Array.isArray(detail) ? detail.map((d: {msg: string}) => d.msg).join("; ")
-      : typeof detail === "string" ? detail : `Ошибка API (${response.status})`);
+    const message=Array.isArray(detail) ? detail.map((d: {msg: string}) => d.msg).join("; ")
+      : typeof detail === "string" ? detail : `Ошибка API (${response.status})`;
+    const requestId=validRequestId(response.headers.get("X-Request-ID"));
+    throw new Error(message+(requestId?` Код запроса: ${requestId}.`:""));
   }
   return data as T;
 }

@@ -23,6 +23,8 @@ Greedy, Beam и альтернативы используют общую нор�
 Карта на **MapLibre** показывает сохранённые POI, порядок посещений и дневные сегменты,
 с фильтром дней и подложкой OSM по кнопке. [Устройство и ограничения](docs/route-map.md).
 [Приёмочные сценарии MVP и сверка всех FR/NFR](docs/acceptance.md).
+Структурированные JSON-логи, `X-Request-ID`, диагностика источников/LLM и ротация:
+[docs/logging.md](docs/logging.md). По умолчанию — консоль и `.local/logs/backend.log`.
 
 Каталог v2 включает платные места и категорию «Искусство», с источниками цен и часов.
 Условия актуальности и ограничения: [docs/catalog-v2.md](docs/catalog-v2.md).
@@ -42,8 +44,8 @@ API и правила поиска: [docs/alternatives.md](docs/alternatives.md)
 Нужны `travel_date` и `end_date`; без конца периода сохраняется однодневный режим.
 Миграция: `uv run alembic upgrade head`. Подробнее: [docs/multiday.md](docs/multiday.md).
 
-Из `frontend` запустить `npm.cmd ci`, затем `npm.cmd run dev` и открыть
-http://127.0.0.1:3000. Backend должен работать на порту 8001.
+Из `frontend` запустить `npm.cmd ci`, затем `npm.cmd run dev -- --port 3001` и открыть
+http://127.0.0.1:3001. Backend должен работать на порту 8001.
 Можно создавать и загружать группы, задавать интересы, строить маршруты и читать
 сохранённые результаты. Инструкция: [frontend/README.md](frontend/README.md).
 
@@ -61,13 +63,13 @@ docker compose up -d --wait
 cd backend
 uv sync --locked
 uv run alembic upgrade head
-uv run uvicorn app.main:app --reload
+uv run python -m app.run --reload
 ```
 
 Если uv не находится в PATH, в этой рабочей копии вместо `uv` используй
 `..\.venv\Scripts\uv.exe` из папки `backend`.
 
-API: http://127.0.0.1:8000/docs. Проверка процесса: http://127.0.0.1:8000/health.
+API: http://127.0.0.1:8001/docs. Проверка процесса: http://127.0.0.1:8001/health.
 `/health` не проверяет подключение к БД. Для запуска демонстрационного расчёта БД не нужна.
 Переменные приложения читаются из `.env` в корне независимо от рабочей папки.
 Пароль из примера предназначен только для локальной разработки.
@@ -86,7 +88,7 @@ $payload = @{
     mandatory = @('museum')
     excluded = @()
 } | ConvertTo-Json -Depth 5
-Invoke-RestMethod -Method Post -Uri http://127.0.0.1:8000/api/v1/plans/demo -ContentType 'application/json' -Body $payload
+Invoke-RestMethod -Method Post -Uri http://127.0.0.1:8001/api/v1/plans/demo -ContentType 'application/json' -Body $payload
 ```
 
 ## Проверки
