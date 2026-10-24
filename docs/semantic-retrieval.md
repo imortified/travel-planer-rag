@@ -102,6 +102,10 @@ cd backend
 
 ## Проверка
 
+Расширенная оценка на зафиксированных 13 POI и 40 запросах, метрики ранжирования
+и RAGAS описаны в [rag-evaluation.md](rag-evaluation.md). Семь запросов ниже остаются
+историческим smoke-набором; его отчёт не перезаписан.
+
 ```powershell
 cd backend
 $env:RUN_DB_TESTS='1'

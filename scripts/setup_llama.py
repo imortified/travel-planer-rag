@@ -13,7 +13,7 @@ ROOT = Path(__file__).resolve().parents[1]
 LOCAL = ROOT / ".local"
 
 
-def download(entry):
+def download(entry, workers=6):
     folder = LOCAL / entry.get("directory", "downloads")
     target = folder / entry["name"]
     if not target.resolve().is_relative_to(LOCAL.resolve()):
@@ -55,9 +55,9 @@ def download(entry):
                     time.sleep(attempt + 1)
 
         # Ordered append leaves a resumable contiguous prefix on interruption.
-        with ThreadPoolExecutor(max_workers=6) as pool, partial.open("ab") as out:
-            for index in range(0, len(ranges), 6):
-                for chunk in pool.map(fetch, ranges[index : index + 6]):
+        with ThreadPoolExecutor(max_workers=workers) as pool, partial.open("ab") as out:
+            for index in range(0, len(ranges), workers):
+                for chunk in pool.map(fetch, ranges[index : index + workers]):
                     out.write(chunk)
                     out.flush()
                     offset += len(chunk)
@@ -75,10 +75,13 @@ def download(entry):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--manifest", default="data/llm-runtime.json")
+    parser.add_argument("--download-workers", type=int, choices=range(1, 17), default=6)
     args = parser.parse_args()
     manifest = json.loads((ROOT / args.manifest).read_text(encoding="utf-8"))
     with ThreadPoolExecutor(max_workers=3) as pool:
-        files = list(pool.map(download, manifest["files"]))
+        files = list(
+            pool.map(lambda entry: download(entry, args.download_workers), manifest["files"])
+        )
     for entry, path in files:
         if "extract_to" not in entry:
             continue

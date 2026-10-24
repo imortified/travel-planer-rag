@@ -86,6 +86,10 @@
 
 ## Где полезен RAGAS
 
+Продолжение этого baseline: [отдельный этап оценки RAG](rag-evaluation.md) с
+необязательной установленной библиотекой, 40 запросами и локальным судьёй.
+Описание ниже фиксирует состояние первого этапа, когда был только экспорт.
+
 [RAGAS](https://docs.ragas.io/en/stable/concepts/metrics/available_metrics/) содержит
 метрики поиска, соответствия ответа вопросу и опоры на контекст. Для этого проекта
 полезны [Faithfulness](https://docs.ragas.io/en/stable/concepts/metrics/available_metrics/faithfulness/)
