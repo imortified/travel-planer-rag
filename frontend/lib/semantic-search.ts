@@ -11,6 +11,7 @@ export function semanticSelection(value: SemanticSearch | undefined, manual: str
     matches: blocked ? [] : value.matches.filter(m => m.score >= value.document_threshold).slice(0, 3),
     message: value?.message || (value?.reason === "negative_or_complex"
       ? "Отрицания задайте ползунками или исключите места в каталоге."
+      : value?.category ? "Проверьте предлагаемый интерес перед применением."
       : "Выберите категорию вручную или уточните пожелание."),
   };
 }

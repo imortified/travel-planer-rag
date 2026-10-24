@@ -1,0 +1,454 @@
+{
+  "kind": "Replay of saved live vector scores; no new model calls. After lexical boundary correction for artificial intelligence and parking.",
+  "policy_version": "semantic-evidence-v2",
+  "sha256_lf": {
+    "backend/app/nlp/retrieval_policy.py": "54055938a41b041dc0167ef8c5c4cf07761b10a3a62e0c7551fe5f048642a366",
+    "docs/semantic-search-evaluation.json": "dca46b18a1b0a3bb0c7bb0923ca228a8e6e4a13a8b78b5632dcec60647ccc759",
+    "docs/semantic-search-validation.json": "990b44ee43f7549a4713a32b28fb4fc3947000b0635bd7cade6b6bbc92466345"
+  },
+  "compared_fields": [
+    "category",
+    "category_source",
+    "can_apply",
+    "reason",
+    "needs_clarification",
+    "warnings",
+    "detected_categories"
+  ],
+  "cases": 72,
+  "unchanged_decisions": 72,
+  "rows": [
+    {
+      "report": "semantic-search-evaluation.json",
+      "id": "rag-01",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-evaluation.json",
+      "id": "rag-02",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-evaluation.json",
+      "id": "rag-03",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-evaluation.json",
+      "id": "rag-04",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-evaluation.json",
+      "id": "rag-05",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-evaluation.json",
+      "id": "rag-06",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-evaluation.json",
+      "id": "rag-07",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-evaluation.json",
+      "id": "rag-08",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-evaluation.json",
+      "id": "rag-09",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-evaluation.json",
+      "id": "rag-10",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-evaluation.json",
+      "id": "rag-11",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-evaluation.json",
+      "id": "rag-12",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-evaluation.json",
+      "id": "rag-13",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-evaluation.json",
+      "id": "rag-14",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-evaluation.json",
+      "id": "rag-15",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-evaluation.json",
+      "id": "rag-16",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-evaluation.json",
+      "id": "rag-17",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-evaluation.json",
+      "id": "rag-18",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-evaluation.json",
+      "id": "rag-19",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-evaluation.json",
+      "id": "rag-20",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-evaluation.json",
+      "id": "rag-21",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-evaluation.json",
+      "id": "rag-22",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-evaluation.json",
+      "id": "rag-23",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-evaluation.json",
+      "id": "rag-24",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-evaluation.json",
+      "id": "rag-25",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-evaluation.json",
+      "id": "rag-26",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-evaluation.json",
+      "id": "rag-27",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-evaluation.json",
+      "id": "rag-28",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-evaluation.json",
+      "id": "rag-29",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-evaluation.json",
+      "id": "rag-30",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-evaluation.json",
+      "id": "rag-31",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-evaluation.json",
+      "id": "rag-32",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-evaluation.json",
+      "id": "rag-33",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-evaluation.json",
+      "id": "rag-34",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-evaluation.json",
+      "id": "rag-35",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-evaluation.json",
+      "id": "rag-36",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-evaluation.json",
+      "id": "rag-37",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-evaluation.json",
+      "id": "rag-38",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-evaluation.json",
+      "id": "rag-39",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-evaluation.json",
+      "id": "rag-40",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-validation.json",
+      "id": "new-01",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-validation.json",
+      "id": "new-02",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-validation.json",
+      "id": "new-03",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-validation.json",
+      "id": "new-04",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-validation.json",
+      "id": "new-05",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-validation.json",
+      "id": "new-06",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-validation.json",
+      "id": "new-07",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-validation.json",
+      "id": "new-08",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-validation.json",
+      "id": "new-09",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-validation.json",
+      "id": "new-10",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-validation.json",
+      "id": "new-11",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-validation.json",
+      "id": "new-12",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-validation.json",
+      "id": "new-13",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-validation.json",
+      "id": "new-14",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-validation.json",
+      "id": "new-15",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-validation.json",
+      "id": "new-16",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-validation.json",
+      "id": "new-17",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-validation.json",
+      "id": "new-18",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-validation.json",
+      "id": "new-19",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-validation.json",
+      "id": "new-20",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-validation.json",
+      "id": "new-21",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-validation.json",
+      "id": "new-22",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-validation.json",
+      "id": "new-23",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-validation.json",
+      "id": "new-24",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-validation.json",
+      "id": "new-25",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-validation.json",
+      "id": "new-26",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-validation.json",
+      "id": "new-27",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-validation.json",
+      "id": "new-28",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-validation.json",
+      "id": "new-29",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-validation.json",
+      "id": "new-30",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-validation.json",
+      "id": "new-31",
+      "matches_recorded_decision": true,
+      "differences": []
+    },
+    {
+      "report": "semantic-search-validation.json",
+      "id": "new-32",
+      "matches_recorded_decision": true,
+      "differences": []
+    }
+  ]
+}

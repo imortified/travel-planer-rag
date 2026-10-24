@@ -1,0 +1,276 @@
+{
+  "scope": "Paired replay of old profile decision on rounded scores from the new live validation. Not a separate old-version live run. None expected for policy cases means automatic assignment disallowed, not that the topic has no category.",
+  "old_source_revision": "f697124",
+  "old_retrieval_source_sha256_lf": "b92088d4c757672bea2e456e003608d870963079bfeb0a8221ccf16af8b8cae9",
+  "score_decimals": 6,
+  "minimum_distance_to_decision_boundary": 0.00385000000000002,
+  "input_sha256_lf": {
+    "data/evaluation/semantic-validation.json": "8c6f738d7735e58065b0210861fb01c1fcaab3aa220ec637e4b7662cf26a71e6",
+    "docs/semantic-search-validation.json": "990b44ee43f7549a4713a32b28fb4fc3947000b0635bd7cade6b6bbc92466345"
+  },
+  "summary": {
+    "positive_cases": 20,
+    "old_positive_correct": 3,
+    "new_positive_correct": 16,
+    "old_inappropriate_assignments": 1,
+    "new_inappropriate_assignments": 0
+  },
+  "rows": [
+    {
+      "id": "new-01",
+      "positive": true,
+      "expected_category": "history",
+      "old_rule_replay": null,
+      "new_live_category": "history",
+      "new_reason": "matched"
+    },
+    {
+      "id": "new-02",
+      "positive": true,
+      "expected_category": "history",
+      "old_rule_replay": null,
+      "new_live_category": null,
+      "new_reason": "no_evidence"
+    },
+    {
+      "id": "new-03",
+      "positive": true,
+      "expected_category": "history",
+      "old_rule_replay": null,
+      "new_live_category": "history",
+      "new_reason": "matched"
+    },
+    {
+      "id": "new-04",
+      "positive": true,
+      "expected_category": "history",
+      "old_rule_replay": null,
+      "new_live_category": "history",
+      "new_reason": "matched"
+    },
+    {
+      "id": "new-05",
+      "positive": true,
+      "expected_category": "history",
+      "old_rule_replay": null,
+      "new_live_category": null,
+      "new_reason": "no_evidence"
+    },
+    {
+      "id": "new-06",
+      "positive": true,
+      "expected_category": "art",
+      "old_rule_replay": "art",
+      "new_live_category": "art",
+      "new_reason": "matched"
+    },
+    {
+      "id": "new-07",
+      "positive": true,
+      "expected_category": "art",
+      "old_rule_replay": null,
+      "new_live_category": "art",
+      "new_reason": "matched"
+    },
+    {
+      "id": "new-08",
+      "positive": true,
+      "expected_category": "art",
+      "old_rule_replay": null,
+      "new_live_category": "art",
+      "new_reason": "matched"
+    },
+    {
+      "id": "new-09",
+      "positive": true,
+      "expected_category": "art",
+      "old_rule_replay": null,
+      "new_live_category": "art",
+      "new_reason": "matched"
+    },
+    {
+      "id": "new-10",
+      "positive": true,
+      "expected_category": "art",
+      "old_rule_replay": null,
+      "new_live_category": null,
+      "new_reason": "uncertain"
+    },
+    {
+      "id": "new-11",
+      "positive": true,
+      "expected_category": "nature",
+      "old_rule_replay": null,
+      "new_live_category": "nature",
+      "new_reason": "matched"
+    },
+    {
+      "id": "new-12",
+      "positive": true,
+      "expected_category": "nature",
+      "old_rule_replay": null,
+      "new_live_category": "nature",
+      "new_reason": "matched"
+    },
+    {
+      "id": "new-13",
+      "positive": true,
+      "expected_category": "nature",
+      "old_rule_replay": "nature",
+      "new_live_category": "nature",
+      "new_reason": "matched"
+    },
+    {
+      "id": "new-14",
+      "positive": true,
+      "expected_category": "nature",
+      "old_rule_replay": "nature",
+      "new_live_category": "nature",
+      "new_reason": "matched"
+    },
+    {
+      "id": "new-15",
+      "positive": true,
+      "expected_category": "nature",
+      "old_rule_replay": null,
+      "new_live_category": "nature",
+      "new_reason": "matched"
+    },
+    {
+      "id": "new-16",
+      "positive": true,
+      "expected_category": "food",
+      "old_rule_replay": null,
+      "new_live_category": "food",
+      "new_reason": "matched"
+    },
+    {
+      "id": "new-17",
+      "positive": true,
+      "expected_category": "food",
+      "old_rule_replay": null,
+      "new_live_category": "food",
+      "new_reason": "matched"
+    },
+    {
+      "id": "new-18",
+      "positive": true,
+      "expected_category": "food",
+      "old_rule_replay": null,
+      "new_live_category": "food",
+      "new_reason": "matched"
+    },
+    {
+      "id": "new-19",
+      "positive": true,
+      "expected_category": "food",
+      "old_rule_replay": null,
+      "new_live_category": "food",
+      "new_reason": "matched"
+    },
+    {
+      "id": "new-20",
+      "positive": true,
+      "expected_category": "food",
+      "old_rule_replay": null,
+      "new_live_category": null,
+      "new_reason": "uncertain"
+    },
+    {
+      "id": "new-21",
+      "positive": false,
+      "expected_category": null,
+      "old_rule_replay": null,
+      "new_live_category": null,
+      "new_reason": "unsupported_condition"
+    },
+    {
+      "id": "new-22",
+      "positive": false,
+      "expected_category": null,
+      "old_rule_replay": null,
+      "new_live_category": null,
+      "new_reason": "unsupported_condition"
+    },
+    {
+      "id": "new-23",
+      "positive": false,
+      "expected_category": null,
+      "old_rule_replay": null,
+      "new_live_category": null,
+      "new_reason": "unsupported_condition"
+    },
+    {
+      "id": "new-24",
+      "positive": false,
+      "expected_category": null,
+      "old_rule_replay": null,
+      "new_live_category": null,
+      "new_reason": "unsupported_condition"
+    },
+    {
+      "id": "new-25",
+      "positive": false,
+      "expected_category": null,
+      "old_rule_replay": null,
+      "new_live_category": null,
+      "new_reason": "negative_or_complex"
+    },
+    {
+      "id": "new-26",
+      "positive": false,
+      "expected_category": null,
+      "old_rule_replay": null,
+      "new_live_category": null,
+      "new_reason": "negative_or_complex"
+    },
+    {
+      "id": "new-27",
+      "positive": false,
+      "expected_category": null,
+      "old_rule_replay": null,
+      "new_live_category": null,
+      "new_reason": "negative_or_complex"
+    },
+    {
+      "id": "new-28",
+      "positive": false,
+      "expected_category": null,
+      "old_rule_replay": null,
+      "new_live_category": null,
+      "new_reason": "multiple_interests"
+    },
+    {
+      "id": "new-29",
+      "positive": false,
+      "expected_category": null,
+      "old_rule_replay": "food",
+      "new_live_category": null,
+      "new_reason": "multiple_interests"
+    },
+    {
+      "id": "new-30",
+      "positive": false,
+      "expected_category": null,
+      "old_rule_replay": null,
+      "new_live_category": null,
+      "new_reason": "unsupported_condition"
+    },
+    {
+      "id": "new-31",
+      "positive": false,
+      "expected_category": null,
+      "old_rule_replay": null,
+      "new_live_category": null,
+      "new_reason": "unsupported_condition"
+    },
+    {
+      "id": "new-32",
+      "positive": false,
+      "expected_category": null,
+      "old_rule_replay": null,
+      "new_live_category": null,
+      "new_reason": "no_evidence"
+    }
+  ]
+}

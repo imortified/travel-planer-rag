@@ -97,6 +97,19 @@ def test_generic_museum_or_no_evidence_does_not_invent_history():
     assert decide("Нечто неизвестное", score=0.1)["reason"] == "no_evidence"
 
 
+@pytest.mark.parametrize(
+    "text,category",
+    [
+        ("Математика искусственного интеллекта", "art"),
+        ("Нужна парковка", "nature"),
+    ],
+)
+def test_unrelated_words_do_not_become_explicit_topic_evidence(text, category):
+    result = decide(text, category)
+    assert result["category"] is None
+    assert result["category_source"] is None
+
+
 def test_recorded_development_mistakes_are_blocked_without_changing_gold():
     corpus = json.loads((ROOT / "data/evaluation/rag-queries.json").read_text("utf-8"))
     report = json.loads((ROOT / "docs/rag-retrieval-evaluation.json").read_text("utf-8"))
