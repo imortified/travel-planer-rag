@@ -14,7 +14,8 @@ export type Explanation = {mode:"llm"|"template";model:string|null;verified:bool
   sources?:Record<string,SemanticMatch>};
 export type SemanticMatch = {place_id:string;name:string;description:string;score:number;source_url:string;checked_on:string|null;description_kind:string};
 export type SemanticSearch = {query:string;model:string;knowledge_version:string;category:string|null;document_threshold:number;
-  category_scores:Record<string,number>;needs_clarification:boolean;reason:string;matches:SemanticMatch[]};
+  category_scores:Record<string,number>;needs_clarification:boolean;reason:string;matches:SemanticMatch[];
+  can_apply?:boolean;message?:string;warnings?:string[];policy_version?:string;category_source?:string|null};
 export type ParsedMember = {name:string;interests:Interests};
 export type ParseOutput = {model:string;prompt_version:string;reference_date:string;group_budget:number|null;
   questions:{field:string;text:string}[];warnings:string[];

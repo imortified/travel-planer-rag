@@ -1,12 +1,12 @@
 """Semantic retrieval via Qdrant; every search is restricted to current candidate IDs."""
 
 import json
-import re
 from pathlib import Path
 
 from app.core.config import ROOT
 from app.integrations.embeddings import Embeddings
 from app.integrations.qdrant import QdrantStore
+from app.nlp.retrieval_policy import assess
 
 THRESHOLD = 0.55
 MARGIN = 0.05
@@ -90,24 +90,21 @@ class Retrieval:
             zip(categories, category_scores, strict=True),
             key=lambda row: (-row[1], row[0]),
         )
-        # A vector does not reliably encode negation, mixed preferences or commands.
-        negative = bool(
-            re.search(
-                r"\bне\b|\bбез\b|\bкроме\b|\bненавиж\w*|\bизбега\w*|\bисключ\w*|\bnot\b|\bwithout\b",
-                text.casefold(),
-            )
-        )
-        accepted = (
-            not negative
-            and ranking[0][1] >= THRESHOLD
-            and (ranking[0][1] - ranking[1][1] >= MARGIN)
-        )
         matches = sorted(
             [
                 {**doc, "score": round(score, 6)}
                 for doc, score in zip(documents, place_scores, strict=True)
             ],
             key=lambda item: (-item["score"], item["place_id"]),
+        )
+        policy = assess(
+            text,
+            ranking,
+            matches,
+            {p["id"]: p["category"] for p in pois},
+            THRESHOLD,
+            MARGIN,
+            DOCUMENT_THRESHOLD,
         )
         return {
             "query": text,
@@ -123,9 +120,7 @@ class Retrieval:
             "threshold": THRESHOLD,
             "document_threshold": DOCUMENT_THRESHOLD,
             "margin": MARGIN,
-            "category": ranking[0][0] if accepted else None,
             "category_scores": {category: round(score, 6) for category, score in ranking},
-            "needs_clarification": not accepted,
-            "reason": "negative_or_complex" if negative else "matched" if accepted else "uncertain",
-            "matches": matches,
+            **policy,
+            "matches": matches if policy["can_apply"] else [],
         }

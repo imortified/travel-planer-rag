@@ -224,6 +224,8 @@ class CityProvider:
             retrieval = Retrieval().search(
                 semantic_query, [p for p in usable if p["id"] not in excluded]
             )
+            if retrieval.get("can_apply") is False:
+                raise IncompleteData(retrieval["message"])
         relevance = {m["place_id"]: m["score"] for m in retrieval["matches"]} if retrieval else {}
         usable.sort(key=lambda p: (p["id"] not in mandatory, -relevance.get(p["id"], -1), p["id"]))
         selected = usable[:12]

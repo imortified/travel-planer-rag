@@ -150,6 +150,8 @@ def facts_for(route, trip, primary=None, option_count=1):
 def retrieved_sources(route):
     context = route.result.get("data_context") or {}
     retrieval = context.get("retrieval") or {}
+    if retrieval.get("can_apply") is False:
+        return {}
     visited = {v["place_id"] for v in route.result["visits"]}
     # Only saved, relevant, source-enriched descriptions of actually visited POIs.
     documents = [

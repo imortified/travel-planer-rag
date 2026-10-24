@@ -1,0 +1,439 @@
+{
+  "version": "ru-semantic-validation-2026-10-24-v1",
+  "snapshot": "rag-catalog.json",
+  "knowledge_version": "lisbon-semantics-2026-10-24-v2",
+  "provenance": "32 author-created additional formulations, frozen before implementation/live measurement of semantic policy v2. Not an independent blind or expert-reviewed sample. Twenty positive relevance labels; twelve policy/no-evidence cases use empty relevance to mean no acceptable automatic single-interest context, not proof that the world contains no relevant place. No tuning on live results of this file.",
+  "cases": [
+    {
+      "id": "new-01",
+      "query": "Археология и предметы, найденные среди монастырских руин.",
+      "expected_category": "history",
+      "relevance": {
+        "osm:node:5068486965": 2
+      },
+      "reference": "Museu Arqueológico do Carmo: Археологический музей Карму расположен среди руин монастыря. Его коллекция включает археологические и исторические предметы разных эпох.",
+      "tags": [
+        "positive",
+        "history"
+      ]
+    },
+    {
+      "id": "new-02",
+      "query": "Хочу разобраться в сопротивлении диктатуре.",
+      "expected_category": "history",
+      "relevance": {
+        "osm:node:4419041593": 2
+      },
+      "reference": "Museu do Aljube - Resistência e Liberdade: Музей Алжубе посвящён сопротивлению диктатуре, борьбе за свободу и памяти политических заключённых в Португалии.",
+      "tags": [
+        "positive",
+        "history"
+      ]
+    },
+    {
+      "id": "new-03",
+      "query": "Мне интересны исторические коллекции разных эпох.",
+      "expected_category": "history",
+      "relevance": {
+        "osm:node:5068486965": 2
+      },
+      "reference": "Museu Arqueológico do Carmo: Археологический музей Карму расположен среди руин монастыря. Его коллекция включает археологические и исторические предметы разных эпох.",
+      "tags": [
+        "positive",
+        "history"
+      ]
+    },
+    {
+      "id": "new-04",
+      "query": "Ищу рассказ о политических заключённых Португалии.",
+      "expected_category": "history",
+      "relevance": {
+        "osm:node:4419041593": 2
+      },
+      "reference": "Museu do Aljube - Resistência e Liberdade: Музей Алжубе посвящён сопротивлению диктатуре, борьбе за свободу и памяти политических заключённых в Португалии.",
+      "tags": [
+        "positive",
+        "history"
+      ]
+    },
+    {
+      "id": "new-05",
+      "query": "Хочу узнать о борьбе за гражданские свободы.",
+      "expected_category": "history",
+      "relevance": {
+        "osm:node:4419041593": 2
+      },
+      "reference": "Museu do Aljube - Resistência e Liberdade: Музей Алжубе посвящён сопротивлению диктатуре, борьбе за свободу и памяти политических заключённых в Португалии.",
+      "tags": [
+        "positive",
+        "history"
+      ]
+    },
+    {
+      "id": "new-06",
+      "query": "Люблю религиозную скульптуру и старинные ткани.",
+      "expected_category": "art",
+      "relevance": {
+        "osm:node:13174527080": 2
+      },
+      "reference": "Museu de São Roque: Музей Сан-Роке хранит коллекцию религиозного искусства: живопись, скульптуру, реликварии и ткани.",
+      "tags": [
+        "positive",
+        "art"
+      ]
+    },
+    {
+      "id": "new-07",
+      "query": "Посоветуй португальскую живопись последних двух столетий.",
+      "expected_category": "art",
+      "relevance": {
+        "osm:node:11047643391": 2
+      },
+      "reference": "Museu Nacional de Arte Contemporânea (MNAC): Национальный музей современного искусства представляет португальское искусство с середины XIX века до современности, в том числе живопись и скульптуру.",
+      "tags": [
+        "positive",
+        "art"
+      ]
+    },
+    {
+      "id": "new-08",
+      "query": "Нравятся художественные коллекции современного периода.",
+      "expected_category": "art",
+      "relevance": {
+        "osm:node:11047643391": 2
+      },
+      "reference": "Museu Nacional de Arte Contemporânea (MNAC): Национальный музей современного искусства представляет португальское искусство с середины XIX века до современности, в том числе живопись и скульптуру.",
+      "tags": [
+        "positive",
+        "art"
+      ]
+    },
+    {
+      "id": "new-09",
+      "query": "Интересуют реликварии в Сан-Роке.",
+      "expected_category": "art",
+      "relevance": {
+        "osm:node:13174527080": 2
+      },
+      "reference": "Museu de São Roque: Музей Сан-Роке хранит коллекцию религиозного искусства: живопись, скульптуру, реликварии и ткани.",
+      "tags": [
+        "positive",
+        "art"
+      ]
+    },
+    {
+      "id": "new-10",
+      "query": "Хочу увидеть произведения португальских мастеров.",
+      "expected_category": "art",
+      "relevance": {
+        "osm:node:11047643391": 2
+      },
+      "reference": "Museu Nacional de Arte Contemporânea (MNAC): Национальный музей современного искусства представляет португальское искусство с середины XIX века до современности, в том числе живопись и скульптуру.",
+      "tags": [
+        "positive",
+        "art"
+      ]
+    },
+    {
+      "id": "new-11",
+      "query": "Хочется посмотреть ботаническую коллекцию на террасах.",
+      "expected_category": "nature",
+      "relevance": {
+        "curated:lisbon:ajuda-botanical-garden": 2
+      },
+      "reference": "Jardim Botânico da Ajuda: Ботанический сад Ажуда знакомит с коллекцией растений. Террасы, фонтаны и зелёные пространства подходят для прогулки среди природы.",
+      "tags": [
+        "positive",
+        "nature"
+      ]
+    },
+    {
+      "id": "new-12",
+      "query": "Интересуют растения в оранжерее с каскадами.",
+      "expected_category": "nature",
+      "relevance": {
+        "curated:lisbon:estufa-fria": 2
+      },
+      "reference": "Estufa Fria de Lisboa: Оранжерейный комплекс Estufa Fria в парке Эдуарда VII. Прогулка среди растений, водоёмов и каскадов; включает холодную, тёплую и суккулентную зоны.",
+      "tags": [
+        "positive",
+        "nature"
+      ]
+    },
+    {
+      "id": "new-13",
+      "query": "Ищу сад с деревьями, прудом и птицами.",
+      "expected_category": "nature",
+      "relevance": {
+        "curated:lisbon:gulbenkian-garden": 2
+      },
+      "reference": "Jardim Gulbenkian — прогулка по саду: Бесплатный сад фонда Гулбенкяна. Деревья, растения, озеро и птицы для спокойной прогулки на открытом воздухе. Посещение музеев в эту остановку не входит.",
+      "tags": [
+        "positive",
+        "nature"
+      ]
+    },
+    {
+      "id": "new-14",
+      "query": "Прогулка среди зелени и коллекций растений.",
+      "expected_category": "nature",
+      "relevance": {
+        "curated:lisbon:ajuda-botanical-garden": 2,
+        "curated:lisbon:estufa-fria": 2,
+        "curated:lisbon:gulbenkian-garden": 2
+      },
+      "reference": "Jardim Botânico da Ajuda: Ботанический сад Ажуда знакомит с коллекцией растений. Террасы, фонтаны и зелёные пространства подходят для прогулки среди природы.\nEstufa Fria de Lisboa: Оранжерейный комплекс Estufa Fria в парке Эдуарда VII. Прогулка среди растений, водоёмов и каскадов; включает холодную, тёплую и суккулентную зоны.\nJardim Gulbenkian — прогулка по саду: Бесплатный сад фонда Гулбенкяна. Деревья, растения, озеро и птицы для спокойной прогулки на открытом воздухе. Посещение музеев в эту остановку не входит.",
+      "tags": [
+        "positive",
+        "nature"
+      ]
+    },
+    {
+      "id": "new-15",
+      "query": "Хочу провести время на открытом воздухе у озера.",
+      "expected_category": "nature",
+      "relevance": {
+        "curated:lisbon:gulbenkian-garden": 2
+      },
+      "reference": "Jardim Gulbenkian — прогулка по саду: Бесплатный сад фонда Гулбенкяна. Деревья, растения, озеро и птицы для спокойной прогулки на открытом воздухе. Посещение музеев в эту остановку не входит.",
+      "tags": [
+        "positive",
+        "nature"
+      ]
+    },
+    {
+      "id": "new-16",
+      "query": "Нравится португальская выпечка и крепкий кофе.",
+      "expected_category": "food",
+      "relevance": {
+        "curated:lisbon:pasteis-de-belem": 2
+      },
+      "reference": "Pastéis de Belém — pastel и эспрессо: Историческая кондитерская в Белене. Гастрономическая остановка: португальская выпечка Pastel de Belém и эспрессо; другие заказы не входят в рассчитанную стоимость.",
+      "tags": [
+        "positive",
+        "food"
+      ]
+    },
+    {
+      "id": "new-17",
+      "query": "Где попробовать бранч с гранолой в Байше?",
+      "expected_category": "food",
+      "relevance": {
+        "curated:lisbon:nicolau-baixa": 2
+      },
+      "reference": "Nicolau Lisboa — Brunch Nicolau: Кафе Nicolau в районе Байша. Бранч из яиц, сока, кофе или чая и йогурта с гранолой либо панкейков. Гастрономическая остановка с конкретным набором из меню.",
+      "tags": [
+        "positive",
+        "food"
+      ]
+    },
+    {
+      "id": "new-18",
+      "query": "Хочу позавтракать в кафе Кампу-де-Орике.",
+      "expected_category": "food",
+      "relevance": {
+        "curated:lisbon:amelia-campo-de-ourique": 2
+      },
+      "reference": "Amélia Lisboa — Brunch Amélia: Кафе Amélia в Кампу-де-Орике. В меню бранч с яйцами, соком, йогуртом или панкейками и горячим напитком. Стоимость относится к одному набору на человека.",
+      "tags": [
+        "positive",
+        "food"
+      ]
+    },
+    {
+      "id": "new-19",
+      "query": "Интересует дегустация местной выпечки в Белене.",
+      "expected_category": "food",
+      "relevance": {
+        "curated:lisbon:pasteis-de-belem": 2
+      },
+      "reference": "Pastéis de Belém — pastel и эспрессо: Историческая кондитерская в Белене. Гастрономическая остановка: португальская выпечка Pastel de Belém и эспрессо; другие заказы не входят в рассчитанную стоимость.",
+      "tags": [
+        "positive",
+        "food"
+      ]
+    },
+    {
+      "id": "new-20",
+      "query": "Ищу сытный утренний набор из яиц, сока и йогурта.",
+      "expected_category": "food",
+      "relevance": {
+        "curated:lisbon:nicolau-baixa": 2,
+        "curated:lisbon:amelia-campo-de-ourique": 2
+      },
+      "reference": "Nicolau Lisboa — Brunch Nicolau: Кафе Nicolau в районе Байша. Бранч из яиц, сока, кофе или чая и йогурта с гранолой либо панкейков. Гастрономическая остановка с конкретным набором из меню.\nAmélia Lisboa — Brunch Amélia: Кафе Amélia в Кампу-де-Орике. В меню бранч с яйцами, соком, йогуртом или панкейками и горячим напитком. Стоимость относится к одному набору на человека.",
+      "tags": [
+        "positive",
+        "food"
+      ]
+    },
+    {
+      "id": "new-21",
+      "query": "Нужен полностью безглютеновый бранч.",
+      "expected_category": null,
+      "relevance": {},
+      "reference": "",
+      "tags": [
+        "policy"
+      ],
+      "expected_policy": {
+        "can_apply": false,
+        "reason": "unsupported_condition"
+      }
+    },
+    {
+      "id": "new-22",
+      "query": "Какие кафе гарантируют отсутствие лактозы?",
+      "expected_category": null,
+      "relevance": {},
+      "reference": "",
+      "tags": [
+        "policy"
+      ],
+      "expected_policy": {
+        "can_apply": false,
+        "reason": "unsupported_condition"
+      }
+    },
+    {
+      "id": "new-23",
+      "query": "У меня аллергия на арахис, ищу кафе.",
+      "expected_category": null,
+      "relevance": {},
+      "reference": "",
+      "tags": [
+        "policy"
+      ],
+      "expected_policy": {
+        "can_apply": false,
+        "reason": "unsupported_condition"
+      }
+    },
+    {
+      "id": "new-24",
+      "query": "Хочу только вегетарианскую кухню.",
+      "expected_category": null,
+      "relevance": {},
+      "reference": "",
+      "tags": [
+        "policy"
+      ],
+      "expected_policy": {
+        "can_apply": false,
+        "reason": "unsupported_condition"
+      }
+    },
+    {
+      "id": "new-25",
+      "query": "Музеи не интересуют.",
+      "expected_category": null,
+      "relevance": {},
+      "reference": "",
+      "tags": [
+        "policy"
+      ],
+      "expected_policy": {
+        "can_apply": false,
+        "reason": "negative_or_complex"
+      }
+    },
+    {
+      "id": "new-26",
+      "query": "Кроме галерей ничего не нужно.",
+      "expected_category": null,
+      "relevance": {},
+      "reference": "",
+      "tags": [
+        "policy"
+      ],
+      "expected_policy": {
+        "can_apply": false,
+        "reason": "negative_or_complex"
+      }
+    },
+    {
+      "id": "new-27",
+      "query": "Хочу сад, но без оранжерей.",
+      "expected_category": null,
+      "relevance": {},
+      "reference": "",
+      "tags": [
+        "policy"
+      ],
+      "expected_policy": {
+        "can_apply": false,
+        "reason": "negative_or_complex"
+      }
+    },
+    {
+      "id": "new-28",
+      "query": "Сначала скульптура, потом археология.",
+      "expected_category": null,
+      "relevance": {},
+      "reference": "",
+      "tags": [
+        "policy"
+      ],
+      "expected_policy": {
+        "can_apply": false,
+        "reason": "multiple_interests"
+      }
+    },
+    {
+      "id": "new-29",
+      "query": "Нравятся гастрономия и природа.",
+      "expected_category": null,
+      "relevance": {},
+      "reference": "",
+      "tags": [
+        "policy"
+      ],
+      "expected_policy": {
+        "can_apply": false,
+        "reason": "multiple_interests"
+      }
+    },
+    {
+      "id": "new-30",
+      "query": "Покажи прогноз осадков для сада.",
+      "expected_category": null,
+      "relevance": {},
+      "reference": "",
+      "tags": [
+        "policy"
+      ],
+      "expected_policy": {
+        "can_apply": false,
+        "reason": "unsupported_condition"
+      }
+    },
+    {
+      "id": "new-31",
+      "query": "Нужно добраться на велосипеде до музея.",
+      "expected_category": null,
+      "relevance": {},
+      "reference": "",
+      "tags": [
+        "policy"
+      ],
+      "expected_policy": {
+        "can_apply": false,
+        "reason": "unsupported_condition"
+      }
+    },
+    {
+      "id": "new-32",
+      "query": "Ищу лекцию по программированию нейросетей.",
+      "expected_category": null,
+      "relevance": {},
+      "reference": "",
+      "tags": [
+        "policy"
+      ],
+      "expected_policy": {
+        "can_apply": false,
+        "reason": "no_evidence"
+      }
+    }
+  ]
+}

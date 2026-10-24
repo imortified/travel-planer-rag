@@ -21,6 +21,7 @@ from app.integrations.city import ORIGIN, CityProvider
 from app.integrations.qdrant import QdrantStore
 from app.nlp.explanations import REQUIRED, explain, facts_for, retrieved_sources
 from app.nlp.retrieval import DOCUMENT_THRESHOLD, MARGIN, THRESHOLD, Retrieval
+from app.nlp.retrieval_policy import VERSION as POLICY_VERSION
 from app.planning.models import Participant, Request
 from app.planning.service import checked_plan
 
@@ -82,6 +83,9 @@ def grade_search(case, output, ks=(1, 3, 5)):
         "no_evidence": not case["relevance"],
         "context_returned_without_evidence": not case["relevance"] and bool(selected),
         "selected_contexts": selected,
+        "policy_checks": {
+            key: output.get(key) == value for key, value in case.get("expected_policy", {}).items()
+        },
     }
 
 
@@ -99,6 +103,14 @@ def summarize_search(rows):
         "false_context_on_no_evidence": sum(
             r["grade"]["context_returned_without_evidence"] for r in absent
         ),
+        "supported_category_correct": sum(r["grade"]["category_correct"] for r in supported),
+        "supported_clarifications": sum(r["output"]["category"] is None for r in supported),
+        "wrong_category_assignments": sum(
+            r.get("output", {}).get("category") is not None and not r["grade"]["category_correct"]
+            for r in successful
+        ),
+        "policy_cases": sum(bool(r["grade"]["policy_checks"]) for r in successful),
+        "policy_failures": sum(not all(r["grade"]["policy_checks"].values()) for r in successful),
         "macro_ranking": {
             k: {
                 metric: mean(r["grade"]["ranking"][k][metric] for r in supported)
@@ -124,6 +136,8 @@ def manifest(paths):
             ROOT / "backend/app" / name
             for name in (
                 "nlp/retrieval.py",
+                "nlp/retrieval_policy.py",
+                "nlp/grounding.py",
                 "nlp/explanations.py",
                 "integrations/qdrant.py",
                 "integrations/embeddings.py",
@@ -231,6 +245,7 @@ def run(dataset, output_path, samples_path, *, explanations=False):
         "input_sha256": hashes,
         "scope": "Frozen catalog; live embeddings/Qdrant; authored regression labels.",
         "embedding_identity": index.embedder.identity,
+        "policy_version": POLICY_VERSION,
         "catalog_snapshot": snapshot["catalog_snapshot"],
         "candidate_count": len(snapshot["pois"]),
         "rows": [],
@@ -322,6 +337,7 @@ def main():
     )
     if (
         report["summary"]["errors"]
+        or report["summary"]["policy_failures"]
         or not report["inputs_unchanged"]
         or any("error" in r or not all(r["checks"].values()) for r in report["explanations"])
     ):
