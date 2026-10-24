@@ -48,6 +48,43 @@ def create_group(client, count=2):
     return gid, ids
 
 
+@pytest.mark.parametrize("collection", ["routes", "route-sets"])
+def test_visit_prices_are_saved_for_each_date_and_match_totals(client, monkeypatch, collection):
+    from app.planning.models import Place
+
+    def dataset(self, day, *args, **kwargs):
+        pid, price = ("a", 100) if day.day == 25 else ("b", 250)
+        return (
+            [Place(pid, "history", price, 60, 540, 1080)],
+            {("start", pid): 1},
+            {"pois": [{"id": pid, "name": pid, "cost_per_person": 9999}]},
+        )
+
+    monkeypatch.setattr("app.api.groups.CityProvider.dataset", dataset)
+    gid, _ = create_group(client, count=3)
+    trip = client.post(
+        f"/api/v1/groups/{gid}/trips",
+        json={
+            "destination": "Lisbon",
+            "travel_date": "2026-10-25",
+            "end_date": "2026-10-26",
+            "budget": 10000,
+            "mandatory": ["a", "b"],
+        },
+    ).json()
+    response = client.post(f"/api/v1/trips/{trip['id']}/{collection}")
+    assert response.status_code == 201
+    route = response.json()["options"][0] if collection == "route-sets" else response.json()
+    result = route["result"]
+    assert [v["cost_per_person"] for v in result["visits"]] == [100, 250]
+    assert [v["group_cost"] for v in result["visits"]] == [300, 750]
+    assert sum(v["group_cost"] for v in result["visits"]) == result["total_cost"] == 1050
+    for day in result["days"]:
+        assert sum(v["group_cost"] for v in day["visits"]) == day["total_cost"]
+    saved = client.get(f"/api/v1/routes/{route['id']}").json()["result"]
+    assert saved == result
+
+
 def test_pace_is_frozen_and_legacy_remains_unrestricted(client, monkeypatch):
     from app.planning.models import Pace
     from app.planning.pace import PROFILES

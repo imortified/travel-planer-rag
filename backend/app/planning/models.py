@@ -58,6 +58,8 @@ class Visit:
     arrival: int
     start: int
     end: int
+    cost_per_person: int | None = None
+    group_cost: int | None = None
 
 
 @dataclass(frozen=True)

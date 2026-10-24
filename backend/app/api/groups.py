@@ -18,6 +18,7 @@ from app.planning.alternatives import alternatives
 from app.planning.models import DayInput, Pace, Participant, Request
 from app.planning.pace import PROFILES, planning_summary, profile_snapshot
 from app.planning.period import plan_period
+from app.planning.pricing import with_visit_prices
 from app.planning.service import checked_plan
 from app.schemas.groups import (
     GroupOutput,
@@ -294,6 +295,7 @@ def planning_inputs(trip, request):
 
 
 def with_overview(result, inputs, request):
+    result = with_visit_prices(result, inputs, len(request.participants))
     result = replace(result, planning_summary=planning_summary(request, result, inputs))
     if inputs[0].data_context is None:
         return result

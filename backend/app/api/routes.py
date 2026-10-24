@@ -1,11 +1,13 @@
 import logging
+from datetime import date
 from typing import Annotated, Literal
 
 from fastapi import APIRouter, Query
 
 from app.core.logging import span
 from app.integrations.demo import load_demo
-from app.planning.models import Participant, Request, Result
+from app.planning.models import DayInput, Participant, Request, Result
+from app.planning.pricing import with_visit_prices
 from app.planning.service import checked_plan
 from app.schemas.planning import PlanInput
 
@@ -53,4 +55,6 @@ def demo_plan(
             validation_valid=result.validation.is_valid,
             solver_status=result.solver.status if result.solver else None,
         )
-    return result
+    return with_visit_prices(
+        result, [DayInput(date.min, places, travel)], len(request.participants)
+    )
