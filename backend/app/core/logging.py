@@ -18,7 +18,7 @@ from app.core.config import ROOT, settings
 request_id: ContextVar[str | None] = ContextVar("request_id", default=None)
 ENUMS = {
     "provider": {"osm", "osrm", "redis", "llama_cpp", "embeddings", "qdrant"},
-    "cache_state": {"hit", "miss", "invalid", "unavailable", "stored", "skipped"},
+    "cache_state": {"hit", "miss", "invalid", "unavailable", "stored", "skipped", "bypassed"},
     "method": {"GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS", "OTHER"},
     "operation": {
         "parse",
@@ -74,6 +74,7 @@ COUNTS = {
     "ttl_seconds",
     "prompt_tokens",
     "completion_tokens",
+    "version_id",
 }
 FLAGS = {"feasible", "validation_valid", "will_retry", "reused", "query"}
 NUMBERS = {"duration_ms", "cache_age_seconds"}
@@ -286,7 +287,12 @@ def configure_logging(config=settings, *, stream=None, file_enabled=True, file_t
     if file_enabled and config.log_file:
         path = Path(config.log_file)
         if file_tag is not None:
-            if file_tag not in {"llm-evaluation", "retrieval-evaluation", "catalog-index"}:
+            if file_tag not in {
+                "llm-evaluation",
+                "retrieval-evaluation",
+                "catalog-index",
+                "catalog-refresh",
+            }:
                 raise ValueError("Unknown log file tag")
             path = path.with_name(f"{path.stem}-{file_tag}{path.suffix}")
         if not path.is_absolute():

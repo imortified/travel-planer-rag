@@ -31,6 +31,7 @@ class Settings(BaseSettings):
     redis_timeout_seconds: float = Field(default=1, gt=0, le=10)
     osm_cache_ttl_seconds: int = Field(default=86400, ge=1, le=604800)
     osrm_cache_ttl_seconds: int = Field(default=3600, ge=1, le=86400)
+    catalog_max_age_seconds: int = Field(default=604800, ge=3600, le=604800)
 
 
 settings = Settings()

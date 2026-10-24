@@ -235,6 +235,7 @@ def planning_inputs(trip, request):
     first = trip.travel_date or trip.created_at.date()
     count = (trip.end_date - first).days + 1 if multi_day else 1
     inputs = []
+    provider = CityProvider() if trip.destination == "Lisbon" else None
     for offset in range(count):
         day, context = first + timedelta(days=offset), None
         if trip.destination == "Lisbon":
@@ -245,13 +246,11 @@ def planning_inputs(trip, request):
                     else {}
                 )
                 if multi_day:
-                    places, travel, context = CityProvider().dataset(
+                    places, travel, context = provider.dataset(
                         day, request.mandatory, allow_empty=True, **semantic
                     )
                 else:
-                    places, travel, context = CityProvider().dataset(
-                        day, request.mandatory, **semantic
-                    )
+                    places, travel, context = provider.dataset(day, request.mandatory, **semantic)
             except IncompleteData as exc:
                 raise HTTPException(422, str(exc)) from exc
             except SourceUnavailable as exc:

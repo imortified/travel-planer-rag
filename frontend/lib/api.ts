@@ -31,7 +31,9 @@ export type Poi = {id: string; name: string; eligible: boolean; issues: string[]
   latitude?:number|null; longitude?:number|null;
   cost_per_person?: number | null; category?: string; duration?: number;
   provenance?: {checked_on: string; valid_until: string; price_source: string; hours_source: string; notes: string}};
-export type DataContext = {pois:Poi[]; origin?:{id:string;name:string;latitude:number;longitude:number}; transport:string; fetched_at:string; attribution:string};
+export type CatalogSnapshot = {version_id:number;content_sha256:string;published_at:string;fetched_at:string;fresh_until:string;curated_version:string;curated_review_until:string;status:"ready"|"expired"};
+export type CatalogResponse = {pois:Poi[];catalog_snapshot:CatalogSnapshot};
+export type DataContext = {pois:Poi[]; origin?:{id:string;name:string;latitude:number;longitude:number}; transport:string; fetched_at:string; attribution:string;catalog_snapshot?:CatalogSnapshot};
 export type Day = {travel_date: string; total_cost: number; visits: {place_id: string; arrival: number; start: number; end: number}[];data_context?:DataContext|null};
 export type Route = {id: number; trip_request_id: number; algorithm: string; data_source: string; created_at: string;
   route_set_id?: number | null;

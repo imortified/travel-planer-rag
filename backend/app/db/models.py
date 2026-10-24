@@ -1,6 +1,17 @@
 from datetime import date, datetime
 
-from sqlalchemy import JSON, CheckConstraint, DateTime, ForeignKey, String, UniqueConstraint, func
+from sqlalchemy import (
+    JSON,
+    CheckConstraint,
+    DateTime,
+    Float,
+    ForeignKey,
+    ForeignKeyConstraint,
+    String,
+    Text,
+    UniqueConstraint,
+    func,
+)
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 
@@ -83,3 +94,60 @@ class RouteOption(Base):
     data_source: Mapped[str] = mapped_column(String(50), default="synthetic-demo-v1")
     result: Mapped[dict] = mapped_column(JSON)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class CatalogVersion(Base):
+    __tablename__ = "catalog_versions"
+    __table_args__ = (
+        UniqueConstraint("destination", "id"),
+        CheckConstraint("poi_count > 0", name="ck_catalog_count"),
+        CheckConstraint("fresh_until > fetched_at", name="ck_catalog_freshness"),
+    )
+    id: Mapped[int] = mapped_column(primary_key=True)
+    destination: Mapped[str] = mapped_column(String(100), index=True)
+    fetched_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    fresh_until: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    published_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+    content_sha256: Mapped[str] = mapped_column(String(64))
+    poi_count: Mapped[int]
+    manifest: Mapped[dict] = mapped_column(JSON)
+
+
+class CatalogPoi(Base):
+    __tablename__ = "catalog_pois"
+    __table_args__ = (
+        CheckConstraint(
+            "latitude BETWEEN -90 AND 90 AND longitude BETWEEN -180 AND 180",
+            name="ck_catalog_coordinates",
+        ),
+        CheckConstraint("cost_per_person IS NULL OR cost_per_person >= 0", name="ck_catalog_price"),
+        CheckConstraint("duration BETWEEN 1 AND 1440", name="ck_catalog_duration"),
+    )
+    version_id: Mapped[int] = mapped_column(
+        ForeignKey("catalog_versions.id", ondelete="RESTRICT"), primary_key=True
+    )
+    place_id: Mapped[str] = mapped_column(String(160), primary_key=True)
+    name: Mapped[str] = mapped_column(String(500))
+    category: Mapped[str] = mapped_column(String(32))
+    latitude: Mapped[float] = mapped_column(Float)
+    longitude: Mapped[float] = mapped_column(Float)
+    cost_per_person: Mapped[int | None]
+    duration: Mapped[int]
+    opening_hours: Mapped[str | None] = mapped_column(Text)
+    source_url: Mapped[str] = mapped_column(Text)
+    details: Mapped[dict] = mapped_column(JSON)
+
+
+class CatalogHead(Base):
+    __tablename__ = "catalog_heads"
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["destination", "version_id"],
+            ["catalog_versions.destination", "catalog_versions.id"],
+            ondelete="RESTRICT",
+        ),
+    )
+    destination: Mapped[str] = mapped_column(String(100), primary_key=True)
+    version_id: Mapped[int | None]

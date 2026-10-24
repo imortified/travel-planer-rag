@@ -46,8 +46,10 @@ class Catalog(BaseModel):
         return self
 
 
-def enrich(pois, travel_date, window_parser, path: Path | None = None):
-    catalog = Catalog.model_validate(
+def enrich(
+    pois, travel_date, window_parser, path: Path | None = None, catalog: Catalog | None = None
+):
+    catalog = catalog or Catalog.model_validate(
         json.loads((path or ROOT / "data" / "lisbon-curated.json").read_text(encoding="utf-8"))
     )
     records = {p["id"]: dict(p) for p in pois}

@@ -73,7 +73,9 @@ def provider(tmp_path, matrix=None):
         return httpx.Response(200, json={"code": "Ok", "durations": matrix or [[0, 61], [None, 0]]})
 
     client = httpx.Client(transport=httpx.MockTransport(handler))
-    return CityProvider(client, RedisHttpCache(MemoryRedis()), curated_path), calls
+    return CityProvider(
+        client, RedisHttpCache(MemoryRedis()), curated_path, live_catalog=True
+    ), calls
 
 
 def test_real_dataset_cache_rounding_and_null_routes(tmp_path):
@@ -111,7 +113,7 @@ def test_malformed_matrix_is_rejected(tmp_path, matrix):
 def test_source_failure_never_falls_back_to_synthetic_data(tmp_path):
     client = httpx.Client(transport=httpx.MockTransport(lambda _: httpx.Response(503)))
     with pytest.raises(SourceUnavailable):
-        CityProvider(client, RedisHttpCache(MemoryRedis())).catalog(DAY)
+        CityProvider(client, RedisHttpCache(MemoryRedis()), live_catalog=True).catalog(DAY)
 
 
 def test_malformed_osm_is_not_cached_and_fresh_response_can_repair_it():
@@ -120,7 +122,7 @@ def test_malformed_osm_is_not_cached_and_fresh_response_can_repair_it():
     with httpx.Client(
         transport=httpx.MockTransport(lambda _: httpx.Response(200, content=next(bodies)))
     ) as client:
-        source = CityProvider(client, cache)
+        source = CityProvider(client, cache, live_catalog=True)
         with pytest.raises(SourceUnavailable, match="OSM"):
             source.catalog(DAY)
         assert not cache.client.values

@@ -113,7 +113,7 @@ class RedisHttpCache:
             raise CacheUnavailable() from exc
 
 
-def cached_get(client, url, params, ttl, cache, provider, validate):
+def cached_get(client, url, params, ttl, cache, provider, validate, *, bypass_cache=False):
     key = cache.key(provider, url, params, ttl)
     info = {
         "backend": "redis",
@@ -123,7 +123,9 @@ def cached_get(client, url, params, ttl, cache, provider, validate):
         "write": "not_attempted",
     }
     try:
-        entry = cache.get(key, ttl)
+        entry = None if bypass_cache else cache.get(key, ttl)
+        if bypass_cache:
+            info["read"] = "bypassed"
         if entry:
             try:
                 parsed = validate(entry.body)
@@ -147,8 +149,8 @@ def cached_get(client, url, params, ttl, cache, provider, validate):
         info["read"] = "unavailable"
         emit(logger, "cache.read", logging.WARNING, provider=provider, cache_state="unavailable")
 
-    if info["read"] == "miss":
-        emit(logger, "cache.read", provider=provider, cache_state="miss", ttl_seconds=ttl)
+    if info["read"] in ("miss", "bypassed"):
+        emit(logger, "cache.read", provider=provider, cache_state=info["read"], ttl_seconds=ttl)
 
     for attempt in range(2):
         started = time.perf_counter()

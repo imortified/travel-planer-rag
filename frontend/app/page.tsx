@@ -11,6 +11,8 @@ import { TravelDocuments, VisaReport, emptyProfile } from "./components/visa-rep
 import { RouteObjective } from "./components/route-objective";
 import { SolverStatus } from "./components/solver-status";
 import { RouteMap } from "./components/route-map";
+import { CatalogStatus } from "./components/catalog-status";
+import type { CatalogSnapshot, CatalogResponse } from "../lib/api";
 import { api, clock, money, minutes, type Group, type Trip, type Route, type RouteSet, type Poi, type Interests, type ParseOutput, type TravelProfile, type VisaReport as VisaData } from "../lib/api";
 
 type Draft = {key: number; name: string; interests: Interests; userId?: number; joined?: boolean; travel_profile?:TravelProfile};
@@ -19,6 +21,8 @@ const normalized=(text:string)=>text.normalize("NFD").replace(/[\u0300-\u036f]/g
 const categories = [["history", "История"], ["nature", "Природа"], ["food", "Еда"], ["art", "Искусство"]];
 const demoPois: Poi[] = [{id:"museum",name:"Музей",eligible:true,issues:[]}, {id:"market",name:"Рынок",eligible:true,issues:[]}, {id:"park",name:"Парк",eligible:true,issues:[]}];
 const issueNames: Record<string,string> = {unknown_price:"Нет цены", unknown_closed_or_unsupported_hours:"Нет подходящих часов", restricted_access:"Ограничен доступ", curation_outside_validity:"Данные требуют повторной проверки", unsupported_conditional_access_or_fee:"Условный доступ"};
+issueNames.catalog_expired="Срок свежести каталога истёк";
+issueNames.curation_review_expired="Срок ручной проверки истёк";
 const reasonNames: Record<string,string> = {mandatory_excluded_conflict:"Место одновременно обязательно и запрещено", no_feasible_visits:"Не найдено допустимых посещений", mandatory_not_scheduled:"Обязательное место не включено", budget_exceeded:"Превышен бюджет", cost_mismatch:"Стоимость рассчитана неверно", duplicate_visit_across_days:"Место повторяется в разные дни", unreachable_arrival:"Недостаточно времени на переезд", outside_opening_hours:"Посещение вне часов работы", missing_travel_time:"Нет данных о переезде"};
 reasonNames.cp_sat_unknown="Время поиска закончилось без решения; невозможность не доказана";
 reasonNames.cp_sat_infeasible="Допустимого маршрута нет при заданных данных и ограничениях";
@@ -48,6 +52,7 @@ export default function Home() {
   const [choices,setChoices] = useState<Record<string,string>>({});
   const [pendingConstraints,setPendingConstraints] = useState<PendingConstraint[]>([]);
   const [catalogKey,setCatalogKey] = useState("Demo City");
+  const [catalogSnapshot,setCatalogSnapshot] = useState<CatalogSnapshot>();
   const [busy,setBusy] = useState("");
   const [error,setError] = useState("");
   const [notice,setNotice] = useState("");
@@ -62,12 +67,12 @@ export default function Home() {
   function changeDate(value: string) {
     if (value === date) return;
     setDate(value); setChoices({});
-    if (destination === "Lisbon") {setPois([]); setCatalogKey("");}
+    if (destination === "Lisbon") {setPois([]); setCatalogKey("");setCatalogSnapshot(undefined);}
   }
   function changeEndDate(value: string) {
     if (value === endDate) return;
     setEndDate(value); setChoices({});
-    if (destination === "Lisbon") {setPois([]); setCatalogKey("");}
+    if (destination === "Lisbon") {setPois([]); setCatalogKey("");setCatalogSnapshot(undefined);}
   }
   async function task(label: string, action: () => Promise<void>) {
     if (busy) return; setBusy(label); setError(""); setNotice("");
@@ -102,6 +107,7 @@ export default function Home() {
     if (algorithm==="cp-sat" && (!solverLimit.trim() || !Number.isFinite(Number(solverLimit)) || Number(solverLimit)<0.05 || Number(solverLimit)>30)) throw new Error("Лимит CP-SAT должен быть от 0,05 до 30 секунд.");
     if (destination==="Lisbon" && !date) throw new Error("Выберите дату поездки.");
     if (destination==="Lisbon" && catalogKey!==`Lisbon:${date}:${endDate || date}`) throw new Error("Сначала загрузите места для выбранной даты.");
+    if (destination==="Lisbon" && catalogSnapshot && (catalogSnapshot.status==="expired" || Date.parse(catalogSnapshot.fresh_until)<=Date.now())) throw new Error("Срок свежести каталога истёк. Требуется обновление данных.");
     if (pendingConstraints.length) throw new Error("Сначала сопоставьте обязательные и исключённые места из текста с каталогом или явно уберите условие.");
     if (!Number.isFinite(Number(budget)) || Number(budget)<0 || Number(budget)>10000000 || !budget.trim()) throw new Error("Проверьте общий бюджет.");
     if (!start || !end || minutes(start)>=minutes(end)) throw new Error("Окончание дня должно быть позже начала.");
@@ -124,7 +130,11 @@ export default function Home() {
     if (parsed.questions.length || !d.destination || parsed.group_budget===null || !d.travel_date) throw new Error("Сначала уточните недостающие параметры.");
     if (gid && d.participants.some(p=>!members.some(m=>normalized(m.name)===normalized(p.name)))) throw new Error("Имена в тексте отличаются от состава сохранённой группы. Укажите текущих участников или создайте новую группу.");
     let catalog=demoPois;
-    if (d.destination==="Lisbon") catalog=(await api<{pois:Poi[]}>(`/destinations/Lisbon/pois?travel_date=${d.travel_date}${d.end_date?`&end_date=${d.end_date}`:""}`)).pois;
+    let snapshot:CatalogSnapshot|undefined;
+    if (d.destination==="Lisbon") {
+      const response=await api<CatalogResponse>(`/destinations/Lisbon/pois?travel_date=${d.travel_date}${d.end_date?`&end_date=${d.end_date}`:""}`);
+      catalog=response.pois;snapshot=response.catalog_snapshot;
+    }
     setSemanticQuery("");
     const nextChoices:Record<string,string>={}, unresolved:PendingConstraint[]=[];
     const aliases:Record<string,string>={"музей":"museum","парк":"park","рынок":"market"};
@@ -143,6 +153,7 @@ export default function Home() {
     if (d.start!==null) setStart(clock(d.start));
     if (d.end!==null) setEnd(clock(d.end));
     setPois(catalog);setCatalogKey(d.destination==="Lisbon"?`Lisbon:${d.travel_date}:${d.end_date || d.travel_date}`:"Demo City");
+    setCatalogSnapshot(snapshot);
     setChoices(nextChoices);setPendingConstraints(unresolved);pendingTrip.current=undefined;
     setNotice(unresolved.length?"Параметры заполнены. Сопоставьте оставшиеся названия мест с каталогом.":"Параметры заполнены. Проверьте форму перед расчётом маршрута.");
   }
@@ -178,14 +189,15 @@ export default function Home() {
           <details className="load"><summary>Продолжить с существующей группой</summary><div className="actions"><label>ID группы<input type="number" min="1" value={loadId} onChange={e=>setLoadId(e.target.value)}/></label><button className="secondary" onClick={()=>task("Загружаем группу…",loadGroup)}>Загрузить</button></div></details>
         </fieldset>
         <fieldset disabled={!!busy} className="card"><legend><span className="step">2</span> Параметры поездки</legend>
-          <div className="two"><label>Куда отправимся<select value={destination} onChange={e=>{setDestination(e.target.value);setChoices({});setPois(e.target.value==="Demo City"?demoPois:[]);setCatalogKey(e.target.value==="Demo City"?"Demo City":"");}}><option value="Demo City">Демо-город · без сети</option><option value="Lisbon">Лиссабон · реальные места</option></select></label><label>Начало поездки<input type="date" value={date} onChange={e=>changeDate(e.target.value)} onInput={e=>changeDate(e.currentTarget.value)}/></label></div>
+          <div className="two"><label>Куда отправимся<select value={destination} onChange={e=>{setDestination(e.target.value);setCatalogSnapshot(undefined);setChoices({});setPois(e.target.value==="Demo City"?demoPois:[]);setCatalogKey(e.target.value==="Demo City"?"Demo City":"");}}><option value="Demo City">Демо-город · без сети</option><option value="Lisbon">Лиссабон · реальные места</option></select></label><label>Начало поездки<input type="date" value={date} onChange={e=>changeDate(e.target.value)} onInput={e=>changeDate(e.currentTarget.value)}/></label></div>
           <div className="two"><label>Конец поездки<input type="date" value={endDate} min={date || undefined} onChange={e=>changeEndDate(e.target.value)} onInput={e=>changeEndDate(e.currentTarget.value)}/></label><p className="hint">До 14 дней включительно. Без даты окончания — один день. Бюджет общий на весь период.</p></div>
           <div className="two"><label>Бюджет на всю группу, EUR<input type="number" min="0" max="10000000" step="0.01" value={budget} onChange={e=>setBudget(e.target.value)}/></label><label>Алгоритм<select value={algorithm} onChange={e=>setAlgorithm(e.target.value)}><option value="beam">Beam search</option><option value="greedy">Greedy</option><option value="cp-sat">CP-SAT · OR-Tools</option></select></label></div>
           {algorithm==="cp-sat" && <><label>Лимит CP-SAT на набор, с<input type="number" min="0.05" max="30" step="0.05" value={solverLimit} onChange={e=>setSolverLimit(e.target.value)}/></label><p className="hint">Общий бюджет времени поиска вариантов. Загрузка данных и подготовка могут добавить время. На сложной задаче оптимум может остаться недоказанным.</p></>}
           <div className="two"><label>Начало дня<input type="time" value={start} onChange={e=>setStart(e.target.value)}/></label><label>Окончание дня<input type="time" value={end} onChange={e=>setEnd(e.target.value)}/></label></div>
           {destination==="Lisbon" && <div className="visa-preview"><label>Цель въезда<select value={purpose} onChange={e=>setPurpose(e.target.value)}><option value="tourism">Туризм</option><option value="other">Иная цель</option><option value="unknown">Не уточнена</option></select></label><p className="hint">Визовый справочник: семь гражданств, краткосрочный туризм в Португалии. Документы заполняются у каждого участника.</p><button className="secondary" disabled={!members.length} onClick={()=>task("Проверяем визовые условия…",async()=>{if(members.some(m=>!m.name.trim())) throw new Error("Введите имена участников.");const report=await api<VisaData>("/visa-check","POST",visaInput);setVisaPreview({signature:visaSignature,report});})}>Проверить визовые условия</button>{visaPreview?.signature===visaSignature && <VisaReport report={visaPreview.report}/>}</div>}
           <p className="hint">{destination==="Lisbon"?"Лиссабон и Ажуда, старт — Rossio. Автомобильные переезды. Учитываются обычные взрослые билеты; скидки и транспортные расходы не включены. Гастрономические точки пока не представлены. Время — местное.":"Синтетические музей, рынок и парк для проверки сценария. Бюджет учитывает входные билеты на всех участников."}</p>
-          {destination==="Lisbon" && <button className="secondary" disabled={!date} onClick={()=>task("Загружаем каталог…",async()=>{const c=await api<{pois:Poi[]}>(`/destinations/Lisbon/pois?travel_date=${date}${endDate?`&end_date=${endDate}`:""}`);setPois(c.pois);setCatalogKey(`Lisbon:${date}:${endDate || date}`);setNotice(`Найдено ${c.pois.length} мест, подходят для расчёта: ${c.pois.filter(p=>p.eligible).length}`);})}>Загрузить места на период</button>}
+          {destination==="Lisbon" && <button className="secondary" disabled={!date} onClick={()=>task("Загружаем каталог…",async()=>{const c=await api<CatalogResponse>(`/destinations/Lisbon/pois?travel_date=${date}${endDate?`&end_date=${endDate}`:""}`);setPois(c.pois);setCatalogSnapshot(c.catalog_snapshot);setCatalogKey(`Lisbon:${date}:${endDate || date}`);setNotice(`Найдено ${c.pois.length} мест, подходят для расчёта: ${c.pois.filter(p=>p.eligible).length}`);})}>Загрузить места на период</button>}
+          {destination==="Lisbon" && <CatalogStatus snapshot={catalogSnapshot}/>}
           {!!pois.length && <details className="places"><summary>Места и ограничения <span>{pois.filter(p=>p.eligible).length} доступны</span></summary>{pois.map(p=><div className="poi" key={p.id}><div><b>{p.name}</b><PoiFacts poi={p} sources/>{p.eligible && p.available_dates && <small>Открыто: {p.available_dates.join(", ")}</small>}{!p.eligible && <small>{p.issues.map(x=>issueNames[x]||x).join(" · ")}</small>}</div><select aria-label={`Ограничение: ${p.name}`} value={choices[p.id]||"optional"} onChange={e=>setChoices(c=>({...c,[p.id]:e.target.value}))}><option value="optional">По желанию</option><option value="mandatory" disabled={!p.eligible}>Обязательно</option><option value="excluded">Исключить</option></select></div>)}</details>}
           {!!pendingConstraints.length && <div className="message"><b>Уточните места из текста</b>{pendingConstraints.map(item=><div className="pending-place" key={item.key}><label>{item.kind==="mandatory"?"Обязательно":"Исключить"}: {item.name}<select aria-label={`Сопоставить: ${item.name}`} value="" onChange={e=>{const id=e.target.value;if (!id) return;if(choices[id] && choices[id]!==item.kind){setError("Место уже имеет противоположное ограничение. Сначала измените его в каталоге.");return;}setChoices(c=>({...c,[id]:item.kind}));setPendingConstraints(old=>old.filter(p=>p.key!==item.key));}}><option value="">Выберите место из каталога</option>{pois.filter(p=>item.kind==="excluded" || p.eligible).map(p=><option key={p.id} value={p.id}>{p.name}</option>)}</select></label><button className="text-button" type="button" onClick={()=>setPendingConstraints(old=>old.filter(p=>p.key!==item.key))}>Убрать условие</button></div>)}</div>}
         </fieldset>
@@ -202,6 +214,7 @@ export default function Home() {
           <div className="stats"><div><small>Входные билеты</small><strong>{money(result!.total_cost)}</strong></div><div><small>Бюджет группы</small><strong>{money(shown.trip.budget)}</strong></div><div><small>Мест в плане</small><strong>{result!.visits.length}</strong></div></div>
           {result!.is_feasible && <RouteObjective report={result!.objective} trip={shown.trip}/>}
           <SolverStatus report={result!.solver}/>
+          <CatalogStatus snapshot={result!.data_context?.catalog_snapshot} saved/>
           <RouteMap key={shown.route.id} route={shown.route} trip={shown.trip} names={resultPois}/>
           <RouteDays route={shown.route} trip={shown.trip} names={resultPois}/>
           {!!result!.reasons.length && <div className="message error">{result!.reasons.map(r=><p key={r}>{reasonNames[r.split(":")[0]] || r}</p>)}</div>}

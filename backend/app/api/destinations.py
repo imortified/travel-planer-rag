@@ -32,8 +32,9 @@ def lisbon_pois(travel_date: date, end_date: date | None = None):
     if not 0 <= (last - travel_date).days <= 13:
         raise HTTPException(422, "Period must contain 1-14 days")
     try:
+        provider = CityProvider()
         catalogs = [
-            CityProvider().catalog(travel_date + timedelta(days=i))
+            provider.catalog(travel_date + timedelta(days=i))
             for i in range((last - travel_date).days + 1)
         ]
         pois = {}

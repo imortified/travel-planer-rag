@@ -47,7 +47,7 @@ Get-Content .\.local\logs\backend.log -Tail 20 -Wait
 использовать консоль и внешний сборщик либо отдельные файлы. Не запускать несколько
 копий API с одним LOG_FILE. Скрипты оценки и индексации автоматически используют
 суффиксы `backend-llm-evaluation.log`, `backend-retrieval-evaluation.log`,
-`backend-catalog-index.log`, чтобы не конкурировать с API за файл.
+`backend-catalog-index.log`, `backend-catalog-refresh.log`, чтобы не конкурировать с API за файл.
 
 ## Формат и корреляция
 
@@ -93,6 +93,7 @@ X-Request-ID, отвечает за его уникальность. После�
 | `upstream.request.*` | Источник, номер попытки, HTTP-статус или тип ошибки, длительность, будет ли повтор |
 | `upstream.response.rejected` | Некорректный ответ источника, не попавший в кэш |
 | `catalog.loaded`, `planning.data.*` | Число дней/POI/кандидатов, источник данных и время подготовки |
+| `catalog.snapshot.loaded`, `catalog.read.failed`, `catalog.refresh.completed/failed` | Версия каталога, количество POI, результат чтения/атомарного обновления |
 | `planning.solve.*` | Алгоритм, участники/дни, допустимость, число вариантов/визитов, статус CP-SAT, время |
 | `route.saved`, `route_set.saved` | ID результата после успешного коммита БД |
 | `llm.call.*`, `llm.output.rejected` | Модель, операция, время, попытка, token usage при наличии; отклонение схемы/фактов |

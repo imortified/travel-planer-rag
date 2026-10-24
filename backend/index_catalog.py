@@ -19,8 +19,9 @@ def main():
     if not 0 <= (last - args.travel_date).days <= 13:
         parser.error("Period must contain 1-14 days")
     pois = {}
+    provider = CityProvider()
     for offset in range((last - args.travel_date).days + 1):
-        catalog = CityProvider().catalog(args.travel_date + timedelta(days=offset))
+        catalog = provider.catalog(args.travel_date + timedelta(days=offset))
         pois.update({p["id"]: p for p in catalog["pois"] if p["eligible"]})
     result = Retrieval().index([pois[key] for key in sorted(pois)])
     print(json.dumps({"ensured_documents": result}))

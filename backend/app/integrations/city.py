@@ -47,6 +47,8 @@ def parse_catalog(body: bytes, travel_date: date):
     for node in root.findall("node"):
         tags = {t.attrib["k"]: t.attrib["v"] for t in node.findall("tag")}
         lat, lon = float(node.attrib["lat"]), float(node.attrib["lon"])
+        if not math.isfinite(lat) or not math.isfinite(lon):
+            raise ValueError("Invalid OSM coordinates")
         if not 38.708 <= lat <= 38.720 or not -9.145 <= lon <= -9.130:
             continue
         if not tags.get("name") or tags.get("tourism") not in ("museum", "attraction", "viewpoint"):
@@ -114,22 +116,50 @@ def parse_matrix(body, points):
 
 
 class CityProvider:
-    def __init__(self, client=None, cache=None, curated_path=None):
+    def __init__(
+        self, client=None, cache=None, curated_path=None, *, live_catalog=False, catalog_source=None
+    ):
         self.client = client
         self.cache = cache if cache is not None else RedisHttpCache()
         self.curated_path = curated_path
+        self.live_catalog = live_catalog
+        if catalog_source is None and not live_catalog:
+            from app.catalog.reader import CatalogReader
+
+            catalog_source = CatalogReader()
+        self.catalog_source = catalog_source
+
+    def with_client(self, client):
+        return CityProvider(
+            client,
+            self.cache,
+            self.curated_path,
+            live_catalog=self.live_catalog,
+            catalog_source=self.catalog_source,
+        )
 
     def catalog(self, travel_date):
+        if not self.live_catalog:
+            return self.catalog_source.catalog(travel_date)
+        return self.fetch_catalog(travel_date)
+
+    def fetch_catalog(self, travel_date, *, curated_catalog=None, force=False):
+        """Explicit upstream fetch for refresh tooling/tests; API reads published snapshots."""
         if self.client is None:
             with httpx.Client(
                 timeout=httpx.Timeout(40, connect=5), follow_redirects=True
             ) as client:
-                return CityProvider(client, self.cache, self.curated_path).catalog(travel_date)
+                return self.with_client(client).fetch_catalog(
+                    travel_date, curated_catalog=curated_catalog, force=force
+                )
         try:
 
             def validate(body):
                 try:
-                    return parse_catalog(body, travel_date)
+                    parsed = parse_catalog(body, travel_date)
+                    if len({p["id"] for p in parsed}) != len(parsed):
+                        raise ValueError("Duplicate OSM POI IDs")
+                    return parsed
                 except (ET.ParseError, KeyError, TypeError, ValueError) as exc:
                     raise ValueError("Invalid OSM response") from exc
 
@@ -141,8 +171,11 @@ class CityProvider:
                 self.cache,
                 "osm",
                 validate,
+                bypass_cache=force,
             )
-            pois, version = enrich(parsed, travel_date, opening_window, self.curated_path)
+            pois, version = enrich(
+                parsed, travel_date, opening_window, self.curated_path, catalog=curated_catalog
+            )
         except (ET.ParseError, KeyError, ValueError) as exc:
             raise SourceUnavailable("Invalid OSM response") from exc
         return {
@@ -155,6 +188,7 @@ class CityProvider:
             "fetched_at": fetched,
             "source": settings.osm_map_url,
             "catalog_version": version,
+            "osm_poi_count": len(parsed),
             "cache": {"osm": cache_info},
             "attribution": "© OpenStreetMap contributors, ODbL 1.0",
         }
@@ -171,10 +205,12 @@ class CityProvider:
             with httpx.Client(
                 timeout=httpx.Timeout(40, connect=5), follow_redirects=True
             ) as client:
-                return CityProvider(client, self.cache, self.curated_path).dataset(
+                return self.with_client(client).dataset(
                     travel_date, mandatory, allow_empty, semantic_query, excluded
                 )
         catalog = self.catalog(travel_date)
+        if (catalog.get("catalog_snapshot") or {}).get("status") == "expired":
+            raise SourceUnavailable("Сохранённый каталог устарел. Обновите данные перед расчётом.")
         usable = [p for p in catalog["pois"] if p["eligible"]]
         if not allow_empty and mandatory - {p["id"] for p in usable}:
             raise IncompleteData(
@@ -205,7 +241,7 @@ class CityProvider:
             )
         if len(mandatory) > 12 or not selected:
             raise IncompleteData("No eligible POI for this date, or more than 12 mandatory POI")
-        points = [ORIGIN] + selected
+        points = [catalog["origin"]] + selected
         coordinates = ";".join(f"{p['longitude']},{p['latitude']}" for p in points)
         url = f"{settings.osrm_url.rstrip('/')}/table/v1/driving/{coordinates}"
         (data, travel), fetched, cache_info = cached_get(

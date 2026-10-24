@@ -107,7 +107,14 @@ def test_ranked_candidate_cap_keeps_mandatory_excludes_blocked_and_preserves_val
         }
         for i in range(16)
     ]
-    monkeypatch.setattr(CityProvider, "catalog", lambda self, day: {"pois": pois})
+    monkeypatch.setattr(
+        CityProvider,
+        "catalog",
+        lambda self, day: {
+            "pois": pois,
+            "origin": {"id": "start", "longitude": -9.1395, "latitude": 38.7135},
+        },
+    )
 
     def search(self, query, candidates):
         assert "15" not in {p["id"] for p in candidates}
