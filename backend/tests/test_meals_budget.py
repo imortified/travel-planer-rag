@@ -1,4 +1,4 @@
-from dataclasses import replace
+from dataclasses import asdict, replace
 from datetime import date, timedelta
 from types import SimpleNamespace
 
@@ -155,3 +155,80 @@ def test_api_settings_validate_total_and_day_windows():
             end=660,
             meal_settings=LUNCH,
         )
+
+
+@pytest.mark.parametrize("algorithm", ["greedy", "beam", "cp-sat"])
+def test_three_meals_have_separate_instances_and_can_share_one_physical_venue(algorithm):
+    request, inputs = fixture(count=3)
+    request = replace(request, start=480, end=1260, pace=PROFILES["intensive"])
+    settings = {
+        "breakfast": {"start": 540, "end": 660, "duration": 45},
+        "lunch": {"start": 720, "end": 900, "duration": 60},
+        "dinner": {"start": 1080, "end": 1260, "duration": 60},
+    }
+    request, inputs = prepare_meals(request, inputs, settings)
+    data = inputs[0]
+    result = checked_plan(request, data.places, data.travel, algorithm, time_limit=5)
+    assert result.is_feasible, result.reasons
+    assert request.meal_ids <= {v.place_id for v in result.visits}
+    assert len(request.meal_ids) == 3
+    assert {p["venue_id"] for p in data.data_context["pois"] if p.get("meal_type")} == {"cafe"}
+    assert result.total_cost >= 3000
+
+
+def test_day_specific_meal_prices_and_missing_road_edges_are_preserved():
+    request, inputs = fixture(days=2)
+    inputs[1] = replace(
+        inputs[1],
+        places=[
+            replace(p, cost_per_person=1200) if p.id == "cafe" else p for p in inputs[1].places
+        ],
+    )
+    travel = dict(inputs[0].travel)
+    travel.pop(("museum:0", "cafe"))
+    inputs[0] = replace(inputs[0], travel=travel)
+    request, inputs = prepare_meals(request, inputs, LUNCH)
+    for index, data in enumerate(inputs):
+        meal = next(p for p in data.places if p.id in request.meal_ids)
+        assert meal.cost_per_person == (1000 if index == 0 else 1200)
+        if index == 0:
+            assert ("museum:0", meal.id) not in data.travel
+
+
+def test_fourteen_days_reserve_solver_capacity_for_meals_without_dropping_mandatory():
+    request, inputs = fixture(days=14, count=100)
+    request = replace(request, start=480, end=1260, mandatory=frozenset({"museum:99"}))
+    settings = {
+        "breakfast": {"start": 540, "end": 660},
+        "lunch": LUNCH["lunch"],
+        "dinner": {"start": 1080, "end": 1260},
+    }
+    request, inputs = prepare_meals(request, inputs, settings)
+    identifiers = {p.id for data in inputs for p in data.places}
+    assert len(identifiers) == 100
+    assert len(request.meal_ids) == 42
+    assert "museum:99" in identifiers and request.mandatory <= identifiers
+
+
+def test_explanation_distinguishes_user_estimates_reserve_and_repeatable_restaurants():
+    from app.nlp.explanations import facts_for
+
+    request, inputs = prepare_meals(*fixture(), LUNCH)
+    result = checked_plan(request, inputs[0].places, inputs[0].travel)
+    trip = SimpleNamespace(
+        budget=20000,
+        budget_settings={"lodging": 10000, "reserve": 2000},
+        participants_snapshot=[{"user_id": 1, "name": "Tester"}],
+        meal_settings=LUNCH,
+        travel_date=None,
+        mandatory=set(),
+        excluded=set(),
+    )
+    result = replace(result, budget_breakdown=breakdown(trip, result, inputs))
+    route = SimpleNamespace(
+        result=asdict(result), visa_report=None, comparison=None, route_set_id=None
+    )
+    facts = facts_for(route, trip)
+    assert "113,00 EUR" in facts["budget"] and "20,00 EUR" in facts["budget"]
+    assert "не предложения бронирования" in facts["limitations"]
+    assert "заведения питания могут повторяться" in facts["summary"]

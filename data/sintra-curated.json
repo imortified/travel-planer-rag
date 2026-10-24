@@ -1,5 +1,5 @@
 {
-  "version": "sintra-curated-2026-10-24-v1",
+  "version": "sintra-curated-2026-10-25-meals-v1",
   "checked_on": "2026-10-24",
   "valid_until": "2026-11-22",
   "price_policy": "Standard adult admission. Individual official sources apply. Discounts, guided services, transport and other meals excluded.",
@@ -164,6 +164,47 @@
       "checked_on": "2026-10-24",
       "valid_until": "2026-11-22",
       "notes": "Official published GPS. Afternoon component of split opening only. Sintra municipality; transport between settlements estimated by driving. Duration is planning policy. Mapped location; routing snaps to public road points."
+    },
+    {
+      "id": "osm:node:4229565132",
+      "name": "Incomum by Luís Santos — ravioli с грибами",
+      "category": "food",
+      "cost_per_person": 1600,
+      "duration": 60,
+      "opening_hours": "Mo,Tu,Th-Su 12:00-24:00",
+      "latitude": 38.7988837,
+      "longitude": -9.3871979,
+      "coordinates_source": "https://www.openstreetmap.org/node/4229565132",
+      "price_source": "https://incomumbyluissantos.pt/",
+      "hours_source": "https://incomumbyluissantos.pt/",
+      "checked_on": "2026-10-25",
+      "valid_until": "2026-11-22",
+      "price_policy": "Per person: one Ravioli c/ Cogumelos de Sintra main dish. Drinks, bread/couvert, dessert and other extras excluded.",
+      "meal_types": [
+        "lunch",
+        "dinner"
+      ],
+      "notes": "Wednesday closed. Uses mapped OSM restaurant node; official address Rua Dr. Alfredo da Costa 22 matches the venue. The main dish is an explicit priced order, not a full-board package. Duration is planning policy. Queue, table availability, dietary suitability and other orders are not confirmed."
+    },
+    {
+      "id": "osm:node:4414909093",
+      "name": "Tascantiga — сэндвич с овощами и вода",
+      "category": "food",
+      "cost_per_person": 1670,
+      "duration": 60,
+      "opening_hours": "Mo-Sa 12:15-16:00",
+      "latitude": 38.7957148,
+      "longitude": -9.3910323,
+      "coordinates_source": "https://www.openstreetmap.org/node/4414909093",
+      "price_source": "https://tascantiga.framer.website/",
+      "hours_source": "https://tascantiga.framer.website/",
+      "checked_on": "2026-10-25",
+      "valid_until": "2026-11-22",
+      "price_policy": "Per person: Sandes de Legumes c/ Queijo de Cabra Gratinado (15 EUR, fries included) + still water 33 cL (1.70 EUR). Other orders excluded.",
+      "meal_types": [
+        "lunch"
+      ],
+      "notes": "Lunch service only; Friday/Saturday evening service is outside this conservative catalog window. Sunday closed. Lunch seating is first come, first served. Menu images: https://framerusercontent.com/images/4x4o9CaT8iRt4xqorRtbR7PLI.png and https://framerusercontent.com/images/T3KFFfURwc0TAth1uA3SOT4wikc.png. Coordinates from mapped restaurant node. Duration is planning policy. Queue, table availability, dietary suitability and other orders are not confirmed."
     }
   ]
 }

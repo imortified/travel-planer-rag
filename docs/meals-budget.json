@@ -1,0 +1,736 @@
+{
+  "stage": "meals-and-trip-budget",
+  "checked_at": "2026-10-24T23:17:58.794866+00:00",
+  "base_branch": "feature/portugal-city-catalogs",
+  "core_checkpoint": "3362bf6",
+  "policies": {
+    "meals": "scheduled-meals-v1",
+    "venue_selection": "reviewed-meal-venues-v1",
+    "budget": "trip-budget-v1",
+    "objective": "normalized-group-objective-v3-meals"
+  },
+  "checks": {
+    "backend_tests": 570,
+    "frontend_tests": 22,
+    "postgresql": true,
+    "redis": true,
+    "qdrant": true,
+    "ruff": "passed",
+    "next_build": "passed"
+  },
+  "scenario_input": {
+    "participants": 6,
+    "days": 7,
+    "travel_date": "2026-10-26",
+    "end_date": "2026-11-01",
+    "budget_eur": 3000,
+    "lodging_estimate_eur": 1200,
+    "transport_estimate_eur": 150,
+    "reserve_eur": 200,
+    "lunch_window": [
+      720,
+      900
+    ],
+    "meal_max_cost_per_person_eur": 25,
+    "pace": "balanced",
+    "cp_sat_time_limit_seconds": 10
+  },
+  "scenarios": [
+    {
+      "city": "Lisbon",
+      "algorithm": "greedy",
+      "seconds": 4.505,
+      "feasible": true,
+      "validated": true,
+      "attractions": 17,
+      "visits_per_day": [
+        3,
+        2,
+        3,
+        2,
+        2,
+        3,
+        2
+      ],
+      "meals_per_day": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "budget": {
+        "version": "trip-budget-v1",
+        "scope": "trip_estimate",
+        "budget": 300000,
+        "admissions": 32100,
+        "food": 75600,
+        "stops_total": 107700,
+        "lodging_estimate": 120000,
+        "transport_estimate": 15000,
+        "reserve": 20000,
+        "known_total": 242700,
+        "available_for_stops": 145000,
+        "unallocated_after_reserve": 37300,
+        "unknown_categories": [],
+        "within_budget": true,
+        "meal_policy": {
+          "version": "scheduled-meals-v1",
+          "breakfast": null,
+          "lunch": {
+            "start": 720,
+            "end": 900,
+            "duration": 60,
+            "max_cost_per_person": 2500
+          },
+          "dinner": null
+        },
+        "limitations": [
+          "User estimates are not booking quotes",
+          "Food covers selected orders only; other meals and extras excluded",
+          "Reserve is unspent money, not an expense"
+        ]
+      },
+      "solver_status": null
+    },
+    {
+      "city": "Lisbon",
+      "algorithm": "beam",
+      "seconds": 1.176,
+      "feasible": true,
+      "validated": true,
+      "attractions": 17,
+      "visits_per_day": [
+        3,
+        2,
+        3,
+        2,
+        2,
+        3,
+        2
+      ],
+      "meals_per_day": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "budget": {
+        "version": "trip-budget-v1",
+        "scope": "trip_estimate",
+        "budget": 300000,
+        "admissions": 32100,
+        "food": 75600,
+        "stops_total": 107700,
+        "lodging_estimate": 120000,
+        "transport_estimate": 15000,
+        "reserve": 20000,
+        "known_total": 242700,
+        "available_for_stops": 145000,
+        "unallocated_after_reserve": 37300,
+        "unknown_categories": [],
+        "within_budget": true,
+        "meal_policy": {
+          "version": "scheduled-meals-v1",
+          "breakfast": null,
+          "lunch": {
+            "start": 720,
+            "end": 900,
+            "duration": 60,
+            "max_cost_per_person": 2500
+          },
+          "dinner": null
+        },
+        "limitations": [
+          "User estimates are not booking quotes",
+          "Food covers selected orders only; other meals and extras excluded",
+          "Reserve is unspent money, not an expense"
+        ]
+      },
+      "solver_status": null
+    },
+    {
+      "city": "Lisbon",
+      "algorithm": "cp-sat",
+      "seconds": 11.264,
+      "feasible": true,
+      "validated": true,
+      "attractions": 20,
+      "visits_per_day": [
+        3,
+        3,
+        3,
+        2,
+        3,
+        3,
+        3
+      ],
+      "meals_per_day": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "budget": {
+        "version": "trip-budget-v1",
+        "scope": "trip_estimate",
+        "budget": 300000,
+        "admissions": 35400,
+        "food": 75600,
+        "stops_total": 111000,
+        "lodging_estimate": 120000,
+        "transport_estimate": 15000,
+        "reserve": 20000,
+        "known_total": 246000,
+        "available_for_stops": 145000,
+        "unallocated_after_reserve": 34000,
+        "unknown_categories": [],
+        "within_budget": true,
+        "meal_policy": {
+          "version": "scheduled-meals-v1",
+          "breakfast": null,
+          "lunch": {
+            "start": 720,
+            "end": 900,
+            "duration": 60,
+            "max_cost_per_person": 2500
+          },
+          "dinner": null
+        },
+        "limitations": [
+          "User estimates are not booking quotes",
+          "Food covers selected orders only; other meals and extras excluded",
+          "Reserve is unspent money, not an expense"
+        ]
+      },
+      "solver_status": "FEASIBLE"
+    },
+    {
+      "city": "Porto",
+      "algorithm": "greedy",
+      "seconds": 3.805,
+      "feasible": true,
+      "validated": true,
+      "attractions": 20,
+      "visits_per_day": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        2
+      ],
+      "meals_per_day": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "budget": {
+        "version": "trip-budget-v1",
+        "scope": "trip_estimate",
+        "budget": 300000,
+        "admissions": 15600,
+        "food": 84000,
+        "stops_total": 99600,
+        "lodging_estimate": 120000,
+        "transport_estimate": 15000,
+        "reserve": 20000,
+        "known_total": 234600,
+        "available_for_stops": 145000,
+        "unallocated_after_reserve": 45400,
+        "unknown_categories": [],
+        "within_budget": true,
+        "meal_policy": {
+          "version": "scheduled-meals-v1",
+          "breakfast": null,
+          "lunch": {
+            "start": 720,
+            "end": 900,
+            "duration": 60,
+            "max_cost_per_person": 2500
+          },
+          "dinner": null
+        },
+        "limitations": [
+          "User estimates are not booking quotes",
+          "Food covers selected orders only; other meals and extras excluded",
+          "Reserve is unspent money, not an expense"
+        ]
+      },
+      "solver_status": null
+    },
+    {
+      "city": "Porto",
+      "algorithm": "beam",
+      "seconds": 1.262,
+      "feasible": true,
+      "validated": true,
+      "attractions": 20,
+      "visits_per_day": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        2
+      ],
+      "meals_per_day": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "budget": {
+        "version": "trip-budget-v1",
+        "scope": "trip_estimate",
+        "budget": 300000,
+        "admissions": 15600,
+        "food": 84000,
+        "stops_total": 99600,
+        "lodging_estimate": 120000,
+        "transport_estimate": 15000,
+        "reserve": 20000,
+        "known_total": 234600,
+        "available_for_stops": 145000,
+        "unallocated_after_reserve": 45400,
+        "unknown_categories": [],
+        "within_budget": true,
+        "meal_policy": {
+          "version": "scheduled-meals-v1",
+          "breakfast": null,
+          "lunch": {
+            "start": 720,
+            "end": 900,
+            "duration": 60,
+            "max_cost_per_person": 2500
+          },
+          "dinner": null
+        },
+        "limitations": [
+          "User estimates are not booking quotes",
+          "Food covers selected orders only; other meals and extras excluded",
+          "Reserve is unspent money, not an expense"
+        ]
+      },
+      "solver_status": null
+    },
+    {
+      "city": "Porto",
+      "algorithm": "cp-sat",
+      "seconds": 10.991,
+      "feasible": true,
+      "validated": true,
+      "attractions": 21,
+      "visits_per_day": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "meals_per_day": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "budget": {
+        "version": "trip-budget-v1",
+        "scope": "trip_estimate",
+        "budget": 300000,
+        "admissions": 9600,
+        "food": 84000,
+        "stops_total": 93600,
+        "lodging_estimate": 120000,
+        "transport_estimate": 15000,
+        "reserve": 20000,
+        "known_total": 228600,
+        "available_for_stops": 145000,
+        "unallocated_after_reserve": 51400,
+        "unknown_categories": [],
+        "within_budget": true,
+        "meal_policy": {
+          "version": "scheduled-meals-v1",
+          "breakfast": null,
+          "lunch": {
+            "start": 720,
+            "end": 900,
+            "duration": 60,
+            "max_cost_per_person": 2500
+          },
+          "dinner": null
+        },
+        "limitations": [
+          "User estimates are not booking quotes",
+          "Food covers selected orders only; other meals and extras excluded",
+          "Reserve is unspent money, not an expense"
+        ]
+      },
+      "solver_status": "FEASIBLE"
+    },
+    {
+      "city": "Sintra",
+      "algorithm": "greedy",
+      "seconds": 2.936,
+      "feasible": true,
+      "validated": true,
+      "attractions": 12,
+      "visits_per_day": [
+        3,
+        3,
+        2,
+        1,
+        1,
+        1,
+        1
+      ],
+      "meals_per_day": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "budget": {
+        "version": "trip-budget-v1",
+        "scope": "trip_estimate",
+        "budget": 300000,
+        "admissions": 13800,
+        "food": 67620,
+        "stops_total": 81420,
+        "lodging_estimate": 120000,
+        "transport_estimate": 15000,
+        "reserve": 20000,
+        "known_total": 216420,
+        "available_for_stops": 145000,
+        "unallocated_after_reserve": 63580,
+        "unknown_categories": [],
+        "within_budget": true,
+        "meal_policy": {
+          "version": "scheduled-meals-v1",
+          "breakfast": null,
+          "lunch": {
+            "start": 720,
+            "end": 900,
+            "duration": 60,
+            "max_cost_per_person": 2500
+          },
+          "dinner": null
+        },
+        "limitations": [
+          "User estimates are not booking quotes",
+          "Food covers selected orders only; other meals and extras excluded",
+          "Reserve is unspent money, not an expense"
+        ]
+      },
+      "solver_status": null
+    },
+    {
+      "city": "Sintra",
+      "algorithm": "beam",
+      "seconds": 1.098,
+      "feasible": true,
+      "validated": true,
+      "attractions": 12,
+      "visits_per_day": [
+        3,
+        3,
+        2,
+        1,
+        1,
+        1,
+        1
+      ],
+      "meals_per_day": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "budget": {
+        "version": "trip-budget-v1",
+        "scope": "trip_estimate",
+        "budget": 300000,
+        "admissions": 13800,
+        "food": 67620,
+        "stops_total": 81420,
+        "lodging_estimate": 120000,
+        "transport_estimate": 15000,
+        "reserve": 20000,
+        "known_total": 216420,
+        "available_for_stops": 145000,
+        "unallocated_after_reserve": 63580,
+        "unknown_categories": [],
+        "within_budget": true,
+        "meal_policy": {
+          "version": "scheduled-meals-v1",
+          "breakfast": null,
+          "lunch": {
+            "start": 720,
+            "end": 900,
+            "duration": 60,
+            "max_cost_per_person": 2500
+          },
+          "dinner": null
+        },
+        "limitations": [
+          "User estimates are not booking quotes",
+          "Food covers selected orders only; other meals and extras excluded",
+          "Reserve is unspent money, not an expense"
+        ]
+      },
+      "solver_status": null
+    },
+    {
+      "city": "Sintra",
+      "algorithm": "cp-sat",
+      "seconds": 1.923,
+      "feasible": true,
+      "validated": true,
+      "attractions": 12,
+      "visits_per_day": [
+        2,
+        1,
+        2,
+        2,
+        2,
+        1,
+        2
+      ],
+      "meals_per_day": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "budget": {
+        "version": "trip-budget-v1",
+        "scope": "trip_estimate",
+        "budget": 300000,
+        "admissions": 13800,
+        "food": 67620,
+        "stops_total": 81420,
+        "lodging_estimate": 120000,
+        "transport_estimate": 15000,
+        "reserve": 20000,
+        "known_total": 216420,
+        "available_for_stops": 145000,
+        "unallocated_after_reserve": 63580,
+        "unknown_categories": [],
+        "within_budget": true,
+        "meal_policy": {
+          "version": "scheduled-meals-v1",
+          "breakfast": null,
+          "lunch": {
+            "start": 720,
+            "end": 900,
+            "duration": 60,
+            "max_cost_per_person": 2500
+          },
+          "dinner": null
+        },
+        "limitations": [
+          "User estimates are not booking quotes",
+          "Food covers selected orders only; other meals and extras excluded",
+          "Reserve is unspent money, not an expense"
+        ]
+      },
+      "solver_status": "OPTIMAL"
+    }
+  ],
+  "catalogs": {
+    "Lisbon": {
+      "curated_version": "lisbon-curated-2026-10-25-meals-v1",
+      "meal_venues": [
+        {
+          "id": "curated:lisbon:nicolau-baixa",
+          "meal_types": [
+            "breakfast",
+            "lunch",
+            "dinner"
+          ],
+          "cost_per_person": 2000,
+          "price_source": "https://nicolaugrupo.com/restaurantes/nicolau-lisboa/",
+          "hours_source": "https://nicolaugrupo.com/restaurantes/nicolau-lisboa/"
+        },
+        {
+          "id": "curated:lisbon:amelia-campo-de-ourique",
+          "meal_types": [
+            "breakfast",
+            "lunch",
+            "dinner"
+          ],
+          "cost_per_person": 1800,
+          "price_source": "https://nicolaugrupo.com/restaurantes/amelia-lisboa/",
+          "hours_source": "https://nicolaugrupo.com/restaurantes/amelia-lisboa/"
+        }
+      ]
+    },
+    "Porto": {
+      "curated_version": "porto-curated-2026-10-25-meals-v1",
+      "meal_venues": [
+        {
+          "id": "curated:porto:nicolau",
+          "meal_types": [
+            "breakfast",
+            "lunch",
+            "dinner"
+          ],
+          "cost_per_person": 2000,
+          "price_source": "https://nicolaugrupo.com/restaurantes/nicolau-porto/",
+          "hours_source": "https://nicolaugrupo.com/restaurantes/nicolau-porto/"
+        }
+      ]
+    },
+    "Sintra": {
+      "curated_version": "sintra-curated-2026-10-25-meals-v1",
+      "meal_venues": [
+        {
+          "id": "osm:node:4229565132",
+          "meal_types": [
+            "lunch",
+            "dinner"
+          ],
+          "cost_per_person": 1600,
+          "price_source": "https://incomumbyluissantos.pt/",
+          "hours_source": "https://incomumbyluissantos.pt/"
+        },
+        {
+          "id": "osm:node:4414909093",
+          "meal_types": [
+            "lunch"
+          ],
+          "cost_per_person": 1670,
+          "price_source": "https://tascantiga.framer.website/",
+          "hours_source": "https://tascantiga.framer.website/"
+        }
+      ]
+    }
+  },
+  "unavailable_meal_status": 422,
+  "fourteen_day_scenario": {
+    "city": "Lisbon",
+    "days": 14,
+    "participants": 1,
+    "budget_eur": 1000,
+    "algorithm": "beam",
+    "seconds": 7.663,
+    "attraction_days": 14,
+    "visits_per_day": [
+      3,
+      2,
+      2,
+      3,
+      2,
+      2,
+      2,
+      2,
+      3,
+      2,
+      2,
+      2,
+      2,
+      2
+    ],
+    "meals": 14,
+    "budget": {
+      "version": "trip-budget-v1",
+      "scope": "trip_estimate",
+      "budget": 100000,
+      "admissions": 12520,
+      "food": 25200,
+      "stops_total": 37720,
+      "lodging_estimate": 40000,
+      "transport_estimate": 10000,
+      "reserve": 10000,
+      "known_total": 87720,
+      "available_for_stops": 40000,
+      "unallocated_after_reserve": 2280,
+      "unknown_categories": [],
+      "within_budget": true,
+      "meal_policy": {
+        "version": "scheduled-meals-v1",
+        "breakfast": null,
+        "lunch": {
+          "start": 720,
+          "end": 900,
+          "duration": 60,
+          "max_cost_per_person": 2500
+        },
+        "dinner": null
+      },
+      "limitations": [
+        "User estimates are not booking quotes",
+        "Food covers selected orders only; other meals and extras excluded",
+        "Reserve is unspent money, not an expense"
+      ]
+    },
+    "validated": true
+  },
+  "browser_scenario": {
+    "city": "Porto",
+    "participants": 1,
+    "days": 3,
+    "budget_eur": 1000,
+    "lodging_estimate_eur": 400,
+    "transport_estimate_eur": 100,
+    "reserve_eur": 100,
+    "admissions_eur": 8,
+    "food_eur": 60,
+    "known_total_eur": 568,
+    "unallocated_after_reserve_eur": 332,
+    "daily_attractions": [
+      3,
+      3,
+      3
+    ],
+    "daily_lunches": [
+      1,
+      1,
+      1
+    ],
+    "created_through_ui": true,
+    "history_restored_through_ui": true,
+    "screenshots": [
+      ".local/evaluations/meals-budget.png",
+      ".local/evaluations/meals-lunch.png"
+    ]
+  },
+  "limitations": [
+    "Venue selection precedes route optimization and is not a joint venue-routing solver",
+    "Only chosen menu orders included; other meals and extras excluded",
+    "Lodging and transport are user estimates, not booking quotes",
+    "Sequential runs with OSRM/Redis; no controlled performance distribution or p95",
+    "Restaurant and dietary availability are not confirmed"
+  ]
+}

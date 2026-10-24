@@ -2,10 +2,14 @@ import { validRequestId } from "./request-id";
 import type { Destination } from "./destinations";
 
 export type Interests = Record<string, number>;
+export type BudgetSettings = {version?:string;lodging:number|null;transport:number|null;reserve:number};
+export type MealSlot = {start:number;end:number;duration:number;max_cost_per_person:number};
+export type MealSettings = {version?:string;breakfast?:MealSlot|null;lunch?:MealSlot|null;dinner?:MealSlot|null};
+export type BudgetBreakdown = {version:string;scope:"trip_estimate"|"stops_only";budget:number;admissions:number;food:number;stops_total:number;lodging_estimate:number|null;transport_estimate:number|null;reserve:number;known_total:number;available_for_stops:number;unallocated_after_reserve:number;unknown_categories:string[];within_budget:boolean;meal_policy:MealSettings|null};
 export type PaceMode = "unrestricted" | "relaxed" | "balanced" | "intensive";
 export type PaceSettings = {mode:Exclude<PaceMode,"unrestricted">;max_visits:number;max_active_minutes:number;break_minutes:number;version:string};
-export type PlanningSummary = {pace:PaceSettings|null;total_days:number;active_days:number;candidate_count:number;coverage_upper_bound:number;scheduled_count:number;cost_scope:string;warnings:string[];
-  days:{travel_date:string;visit_count:number;activity_minutes:number;drive_minutes:number;rest_minutes:number;active_minutes:number;opening_wait_minutes:number;eligible_count:number}[]};
+export type PlanningSummary = {pace:PaceSettings|null;total_days:number;active_days:number;attraction_days?:number;candidate_count:number;coverage_upper_bound:number;scheduled_count:number;cost_scope:string;warnings:string[];
+  days:{travel_date:string;visit_count:number;meal_count?:number;attraction_count?:number;activity_minutes:number;drive_minutes:number;rest_minutes:number;active_minutes:number;opening_wait_minutes:number;eligible_count:number}[]};
 export type SolverReport = {backend:string;version:string;status:string;time_limit_seconds:number;search_time_limit_seconds:number;
   elapsed_seconds:number;solver_seconds:number;seed:number;workers:number;scale:number;objective_error_bound:number;
   integer_model_optimal:boolean;model_objective:number|null;model_best_bound:number|null;original_upper_bound:number|null;
@@ -32,9 +36,11 @@ export type VisaReport = {version:string;assessed_on:string;checked_on:string;re
 export type Member = {user_id: number; name: string; interests: Interests;travel_profile?:TravelProfile};
 export type Group = {id: number; name: string; members: Member[]};
 export type Trip = {id: number; group_id: number; destination: string; travel_date: string | null; end_date?: string | null;
+  budget_settings?:BudgetSettings|null;meal_settings?:MealSettings|null;
   pace?:PaceMode;pace_settings?:PaceSettings|null;
   budget: number; start: number; end: number; participants_snapshot: Member[];semantic_query?:string|null;purpose?:string};
 export type Poi = {id: string; name: string; eligible: boolean; issues: string[]; source_url?: string; available_dates?: string[];
+  meal_types?:string[];meal_type?:string;venue_id?:string;
   prices_by_date?:Record<string,number>;
   latitude?:number|null; longitude?:number|null;
   cost_per_person?: number | null; category?: string; duration?: number;
@@ -50,6 +56,7 @@ export type Route = {id: number; trip_request_id: number; algorithm: string; dat
   visa_report?: VisaReport | null;
   comparison?: {visit_count: number; participant_utility: Record<string, number>; mean_utility: number; min_utility: number; utility_gap: number} | null;
   result: {is_feasible: boolean; total_cost: number; satisfaction: Record<string, number>;
+    budget_breakdown?:BudgetBreakdown|null;
     days?: Day[] | null;
     objective?: ObjectiveReport | null;
     solver?: SolverReport | null;

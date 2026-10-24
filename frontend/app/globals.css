@@ -57,3 +57,6 @@
 .timeline .visit-price{margin:10px 0 0;color:var(--green)}.visit-price strong{font-size:12px;font-weight:600}.visit-price small{display:block;margin-top:3px}
 .places label:has(input[type=checkbox]){display:flex;align-items:center;gap:8px;margin:12px 0}
 .places input[type=checkbox]{width:16px;min-height:16px;height:16px;margin:0;padding:0;flex-shrink:0;accent-color:var(--green)}
+.trip-costs{border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin:20px 0;padding:12px 0}.trip-costs h3{font-size:16px}
+.trip-costs .cost-toggle{display:flex;align-items:center;gap:9px;margin:12px 0;font-weight:600}.trip-costs input[type=checkbox]{width:16px;min-height:16px;height:16px;margin:0;padding:0;flex-shrink:0;accent-color:var(--green)}
+.meal-slot{padding:8px 12px;border:1px solid var(--line);border-radius:8px;margin:10px 0;background:#f6f8f1}.budget-breakdown{margin:20px 0;padding:16px;background:#f1f5eb;border:1px solid var(--line);border-radius:10px}.budget-breakdown h3{margin-top:0;font-size:16px}.budget-breakdown dl{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:9px 14px;font-size:12px}.budget-breakdown dt,.budget-breakdown dd{margin:0}.budget-breakdown dd{text-align:right;font-variant-numeric:tabular-nums}

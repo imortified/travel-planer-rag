@@ -7,7 +7,7 @@ retain their original identity and the no-repeat rule. No prices or road legs in
 
 from dataclasses import asdict, replace
 
-from app.planning.candidates import PERIOD_POOL_LIMIT
+from app.planning.candidates import PERIOD_POOL_LIMIT, select_candidates
 from app.schemas.trip_costs import MealSettings
 
 LABELS = {"breakfast": "Завтрак", "lunch": "Обед", "dinner": "Ужин"}
@@ -93,11 +93,22 @@ def prepare_meals(request, inputs, settings):
         for p in data.places
         if p.category != "food" and p.id not in request.excluded
     }
-    ordered = sorted(ordinary, key=lambda pid: (pid not in mandatory, pid))
     capacity = PERIOD_POOL_LIMIT - len(meal_ids)
     if len(mandatory - meal_ids) > capacity:
         raise ValueError("Слишком много обязательных мест вместе с приёмами пищи")
-    kept = set(ordered[:capacity])
+    preferences = {
+        key: sum(p.interests.get(key, 0) for p in request.participants)
+        for key in ("art", "history", "nature", "food")
+    }
+    kept = {
+        p["id"]
+        for p in select_candidates(
+            [asdict(p) for p in ordinary.values()],
+            mandatory - meal_ids,
+            preferences,
+            limit=capacity,
+        )
+    }
     prepared = []
     for index, data in enumerate(inputs):
         context = data.data_context or {}
@@ -115,7 +126,9 @@ def prepare_meals(request, inputs, settings):
                     "name": f"{LABELS[kind]} · {metadata[chosen.id]['name']}",
                     "venue_id": chosen.id,
                     "meal_type": kind,
+                    "cost_per_person": chosen.cost_per_person,
                     "duration": chosen.duration,
+                    "duration_source": "meal_policy_and_catalog_minimum",
                     "window": [chosen.opens, chosen.closes],
                 }
             )
@@ -140,6 +153,8 @@ def prepare_meals(request, inputs, settings):
                 "meal_ids": sorted(p.id for p in places if p.id in meal_ids),
             },
             "places_snapshot": [asdict(p) for p in places],
+            "candidate_limit": context.get("candidate_limit", 24) + len(settings.slots()),
+            "period_pool_limit": PERIOD_POOL_LIMIT,
             "travel_minutes": [
                 {"from": a, "to": b, "minutes": minutes}
                 for (a, b), minutes in sorted(travel.items())

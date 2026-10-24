@@ -1,5 +1,5 @@
 {
-  "version": "lisbon-curated-2026-10-24-cities-v1",
+  "version": "lisbon-curated-2026-10-25-meals-v1",
   "checked_on": "2026-10-23",
   "valid_until": "2026-11-22",
   "price_policy": "Regular adult admission; food costs cover only the explicit order per participant. Discounts, extra orders, transport and other meals are excluded.",
@@ -114,9 +114,14 @@
       "hours_source": "https://nicolaugrupo.com/restaurantes/nicolau-lisboa/",
       "coordinates_source": "https://nicolaugrupo.com/restaurantes/nicolau-lisboa/",
       "price_policy": "На человека: один Brunch Nicolau за 20 EUR — апельсиновый сок, йогурт с фруктами и гранолой или классические панкейки, яйца на выбор, эспрессо, американо или чай. Дополнения отдельно.",
-      "notes": "Бранч из опубликованного меню, не бюджет питания на день. Координаты взяты из ссылки «Como Chegar» владельца. 90 минут — правило планирования; столик, очередь и доступность заказа не гарантированы.",
+      "notes": "Бранч из опубликованного меню, не бюджет питания на день. Координаты взяты из ссылки «Como Chegar» владельца. 90 минут — правило планирования; столик, очередь и доступность заказа не гарантированы. May be selected as a dated meal with this same explicit brunch order; no dietary or table-availability guarantee.",
       "checked_on": "2026-10-24",
-      "valid_until": "2026-11-22"
+      "valid_until": "2026-11-22",
+      "meal_types": [
+        "breakfast",
+        "lunch",
+        "dinner"
+      ]
     },
     {
       "id": "curated:lisbon:amelia-campo-de-ourique",
@@ -131,9 +136,14 @@
       "hours_source": "https://nicolaugrupo.com/restaurantes/amelia-lisboa/",
       "coordinates_source": "https://nicolaugrupo.com/restaurantes/amelia-lisboa/",
       "price_policy": "На человека: один Brunch Amélia за 18 EUR — апельсиновый сок, йогурт с фруктами и гранолой или классические панкейки, яйца на выбор, эспрессо, американо или чай. Дополнения отдельно.",
-      "notes": "Бранч из опубликованного меню. Координаты взяты из ссылки «Como Chegar» владельца. 90 минут — правило планирования; бронирование не выполняется, диетические ограничения не проверяются.",
+      "notes": "Бранч из опубликованного меню. Координаты взяты из ссылки «Como Chegar» владельца. 90 минут — правило планирования; бронирование не выполняется, диетические ограничения не проверяются. May be selected as a dated meal with this same explicit brunch order; no dietary or table-availability guarantee.",
       "checked_on": "2026-10-24",
-      "valid_until": "2026-11-22"
+      "valid_until": "2026-11-22",
+      "meal_types": [
+        "breakfast",
+        "lunch",
+        "dinner"
+      ]
     },
     {
       "id": "curated:lisbon:estufa-fria",

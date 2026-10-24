@@ -14,12 +14,13 @@ const warnings:Record<string,string> = {
 export function RoutePace({summary}:{summary?:PlanningSummary|null}) {
   if (!summary) return null;
   const pace=summary.pace;
+  const meals=summary.days.some(day=>(day.meal_count || 0)>0);
   return <section className="route-objective" aria-label="Темп и заполнение поездки">
-    <h3>Темп: {paceNames[pace?.mode || "unrestricted"]} · {summary.active_days} из {summary.total_days} дней с посещениями</h3>
-    <p>В плане {summary.scheduled_count} из {summary.candidate_count} уникальных мест, переданных в расчёт.</p>
+    <h3>Темп: {paceNames[pace?.mode || "unrestricted"]} · {summary.attraction_days ?? summary.active_days} из {summary.total_days} дней {meals?"с достопримечательностями":"с посещениями"}</h3>
+    <p>В плане {summary.scheduled_count} остановок из {summary.candidate_count} кандидатов расчёта.{meals && " Приёмы пищи отмечены отдельно; ресторан может повторяться."}</p>
     {summary.coverage_upper_bound < summary.total_days && <p>По доступности кандидатов можно занять не более {summary.coverage_upper_bound} из {summary.total_days} дней. Это верхняя граница без учёта бюджета, переездов и дневных лимитов; достижимость не гарантируется.</p>}
-    {pace && <p>До {pace.max_visits} мест и {pace.max_active_minutes} мин нагрузки в день. Перерыв между посещениями — минимум {pace.break_minutes} мин.</p>}
-    <p className="hint">Нагрузка: посещения, переезды и обязательные перерывы. Дополнительное ожидание открытия показано отдельно. Бюджет покрывает билеты и указанные заказы в кафе; жильё, дорога до города, транспорт и остальное питание в сумму не входят.</p>
+    {pace && <p>До {pace.max_visits} {meals?"достопримечательностей":"мест"} и {pace.max_active_minutes} мин нагрузки в день. Перерыв между остановками — минимум {pace.break_minutes} мин.</p>}
+    <p className="hint">Нагрузка: посещения, питание, переезды и обязательные перерывы. Дополнительное ожидание открытия показано отдельно. Расходы на остановки покрывают билеты и указанные заказы; оценки жилья и транспорта показаны в разбивке, если заданы.</p>
     {!!summary.warnings.length && <ul>{summary.warnings.map(code=><li key={code}>{warnings[code] || code}</li>)}</ul>}
   </section>;
 }

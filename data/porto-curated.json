@@ -1,5 +1,5 @@
 {
-  "version": "porto-curated-2026-10-24-v1",
+  "version": "porto-curated-2026-10-25-meals-v1",
   "checked_on": "2026-10-24",
   "valid_until": "2026-11-22",
   "price_policy": "Standard adult admission. Individual official sources apply. Discounts, guided services, transport and other meals excluded.",
@@ -178,6 +178,28 @@
       "checked_on": "2026-10-24",
       "valid_until": "2026-11-22",
       "notes": " Duration is planning policy. Mapped area representative point; not a verified visitor entrance."
+    },
+    {
+      "id": "curated:porto:nicolau",
+      "name": "Nicolau Porto — Brunch Porto",
+      "category": "food",
+      "cost_per_person": 2000,
+      "duration": 60,
+      "opening_hours": "09:00-22:30",
+      "latitude": 41.1500473,
+      "longitude": -8.6146497,
+      "coordinates_source": "https://maps.app.goo.gl/rkErYhxUZbr1VoXv9",
+      "price_source": "https://nicolaugrupo.com/restaurantes/nicolau-porto/",
+      "hours_source": "https://nicolaugrupo.com/restaurantes/nicolau-porto/",
+      "checked_on": "2026-10-25",
+      "valid_until": "2026-11-22",
+      "price_policy": "Per person: Brunch Porto with juice, yogurt with fruit/granola or plain pancakes, eggs and espresso/americano/tea. Extras excluded.",
+      "meal_types": [
+        "breakfast",
+        "lunch",
+        "dinner"
+      ],
+      "notes": "All-day menu. Coordinates from the owner-linked Google Maps place, not the map camera centre. Duration is planning policy. Queue, table availability, dietary suitability and other orders are not confirmed."
     }
   ]
 }
