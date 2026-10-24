@@ -110,6 +110,15 @@ def test_duplicate_ids_and_inconsistent_provenance_are_rejected():
         SnapshotData.model_validate(body)
 
 
+def test_individual_review_dates_stay_inside_manifest_bounds():
+    body = snapshot(curated=True).model_dump(mode="json")
+    body["pois"][0]["provenance"]["checked_on"] = "2026-10-24"
+    assert SnapshotData.model_validate(body).pois[0].provenance.checked_on == date(2026, 10, 24)
+    body["pois"][0]["provenance"]["valid_until"] = "2026-11-23"
+    with pytest.raises(ValueError):
+        SnapshotData.model_validate(body)
+
+
 def test_dataset_uses_published_origin_and_no_osm_with_empty_redis():
     calls = []
 

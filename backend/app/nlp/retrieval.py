@@ -37,7 +37,9 @@ class Retrieval:
                     "name": poi["name"],
                     "description": description,
                     "source_url": extra["source_url"] if extra else poi["source_url"],
-                    "checked_on": self.knowledge["checked_on"] if extra else None,
+                    "checked_on": extra.get("checked_on", self.knowledge["checked_on"])
+                    if extra
+                    else None,
                     "description_kind": "curated" if extra else "catalog_category",
                 }
             )

@@ -18,7 +18,7 @@ export function RouteComparison({data, trip, selectedId, names, reasonLabels, di
       {label:"Переезды, мин",value:(r:Route)=>r.result.objective?String(r.result.objective.travel_minutes):"—"},
       {label:"Разрыв покрытия интересов ↓",value:(r:Route)=>r.result.objective?r.result.objective.fairness_gap.toLocaleString("ru-RU",{maximumFractionDigits:4}):"—"},
     ]:[]),
-    {label:"Билеты на всю группу",value:r=>money(r.result.total_cost)},
+    {label:"Расходы на всю группу",value:r=>money(r.result.total_cost)},
     {label:"Посещения",value:r=>String(r.comparison!.visit_count)},
     {label:"Средняя полезность, баллы",value:r=>points(r.comparison!.mean_utility)},
     {label:"Минимум у участника, баллы",value:r=>points(r.comparison!.min_utility)},

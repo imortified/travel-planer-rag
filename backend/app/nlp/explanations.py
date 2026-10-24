@@ -8,7 +8,7 @@ from app.integrations.demo import load_demo
 from app.integrations.llama_cpp import InvalidLlmOutput, LlamaCpp, LlmUnavailable
 from app.schemas.assistant import ExplanationDraft, ExplanationOutput
 
-PROMPT_VERSION = "grounded-explanation-v4-objective"
+PROMPT_VERSION = "grounded-explanation-v5-catalog-costs"
 REQUIRED = {"summary", "budget", "limitations"}
 logger = logging.getLogger(__name__)
 CATEGORIES = {"history": "история", "nature": "природа", "art": "искусство", "food": "еда"}
@@ -42,7 +42,7 @@ def facts_for(route, trip, primary=None, option_count=1):
     facts = {
         "summary": f"Маршрут включает {len(visits)} посещений; повторных мест нет.",
         "budget": (
-            f"Входные билеты на {count} участников стоят {money(result['total_cost'])} "
+            f"Учтённые расходы на посещения для {count} участников — {money(result['total_cost'])} "
             f"при общем бюджете {money(trip.budget)}. "
             f"Остаток — {money(trip.budget - result['total_cost'])}."
         ),

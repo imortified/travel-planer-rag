@@ -106,8 +106,10 @@ class SnapshotData(FactModel):
         for p in self.pois:
             if p.provenance and (
                 p.provenance.version != self.manifest.catalog_version
-                or p.provenance.checked_on != self.manifest.curated_checked_on
-                or p.provenance.valid_until != self.manifest.curated_valid_until
+                or not self.manifest.curated_checked_on
+                <= p.provenance.checked_on
+                <= p.provenance.valid_until
+                <= self.manifest.curated_valid_until
             ):
                 raise ValueError("Catalog fact version differs from manifest")
         return self

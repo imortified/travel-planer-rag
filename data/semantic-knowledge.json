@@ -1,5 +1,5 @@
 {
-  "version": "lisbon-semantics-2026-10-23-v1",
+  "version": "lisbon-semantics-2026-10-24-v2",
   "checked_on": "2026-10-23",
   "categories": {
     "history": "История: археология, древние цивилизации, исторические музеи, руины, политическая история, сопротивление диктатуре, жизнь людей в прошлом.",
@@ -27,6 +27,31 @@
     "curated:lisbon:ajuda-botanical-garden": {
       "description": "Ботанический сад Ажуда знакомит с коллекцией растений. Террасы, фонтаны и зелёные пространства подходят для прогулки среди природы.",
       "source_url": "https://jba.isa.ulisboa.pt/"
+    },
+    "curated:lisbon:pasteis-de-belem": {
+      "description": "Историческая кондитерская в Белене. Гастрономическая остановка: португальская выпечка Pastel de Belém и эспрессо; другие заказы не входят в рассчитанную стоимость.",
+      "source_url": "https://pasteisdebelem.pt/contactos/",
+      "checked_on": "2026-10-24"
+    },
+    "curated:lisbon:nicolau-baixa": {
+      "description": "Кафе Nicolau в районе Байша. Бранч из яиц, сока, кофе или чая и йогурта с гранолой либо панкейков. Гастрономическая остановка с конкретным набором из меню.",
+      "source_url": "https://nicolaugrupo.com/restaurantes/nicolau-lisboa/",
+      "checked_on": "2026-10-24"
+    },
+    "curated:lisbon:amelia-campo-de-ourique": {
+      "description": "Кафе Amélia в Кампу-де-Орике. В меню бранч с яйцами, соком, йогуртом или панкейками и горячим напитком. Стоимость относится к одному набору на человека.",
+      "source_url": "https://nicolaugrupo.com/restaurantes/amelia-lisboa/",
+      "checked_on": "2026-10-24"
+    },
+    "curated:lisbon:estufa-fria": {
+      "description": "Оранжерейный комплекс Estufa Fria в парке Эдуарда VII. Прогулка среди растений, водоёмов и каскадов; включает холодную, тёплую и суккулентную зоны.",
+      "source_url": "https://estufafria.lisboa.pt/visitar",
+      "checked_on": "2026-10-24"
+    },
+    "curated:lisbon:gulbenkian-garden": {
+      "description": "Бесплатный сад фонда Гулбенкяна. Деревья, растения, озеро и птицы для спокойной прогулки на открытом воздухе. Посещение музеев в эту остановку не входит.",
+      "source_url": "https://gulbenkian.pt/fundacao/jardim-gulbenkian/",
+      "checked_on": "2026-10-24"
     }
   }
 }

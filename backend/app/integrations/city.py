@@ -282,7 +282,8 @@ class CityProvider:
                 "OSM data is not an official guarantee of opening or price",
                 "OSM nodes in central Lisbon plus source-verified curated locations",
                 "Visit durations are planning policy, not source facts",
-                "Standard adult entry prices; discounts, bundled tickets and booking fees excluded",
+                "Regular adult admission and explicit food orders per participant; "
+                "other meals, extras and discounts excluded",
                 "Driving estimates exclude traffic, parking and transport costs",
                 "Travel is between OSRM-snapped road points, not door-to-door",
                 "No return trip or weather checks; visa requirements are in a separate report",

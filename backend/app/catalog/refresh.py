@@ -28,7 +28,8 @@ def collect_snapshot(provider=None, curated_path=None, now=None):
     path = curated_path or ROOT / "data" / "lisbon-curated.json"
     curated = Catalog.model_validate(json.loads(path.read_text(encoding="utf-8")))
     assessed = now or datetime.now(timezone.utc)
-    if curated.checked_on > assessed.astimezone(ZoneInfo("Europe/Lisbon")).date():
+    today = assessed.astimezone(ZoneInfo("Europe/Lisbon")).date()
+    if max([curated.checked_on, *[p.checked_on for p in curated.pois if p.checked_on]]) > today:
         raise ValueError("Curated facts are dated in the future")
     # Refresh means actual upstream fetch, not a new timestamp on an old Redis response.
     source = (provider or CityProvider()).fetch_catalog(
