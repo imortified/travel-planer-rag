@@ -1,0 +1,28 @@
+{
+  "version": "hotel-provider-pilot-v1",
+  "city": "Lisbon",
+  "currency": "EUR",
+  "checkin": "2026-11-02",
+  "nights": [1, 2],
+  "hotels": [
+    {
+      "name": "Hotel Da Baixa",
+      "xotelo_key": "g189158-d13402042",
+      "latitude": 38.712166,
+      "longitude": -9.137548,
+      "identity_source": "https://www.tripadvisor.com/Hotel_Review-g189158-d13402042-Reviews-Hotel_Da_Baixa-Lisbon_Lisbon_District_Central_Portugal.html"
+    },
+    {
+      "name": "Jupiter Lisboa Hotel - Rooftop & Spa",
+      "xotelo_key": "g189158-d7363512",
+      "latitude": 38.739616,
+      "longitude": -9.145963,
+      "identity_source": "https://www.tripadvisor.com/Hotel_Review-g189158-d7363512-Reviews-Jupiter_Lisboa_Hotel_Rooftop_Spa-Lisbon_Lisbon_District_Central_Portugal.html"
+    }
+  ],
+  "parties": [
+    {"id": "two-adults", "adults": 2, "child_ages": [], "rooms": 1},
+    {"id": "family-child8", "adults": 2, "child_ages": [8], "rooms": 1},
+    {"id": "four-adults-two-rooms", "adults": 4, "child_ages": [], "rooms": 2}
+  ]
+}
