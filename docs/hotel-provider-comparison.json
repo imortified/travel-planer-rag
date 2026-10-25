@@ -752,5 +752,16 @@
     "existing_lodging_contract_tests": 15,
     "total_focused_tests": 29,
     "ruff": "passed"
+  },
+  "decision": {
+    "selected_for_next_prototype": "xotelo",
+    "reason": "User selected the available public provider; SerpApi access was not obtained",
+    "not_a_proven_quality_ranking": true,
+    "remaining_checks": [
+      "family proposals",
+      "nightly and per-room price unit",
+      "taxes and other charges",
+      "multi-room occupancy"
+    ]
   }
 }
