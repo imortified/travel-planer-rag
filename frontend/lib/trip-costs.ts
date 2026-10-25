@@ -19,6 +19,12 @@ export function amount(value:string,label:string,optional=false):number|null {
   if (!Number.isSafeInteger(result) || result>1_000_000_000) throw new Error(`Слишком большая сумма: ${label}.`);
   return result;
 }
+export function requireSelectedFlightBudget(draft:Pick<CostDraft,"budgetEnabled"|"flights">):number {
+  if(!draft.budgetEnabled)throw new Error("Для выбранного перелёта включите бюджет всей поездки.");
+  const total=amount(draft.flights,"перелёты на всю группу",true);
+  if(total===null)throw new Error("Перелёт выбран, но его стоимость ещё не учтена. Укажите общую сумму всех билетов рядом с выбранным перелётом и повторите расчёт.");
+  return total;
+}
 const minute=(value:string)=>{if(!/^\d{2}:\d{2}$/.test(value))throw new Error("Укажите время приёма пищи.");const [h,m]=value.split(":").map(Number);if(h>23||m>59)throw new Error("Проверьте время приёма пищи.");return h*60+m;};
 export function costPayload(draft:CostDraft,destination:string):{budget_settings:BudgetSettings|null;meal_settings:MealSettings|null} {
   const budget_settings:BudgetSettings|null=draft.budgetEnabled?{lodging:amount(draft.lodging,"жильё",true),transport:amount(draft.transport,"наземный транспорт",true),flights:amount(draft.flights,"перелёты",true),transport_scope:"ground_only",reserve:amount(draft.reserve,"резерв")!}:null;

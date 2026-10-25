@@ -29,7 +29,7 @@ import type { PickedQuote } from "../lib/xotelo";
 import { MemberAge } from "./components/member-age";
 import { AgePricingNotice } from "./components/age-pricing-notice";
 import { ageProfile } from "../lib/ages";
-import { amount, costPayload, defaultCostDraft, type CostDraft } from "../lib/trip-costs";
+import { amount, costPayload, defaultCostDraft, requireSelectedFlightBudget, type CostDraft } from "../lib/trip-costs";
 import { RoutePace, paceNames } from "./components/route-pace";
 import type { AgeProfile, PaceMode, PaceSettings } from "../lib/api";
 import type { CatalogSnapshot, CatalogResponse } from "../lib/api";
@@ -202,7 +202,7 @@ function Planner({account,onLogout}:{account:Account;onLogout:()=>Promise<void>}
     if (endDate && (!date || endDate<date || (Date.parse(endDate)-Date.parse(date))/86400000>13)) throw new Error("Период должен содержать от 1 до 14 дней.");
     if ((selectedLodging || selectedQuote) && !costDraft.budgetEnabled) throw new Error("Для выбранного проживания включите бюджет всей поездки.");
     if(selectedQuote && Date.parse(selectedQuote.observation.expires_at)<=Date.now())throw new Error("Предложение Xotelo истекло. Загрузите цены снова или выберите ручной каталог.");
-    if(selectedFlight&&!costDraft.budgetEnabled)throw new Error("Для выбранного перелёта включите бюджет всей поездки.");
+    if(selectedFlight)requireSelectedFlightBudget(costDraft);
     if(selectedFlight&&Date.parse(selectedFlight.observation.expires_at)<=Date.now())throw new Error("Срок выбора перелёта истёк. Повторите поиск.");
     const id = await saveGroup();
     const payload={...costPayload(costDraft,destination),flight_plan:selectedFlight?.choice||null,lodging_quote:selectedQuote?.choice || null,lodging_plan:selectedLodging?.plan || null,destination, purpose, pace, travel_date:date || null, end_date:endDate || null, semantic_query:destination!=="Demo City" && semanticQuery?semanticQuery:null, budget:Math.round(Number(budget)*100), start:minutes(start), end:minutes(end),
@@ -295,7 +295,7 @@ function Planner({account,onLogout}:{account:Account;onLogout:()=>Promise<void>}
           {algorithm==="cp-sat" && <><label>Лимит CP-SAT на набор, с<input type="number" min="0.05" max="30" step="0.05" value={solverLimit} onChange={e=>setSolverLimit(e.target.value)}/></label><p className="hint">Общий бюджет времени поиска вариантов. Загрузка данных и подготовка могут добавить время. На сложной задаче оптимум может остаться недоказанным.</p></>}
           <div className="two"><label>Начало дня<input type="time" value={start} onChange={e=>setStart(e.target.value)}/></label><label>Окончание дня<input type="time" value={end} onChange={e=>setEnd(e.target.value)}/></label></div>
           <TripCostForm value={costDraft} onChange={changeCosts} destination={destination} budget={budget}/>
-          <FlightSearch key={`flights:${lodgingContext}`} destination={destination} first={date} last={endDate||date} disabled={!!busy} ensureGroup={saveGroup} value={selectedFlight} onBusy={setBusy} onChoose={chooseFlight}/>
+          <FlightSearch key={`flights:${lodgingContext}`} destination={destination} first={date} last={endDate||date} disabled={!!busy} ensureGroup={saveGroup} value={selectedFlight} estimate={costDraft.flights} budgetEnabled={costDraft.budgetEnabled} participantCount={members.length} onEstimateChange={flights=>setCostDraft(old=>({...old,flights,budgetEnabled:true}))} onBusy={setBusy} onChoose={chooseFlight}/>
           <XoteloSearch key={`xotelo:${lodgingContext}`} destination={destination} first={date} last={endDate || date} agesKnown={members.length>0&&members.every(m=>m.age_profile?.age_on_start!=null || !!m.age_profile?.birth_date)} disabled={!!busy} ensureGroup={saveGroup} value={selectedQuote} onBusy={setBusy} onChoose={chooseQuote}/>
           <LodgingSearch key={lodgingContext} destination={destination} first={date} last={endDate || date} guestCount={members.length} value={selectedLodging} disabled={!!busy} onChange={chooseDirectory}/>
           {destination!=="Demo City" && <div className="visa-preview"><label>Цель въезда<select value={purpose} onChange={e=>setPurpose(e.target.value)}><option value="tourism">Туризм</option><option value="other">Иная цель</option><option value="unknown">Не уточнена</option></select></label><p className="hint">Визовый справочник: семь гражданств, краткосрочный туризм в Португалии. Документы заполняются у каждого участника.</p><button className="secondary" disabled={!members.length} onClick={()=>task("Проверяем визовые условия…",async()=>{if(members.some(m=>!m.name.trim())) throw new Error("Введите имена участников.");const report=await api<VisaData>("/visa-check","POST",visaInput);setVisaPreview({signature:visaSignature,report});})}>Проверить визовые условия</button>{visaPreview?.signature===visaSignature && <VisaReport report={visaPreview.report}/>}</div>}
@@ -318,7 +318,7 @@ function Planner({account,onLogout}:{account:Account;onLogout:()=>Promise<void>}
           <div className="stats"><div><small>{result!.budget_breakdown?.scope==="trip_estimate"?"Учтённые расходы с оценками":"Расходы на остановки"}</small><strong>{money(result!.budget_breakdown?.known_total ?? result!.total_cost)}</strong></div><div><small>Бюджет группы</small><strong>{money(shown.trip.budget)}</strong></div><div><small>Остановок в плане</small><strong>{result!.visits.length}</strong></div></div>
           {result!.is_feasible && <RouteObjective report={result!.objective} trip={shown.trip}/>}
           <SolverStatus report={result!.solver}/>
-          <BudgetBreakdown value={result!.budget_breakdown}/>
+          <BudgetBreakdown value={result!.budget_breakdown} flightSelected={!!shown.trip.flight_snapshot}/>
           <LodgingSummary value={shown.trip.lodging_snapshot} members={shown.trip.participants_snapshot}/>
           <FlightSummary value={shown.trip.flight_snapshot} members={shown.trip.participants_snapshot}/>
           <AgePricingNotice route={shown.route}/>

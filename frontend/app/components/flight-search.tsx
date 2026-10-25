@@ -1,8 +1,12 @@
-import { useState } from "react";
+import { useId,useState } from "react";
 import { api,money } from "../../lib/api";
 import { airportFor,departureLabel,pickFlight,validateFlightSearch,type FlightObservation,type FlightOption,type PickedFlight } from "../../lib/flights";
+import { requireSelectedFlightBudget } from "../../lib/trip-costs";
 
-export function FlightSearch({destination,first,last,disabled,ensureGroup,value,onBusy,onChoose}:{destination:string;first:string;last:string;disabled:boolean;ensureGroup:()=>Promise<number>;value?:PickedFlight;onBusy:(value:string)=>void;onChoose:(value:PickedFlight|undefined)=>void}) {
+export function FlightSearch({destination,first,last,disabled,ensureGroup,value,estimate,budgetEnabled,participantCount,onEstimateChange,onBusy,onChoose}:{destination:string;first:string;last:string;disabled:boolean;ensureGroup:()=>Promise<number>;value?:PickedFlight;estimate:string;budgetEnabled:boolean;participantCount:number;onEstimateChange:(value:string)=>void;onBusy:(value:string)=>void;onChoose:(value:PickedFlight|undefined)=>void}) {
+  const estimateHelp=useId();
+  let estimateCents:number|undefined,estimateIssue="";
+  if(value)try{estimateCents=requireSelectedFlightBudget({flights:estimate,budgetEnabled});}catch(e){estimateIssue=e instanceof Error?e.message:"Проверьте сумму перелётов";}
   const [origin,setOrigin]=useState(""),[departure,setDeparture]=useState(first),[returning,setReturning]=useState(last>first),[back,setBack]=useState(last),[direct,setDirect]=useState(false);
   const [market,setMarket]=useState<"ru"|"us">("ru"),[result,setResult]=useState<FlightObservation>(),[error,setError]=useState("");
   const invalidate=()=>{setResult(undefined);onChoose(undefined);setError("");};
@@ -38,8 +42,14 @@ export function FlightSearch({destination,first,last,disabled,ensureGroup,value,
         {option.return_at&&<p>Обратный вылет: {departureLabel(option.return_at)}. Пересадок обратно: {option.return_transfers}.</p>}
         <p className="hint">Смещение часового пояса указано в дате. Полные сегменты и прибытие не подтверждены; время посещений не меняется. Цена всей группы и детские тарифы не рассчитаны.</p>
         {option.search_url&&<a href={option.search_url} target="_blank" rel="noreferrer">Перепроверить цену на Aviasales ↗</a>}
-        <button type="button" className="secondary" disabled={disabled} onClick={()=>choose(option)}>Выбрать перелёт</button>
+        <button type="button" className="secondary" disabled={disabled} aria-pressed={value?.choice.option_id===option.option_id} onClick={()=>choose(option)}>{value?.choice.option_id===option.option_id?"Рейс выбран ✓":"Выбрать перелёт"}</button>
       </article>)}</div>}</>}
-    {value&&<div className="lodging-picked"><b>Выбран перелёт {value.option.origin_airport} → {value.option.destination_airport}</b><p>Укажите общую сумму всех билетов в поле «Перелёты на всю группу». Цена из кэша автоматически не переносится. Наземный транспорт учитывается отдельно.</p><button type="button" className="text-button" disabled={disabled} onClick={()=>onChoose(undefined)}>Убрать выбранный перелёт</button></div>}
+    {value&&<div className={`lodging-picked flight-picked${estimateIssue?" flight-budget-pending":""}`}><b>Выбран рейс {value.option.origin_airport} → {value.option.destination_airport}</b>
+      <p role="status">{estimateIssue||`Указана общая оценка перелётов: ${money(estimateCents!)} на всю группу.`}</p>
+      <label>Общая стоимость выбранного перелёта на всю группу, EUR<input type="number" min="0" max="10000000" step="0.01" placeholder="Введите сумму всех билетов" value={estimate} disabled={disabled} autoFocus aria-describedby={estimateHelp} aria-invalid={!!estimateIssue} onChange={e=>onEstimateChange(e.target.value)}/></label>
+      <p id={estimateHelp} className="hint">Участников: {participantCount}. Введите общую сумму всех билетов{value.option.return_at?" туда и обратно":" в одну сторону"}, включая нужный багаж. Цена из кэша {money(value.option.observed_price)} не рассчитана на вашу группу и автоматически не переносится. Наземный транспорт учитывается отдельно.</p>
+      {!budgetEnabled&&<button type="button" className="secondary" disabled={disabled} onClick={()=>onEstimateChange(estimate)}>Включить учёт перелётов в бюджете</button>}
+      <p className="hint">Поле связано с «Перелёты на всю группу» в расходах: сумма учитывается один раз. Чтобы обновить итог, нажмите «Построить маршрут».</p>
+      <button type="button" className="text-button" disabled={disabled} onClick={()=>onChoose(undefined)}>Убрать выбранный перелёт</button></div>}
   </section>;
 }
