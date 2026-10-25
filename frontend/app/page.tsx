@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { AccountGate } from "./components/account-gate";
+import { ThemeSwitcher } from "./components/theme-switcher";
 import type { Account, SavedTraveller } from "../lib/api";
 import { reuseTraveller } from "../lib/travellers";
 import { RouteDays } from "./components/route-days";
@@ -266,7 +267,7 @@ function Planner({account,onLogout}:{account:Account;onLogout:()=>Promise<void>}
       <div className="account-info"><strong>{account.name}</strong><small>{account.email}</small><button className="text-button" disabled={!!busy} onClick={()=>task("Выходим…",onLogout)}>Выйти</button></div>
       <div className="sidebar-bottom"><span className="dot"/> Локальная версия MVP<p>Общие интересы. Несколько дней.<br/>Проверяемый маршрут.</p></div>
     </aside>
-    <section className="workspace"><header><span className="eyebrow">ПУТЕШЕСТВУЙТЕ ВМЕСТЕ</span><span className="header-tag">План на 1–14 дней</span></header>
+    <section className="workspace"><header><span className="eyebrow">ПУТЕШЕСТВУЙТЕ ВМЕСТЕ</span><div className="header-tools"><span className="header-tag">План на 1–14 дней</span><ThemeSwitcher/></div></header>
       <div className="intro"><h1>Разные интересы.<br/><em>Один маршрут.</em></h1><p>Соберите компанию, расскажите о предпочтениях.<br/>Мы найдём места, на которые хватит времени и бюджета.</p></div>
       <div className="columns"><div className="form-column">
         <TextRequest disabled={!!busy} memberNames={members.map(m=>m.name.trim()).filter(Boolean)} onBusy={setBusy} onApply={applyParsed}/>

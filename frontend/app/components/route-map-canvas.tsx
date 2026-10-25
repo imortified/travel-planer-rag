@@ -20,8 +20,12 @@ export default function RouteMapCanvas({days,active,onSelect,basemap}:{days:MapD
   const [loaded,setLoaded]=useState(0);
   useEffect(()=>{
     if(!element.current) return;
+    const palette=()=>{
+      const css=getComputedStyle(document.documentElement);
+      return {background:css.getPropertyValue("--map-bg").trim(),outline:css.getPropertyValue("--map-path-outline").trim()};
+    };
     let map:maplibregl.Map;
-    const style:StyleSpecification={version:8,sources:{},layers:[{id:"background",type:"background",paint:{"background-color":"#edf0e8"}}]};
+    const style:StyleSpecification={version:8,sources:{},layers:[{id:"background",type:"background",paint:{"background-color":palette().background}}]};
     try {
       map=new maplibregl.Map({container:element.current,style,center:[0,0],zoom:1,maxZoom:18,attributionControl:false,renderWorldCopies:false,dragRotate:false,pitchWithRotate:false,locale:{"NavigationControl.ZoomIn":"Приблизить","NavigationControl.ZoomOut":"Отдалить","Popup.Close":"Закрыть"}});
     } catch {
@@ -45,7 +49,7 @@ export default function RouteMapCanvas({days,active,onSelect,basemap}:{days:MapD
     map.on("load",()=>{
       const features=days.flatMap(d=>d.segments.map(coordinates=>({type:"Feature" as const,properties:{color:d.color},geometry:{type:"LineString" as const,coordinates}})));
       map.addSource("sequence",{type:"geojson",data:{type:"FeatureCollection",features}});
-      map.addLayer({id:"sequence-outline",type:"line",source:"sequence",paint:{"line-color":"#fffefb","line-width":7,"line-opacity":0.9}});
+      map.addLayer({id:"sequence-outline",type:"line",source:"sequence",paint:{"line-color":palette().outline,"line-width":7,"line-opacity":0.9}});
       map.addLayer({id:"sequence",type:"line",source:"sequence",paint:{"line-color":["get","color"],"line-width":3.5,"line-dasharray":[2,2]}});
       for(const day of days) {
         if(day.stops.length && day.origin && !starts.has(day.origin.coordinates.join(","))) {
@@ -73,7 +77,14 @@ export default function RouteMapCanvas({days,active,onSelect,basemap}:{days:MapD
       setLoaded(value=>value+1);
     });
     const observer=new ResizeObserver(()=>map.resize());observer.observe(element.current);
-    return ()=>{observer.disconnect();map.getCanvas().removeEventListener("webglcontextlost",lost);pins.forEach(p=>p.remove());markers.current.clear();map.remove();mapRef.current=null;readyMap.current=null;};
+    const syncTheme=()=>{
+      const colors=palette();
+      if(map.getLayer("background"))map.setPaintProperty("background","background-color",colors.background);
+      if(map.getLayer("sequence-outline"))map.setPaintProperty("sequence-outline","line-color",colors.outline);
+    };
+    const themeObserver=new MutationObserver(syncTheme);
+    themeObserver.observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
+    return ()=>{themeObserver.disconnect();observer.disconnect();map.getCanvas().removeEventListener("webglcontextlost",lost);pins.forEach(p=>p.remove());markers.current.clear();map.remove();mapRef.current=null;readyMap.current=null;};
   },[days]);
   useEffect(()=>{
     const map=mapRef.current;if(!map || map!==readyMap.current) return;

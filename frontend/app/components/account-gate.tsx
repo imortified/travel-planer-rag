@@ -2,6 +2,7 @@
 
 import { useEffect, useState, type ReactNode, type FormEvent } from "react";
 import { api, setAuthSession, type Account, type AuthSession } from "../../lib/api";
+import { ThemeSwitcher } from "./theme-switcher";
 
 export function AccountGate({children}:{children:(account:Account,onLogout:()=>Promise<void>)=>ReactNode}) {
   const [session,setSession]=useState<AuthSession|null>();
@@ -23,9 +24,9 @@ export function AccountGate({children}:{children:(account:Account,onLogout:()=>P
     finally{setBusy(false);}
   }
   async function logout(){await api("/auth/logout","POST");accept(null);}
-  if(session===undefined)return <main className="auth-shell"><p role="status">Проверяем вход…</p></main>;
+  if(session===undefined)return <main className="auth-shell"><ThemeSwitcher corner/><p role="status">Проверяем вход…</p></main>;
   if(session)return children(session.account,logout);
-  return <main className="auth-shell"><section className="card auth-card"><a className="brand" href="/">попутно<span>↗</span></a>
+  return <main className="auth-shell"><ThemeSwitcher corner/><section className="card auth-card"><a className="brand" href="/">попутно<span>↗</span></a>
     <p className="eyebrow">ВАШИ ПУТЕШЕСТВИЯ В ОДНОМ МЕСТЕ</p><h1>{mode==="login"?"С возвращением":"Начнём путешествие"}</h1>
     <p>Сохраняйте маршруты, возвращайтесь к поездкам и выбирайте участников из своей записной книжки.</p>
     <form onSubmit={submit}>
