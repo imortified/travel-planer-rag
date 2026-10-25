@@ -8,6 +8,7 @@ from app.planning.alternatives import ComparisonMetrics
 from app.planning.models import Result
 from app.schemas.ages import AgeProfile
 from app.schemas.assistant import ExplanationOutput
+from app.schemas.lodging import LodgingSelection
 from app.schemas.trip_costs import BudgetSettings, MealSettings
 from app.schemas.visa import TravelProfile
 
@@ -45,6 +46,7 @@ class GroupOutput(NamedOutput):
 
 
 class TripInput(BaseModel):
+    lodging_plan: LodgingSelection | None = None
     budget_settings: BudgetSettings | None = None
     meal_settings: MealSettings | None = None
     pace: Literal["unrestricted", "relaxed", "balanced", "intensive"] = "unrestricted"
@@ -62,6 +64,15 @@ class TripInput(BaseModel):
 
     @model_validator(mode="after")
     def check_interval(self):
+        if self.lodging_plan:
+            if self.destination == "Demo City" or self.travel_date is None:
+                raise ValueError("Выбор проживания требует реального города и дат поездки")
+            if self.budget_settings is None:
+                raise ValueError("Для выбранного проживания включите бюджет всей поездки")
+            if self.lodging_plan.checkin > self.travel_date or self.lodging_plan.checkout < (
+                self.end_date or self.travel_date
+            ):
+                raise ValueError("Даты проживания должны покрывать период поездки")
         if self.budget_settings and self.budget_settings.committed > self.budget:
             raise ValueError("Жильё, транспорт и резерв превышают общий бюджет поездки")
         if self.meal_settings:
@@ -83,6 +94,7 @@ class TripInput(BaseModel):
 
 
 class TripOutput(TripInput):
+    lodging_snapshot: dict | None = None
     pace_settings: dict | None = None
     id: int
     group_id: int

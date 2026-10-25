@@ -15,6 +15,8 @@ import { CatalogStatus } from "./components/catalog-status";
 import { destinationName, type DestinationInfo } from "../lib/destinations";
 import { TripCostForm } from "./components/trip-cost-form";
 import { BudgetBreakdown } from "./components/budget-breakdown";
+import { LodgingSearch, type SelectedLodging } from "./components/lodging-search";
+import { LodgingSummary } from "./components/lodging-summary";
 import { MemberAge } from "./components/member-age";
 import { AgePricingNotice } from "./components/age-pricing-notice";
 import { ageProfile } from "../lib/ages";
@@ -59,6 +61,7 @@ export default function Home() {
   const visaSignature=JSON.stringify(visaInput);
   const [budget,setBudget] = useState("100");
   const [costDraft,setCostDraft] = useState(defaultCostDraft);
+  const [selectedLodging,setSelectedLodging] = useState<SelectedLodging>();
   const [start,setStart] = useState("09:00");
   const [end,setEnd] = useState("18:00");
   const [algorithm,setAlgorithm] = useState("beam");
@@ -81,7 +84,9 @@ export default function Home() {
   const [shown,setShown] = useState<{route: Route; trip: Trip}>();
   const [comparison,setComparison] = useState<{data: RouteSet; trip: Trip}>();
   const pendingTrip = useRef<{signature: string; trip: Trip} | undefined>(undefined);
+  const lodgingContext=JSON.stringify({destination,date,endDate,guests:members.map(m=>({key:m.key,name:m.name,age:m.age_profile}))});
 
+  useEffect(()=>{setSelectedLodging(undefined);},[lodgingContext]);
   useEffect(() => { const stored = localStorage.getItem("travel-group-id"); if (stored) setLoadId(stored); }, []);
   useEffect(() => {let active=true;api<Record<string,PaceSettings>>("/planning/pace-profiles").then(profiles=>{if(active)setPaceProfiles(profiles);}).catch(()=>{});return ()=>{active=false;};}, []);
   useEffect(() => {let active=true;api<DestinationInfo[]>("/destinations").then(cities=>{if(active)setDestinations(cities);}).catch(()=>{});return ()=>{active=false;};}, []);
@@ -136,8 +141,9 @@ export default function Home() {
     if (!Number.isFinite(Number(budget)) || Number(budget)<0 || Number(budget)>10000000 || !budget.trim()) throw new Error("Проверьте общий бюджет.");
     if (!start || !end || minutes(start)>=minutes(end)) throw new Error("Окончание дня должно быть позже начала.");
     if (endDate && (!date || endDate<date || (Date.parse(endDate)-Date.parse(date))/86400000>13)) throw new Error("Период должен содержать от 1 до 14 дней.");
+    if (selectedLodging && !costDraft.budgetEnabled) throw new Error("Для выбранного проживания включите бюджет всей поездки.");
     const id = await saveGroup();
-    const payload={...costPayload(costDraft,destination),destination, purpose, pace, travel_date:date || null, end_date:endDate || null, semantic_query:destination!=="Demo City" && semanticQuery?semanticQuery:null, budget:Math.round(Number(budget)*100), start:minutes(start), end:minutes(end),
+    const payload={...costPayload(costDraft,destination),lodging_plan:selectedLodging?.plan || null,destination, purpose, pace, travel_date:date || null, end_date:endDate || null, semantic_query:destination!=="Demo City" && semanticQuery?semanticQuery:null, budget:Math.round(Number(budget)*100), start:minutes(start), end:minutes(end),
       mandatory:Object.keys(choices).filter(k=>choices[k]==="mandatory"), excluded:Object.keys(choices).filter(k=>choices[k]==="excluded")};
     const signature=JSON.stringify({id,payload,members:members.map(m=>({interests:m.interests,profile:m.travel_profile || emptyProfile,age_profile:ageProfile(m.age_profile)}))});
     let trip = pendingTrip.current?.signature===signature ? pendingTrip.current.trip : undefined;
@@ -173,7 +179,7 @@ export default function Home() {
     }
     if (!gid && d.participants.length) setMembers(d.participants.map(p=>({key:key.current++,name:p.name,interests:{history:0.5,nature:0.5,food:0.5,art:0.5,...d.common_interests,...p.interests}})));
     else setMembers(ms=>ms.map(m=>({...m,interests:{...m.interests,...d.common_interests,...d.participants.find(p=>normalized(p.name)===normalized(m.name))?.interests}})));
-    setCostDraft(defaultCostDraft());setDestination(d.destination);setDate(d.travel_date);setEndDate(d.end_date || "");setBudget(String(parsed.group_budget/100));
+    setSelectedLodging(undefined);setCostDraft(defaultCostDraft());setDestination(d.destination);setDate(d.travel_date);setEndDate(d.end_date || "");setBudget(String(parsed.group_budget/100));
     if (d.start!==null) setStart(clock(d.start));
     if (d.end!==null) setEnd(clock(d.end));
     setPois(catalog);setCatalogKey(d.destination!=="Demo City"?`${d.destination}:${d.travel_date}:${d.end_date || d.travel_date}`:"Demo City");
@@ -222,6 +228,7 @@ export default function Home() {
           {algorithm==="cp-sat" && <><label>Лимит CP-SAT на набор, с<input type="number" min="0.05" max="30" step="0.05" value={solverLimit} onChange={e=>setSolverLimit(e.target.value)}/></label><p className="hint">Общий бюджет времени поиска вариантов. Загрузка данных и подготовка могут добавить время. На сложной задаче оптимум может остаться недоказанным.</p></>}
           <div className="two"><label>Начало дня<input type="time" value={start} onChange={e=>setStart(e.target.value)}/></label><label>Окончание дня<input type="time" value={end} onChange={e=>setEnd(e.target.value)}/></label></div>
           <TripCostForm value={costDraft} onChange={setCostDraft} destination={destination} budget={budget}/>
+          <LodgingSearch key={lodgingContext} destination={destination} first={date} last={endDate || date} guestCount={members.length} value={selectedLodging} disabled={!!busy} onChange={value=>{setSelectedLodging(value);if(value)setCostDraft(old=>({...old,budgetEnabled:true}));}}/>
           {destination!=="Demo City" && <div className="visa-preview"><label>Цель въезда<select value={purpose} onChange={e=>setPurpose(e.target.value)}><option value="tourism">Туризм</option><option value="other">Иная цель</option><option value="unknown">Не уточнена</option></select></label><p className="hint">Визовый справочник: семь гражданств, краткосрочный туризм в Португалии. Документы заполняются у каждого участника.</p><button className="secondary" disabled={!members.length} onClick={()=>task("Проверяем визовые условия…",async()=>{if(members.some(m=>!m.name.trim())) throw new Error("Введите имена участников.");const report=await api<VisaData>("/visa-check","POST",visaInput);setVisaPreview({signature:visaSignature,report});})}>Проверить визовые условия</button>{visaPreview?.signature===visaSignature && <VisaReport report={visaPreview.report}/>}</div>}
           <p className="hint">{destination!=="Demo City"?`Португалия · ${destinationName(destination)}. Старт — ${destinationInfo?.origin?.name || "точка города"}. Автомобильные переезды по доступным дорогам. Один город на поездку. Билеты рассчитываются по возрасту каждого участника; при непроверенной льготе используется обычный тариф. Питание — указанные заказы. Оценки жилья и транспорта учитываются отдельно, если заданы. Прочее питание, дополнения и неподтверждённые скидки не включены в стоимость остановок. Бронирование и доступность билетов не подтверждаются. Время — местное.`:"Синтетические музей, рынок и парк для проверки сценария. Бюджет учитывает входные билеты на всех участников."}</p>
           {destination!=="Demo City" && <button className="secondary" disabled={!date} onClick={()=>task("Загружаем каталог…",async()=>{const c=await api<CatalogResponse>(`/destinations/${destination}/pois?travel_date=${date}${endDate?`&end_date=${endDate}`:""}`);setPois(c.pois);setCatalogSnapshot(c.catalog_snapshot);setCatalogKey(`${destination}:${date}:${endDate || date}`);setNotice(`Найдено ${c.pois.length} мест, подходят для расчёта: ${c.pois.filter(p=>p.eligible).length}`);})}>Загрузить места на период</button>}
@@ -243,6 +250,7 @@ export default function Home() {
           {result!.is_feasible && <RouteObjective report={result!.objective} trip={shown.trip}/>}
           <SolverStatus report={result!.solver}/>
           <BudgetBreakdown value={result!.budget_breakdown}/>
+          <LodgingSummary value={shown.trip.lodging_snapshot} members={shown.trip.participants_snapshot}/>
           <AgePricingNotice route={shown.route}/>
           <RoutePace summary={result!.planning_summary}/>
           <CatalogStatus snapshot={result!.data_context?.catalog_snapshot} saved/>

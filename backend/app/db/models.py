@@ -65,6 +65,7 @@ class TripRequest(Base):
     pace_settings: Mapped[dict | None] = mapped_column(JSON, nullable=True)
     budget_settings: Mapped[dict | None] = mapped_column(JSON, nullable=True)
     meal_settings: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    lodging_snapshot: Mapped[dict | None] = mapped_column(JSON, nullable=True)
     purpose: Mapped[str] = mapped_column(String(20), default="tourism", server_default="unknown")
     budget: Mapped[int]
     start: Mapped[int]
@@ -150,6 +151,34 @@ class CatalogHead(Base):
         ForeignKeyConstraint(
             ["destination", "version_id"],
             ["catalog_versions.destination", "catalog_versions.id"],
+            ondelete="RESTRICT",
+        ),
+    )
+    destination: Mapped[str] = mapped_column(String(100), primary_key=True)
+    version_id: Mapped[int | None]
+
+
+class LodgingCatalogVersion(Base):
+    __tablename__ = "lodging_catalog_versions"
+    __table_args__ = (
+        UniqueConstraint("destination", "content_sha256"),
+        UniqueConstraint("destination", "id"),
+    )
+    id: Mapped[int] = mapped_column(primary_key=True)
+    destination: Mapped[str] = mapped_column(String(100))
+    content_sha256: Mapped[str] = mapped_column(String(64))
+    data: Mapped[dict] = mapped_column(JSON)
+    published_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+
+
+class LodgingCatalogHead(Base):
+    __tablename__ = "lodging_catalog_heads"
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["destination", "version_id"],
+            ["lodging_catalog_versions.destination", "lodging_catalog_versions.id"],
             ondelete="RESTRICT",
         ),
     )

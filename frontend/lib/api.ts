@@ -3,6 +3,10 @@ import type { Destination } from "./destinations";
 
 export type Interests = Record<string, number>;
 export type AgeProfile = {age_on_start:number|null;birth_date:string|null};
+export type LodgingSelection = {property_id:string;catalog_version_id:number;checkin:string;checkout:string;rooms:number};
+export type LodgingProperty = {id:string;destination:string;name:string;kind:string;latitude:number;longitude:number;location_kind:string;address:string|null;website_url:string|null;source_url:string};
+export type LodgingDirectory = {mode:"directory";live_offers:false;destination:string;catalog_version_id:number;content_sha256:string;source_upstream_asof:string;downloaded_at:string;published_at:string;attribution:string;total:number;page:number;page_size:number;properties:LodgingProperty[];availability_status:"not_checked";price_status:"unknown"};
+export type LodgingSnapshot = {version:string;mode:"directory";selection:LodgingSelection;property:LodgingProperty;catalog_sha256:string;source_upstream_asof:string;attribution:string;nights:number;guests:{participant_id:string;age_at_checkin:number|null}[];adults:number;children_ages:number[];unknown_ages:number;group_total_estimate:number|null;price_status:"user_estimate"|"unknown";availability_status:"not_checked";occupancy_status:"not_checked";booking_status:"not_booked"};
 export type ParticipantPrice = {participant_id:string;age:number|null;cost:number;label:string;reason:string;source_url?:string|null};
 export type BudgetSettings = {version?:string;lodging:number|null;transport:number|null;reserve:number};
 export type MealSlot = {start:number;end:number;duration:number;max_cost_per_person:number};
@@ -38,6 +42,7 @@ export type VisaReport = {version:string;assessed_on:string;checked_on:string;re
 export type Member = {user_id: number; name: string; interests: Interests;travel_profile?:TravelProfile;age_profile?:AgeProfile};
 export type Group = {id: number; name: string; members: Member[]};
 export type Trip = {id: number; group_id: number; destination: string; travel_date: string | null; end_date?: string | null;
+  lodging_plan?:LodgingSelection|null;lodging_snapshot?:LodgingSnapshot|null;
   budget_settings?:BudgetSettings|null;meal_settings?:MealSettings|null;
   pace?:PaceMode;pace_settings?:PaceSettings|null;
   budget: number; start: number; end: number; participants_snapshot: Member[];semantic_query?:string|null;purpose?:string};

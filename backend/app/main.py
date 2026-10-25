@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from app.api.assistant import router as assistant_router
 from app.api.destinations import router as destinations_router
 from app.api.groups import router as groups_router
+from app.api.lodging import router as lodging_router
 from app.api.routes import router
 from app.api.visa import router as visa_router
 from app.core.logging import configure_logging
@@ -17,3 +18,4 @@ app.include_router(groups_router)
 app.include_router(destinations_router)
 app.include_router(assistant_router)
 app.include_router(visa_router)
+app.include_router(lodging_router)

@@ -188,7 +188,10 @@ def update_age_profile(group_id: int, user_id: int, payload: AgeProfile, session
 
 def trip_output(trip):
     pace = getattr(trip, "pace_settings", None)
+    lodging = getattr(trip, "lodging_snapshot", None)
     return TripOutput(
+        lodging_plan=lodging["selection"] if lodging else None,
+        lodging_snapshot=lodging,
         budget_settings=getattr(trip, "budget_settings", None),
         meal_settings=getattr(trip, "meal_settings", None),
         pace=pace["mode"] if pace else "unrestricted",
@@ -217,6 +220,12 @@ def create_trip(group_id: int, payload: TripInput, session: DB):
     participants = members(session, group_id)
     if not participants:
         raise HTTPException(409, "Add participants before creating a trip")
+    from app.catalog.lodging import freeze_lodging
+
+    try:
+        lodging_snapshot = freeze_lodging(session, payload, participants)
+    except (LookupError, ValueError) as exc:
+        raise HTTPException(422, str(exc)) from exc
     from app.planning.costs import age_at
 
     for member in participants:
@@ -232,6 +241,7 @@ def create_trip(group_id: int, payload: TripInput, session: DB):
         except ValueError as exc:
             raise HTTPException(422, str(exc)) from exc
     trip = TripRequest(
+        lodging_snapshot=lodging_snapshot,
         budget_settings=payload.budget_settings.model_dump() if payload.budget_settings else None,
         meal_settings=payload.meal_settings.model_dump() if payload.meal_settings else None,
         group_id=group_id,
