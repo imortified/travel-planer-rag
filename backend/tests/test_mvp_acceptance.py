@@ -56,6 +56,7 @@ def client(monkeypatch):
         )
 
     monkeypatch.setattr("app.api.groups.CityProvider.dataset", dataset)
+    monkeypatch.setattr("app.schemas.groups.trip_today", lambda _destination: date(2026, 10, 24))
     monkeypatch.setattr("app.visa.reference_date", lambda: date(2026, 10, 24))
     with engine.connect() as connection:
         transaction = connection.begin()

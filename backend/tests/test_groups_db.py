@@ -1,6 +1,7 @@
 """Opt-in PostgreSQL tests. Each test is rolled back, including API commits."""
 
 import os
+from datetime import date
 
 import pytest
 from fastapi.testclient import TestClient
@@ -15,7 +16,9 @@ pytestmark = pytest.mark.skipif(
 
 
 @pytest.fixture
-def client():
+def client(monkeypatch):
+    # Calendar fixtures intentionally use October 2026. Keep their business clock fixed.
+    monkeypatch.setattr("app.schemas.groups.trip_today", lambda _destination: date(2026, 10, 23))
     with engine.connect() as connection:
         transaction = connection.begin()
 
@@ -107,8 +110,6 @@ def test_pace_is_frozen_and_legacy_remains_unrestricted(client, monkeypatch):
 
 
 def test_travel_profiles_and_visa_reports_are_frozen(client, monkeypatch):
-    from datetime import date
-
     from app.planning.models import Place
 
     monkeypatch.setattr("app.visa.reference_date", lambda: date(2026, 10, 23))

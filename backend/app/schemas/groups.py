@@ -3,6 +3,7 @@ from typing import Annotated, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
+from app.core.dates import trip_today
 from app.core.destinations import Destination
 from app.planning.alternatives import ComparisonMetrics
 from app.planning.models import Result
@@ -47,7 +48,7 @@ class GroupOutput(NamedOutput):
     members: list[MemberOutput]
 
 
-class TripInput(BaseModel):
+class TripParameters(BaseModel):
     flight_plan: FlightChoice | None = None
     lodging_quote: XoteloChoice | None = None
     lodging_plan: LodgingSelection | None = None
@@ -115,7 +116,18 @@ class TripInput(BaseModel):
         return self
 
 
-class TripOutput(TripInput):
+class TripInput(TripParameters):
+    @model_validator(mode="after")
+    def check_new_trip_date(self):
+        if self.travel_date is not None and self.travel_date < trip_today(self.destination):
+            raise ValueError(
+                "Дата начала новой поездки не может быть в прошлом. "
+                "Выберите сегодня или будущую дату по часовому поясу города назначения."
+            )
+        return self
+
+
+class TripOutput(TripParameters):
     flight_snapshot: dict | None = None
     lodging_snapshot: dict | None = None
     pace_settings: dict | None = None
