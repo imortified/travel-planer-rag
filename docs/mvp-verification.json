@@ -1,0 +1,448 @@
+{
+  "checked_on": "2026-10-25",
+  "branch": "fix/future-trip-dates-and-mvp-verification",
+  "fix_commit": "baa0188",
+  "runner_commit": "74fb12c",
+  "configuration": {
+    "base_url": "http://127.0.0.1:8001",
+    "start": "2026-11-02",
+    "samples": 20,
+    "read_samples": 100,
+    "concurrency": 1,
+    "algorithm": "beam",
+    "beam_width": 32
+  },
+  "environment": {
+    "python": "3.13.3",
+    "platform": "Windows-10-10.0.19045-SP0",
+    "git_revision": "74fb12c2796e0e6137749d74da19464dd81914a9",
+    "cpu": "12th Gen Intel(R) Core(TM) i5-12500H",
+    "gpu_names": [
+      "NVIDIA GeForce RTX 3050 Laptop GPU",
+      "Intel(R) Iris(R) Xe Graphics"
+    ],
+    "logical_processors": 16,
+    "ram_gib": 31.7,
+    "physical_cores": 12
+  },
+  "latency_scope": "Local HTTP through JSON decoding: POI/routing, alternatives, validation, DB commit. Excludes trip setup, LLM parsing and explanation.",
+  "limitations": [
+    "Sequential local measurement, not a concurrent load test or universal SLA",
+    "Warmups separate; failed requests remain in all measured latency statistics",
+    "Persists synthetic demos; never changes or deletes existing user data",
+    "LLM was not running during planning/read measurement; started after those measurements",
+    "Not an end-to-end p95 of free-text input plus planning plus LLM explanation",
+    "Fresh catalog and known prices/hours are still required for a new recalculation of an old trip"
+  ],
+  "date_policy": {
+    "today_allowed": true,
+    "past_new_requests": "422",
+    "real_city_timezone": "destination timezone; currently Europe/Lisbon",
+    "demo_timezone": "UTC",
+    "historical_dto_has_no_current_date_guard": true,
+    "history_recalculation_regressions": "all three algorithms, routes and route-sets; controlled source facts"
+  },
+  "checks": {
+    "backend_tests": 726,
+    "postgresql": true,
+    "redis": true,
+    "qdrant": true,
+    "ruff": "passed",
+    "frontend_changed": false,
+    "frontend_tests_and_build_rerun": false
+  },
+  "planning": [
+    {
+      "days": 5,
+      "participants": 6,
+      "group_id": 3244,
+      "trip_id": 3071,
+      "payload": {
+        "destination": "Lisbon",
+        "travel_date": "2026-11-02",
+        "end_date": "2026-11-06",
+        "budget": 200000,
+        "pace": "balanced",
+        "budget_settings": {
+          "lodging": 30000,
+          "transport": 6000,
+          "flights": 0,
+          "transport_scope": "ground_only",
+          "reserve": 20000
+        }
+      },
+      "warmup": {
+        "method": "POST",
+        "path": "/api/v1/trips/3071/route-sets?algorithm=beam&beam_width=32",
+        "ok": true,
+        "http_status": 201,
+        "response_bytes": 2329744,
+        "elapsed_seconds": 4.258891699952073,
+        "feasible": true,
+        "options": 3,
+        "route_id": 4642,
+        "active_days": 5,
+        "stops": 15,
+        "stops_cost": 8820,
+        "known_total": 44820,
+        "osrm_cache_reads": [
+          "miss",
+          "miss",
+          "miss",
+          "miss",
+          "miss"
+        ],
+        "catalog_versions": [
+          426
+        ]
+      },
+      "latency": {
+        "attempts": 20,
+        "successful": 20,
+        "errors": 0,
+        "p50_seconds": 2.3991108000045642,
+        "p95_seconds": 2.4579483000561595,
+        "max_seconds": 2.5130410999991
+      },
+      "all_measured_osrm_hits": true,
+      "same_catalog": true,
+      "nfr1_local_sequential_pass": true
+    },
+    {
+      "days": 7,
+      "participants": 6,
+      "group_id": 3244,
+      "trip_id": 3072,
+      "payload": {
+        "destination": "Lisbon",
+        "travel_date": "2026-11-02",
+        "end_date": "2026-11-08",
+        "budget": 200000,
+        "pace": "balanced",
+        "budget_settings": {
+          "lodging": 30000,
+          "transport": 6000,
+          "flights": 0,
+          "transport_scope": "ground_only",
+          "reserve": 20000
+        }
+      },
+      "warmup": {
+        "method": "POST",
+        "path": "/api/v1/trips/3072/route-sets?algorithm=beam&beam_width=32",
+        "ok": true,
+        "http_status": 201,
+        "response_bytes": 3126730,
+        "elapsed_seconds": 5.992413599975407,
+        "feasible": true,
+        "options": 3,
+        "route_id": 4705,
+        "active_days": 7,
+        "stops": 20,
+        "stops_cost": 21300,
+        "known_total": 57300,
+        "osrm_cache_reads": [
+          "hit",
+          "hit",
+          "hit",
+          "hit",
+          "hit",
+          "miss",
+          "miss"
+        ],
+        "catalog_versions": [
+          426
+        ]
+      },
+      "latency": {
+        "attempts": 20,
+        "successful": 20,
+        "errors": 0,
+        "p50_seconds": 4.380567300016992,
+        "p95_seconds": 4.441644800012,
+        "max_seconds": 4.4590424000052735
+      },
+      "all_measured_osrm_hits": true,
+      "same_catalog": true,
+      "nfr1_local_sequential_pass": true
+    }
+  ],
+  "saved_route_reads": {
+    "route_id": 4705,
+    "warmups": 5,
+    "latency": {
+      "attempts": 100,
+      "successful": 100,
+      "errors": 0,
+      "p50_seconds": 0.04246604995569214,
+      "p95_seconds": 0.049252299941144884,
+      "max_seconds": 0.059675500029698014
+    },
+    "nfr2_local_sequential_pass": true
+  },
+  "negative_dates": {
+    "method": "POST",
+    "path": "/api/v1/groups/3244/trips",
+    "ok": true,
+    "http_status": 422,
+    "response_bytes": 388,
+    "elapsed_seconds": 0.0034008000511676073
+  },
+  "negative_budget": {
+    "method": "POST",
+    "path": "/api/v1/trips/3074/route-sets?algorithm=beam",
+    "ok": true,
+    "http_status": 201,
+    "response_bytes": 118306,
+    "elapsed_seconds": 1.001540599972941,
+    "reported_infeasible": true
+  },
+  "solo_manual_demo": {
+    "method": "POST",
+    "path": "/api/v1/trips/3073/route-sets?algorithm=beam",
+    "ok": true,
+    "http_status": 201,
+    "response_bytes": 1108941,
+    "elapsed_seconds": 2.2490140999434516,
+    "feasible": true,
+    "options": 3,
+    "route_id": 4768,
+    "active_days": 3,
+    "stops": 9,
+    "stops_cost": 800,
+    "known_total": 36800,
+    "osrm_cache_reads": [
+      "miss",
+      "miss",
+      "miss"
+    ],
+    "catalog_versions": [
+      426
+    ],
+    "group_id": 3245,
+    "trip_id": 3073
+  },
+  "llm_initial_probes": [
+    {
+      "case": "solo",
+      "text": "Еду один в Лиссабон со 2 по 4 ноября 2026 года. Бюджет 1000 евро на всю поездку на одного человека. Интересуют история и природа. Каждый день с 09:00 до 18:00.",
+      "parse_http_status": 502,
+      "parse_seconds": 32.85608209995553,
+      "parse_matches_expected": null,
+      "parse": {
+        "detail": "Модель не вернула корректные параметры после повторной попытки. Упростите текст или заполните форму вручную."
+      },
+      "explanation_seconds": 57.23105230007786,
+      "explanation_mode": "llm",
+      "verified": true,
+      "fallback_reason": null,
+      "prompt_version": "grounded-explanation-v9-flights"
+    },
+    {
+      "case": "group",
+      "text": "Нас 6 человек. Едем в Лиссабон со 2 по 8 ноября 2026 года. Общий бюджет 2000 евро на всех за всю поездку. Нам интересны история и природа. Каждый день с 09:00 до 18:00.",
+      "parse_http_status": 200,
+      "parse_seconds": 18.85654210008215,
+      "parse_matches_expected": true,
+      "parse": {
+        "draft": {
+          "destination": "Lisbon",
+          "travel_date": "2026-11-02",
+          "end_date": "2026-11-08",
+          "duration_days": null,
+          "budget_eur": 2000.0,
+          "currency": "EUR",
+          "budget_scope": "group",
+          "participant_count": 6,
+          "participants": [],
+          "common_interests": {
+            "history": 1.0,
+            "nature": 1.0
+          },
+          "start": 540,
+          "end": 1080,
+          "mandatory_names": [],
+          "excluded_names": [],
+          "unsupported": [],
+          "evidence": {
+            "destination": "Лиссабон",
+            "dates": "со 2 по 8 ноября 2026",
+            "budget": "общий бюджет 2000 евро на всех за всю поездку",
+            "participants": "Нас 6 человек",
+            "hours": "с 09:00 до 18:00",
+            "interests": "интересны история и природа"
+          }
+        },
+        "group_budget": 200000,
+        "questions": [
+          {
+            "field": "participants",
+            "text": "Укажите имена участников: модель предложила имя без подтверждения в запросе."
+          }
+        ],
+        "warnings": [],
+        "model": "Qwen3-4B-Q4_K_M",
+        "prompt_version": "trip-extract-v3-portugal",
+        "reference_date": "2026-10-25"
+      },
+      "explanation_seconds": 60.41854310000781,
+      "explanation_mode": "template",
+      "verified": true,
+      "fallback_reason": "llm_unavailable",
+      "prompt_version": "grounded-explanation-v9-flights"
+    }
+  ],
+  "llm_ui_context_followup": [
+    {
+      "case": "solo",
+      "reason": "Pass existing member_names exactly as the UI does; original attempts retained",
+      "http_status": 200,
+      "elapsed_seconds": 20.543069800012745,
+      "parse": {
+        "draft": {
+          "destination": "Lisbon",
+          "travel_date": "2026-11-02",
+          "end_date": "2026-11-04",
+          "duration_days": null,
+          "budget_eur": 1000.0,
+          "currency": "EUR",
+          "budget_scope": "per_person",
+          "participant_count": 1,
+          "participants": [
+            {
+              "name": "Demo member 1",
+              "interests": {}
+            }
+          ],
+          "common_interests": {
+            "history": 1.0,
+            "nature": 1.0
+          },
+          "start": 540,
+          "end": 1080,
+          "mandatory_names": [],
+          "excluded_names": [],
+          "unsupported": [],
+          "evidence": {
+            "destination": "Лиссабон",
+            "dates": "со 2 по 4 ноября 2026 года",
+            "budget": "бюджет 1000 евро на всю поездку на одного человека",
+            "participants": "Еду один",
+            "hours": "каждый день с 09:00 до 18:00",
+            "interests": "история и природа"
+          }
+        },
+        "group_budget": 100000,
+        "questions": [],
+        "warnings": [],
+        "model": "Qwen3-4B-Q4_K_M",
+        "prompt_version": "trip-extract-v3-portugal",
+        "reference_date": "2026-10-25"
+      },
+      "matches_expected": true
+    },
+    {
+      "case": "group",
+      "reason": "Pass existing member_names exactly as the UI does; original attempts retained",
+      "http_status": 200,
+      "elapsed_seconds": 27.66587220004294,
+      "parse": {
+        "draft": {
+          "destination": "Lisbon",
+          "travel_date": "2026-11-02",
+          "end_date": "2026-11-08",
+          "duration_days": null,
+          "budget_eur": 2000.0,
+          "currency": "EUR",
+          "budget_scope": "group",
+          "participant_count": 6,
+          "participants": [
+            {
+              "name": "Demo member 1",
+              "interests": {}
+            },
+            {
+              "name": "Demo member 2",
+              "interests": {}
+            },
+            {
+              "name": "Demo member 3",
+              "interests": {}
+            },
+            {
+              "name": "Demo member 4",
+              "interests": {}
+            },
+            {
+              "name": "Demo member 5",
+              "interests": {}
+            },
+            {
+              "name": "Demo member 6",
+              "interests": {}
+            }
+          ],
+          "common_interests": {
+            "history": 1.0,
+            "nature": 1.0
+          },
+          "start": 360,
+          "end": 1080,
+          "mandatory_names": [],
+          "excluded_names": [],
+          "unsupported": [],
+          "evidence": {
+            "destination": "Лиссабон",
+            "dates": "со 2 по 8 ноября 2026",
+            "budget": "общий бюджет 2000 евро на всех за всю поездку",
+            "participants": "Нас 6 человек",
+            "hours": "каждый день с 09:00 до 18:00",
+            "interests": "интересны история и природа"
+          }
+        },
+        "group_budget": 200000,
+        "questions": [],
+        "warnings": [],
+        "model": "Qwen3-4B-Q4_K_M",
+        "prompt_version": "trip-extract-v3-portugal",
+        "reference_date": "2026-10-25"
+      },
+      "matches_expected": true
+    }
+  ],
+  "llm_runtime": {
+    "model": "Qwen3-4B-Q4_K_M",
+    "llama_cpp": "b11840",
+    "port": 8081,
+    "gpu_layers": 24,
+    "context": 4096,
+    "threads": 8,
+    "parallel": 1,
+    "timeout_seconds": 60
+  },
+  "ui_checks": {
+    "past_date_error_visible": true,
+    "impossible_budget_visible": true,
+    "saved_seven_day_trip": 3072,
+    "three_options_shown": true,
+    "first_alternative_selected": true,
+    "seventh_day_map_filter_visits": 3,
+    "map_screenshot": ".local/evaluations/mvp-verification-map.png",
+    "solo_llm_applied_to_form": true,
+    "solo_new_trip": 3173,
+    "solo_dates": [
+      "2026-11-02",
+      "2026-11-04"
+    ],
+    "solo_budget_cents": 100000,
+    "solo_budget_scope": "stops_only",
+    "solo_stops": 9,
+    "solo_stops_cost_cents": 370,
+    "solo_route_id": 4898,
+    "solo_explanation_mode": "llm",
+    "solo_explanation_verified": true,
+    "solo_explanation_prompt_version": "grounded-explanation-v9-flights",
+    "solo_history_after_reload": true
+  },
+  "sample_csv_sha256": "34fea41402c320d5c276a55263e79710478d4924e8f27dafd5fdda2ac25f0cc7"
+}

@@ -1,6 +1,6 @@
 {
   "checked_on": "2026-10-25",
-  "implementation_commit": "76eca23b8e97f7b380eea1ca13e643bec031774e",
+  "implementation_commit": "74fb12c",
   "branch": "docs/mvp-requirements-audit",
   "parent_branch": "feature/flight-search-and-selection",
   "source": {
@@ -61,10 +61,11 @@
       "id": "MVP-5",
       "requirement": "Feasibility: бюджет, время, mandatory, статические визы",
       "status": "covered",
-      "finding": "Числовые ограничения проверяются независимо. Португалия/7 гражданств: статические правила и сроки-предупреждения. Warning-режим виз прямо разрешён §13.2; is_feasible не означает разрешение на въезд. См. отдельный пробел G1 для прошлых дат.",
+      "finding": "Числовые ограничения проверяются независимо. Португалия/7 гражданств: статические правила и сроки-предупреждения. Warning-режим виз прямо разрешён §13.2; is_feasible не означает разрешение на въезд. Проверка прошлых дат G1 исправлена отдельно с сохранением истории.",
       "evidence": [
         "E3",
-        "E5"
+        "E5",
+        "E12"
       ]
     },
     {
@@ -394,20 +395,19 @@
     {
       "id": "NFR-1",
       "requirement": "Построение 5–7 дней/6 участников за 15–30 секунд",
-      "status": "unverified",
-      "finding": "Есть живые семидневные случаи и offline-тайминги алгоритмов, но нет репрезентативного end-to-end прогона с p50/p95 и заявленной конфигурацией тёплого кэша.",
+      "status": "covered",
+      "finding": "Подтверждено в локальном последовательном HTTP-профиле: 6 взрослых, Lisbon, Beam width 32, 20 расчётов на 5/7 дней, p95 2.458/4.442 с, все OSRM Redis hit. Исключает LLM-ввод/объяснение; не конкурентный SLA.",
       "evidence": [
-        "E4",
-        "E11"
+        "E12"
       ]
     },
     {
       "id": "NFR-2",
       "requirement": "Чтение сохранённого маршрута p95 ≤300 мс",
-      "status": "unverified",
-      "finding": "Одиночные успешные чтения не заменяют серию замеров p95 под определённой нагрузкой.",
+      "status": "covered",
+      "finding": "100 последовательных локальных чтений семидневного маршрута после 5 прогревов: p95 49.3 мс, ошибок нет. Конкурентная/удалённая нагрузка не проверена.",
       "evidence": [
-        "E1"
+        "E12"
       ]
     },
     {
@@ -614,6 +614,16 @@
       "docs/ragas-evaluation.json",
       "docs/portugal-catalogs.json",
       "docs/flights.md"
+    ],
+    "E12": [
+      "backend/app/core/dates.py",
+      "backend/app/schemas/groups.py",
+      "backend/app/evaluation/mvp_http.py",
+      "backend/tests/test_trip_dates.py",
+      "backend/tests/test_trip_dates_db.py",
+      "docs/mvp-verification.md",
+      "docs/mvp-verification.json",
+      "docs/mvp-http-samples.csv"
     ]
   },
   "counts": {
@@ -627,10 +637,10 @@
       "missing": 6
     },
     "nfr": {
-      "unverified": 3,
+      "covered": 6,
       "partial": 6,
       "missing": 2,
-      "covered": 4
+      "unverified": 1
     }
   },
   "current_checks": {
@@ -696,7 +706,8 @@
         },
         "detail": null
       }
-    }
+    },
+    "latest_backend_tests_passed": 726
   },
   "previous_stage_checks": {
     "backend_tests_passed": 709,
@@ -708,8 +719,11 @@
   "new_gap": {
     "id": "G1",
     "source": "§13.2, PDF p.20, DateRangeValidator",
-    "finding": "TripInput accepts travel_date=2020-01-01 for a new Lisbon request; calendar range is checked but future date is not. Flight/provider searches have their own date checks.",
-    "fix_scope": "Reject past dates in new trip requests while retaining historical trip reads/recalculations."
+    "finding": "Originally TripInput accepted a past date. Fixed: new past requests return 422, today is allowed in the destination timezone; historical output validation is independent of the current date.",
+    "fix_scope": "Reject past dates in new trip requests while retaining historical trip reads/recalculations.",
+    "status": "closed",
+    "closed_by": "baa0188",
+    "original_finding_at": "76eca23"
   },
   "not_in_mvp": [
     "real booking and payments",
@@ -720,10 +734,20 @@
     "guaranteed live group ticket/hotel availability"
   ],
   "evaluation_gaps": [
-    "reproducible end-to-end p50/p95 for 5–7 days and 6 people",
-    "p95 saved-route reads under stated load",
+    "concurrent load/generalization beyond the measured local Beam profile",
+    "p95 of the complete free-text-to-explanation workflow",
+    "500 requests/day quotas/cost profile",
     "independent user evaluation with 5–10 people",
-    "current parser/explanation quality beyond author-designed corpora",
+    "live LLM robustness: initial parse failure and group explanation timeout",
     "full §17 rate limiting/audit/deletion and CI/container deployment"
-  ]
+  ],
+  "initial_audit_commit": "76eca23b8e97f7b380eea1ca13e643bec031774e",
+  "verification_update": {
+    "fix_commit": "baa0188",
+    "runner_commit": "74fb12c",
+    "report": "docs/mvp-verification.json",
+    "planning_nfr_scope": "sequential local HTTP, Beam width 32, Lisbon, 6 adults, 5/7 days, 20 measurements each; excludes LLM",
+    "read_nfr_scope": "100 sequential local reads after 5 warmups",
+    "llm_status": "mixed: original 502 and group explanation timeout retained; UI-context parsing 2/2 and new live solo UI flow succeeded"
+  }
 }
