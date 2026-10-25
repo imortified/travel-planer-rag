@@ -115,19 +115,21 @@
       "id": "FR-2",
       "requirement": "Группа и добавление по email/приглашению",
       "status": "partial",
-      "finding": "Группы и участники создаются по ID; email и ссылки-приглашения отсутствуют.",
+      "finding": "Группы и участники принадлежат аккаунту; профили повторно выбираются по имени. Email аккаунта не является приглашением: приглашения и совместный доступ отсутствуют.",
       "evidence": [
-        "E1"
+        "E1",
+        "E13"
       ]
     },
     {
       "id": "FR-3",
       "requirement": "Независимые интересы, бюджет и ограничения каждого участника",
       "status": "partial",
-      "finding": "Индивидуальные веса, возраст и документы есть; персональных бюджетов, полного набора ограничений и защищённого личного кабинета нет.",
+      "finding": "Индивидуальные веса, возраст и документы есть; добавлены аккаунт владельца и сохранённые профили. Персональных бюджетов и полного набора личных ограничений нет.",
       "evidence": [
         "E1",
-        "E5"
+        "E5",
+        "E13"
       ]
     },
     {
@@ -491,11 +493,12 @@
     {
       "id": "NFR-11",
       "requirement": "Роли доступа к персональным данным и HTTPS",
-      "status": "missing",
-      "finding": "Локальный HTTP, нет ролей/аутентификации и TLS-развёртывания. Не подходит для публичного сервиса с персональными данными.",
+      "status": "partial",
+      "finding": "Добавлены регистрация/вход, Argon2id, отзываемые cookie-сессии, CSRF и изоляция владельцев. Локальный HTTP; TLS-развёртывания, приглашений и развитой модели ролей нет.",
       "evidence": [
         "E1",
-        "E9"
+        "E9",
+        "E13"
       ]
     },
     {
@@ -624,6 +627,15 @@
       "docs/mvp-verification.md",
       "docs/mvp-verification.json",
       "docs/mvp-http-samples.csv"
+    ],
+    "E13": [
+      "backend/app/core/auth.py",
+      "backend/app/api/accounts.py",
+      "backend/app/accounts_legacy.py",
+      "backend/tests/test_accounts_db.py",
+      "frontend/app/components/account-gate.tsx",
+      "frontend/lib/travellers.ts",
+      "docs/accounts.md"
     ]
   },
   "counts": {
@@ -638,8 +650,8 @@
     },
     "nfr": {
       "covered": 6,
-      "partial": 6,
-      "missing": 2,
+      "partial": 7,
+      "missing": 1,
       "unverified": 1
     }
   },
@@ -749,5 +761,16 @@
     "planning_nfr_scope": "sequential local HTTP, Beam width 32, Lisbon, 6 adults, 5/7 days, 20 measurements each; excludes LLM",
     "read_nfr_scope": "100 sequential local reads after 5 warmups",
     "llm_status": "mixed: original 502 and group explanation timeout retained; UI-context parsing 2/2 and new live solo UI flow succeeded"
+  },
+  "accounts_update": {
+    "branch": "feature/accounts-and-saved-travellers",
+    "migration": "0016",
+    "report": "docs/accounts.md",
+    "legacy_records_preserved_and_unowned": true,
+    "sharing_and_tls_not_added": true,
+    "implementation_commit": "339fba8",
+    "backend_tests_passed": 749,
+    "frontend_tests_passed": 32,
+    "frontend_build_passed": true
   }
 }
