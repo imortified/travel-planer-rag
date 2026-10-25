@@ -1,0 +1,195 @@
+{
+  "stage": "age-aware-ticket-pricing",
+  "checked_at": "2026-10-25T00:00:38.307583+00:00",
+  "base_branch": "feature/meals-and-trip-budget",
+  "base_commit": "52afdf7",
+  "core_checkpoint": "1c23fe6",
+  "migration": "0012_member_age",
+  "policy": "individual-age-pricing-v1",
+  "checks": {
+    "backend_tests": 603,
+    "frontend_tests": 25,
+    "postgresql": true,
+    "redis": true,
+    "qdrant": true,
+    "ruff": "passed",
+    "next_build": "passed",
+    "live_cases": 12,
+    "history_frozen": true,
+    "browser": {
+      "age_profile_saved": true,
+      "birth_date_input": true,
+      "new_family_route": true,
+      "saved_individual_prices_visible": true
+    }
+  },
+  "live_travel_date": "2026-10-27",
+  "live_period_end": "2026-10-28",
+  "family_ages": [
+    30,
+    35,
+    8
+  ],
+  "currency": "EUR",
+  "amount_unit": "eurocent",
+  "catalogs": {
+    "Lisbon": {
+      "curated_version": "lisbon-curated-2026-10-25-age-v1",
+      "age_reviewed_places": 2
+    },
+    "Porto": {
+      "curated_version": "porto-curated-2026-10-25-age-v1",
+      "age_reviewed_places": 5
+    },
+    "Sintra": {
+      "curated_version": "sintra-curated-2026-10-25-age-v1",
+      "age_reviewed_places": 2
+    }
+  },
+  "scenarios": [
+    {
+      "city": "Lisbon",
+      "algorithm": "greedy",
+      "checked_place": "osm:way:30104081",
+      "participant_costs": [
+        3100,
+        3100,
+        1900
+      ],
+      "total_cost": 8100,
+      "valid": true
+    },
+    {
+      "city": "Lisbon",
+      "algorithm": "beam",
+      "checked_place": "osm:way:30104081",
+      "participant_costs": [
+        3100,
+        3100,
+        1900
+      ],
+      "total_cost": 8100,
+      "valid": true
+    },
+    {
+      "city": "Lisbon",
+      "algorithm": "cp-sat",
+      "checked_place": "osm:way:30104081",
+      "participant_costs": [
+        3100,
+        3100,
+        1900
+      ],
+      "total_cost": 8100,
+      "valid": true
+    },
+    {
+      "city": "Porto",
+      "algorithm": "greedy",
+      "checked_place": "osm:way:255778741",
+      "participant_costs": [
+        400,
+        400,
+        0
+      ],
+      "total_cost": 800,
+      "valid": true
+    },
+    {
+      "city": "Porto",
+      "algorithm": "beam",
+      "checked_place": "osm:way:255778741",
+      "participant_costs": [
+        400,
+        400,
+        0
+      ],
+      "total_cost": 800,
+      "valid": true
+    },
+    {
+      "city": "Porto",
+      "algorithm": "cp-sat",
+      "checked_place": "osm:way:255778741",
+      "participant_costs": [
+        400,
+        400,
+        0
+      ],
+      "total_cost": 800,
+      "valid": true
+    },
+    {
+      "city": "Sintra",
+      "algorithm": "greedy",
+      "checked_place": "osm:way:146132549",
+      "participant_costs": [
+        1200,
+        1200,
+        1000
+      ],
+      "total_cost": 3400,
+      "valid": true
+    },
+    {
+      "city": "Sintra",
+      "algorithm": "beam",
+      "checked_place": "osm:way:146132549",
+      "participant_costs": [
+        1200,
+        1200,
+        1000
+      ],
+      "total_cost": 3400,
+      "valid": true
+    },
+    {
+      "city": "Sintra",
+      "algorithm": "cp-sat",
+      "checked_place": "osm:way:146132549",
+      "participant_costs": [
+        1200,
+        1200,
+        1000
+      ],
+      "total_cost": 3400,
+      "valid": true
+    },
+    {
+      "city": "Lisbon",
+      "algorithm": "greedy",
+      "case": "two-days-meals-estimates",
+      "meal_count": 2,
+      "food": 10800,
+      "known_total": 43900,
+      "valid": true
+    },
+    {
+      "city": "Lisbon",
+      "algorithm": "beam",
+      "case": "two-days-meals-estimates",
+      "meal_count": 2,
+      "food": 10800,
+      "known_total": 46000,
+      "valid": true
+    },
+    {
+      "city": "Lisbon",
+      "algorithm": "cp-sat",
+      "case": "two-days-meals-estimates",
+      "meal_count": 2,
+      "food": 10800,
+      "known_total": 45400,
+      "valid": true
+    }
+  ],
+  "limitations": [
+    "Only 9 venues have reviewed age bands; ordinary tariff is an explicit fallback elsewhere.",
+    "Sintra ages 0-5 and exactly 65 remain unverified and use the ordinary fallback.",
+    "MAAT accompaniment under18/18+ is conservative project policy; operator does not state these exact numeric thresholds.",
+    "No automatic family, residency, student, online or birthday promotions.",
+    "Children currently receive the same explicit food order as adults; no child portions or menus.",
+    "Lodging and transport remain user estimates; no age-aware booking or airfare rules.",
+    "Old stored results are not repriced."
+  ]
+}
