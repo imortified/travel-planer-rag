@@ -1,0 +1,252 @@
+{
+  "checked_at": "2026-10-25T13:01:25.229318+00:00",
+  "api_access_confirmed": true,
+  "scope": "read-only access pilot; no UI integration, booking or verified group price",
+  "cases": [
+    {
+      "provider": "aviasales_data_api",
+      "checked_at": "2026-10-25T13:01:24.134673+00:00",
+      "query": {
+        "origin": "WAW",
+        "destination": "LIS",
+        "departure_at": "2026-11-15",
+        "currency": "eur",
+        "market": "ru",
+        "one_way": "true",
+        "limit": 5,
+        "page": 1,
+        "sorting": "price"
+      },
+      "price_kind": "provider_cached_observation",
+      "group_total_confirmed": false,
+      "booking_status": "not_booked",
+      "http_status": 200,
+      "status": "observations",
+      "currency": "eur",
+      "count": 1,
+      "observations": [
+        {
+          "flight_number": "1431",
+          "origin_airport": "WAW",
+          "destination_airport": "LIS",
+          "departure_at": "2026-11-15T05:35:00+01:00",
+          "airline": "W6",
+          "destination": "LIS",
+          "origin": "WAW",
+          "price": 81,
+          "return_transfers": 0,
+          "duration": 3415,
+          "duration_to": 305,
+          "duration_back": 0,
+          "transfers": 1
+        }
+      ]
+    },
+    {
+      "provider": "aviasales_data_api",
+      "checked_at": "2026-10-25T13:01:24.450721+00:00",
+      "query": {
+        "origin": "WAW",
+        "destination": "OPO",
+        "departure_at": "2026-11-15",
+        "currency": "eur",
+        "market": "ru",
+        "one_way": "true",
+        "limit": 5,
+        "page": 1,
+        "sorting": "price"
+      },
+      "price_kind": "provider_cached_observation",
+      "group_total_confirmed": false,
+      "booking_status": "not_booked",
+      "http_status": 200,
+      "status": "observations",
+      "currency": "eur",
+      "count": 1,
+      "observations": [
+        {
+          "flight_number": "1431",
+          "origin_airport": "WAW",
+          "destination_airport": "OPO",
+          "departure_at": "2026-11-15T05:35:00+01:00",
+          "airline": "W6",
+          "destination": "OPO",
+          "origin": "WAW",
+          "price": 67,
+          "return_transfers": 0,
+          "duration": 3730,
+          "duration_to": 290,
+          "duration_back": 0,
+          "transfers": 1
+        }
+      ]
+    },
+    {
+      "provider": "aviasales_data_api",
+      "checked_at": "2026-10-25T13:01:24.601897+00:00",
+      "query": {
+        "origin": "VNO",
+        "destination": "LIS",
+        "departure_at": "2026-11-15",
+        "currency": "eur",
+        "market": "ru",
+        "one_way": "true",
+        "limit": 5,
+        "page": 1,
+        "sorting": "price"
+      },
+      "price_kind": "provider_cached_observation",
+      "group_total_confirmed": false,
+      "booking_status": "not_booked",
+      "http_status": 200,
+      "status": "observations",
+      "currency": "eur",
+      "count": 1,
+      "observations": [
+        {
+          "flight_number": "835",
+          "origin_airport": "VNO",
+          "destination_airport": "LIS",
+          "departure_at": "2026-11-15T06:45:00+02:00",
+          "airline": "FR",
+          "destination": "LIS",
+          "origin": "VNO",
+          "price": 96,
+          "return_transfers": 0,
+          "duration": 3055,
+          "duration_to": 335,
+          "duration_back": 0,
+          "transfers": 1
+        }
+      ]
+    },
+    {
+      "provider": "aviasales_data_api",
+      "checked_at": "2026-10-25T13:01:24.756036+00:00",
+      "query": {
+        "origin": "MSQ",
+        "destination": "LIS",
+        "departure_at": "2026-11-15",
+        "currency": "eur",
+        "market": "ru",
+        "one_way": "true",
+        "limit": 5,
+        "page": 1,
+        "sorting": "price"
+      },
+      "price_kind": "provider_cached_observation",
+      "group_total_confirmed": false,
+      "booking_status": "not_booked",
+      "http_status": 200,
+      "status": "empty",
+      "currency": "eur",
+      "count": 0,
+      "observations": []
+    },
+    {
+      "provider": "aviasales_data_api",
+      "checked_at": "2026-10-25T13:01:24.909088+00:00",
+      "query": {
+        "origin": "WAW",
+        "destination": "LIS",
+        "departure_at": "2026-11-15",
+        "currency": "eur",
+        "market": "ru",
+        "one_way": "false",
+        "limit": 5,
+        "page": 1,
+        "sorting": "price",
+        "return_at": "2026-11-22"
+      },
+      "price_kind": "provider_cached_observation",
+      "group_total_confirmed": false,
+      "booking_status": "not_booked",
+      "http_status": 200,
+      "status": "observations",
+      "currency": "eur",
+      "count": 5,
+      "observations": [
+        {
+          "flight_number": "1318",
+          "origin_airport": "WAW",
+          "destination_airport": "LIS",
+          "departure_at": "2026-11-15T19:40:00+01:00",
+          "airline": "KL",
+          "destination": "LIS",
+          "return_at": "2026-11-22T05:00:00Z",
+          "origin": "WAW",
+          "price": 165,
+          "return_transfers": 1,
+          "duration": 1560,
+          "duration_to": 305,
+          "duration_back": 290,
+          "transfers": 1
+        },
+        {
+          "flight_number": "1284",
+          "origin_airport": "WAW",
+          "destination_airport": "LIS",
+          "departure_at": "2026-11-15T12:35:00+01:00",
+          "airline": "MW",
+          "destination": "LIS",
+          "return_at": "2026-11-22T10:00:00Z",
+          "origin": "WAW",
+          "price": 186,
+          "return_transfers": 1,
+          "duration": 1655,
+          "duration_to": 310,
+          "duration_back": 285,
+          "transfers": 1
+        },
+        {
+          "flight_number": "1205",
+          "origin_airport": "WAW",
+          "destination_airport": "LIS",
+          "departure_at": "2026-11-15T13:00:00+01:00",
+          "airline": "TP",
+          "destination": "LIS",
+          "return_at": "2026-11-22T07:05:00Z",
+          "origin": "WAW",
+          "price": 188,
+          "return_transfers": 0,
+          "duration": 510,
+          "duration_to": 265,
+          "duration_back": 245,
+          "transfers": 0
+        },
+        {
+          "flight_number": "1445",
+          "origin_airport": "WAW",
+          "destination_airport": "LIS",
+          "departure_at": "2026-11-15T21:30:00+01:00",
+          "airline": "W4",
+          "destination": "LIS",
+          "return_at": "2026-11-22T06:00:00Z",
+          "origin": "WAW",
+          "price": 196,
+          "return_transfers": 1,
+          "duration": 1075,
+          "duration_to": 345,
+          "duration_back": 285,
+          "transfers": 1
+        },
+        {
+          "flight_number": "1835",
+          "origin_airport": "WMI",
+          "destination_airport": "LIS",
+          "departure_at": "2026-11-15T12:15:00+01:00",
+          "airline": "FR",
+          "destination": "LIS",
+          "return_at": "2026-11-22T06:00:00Z",
+          "origin": "WAW",
+          "price": 198,
+          "return_transfers": 1,
+          "duration": 905,
+          "duration_to": 320,
+          "duration_back": 285,
+          "transfers": 1
+        }
+      ]
+    }
+  ]
+}
