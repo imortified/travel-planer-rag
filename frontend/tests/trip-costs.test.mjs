@@ -17,7 +17,7 @@ test("disabled extras keep legacy budget scope and never add phantom meals",()=>
 test("serialize total-group estimates separately from per-person meal limits",()=>{
   const draft=defaultCostDraft();draft.budgetEnabled=true;draft.lodging="500";draft.reserve="100";draft.mealsEnabled=true;
   const result=costPayload(draft,"Porto");
-  assert.deepEqual(result.budget_settings,{lodging:50000,transport:null,reserve:10000});
+  assert.deepEqual(result.budget_settings,{lodging:50000,transport:null,flights:null,transport_scope:"ground_only",reserve:10000});
   assert.deepEqual(result.meal_settings,{lunch:{start:720,end:900,duration:60,max_cost_per_person:2500}});
   assert.equal(draft.meals.lunch.maxCost,"25");
 });

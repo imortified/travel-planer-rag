@@ -8,6 +8,7 @@ from app.planning.alternatives import ComparisonMetrics
 from app.planning.models import Result
 from app.schemas.ages import AgeProfile
 from app.schemas.assistant import ExplanationOutput
+from app.schemas.flights import FlightChoice
 from app.schemas.lodging import LodgingSelection
 from app.schemas.trip_costs import BudgetSettings, MealSettings
 from app.schemas.visa import TravelProfile
@@ -47,6 +48,7 @@ class GroupOutput(NamedOutput):
 
 
 class TripInput(BaseModel):
+    flight_plan: FlightChoice | None = None
     lodging_quote: XoteloChoice | None = None
     lodging_plan: LodgingSelection | None = None
     budget_settings: BudgetSettings | None = None
@@ -66,6 +68,15 @@ class TripInput(BaseModel):
 
     @model_validator(mode="after")
     def check_interval(self):
+        if self.flight_plan and (
+            self.destination == "Demo City"
+            or self.travel_date is None
+            or self.budget_settings is None
+            or self.budget_settings.transport_scope != "ground_only"
+        ):
+            raise ValueError(
+                "Для перелёта нужны реальный город, даты и отдельный бюджет наземного транспорта"
+            )
         if self.lodging_quote:
             if self.lodging_plan:
                 raise ValueError("Выберите один источник проживания: каталог или Xotelo")
@@ -105,6 +116,7 @@ class TripInput(BaseModel):
 
 
 class TripOutput(TripInput):
+    flight_snapshot: dict | None = None
     lodging_snapshot: dict | None = None
     pace_settings: dict | None = None
     id: int

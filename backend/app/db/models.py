@@ -66,6 +66,7 @@ class TripRequest(Base):
     budget_settings: Mapped[dict | None] = mapped_column(JSON, nullable=True)
     meal_settings: Mapped[dict | None] = mapped_column(JSON, nullable=True)
     lodging_snapshot: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    flight_snapshot: Mapped[dict | None] = mapped_column(JSON, nullable=True)
     purpose: Mapped[str] = mapped_column(String(20), default="tourism", server_default="unknown")
     budget: Mapped[int]
     start: Mapped[int]
@@ -188,6 +189,15 @@ class LodgingCatalogHead(Base):
 
 class LodgingProviderQuote(Base):
     __tablename__ = "lodging_provider_quotes"
+    id: Mapped[str] = mapped_column(String(36), primary_key=True)
+    group_id: Mapped[int] = mapped_column(ForeignKey("groups.id"), index=True)
+    data: Mapped[dict] = mapped_column(JSON)
+    content_sha256: Mapped[str] = mapped_column(String(64))
+    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+
+class FlightSearchObservation(Base):
+    __tablename__ = "flight_search_observations"
     id: Mapped[str] = mapped_column(String(36), primary_key=True)
     group_id: Mapped[int] = mapped_column(ForeignKey("groups.id"), index=True)
     data: Mapped[dict] = mapped_column(JSON)

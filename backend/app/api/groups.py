@@ -189,7 +189,10 @@ def update_age_profile(group_id: int, user_id: int, payload: AgeProfile, session
 def trip_output(trip):
     pace = getattr(trip, "pace_settings", None)
     lodging = getattr(trip, "lodging_snapshot", None)
+    flight = getattr(trip, "flight_snapshot", None)
     return TripOutput(
+        flight_plan=flight["choice"] if flight else None,
+        flight_snapshot=flight,
         lodging_plan=lodging["selection"] if lodging and lodging["mode"] == "directory" else None,
         lodging_quote=lodging["quote_choice"] if lodging and lodging["mode"] == "xotelo" else None,
         lodging_snapshot=lodging,
@@ -221,10 +224,12 @@ def create_trip(group_id: int, payload: TripInput, session: DB):
     participants = members(session, group_id)
     if not participants:
         raise HTTPException(409, "Add participants before creating a trip")
+    from app.catalog.flights import freeze_flight
     from app.catalog.lodging import freeze_lodging
 
     try:
         lodging_snapshot = freeze_lodging(session, payload, participants, group_id)
+        flight_snapshot = freeze_flight(session, payload, participants, group_id)
     except (LookupError, ValueError) as exc:
         raise HTTPException(422, str(exc)) from exc
     from app.planning.costs import age_at
@@ -242,6 +247,7 @@ def create_trip(group_id: int, payload: TripInput, session: DB):
         except ValueError as exc:
             raise HTTPException(422, str(exc)) from exc
     trip = TripRequest(
+        flight_snapshot=flight_snapshot,
         lodging_snapshot=lodging_snapshot,
         budget_settings=payload.budget_settings.model_dump() if payload.budget_settings else None,
         meal_settings=payload.meal_settings.model_dump() if payload.meal_settings else None,

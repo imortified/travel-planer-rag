@@ -12,11 +12,21 @@ class BudgetSettings(BaseModel):
     version: Literal["trip-budget-v1"] = "trip-budget-v1"
     lodging: Money | None = None
     transport: Money | None = None
+    flights: Money | None = None
+    transport_scope: Literal["all_transport", "ground_only"] = "all_transport"
     reserve: Money = 0
+
+    @model_validator(mode="after")
+    def separate_transport(self):
+        if self.flights is not None and self.transport_scope != "ground_only":
+            raise ValueError(
+                "При отдельной сумме перелётов транспорт должен включать только наземные расходы"
+            )
+        return self
 
     @property
     def committed(self):
-        return (self.lodging or 0) + (self.transport or 0) + self.reserve
+        return (self.lodging or 0) + (self.transport or 0) + (self.flights or 0) + self.reserve
 
 
 class MealSlot(BaseModel):

@@ -60,7 +60,7 @@ class RedisHttpCache:
             raise ValueError("Invalid Redis cache prefix")
 
     def key(self, provider, url, params, ttl):
-        if provider not in ("osm", "osrm", "xotelo"):
+        if provider not in ("osm", "osrm", "xotelo", "aviasales"):
             raise ValueError("Unknown cache provider")
         # The full URL includes OSRM profile and ordered coordinates. Canonical query
         # parameters include annotations/options. TTL changes get a separate key.
@@ -114,7 +114,17 @@ class RedisHttpCache:
 
 
 def cached_get(
-    client, url, params, ttl, cache, provider, validate, *, bypass_cache=False, attempts=2
+    client,
+    url,
+    params,
+    ttl,
+    cache,
+    provider,
+    validate,
+    *,
+    bypass_cache=False,
+    attempts=2,
+    headers=None,
 ):
     if type(attempts) is not int or not 1 <= attempts <= 2:
         raise ValueError("Invalid upstream attempt limit")
@@ -160,7 +170,7 @@ def cached_get(
         started = time.perf_counter()
         try:
             correlation = {"X-Request-ID": request_id.get()} if request_id.get() else {}
-            response = client.get(url, params=params, headers=correlation)
+            response = client.get(url, params=params, headers={**(headers or {}), **correlation})
             response.raise_for_status()
             emit(
                 logger,

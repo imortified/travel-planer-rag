@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import Literal
 
-from pydantic import Field
+from pydantic import Field, SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -34,6 +34,9 @@ class Settings(BaseSettings):
     xotelo_rates_ttl_seconds: int = Field(default=600, ge=60, le=900)
     xotelo_list_ttl_seconds: int = Field(default=86400, ge=300, le=86400)
     xotelo_timeout_seconds: float = Field(default=30, gt=0, le=60)
+    travelpayouts_api_token: SecretStr | None = None
+    aviasales_cache_ttl_seconds: int = Field(default=3600, ge=60, le=86400)
+    aviasales_timeout_seconds: float = Field(default=30, gt=0, le=60)
     catalog_max_age_seconds: int = Field(default=604800, ge=3600, le=604800)
 
 

@@ -8,7 +8,7 @@ from app.integrations.demo import load_demo
 from app.integrations.llama_cpp import InvalidLlmOutput, LlamaCpp, LlmUnavailable
 from app.schemas.assistant import ExplanationDraft, ExplanationOutput
 
-PROMPT_VERSION = "grounded-explanation-v8-xotelo"
+PROMPT_VERSION = "grounded-explanation-v9-flights"
 REQUIRED = {"summary", "budget", "limitations"}
 logger = logging.getLogger(__name__)
 CATEGORIES = {"history": "история", "nature": "природа", "art": "искусство", "food": "еда"}
@@ -88,7 +88,8 @@ def facts_for(route, trip, primary=None, option_count=1):
         )
         if costs["scope"] == "trip_estimate":
             facts["budget"] += (
-                f"Учтённая сумма с пользовательскими оценками жилья и транспорта — "
+                "Учтённая сумма с оценками жилья и транспорта, "
+                "включая отдельно заданные перелёты — "
                 f"{money(costs['known_total'])} при общем бюджете {money(costs['budget'])}. "
                 f"Резерв — {money(costs['reserve'])}; свободно после резерва — "
                 f"{money(costs['unallocated_after_reserve'])}. "
@@ -119,6 +120,12 @@ def facts_for(route, trip, primary=None, option_count=1):
             "Документы для льгот не проверены. Детские порции питания не моделируются."
         )
     lodging = getattr(trip, "lodging_snapshot", None) or {}
+    if getattr(trip, "flight_snapshot", None):
+        facts["limitations"] += (
+            " Перелёт выбран по кэшированным данным Aviasales; цена всей группы задаётся "
+            "пользователем. Наличие билетов, багаж, детские тарифы и полные сегменты "
+            "не подтверждены; расписание посещений не корректируется по времени перелёта."
+        )
     if lodging.get("mode") == "xotelo":
         facts["limitations"] += (
             " Сохранён тариф Xotelo для выбранного проживания. "

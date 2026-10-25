@@ -4,13 +4,15 @@ import { amount,mealNames,type CostDraft,type MealType } from "../../lib/trip-co
 export function TripCostForm({value,onChange,destination,budget}:{value:CostDraft;onChange:(v:CostDraft)=>void;destination:string;budget:string}) {
   const patch=(next:Partial<CostDraft>)=>onChange({...value,...next});
   let available:number|undefined;
-  try {available=(amount(budget,"бюджет")||0)-(amount(value.lodging,"жильё",true)||0)-(amount(value.transport,"транспорт",true)||0)-(amount(value.reserve,"резерв")||0);} catch {}
+  try {available=(amount(budget,"бюджет")||0)-(amount(value.lodging,"жильё",true)||0)-(amount(value.transport,"транспорт",true)||0)-(amount(value.flights,"перелёты",true)||0)-(amount(value.reserve,"резерв")||0);} catch {}
   return <section className="trip-costs">
     <h3>Расходы и питание</h3>
     <label className="cost-toggle"><input type="checkbox" checked={value.budgetEnabled} onChange={e=>patch({budgetEnabled:e.target.checked})}/> Бюджет всей поездки</label>
     {value.budgetEnabled?<>
       <p className="hint">Оценки на всю группу за весь период. Пустое поле означает «не указано», ноль — расходов по этой статье нет. Уже оплаченные расходы тоже включайте, если они входят в общий бюджет. Это ваши оценки, а не цены бронирования.</p>
-      <div className="two"><label>Жильё на всю группу, EUR<input type="number" min="0" max="10000000" step="0.01" placeholder="Не указано" value={value.lodging} onChange={e=>patch({lodging:e.target.value})}/></label><label>Транспорт на всю группу, EUR<input type="number" min="0" max="10000000" step="0.01" placeholder="Не указано" value={value.transport} onChange={e=>patch({transport:e.target.value})}/></label></div>
+      <div className="two"><label>Жильё на всю группу, EUR<input type="number" min="0" max="10000000" step="0.01" placeholder="Не указано" value={value.lodging} onChange={e=>patch({lodging:e.target.value})}/></label><label>Наземный транспорт на всю группу, EUR<input type="number" min="0" max="10000000" step="0.01" placeholder="Не указано" value={value.transport} onChange={e=>patch({transport:e.target.value})}/></label></div>
+      <label>Перелёты на всю группу, EUR<input type="number" min="0" max="10000000" step="0.01" placeholder="Не указано" value={value.flights} onChange={e=>patch({flights:e.target.value})}/></label>
+      <p className="hint">Перелёты — общая сумма всех билетов туда и обратно для всех участников с нужным багажом. В наземный транспорт включайте трансферы, городской транспорт и аренду; авиабилеты в него повторно не добавляйте. Если перелёта нет, укажите 0.</p>
       <label>Неприкосновенный резерв, EUR<input type="number" min="0" max="10000000" step="0.01" value={value.reserve} onChange={e=>patch({reserve:e.target.value})}/></label>
       {available!==undefined && <p className={`hint${available<0?" error":""}`}>На посещения и выбранные заказы питания остаётся {money(available)} после указанных оценок и резерва.</p>}
     </>:<p className="hint">Бюджет ограничивает посещения и выбранные заказы. Жильё, транспорт и прочие расходы отдельно не учтены.</p>}

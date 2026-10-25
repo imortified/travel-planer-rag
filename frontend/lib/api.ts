@@ -1,5 +1,6 @@
 import { validRequestId } from "./request-id";
 import type { Destination } from "./destinations";
+import type { FlightChoice,FlightSnapshot } from "./flights";
 
 export type Interests = Record<string, number>;
 export type AgeProfile = {age_on_start:number|null;birth_date:string|null};
@@ -13,10 +14,10 @@ export type XoteloList={hotels:XoteloHotel[];destination:string;total:number;off
 export type XoteloObservation={quote_id:string;destination:string;stay:{hotel_key:string;destination:string;checkin:string;checkout:string;rooms:number;list_offset:number};hotel:XoteloHotel;rates:XoteloRate[];source_timestamp:string;fetched_at:string;expires_at:string;status:"quotes"|"empty";adults:number;children_ages:number[];cache:{read:string}};
 export type LodgingSnapshot = {version:string;mode:"directory"|"xotelo";selection:Omit<LodgingSelection,"catalog_version_id">&{catalog_version_id:number|null};property:LodgingProperty;catalog_sha256:string|null;source_upstream_asof:string;attribution:string;nights:number;guests:{participant_id:string;age_at_checkin:number|null}[];adults:number;children_ages:number[];unknown_ages:number;group_total_estimate:number|null;price_status:"user_estimate"|"unknown"|"provider_base_estimate";availability_status:string;occupancy_status:string;booking_status:"not_booked";taxes_and_fees_status?:string;provider_quote?:{rate:XoteloRate;fetched_at:string;source_timestamp:string;expires_at:string;complete_total_confirmed:false}};
 export type ParticipantPrice = {participant_id:string;age:number|null;cost:number;label:string;reason:string;source_url?:string|null};
-export type BudgetSettings = {version?:string;lodging:number|null;transport:number|null;reserve:number};
+export type BudgetSettings = {version?:string;lodging:number|null;transport:number|null;flights?:number|null;transport_scope?:"all_transport"|"ground_only";reserve:number};
 export type MealSlot = {start:number;end:number;duration:number;max_cost_per_person:number};
 export type MealSettings = {version?:string;breakfast?:MealSlot|null;lunch?:MealSlot|null;dinner?:MealSlot|null};
-export type BudgetBreakdown = {version:string;scope:"trip_estimate"|"stops_only";budget:number;admissions:number;food:number;stops_total:number;lodging_estimate:number|null;lodging_price_basis?:string;transport_estimate:number|null;reserve:number;known_total:number;available_for_stops:number;unallocated_after_reserve:number;unknown_categories:string[];within_budget:boolean;meal_policy:MealSettings|null};
+export type BudgetBreakdown = {version:string;scope:"trip_estimate"|"stops_only";budget:number;admissions:number;food:number;stops_total:number;lodging_estimate:number|null;lodging_price_basis?:string;transport_estimate:number|null;flights_estimate?:number|null;transport_scope?:"all_transport"|"ground_only";reserve:number;known_total:number;available_for_stops:number;unallocated_after_reserve:number;unknown_categories:string[];within_budget:boolean;meal_policy:MealSettings|null};
 export type PaceMode = "unrestricted" | "relaxed" | "balanced" | "intensive";
 export type PaceSettings = {mode:Exclude<PaceMode,"unrestricted">;max_visits:number;max_active_minutes:number;break_minutes:number;version:string};
 export type PlanningSummary = {pace:PaceSettings|null;total_days:number;active_days:number;attraction_days?:number;candidate_count:number;coverage_upper_bound:number;scheduled_count:number;cost_scope:string;warnings:string[];
@@ -47,6 +48,7 @@ export type VisaReport = {version:string;assessed_on:string;checked_on:string;re
 export type Member = {user_id: number; name: string; interests: Interests;travel_profile?:TravelProfile;age_profile?:AgeProfile};
 export type Group = {id: number; name: string; members: Member[]};
 export type Trip = {id: number; group_id: number; destination: string; travel_date: string | null; end_date?: string | null;
+  flight_plan?:FlightChoice|null;flight_snapshot?:FlightSnapshot|null;
   lodging_plan?:LodgingSelection|null;lodging_snapshot?:LodgingSnapshot|null;
   lodging_quote?:XoteloChoice|null;
   budget_settings?:BudgetSettings|null;meal_settings?:MealSettings|null;

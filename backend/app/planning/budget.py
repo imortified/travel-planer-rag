@@ -30,8 +30,10 @@ def breakdown(trip, result, inputs):
         )
     lodging = settings.lodging if settings else None
     transport = settings.transport if settings else None
+    flights = settings.flights if settings else None
+    transport_scope = settings.transport_scope if settings else "all_transport"
     reserve = settings.reserve if settings else 0
-    estimated = (lodging or 0) + (transport or 0)
+    estimated = (lodging or 0) + (transport or 0) + (flights or 0)
     total = result.total_cost + estimated
     snapshot = getattr(trip, "lodging_snapshot", None) or {}
     provider_estimate = snapshot.get("price_status") == "provider_base_estimate"
@@ -45,6 +47,8 @@ def breakdown(trip, result, inputs):
         "lodging_estimate": lodging,
         "lodging_price_basis": "xotelo_base_estimate" if provider_estimate else "user_estimate",
         "transport_estimate": transport,
+        "flights_estimate": flights,
+        "transport_scope": transport_scope,
         "reserve": reserve,
         "known_total": total,
         "available_for_stops": activity_budget(trip),
@@ -56,6 +60,7 @@ def breakdown(trip, result, inputs):
                 if value is None
             ]
             + (["lodging_taxes_and_fees"] if provider_estimate else [])
+            + (["flights"] if transport_scope == "ground_only" and flights is None else [])
         ),
         "within_budget": total + reserve <= trip.budget,
         "meal_policy": getattr(trip, "meal_settings", None),
