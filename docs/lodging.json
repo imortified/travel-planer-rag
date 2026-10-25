@@ -1,0 +1,196 @@
+{
+  "stage": "lodging-search-and-selection",
+  "checked_at": "2026-10-25T11:09:43.869063+00:00",
+  "base_branch": "feature/age-aware-ticket-pricing",
+  "base_commit": "e88d1ce",
+  "core_checkpoint": "bb28c9e",
+  "migration": "0013",
+  "mode": "directory",
+  "live_offers": false,
+  "price_status": "user_estimate_or_unknown",
+  "booking_status": "not_booked",
+  "source": {
+    "upstream_asof": "2026-10-23T20:20:51Z",
+    "downloaded_at": "2026-10-24T15:33:48.961648Z",
+    "pbf_sha256": "1f424c95bb7b2da6530fec47ef3f97b74d46827c9e48d6837ab317be8a440988",
+    "catalog_records": 1317,
+    "unique_osm_ids": 1313,
+    "website_records": 555,
+    "attribution": "© OpenStreetMap contributors, ODbL 1.0; Geofabrik Portugal extract"
+  },
+  "catalogs": {
+    "Lisbon": {
+      "properties": 683,
+      "hotels": 375,
+      "version_id": 1,
+      "source_upstream_asof": "2026-10-23T20:20:51+00:00",
+      "selected_id": "osm:node:5096400091",
+      "selected_name": "9 Hotel Mercy"
+    },
+    "Porto": {
+      "properties": 552,
+      "hotels": 202,
+      "version_id": 2,
+      "source_upstream_asof": "2026-10-23T20:20:51+00:00",
+      "selected_id": "osm:way:565088692",
+      "selected_name": "705 O'Porto Hotel"
+    },
+    "Sintra": {
+      "properties": 82,
+      "hotels": 35,
+      "version_id": 3,
+      "source_upstream_asof": "2026-10-23T20:20:51+00:00",
+      "selected_id": "osm:way:610017015",
+      "selected_name": "Almáa Sintra Hostel"
+    }
+  },
+  "checks": {
+    "backend_tests": 628,
+    "frontend_tests": 27,
+    "postgresql": true,
+    "redis": true,
+    "qdrant": true,
+    "ruff": "passed",
+    "next_build": "passed",
+    "idempotent_publication": true,
+    "live_cases": 9,
+    "history_frozen": true,
+    "unknown_price_preserved": true,
+    "unknown_ages_preserved": true,
+    "browser": {
+      "name_search": true,
+      "select_property": true,
+      "rooms_change_resets_selection": true,
+      "create_trip": true,
+      "reopen_after_reload": true,
+      "saved_guest_ages_visible": true
+    }
+  },
+  "scenario_input": {
+    "travel_date": "2026-10-27",
+    "end_date": "2026-10-28",
+    "checkin": "2026-10-27",
+    "checkout": "2026-10-28",
+    "rooms": 2,
+    "group_ages": [
+      30,
+      35,
+      8
+    ],
+    "currency": "EUR",
+    "budget_eurocents": 80000,
+    "lodging_estimate_eurocents": 20000,
+    "transport_estimate_eurocents": 5000,
+    "reserve_eurocents": 10000
+  },
+  "scenarios": [
+    {
+      "destination": "Lisbon",
+      "algorithm": "greedy",
+      "known_total": 28210,
+      "lodging_estimate": 20000,
+      "nights": 1,
+      "rooms": 2,
+      "valid": true
+    },
+    {
+      "destination": "Lisbon",
+      "algorithm": "beam",
+      "known_total": 28210,
+      "lodging_estimate": 20000,
+      "nights": 1,
+      "rooms": 2,
+      "valid": true
+    },
+    {
+      "destination": "Lisbon",
+      "algorithm": "cp-sat",
+      "known_total": 28210,
+      "lodging_estimate": 20000,
+      "nights": 1,
+      "rooms": 2,
+      "valid": true
+    },
+    {
+      "destination": "Porto",
+      "algorithm": "greedy",
+      "known_total": 25000,
+      "lodging_estimate": 20000,
+      "nights": 1,
+      "rooms": 2,
+      "valid": true
+    },
+    {
+      "destination": "Porto",
+      "algorithm": "beam",
+      "known_total": 25000,
+      "lodging_estimate": 20000,
+      "nights": 1,
+      "rooms": 2,
+      "valid": true
+    },
+    {
+      "destination": "Porto",
+      "algorithm": "cp-sat",
+      "known_total": 25000,
+      "lodging_estimate": 20000,
+      "nights": 1,
+      "rooms": 2,
+      "valid": true
+    },
+    {
+      "destination": "Sintra",
+      "algorithm": "greedy",
+      "known_total": 28400,
+      "lodging_estimate": 20000,
+      "nights": 1,
+      "rooms": 2,
+      "valid": true
+    },
+    {
+      "destination": "Sintra",
+      "algorithm": "beam",
+      "known_total": 28400,
+      "lodging_estimate": 20000,
+      "nights": 1,
+      "rooms": 2,
+      "valid": true
+    },
+    {
+      "destination": "Sintra",
+      "algorithm": "cp-sat",
+      "known_total": 28400,
+      "lodging_estimate": 20000,
+      "nights": 1,
+      "rooms": 2,
+      "valid": true
+    }
+  ],
+  "provider_review": {
+    "date": "2026-10-25",
+    "amadeus": {
+      "status": "self_service_portal_decommissioned_enterprise_only",
+      "source": "https://developers.amadeus.com/"
+    },
+    "tripadvisor_content": {
+      "status": "not_a_hotel_pricing_api",
+      "first_monthly_calls_free": 5000,
+      "card_required": true,
+      "hotel_pricing_access": "separate_request",
+      "source": "https://www.tripadvisor.com/business/solutions/hotels/content-api"
+    },
+    "booking_demand": {
+      "status": "managed_affiliate_access_required",
+      "source": "https://developers.booking.com/demand/docs/getting-started/prerequisites"
+    }
+  },
+  "limitations": [
+    "Directory matching by name/address/type; no live price or availability search.",
+    "User estimate covers the entire group, all selected rooms and nights; it is not a supplier quote.",
+    "Guest occupancy and child rates/cots/check-in age policies are unverified.",
+    "No booking, payment or prefilled supplier offer URL.",
+    "The city origin remains unchanged; hotel transfers and check-in/out times are not modeled.",
+    "OSM can be stale, incomplete, misclassified or duplicated; links are sourced, not independently verified.",
+    "Flight search is not part of this stage."
+  ]
+}
