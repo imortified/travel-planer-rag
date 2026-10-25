@@ -1,0 +1,134 @@
+{
+  "checked_at": "2026-10-25T13:12:58.699274+00:00",
+  "branch": "feature/flight-search-and-selection",
+  "implementation_commit": "f3b30ec",
+  "checks": {
+    "backend_tests": 709,
+    "frontend_tests": 30,
+    "ruff": "passed",
+    "production_build": "passed",
+    "migration": "0015",
+    "ui_search_and_frozen_history": "passed"
+  },
+  "live_search": {
+    "origin": "WAW",
+    "destination": "LIS",
+    "departure": "2026-11-15",
+    "return_date": "2026-11-22",
+    "options": 10,
+    "observed_price_cents": 16500,
+    "currency": "EUR",
+    "repeat_cache": "hit",
+    "source_found_at": null,
+    "group_total_confirmed": false
+  },
+  "manual_budget": {
+    "lodging": 20000,
+    "flights": 40000,
+    "transport": 5000,
+    "transport_scope": "ground_only",
+    "reserve": 10000,
+    "budget": 200000
+  },
+  "routes": [
+    {
+      "algorithm": "greedy",
+      "feasible": true,
+      "budget": {
+        "version": "trip-budget-v1",
+        "scope": "trip_estimate",
+        "budget": 200000,
+        "admissions": 4500,
+        "food": 0,
+        "stops_total": 4500,
+        "lodging_estimate": 20000,
+        "lodging_price_basis": "user_estimate",
+        "transport_estimate": 5000,
+        "flights_estimate": 40000,
+        "transport_scope": "ground_only",
+        "reserve": 10000,
+        "known_total": 69500,
+        "available_for_stops": 125000,
+        "unallocated_after_reserve": 120500,
+        "unknown_categories": [],
+        "within_budget": true,
+        "meal_policy": null,
+        "limitations": [
+          "User estimates are not booking quotes",
+          "Food covers selected orders only; other meals and extras excluded",
+          "Reserve is unspent money, not an expense"
+        ]
+      }
+    },
+    {
+      "algorithm": "beam",
+      "feasible": true,
+      "budget": {
+        "version": "trip-budget-v1",
+        "scope": "trip_estimate",
+        "budget": 200000,
+        "admissions": 4500,
+        "food": 0,
+        "stops_total": 4500,
+        "lodging_estimate": 20000,
+        "lodging_price_basis": "user_estimate",
+        "transport_estimate": 5000,
+        "flights_estimate": 40000,
+        "transport_scope": "ground_only",
+        "reserve": 10000,
+        "known_total": 69500,
+        "available_for_stops": 125000,
+        "unallocated_after_reserve": 120500,
+        "unknown_categories": [],
+        "within_budget": true,
+        "meal_policy": null,
+        "limitations": [
+          "User estimates are not booking quotes",
+          "Food covers selected orders only; other meals and extras excluded",
+          "Reserve is unspent money, not an expense"
+        ]
+      }
+    },
+    {
+      "algorithm": "cp-sat",
+      "feasible": true,
+      "budget": {
+        "version": "trip-budget-v1",
+        "scope": "trip_estimate",
+        "budget": 200000,
+        "admissions": 3600,
+        "food": 0,
+        "stops_total": 3600,
+        "lodging_estimate": 20000,
+        "lodging_price_basis": "user_estimate",
+        "transport_estimate": 5000,
+        "flights_estimate": 40000,
+        "transport_scope": "ground_only",
+        "reserve": 10000,
+        "known_total": 68600,
+        "available_for_stops": 125000,
+        "unallocated_after_reserve": 121400,
+        "unknown_categories": [],
+        "within_budget": true,
+        "meal_policy": null,
+        "limitations": [
+          "User estimates are not booking quotes",
+          "Food covers selected orders only; other meals and extras excluded",
+          "Reserve is unspent money, not an expense"
+        ]
+      }
+    }
+  ],
+  "empty_search": {
+    "origin": "MSQ",
+    "destination": "LIS",
+    "departure": "2026-11-15",
+    "status": "empty"
+  },
+  "limitations": [
+    "provider cached observations, not passenger-specific live offers",
+    "manual group total; no inferred child discounts",
+    "no booking",
+    "no complete segments or arrival inference; daily schedule unchanged"
+  ]
+}
