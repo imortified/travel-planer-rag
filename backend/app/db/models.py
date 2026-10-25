@@ -184,3 +184,12 @@ class LodgingCatalogHead(Base):
     )
     destination: Mapped[str] = mapped_column(String(100), primary_key=True)
     version_id: Mapped[int | None]
+
+
+class LodgingProviderQuote(Base):
+    __tablename__ = "lodging_provider_quotes"
+    id: Mapped[str] = mapped_column(String(36), primary_key=True)
+    group_id: Mapped[int] = mapped_column(ForeignKey("groups.id"), index=True)
+    data: Mapped[dict] = mapped_column(JSON)
+    content_sha256: Mapped[str] = mapped_column(String(64))
+    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))

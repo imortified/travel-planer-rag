@@ -11,6 +11,7 @@ from app.schemas.assistant import ExplanationOutput
 from app.schemas.lodging import LodgingSelection
 from app.schemas.trip_costs import BudgetSettings, MealSettings
 from app.schemas.visa import TravelProfile
+from app.schemas.xotelo import XoteloChoice
 
 Name = Annotated[str, Field(min_length=1, max_length=100, pattern=r"\S")]
 Weight = Annotated[float, Field(ge=0, le=1)]
@@ -46,6 +47,7 @@ class GroupOutput(NamedOutput):
 
 
 class TripInput(BaseModel):
+    lodging_quote: XoteloChoice | None = None
     lodging_plan: LodgingSelection | None = None
     budget_settings: BudgetSettings | None = None
     meal_settings: MealSettings | None = None
@@ -64,6 +66,15 @@ class TripInput(BaseModel):
 
     @model_validator(mode="after")
     def check_interval(self):
+        if self.lodging_quote:
+            if self.lodging_plan:
+                raise ValueError("Выберите один источник проживания: каталог или Xotelo")
+            if (
+                self.destination == "Demo City"
+                or self.travel_date is None
+                or self.budget_settings is None
+            ):
+                raise ValueError("Для Xotelo нужны реальный город, даты и бюджет всей поездки")
         if self.lodging_plan:
             if self.destination == "Demo City" or self.travel_date is None:
                 raise ValueError("Выбор проживания требует реального города и дат поездки")

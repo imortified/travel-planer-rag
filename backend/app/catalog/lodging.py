@@ -106,7 +106,11 @@ def search_lodgings(session, destination, query="", kind=None, page=1, page_size
     }
 
 
-def freeze_lodging(session, payload, members):
+def freeze_lodging(session, payload, members, group_id=None):
+    if payload.lodging_quote:
+        from app.catalog.lodging_quotes import freeze_quote
+
+        return freeze_quote(session, payload, members, group_id)
     selection = payload.lodging_plan
     if selection is None:
         return None

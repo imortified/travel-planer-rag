@@ -17,7 +17,7 @@ from app.core.config import ROOT, settings
 
 request_id: ContextVar[str | None] = ContextVar("request_id", default=None)
 ENUMS = {
-    "provider": {"osm", "osrm", "redis", "llama_cpp", "embeddings", "qdrant"},
+    "provider": {"osm", "osrm", "redis", "llama_cpp", "embeddings", "qdrant", "xotelo"},
     "cache_state": {"hit", "miss", "invalid", "unavailable", "stored", "skipped", "bypassed"},
     "method": {"GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS", "OTHER"},
     "operation": {

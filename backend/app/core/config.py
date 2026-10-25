@@ -31,6 +31,9 @@ class Settings(BaseSettings):
     redis_timeout_seconds: float = Field(default=1, gt=0, le=10)
     osm_cache_ttl_seconds: int = Field(default=86400, ge=1, le=604800)
     osrm_cache_ttl_seconds: int = Field(default=3600, ge=1, le=86400)
+    xotelo_rates_ttl_seconds: int = Field(default=600, ge=60, le=900)
+    xotelo_list_ttl_seconds: int = Field(default=86400, ge=300, le=86400)
+    xotelo_timeout_seconds: float = Field(default=30, gt=0, le=60)
     catalog_max_age_seconds: int = Field(default=604800, ge=3600, le=604800)
 
 

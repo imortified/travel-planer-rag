@@ -8,7 +8,7 @@ from app.integrations.demo import load_demo
 from app.integrations.llama_cpp import InvalidLlmOutput, LlamaCpp, LlmUnavailable
 from app.schemas.assistant import ExplanationDraft, ExplanationOutput
 
-PROMPT_VERSION = "grounded-explanation-v7-age-pricing"
+PROMPT_VERSION = "grounded-explanation-v8-xotelo"
 REQUIRED = {"summary", "budget", "limitations"}
 logger = logging.getLogger(__name__)
 CATEGORIES = {"history": "история", "nature": "природа", "art": "искусство", "food": "еда"}
@@ -117,6 +117,13 @@ def facts_for(route, trip, primary=None, option_count=1):
             " Билеты рассчитаны по сохранённому возрасту на дату посещения; "
             f"для {fallback} билетов применён обычный тариф без подтверждённой возрастной льготы. "
             "Документы для льгот не проверены. Детские порции питания не моделируются."
+        )
+    lodging = getattr(trip, "lodging_snapshot", None) or {}
+    if lodging.get("mode") == "xotelo":
+        facts["limitations"] += (
+            " Сохранён тариф Xotelo для выбранного проживания. "
+            "Базовая оценка не подтверждает полную цену с налогами и сборами, "
+            "вместимость группы или бронирование."
         )
     if trip.travel_date:
         last = trip.end_date or trip.travel_date

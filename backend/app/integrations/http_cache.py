@@ -60,7 +60,7 @@ class RedisHttpCache:
             raise ValueError("Invalid Redis cache prefix")
 
     def key(self, provider, url, params, ttl):
-        if provider not in ("osm", "osrm"):
+        if provider not in ("osm", "osrm", "xotelo"):
             raise ValueError("Unknown cache provider")
         # The full URL includes OSRM profile and ordered coordinates. Canonical query
         # parameters include annotations/options. TTL changes get a separate key.
@@ -113,7 +113,11 @@ class RedisHttpCache:
             raise CacheUnavailable() from exc
 
 
-def cached_get(client, url, params, ttl, cache, provider, validate, *, bypass_cache=False):
+def cached_get(
+    client, url, params, ttl, cache, provider, validate, *, bypass_cache=False, attempts=2
+):
+    if type(attempts) is not int or not 1 <= attempts <= 2:
+        raise ValueError("Invalid upstream attempt limit")
     key = cache.key(provider, url, params, ttl)
     info = {
         "backend": "redis",
@@ -152,7 +156,7 @@ def cached_get(client, url, params, ttl, cache, provider, validate, *, bypass_ca
     if info["read"] in ("miss", "bypassed"):
         emit(logger, "cache.read", provider=provider, cache_state=info["read"], ttl_seconds=ttl)
 
-    for attempt in range(2):
+    for attempt in range(attempts):
         started = time.perf_counter()
         try:
             correlation = {"X-Request-ID": request_id.get()} if request_id.get() else {}
@@ -172,7 +176,7 @@ def cached_get(client, url, params, ttl, cache, provider, validate, *, bypass_ca
             emit(
                 logger,
                 "upstream.request.failed",
-                logging.ERROR if attempt else logging.WARNING,
+                logging.ERROR if attempt == attempts - 1 else logging.WARNING,
                 exception=exc,
                 provider=provider,
                 method="GET",
@@ -180,11 +184,11 @@ def cached_get(client, url, params, ttl, cache, provider, validate, *, bypass_ca
                 if isinstance(exc, httpx.HTTPStatusError)
                 else None,
                 attempt=attempt + 1,
-                will_retry=attempt == 0,
+                will_retry=attempt < attempts - 1,
                 reason=error_kind(exc),
                 duration_ms=(time.perf_counter() - started) * 1000,
             )
-            if attempt == 1:
+            if attempt == attempts - 1:
                 raise SourceUnavailable(
                     f"{provider.upper()} unavailable; no stale or synthetic fallback"
                 ) from exc

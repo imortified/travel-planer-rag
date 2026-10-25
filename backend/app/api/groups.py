@@ -190,7 +190,8 @@ def trip_output(trip):
     pace = getattr(trip, "pace_settings", None)
     lodging = getattr(trip, "lodging_snapshot", None)
     return TripOutput(
-        lodging_plan=lodging["selection"] if lodging else None,
+        lodging_plan=lodging["selection"] if lodging and lodging["mode"] == "directory" else None,
+        lodging_quote=lodging["quote_choice"] if lodging and lodging["mode"] == "xotelo" else None,
         lodging_snapshot=lodging,
         budget_settings=getattr(trip, "budget_settings", None),
         meal_settings=getattr(trip, "meal_settings", None),
@@ -223,7 +224,7 @@ def create_trip(group_id: int, payload: TripInput, session: DB):
     from app.catalog.lodging import freeze_lodging
 
     try:
-        lodging_snapshot = freeze_lodging(session, payload, participants)
+        lodging_snapshot = freeze_lodging(session, payload, participants, group_id)
     except (LookupError, ValueError) as exc:
         raise HTTPException(422, str(exc)) from exc
     from app.planning.costs import age_at

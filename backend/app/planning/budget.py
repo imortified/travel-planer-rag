@@ -33,6 +33,8 @@ def breakdown(trip, result, inputs):
     reserve = settings.reserve if settings else 0
     estimated = (lodging or 0) + (transport or 0)
     total = result.total_cost + estimated
+    snapshot = getattr(trip, "lodging_snapshot", None) or {}
+    provider_estimate = snapshot.get("price_status") == "provider_base_estimate"
     return {
         "version": "trip-budget-v1",
         "scope": "trip_estimate" if settings else "stops_only",
@@ -41,14 +43,20 @@ def breakdown(trip, result, inputs):
         "food": food,
         "stops_total": result.total_cost,
         "lodging_estimate": lodging,
+        "lodging_price_basis": "xotelo_base_estimate" if provider_estimate else "user_estimate",
         "transport_estimate": transport,
         "reserve": reserve,
         "known_total": total,
         "available_for_stops": activity_budget(trip),
         "unallocated_after_reserve": trip.budget - total - reserve,
-        "unknown_categories": [
-            key for key, value in (("lodging", lodging), ("transport", transport)) if value is None
-        ],
+        "unknown_categories": (
+            [
+                key
+                for key, value in (("lodging", lodging), ("transport", transport))
+                if value is None
+            ]
+            + (["lodging_taxes_and_fees"] if provider_estimate else [])
+        ),
         "within_budget": total + reserve <= trip.budget,
         "meal_policy": getattr(trip, "meal_settings", None),
         "limitations": [

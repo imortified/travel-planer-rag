@@ -17,10 +17,12 @@ import { TripCostForm } from "./components/trip-cost-form";
 import { BudgetBreakdown } from "./components/budget-breakdown";
 import { LodgingSearch, type SelectedLodging } from "./components/lodging-search";
 import { LodgingSummary } from "./components/lodging-summary";
+import { XoteloSearch } from "./components/xotelo-search";
+import type { PickedQuote } from "../lib/xotelo";
 import { MemberAge } from "./components/member-age";
 import { AgePricingNotice } from "./components/age-pricing-notice";
 import { ageProfile } from "../lib/ages";
-import { costPayload, defaultCostDraft } from "../lib/trip-costs";
+import { amount, costPayload, defaultCostDraft, type CostDraft } from "../lib/trip-costs";
 import { RoutePace, paceNames } from "./components/route-pace";
 import type { AgeProfile, PaceMode, PaceSettings } from "../lib/api";
 import type { CatalogSnapshot, CatalogResponse } from "../lib/api";
@@ -62,6 +64,7 @@ export default function Home() {
   const [budget,setBudget] = useState("100");
   const [costDraft,setCostDraft] = useState(defaultCostDraft);
   const [selectedLodging,setSelectedLodging] = useState<SelectedLodging>();
+  const [selectedQuote,setSelectedQuote] = useState<PickedQuote>();
   const [start,setStart] = useState("09:00");
   const [end,setEnd] = useState("18:00");
   const [algorithm,setAlgorithm] = useState("beam");
@@ -86,7 +89,7 @@ export default function Home() {
   const pendingTrip = useRef<{signature: string; trip: Trip} | undefined>(undefined);
   const lodgingContext=JSON.stringify({destination,date,endDate,guests:members.map(m=>({key:m.key,name:m.name,age:m.age_profile}))});
 
-  useEffect(()=>{setSelectedLodging(undefined);},[lodgingContext]);
+  useEffect(()=>{setSelectedLodging(undefined);setSelectedQuote(undefined);if(selectedQuote?.choice.apply_base_estimate)setCostDraft(old=>({...old,lodging:""}));},[lodgingContext]);
   useEffect(() => { const stored = localStorage.getItem("travel-group-id"); if (stored) setLoadId(stored); }, []);
   useEffect(() => {let active=true;api<Record<string,PaceSettings>>("/planning/pace-profiles").then(profiles=>{if(active)setPaceProfiles(profiles);}).catch(()=>{});return ()=>{active=false;};}, []);
   useEffect(() => {let active=true;api<DestinationInfo[]>("/destinations").then(cities=>{if(active)setDestinations(cities);}).catch(()=>{});return ()=>{active=false;};}, []);
@@ -131,6 +134,29 @@ export default function Home() {
     setTrips(history); setShown(undefined); setComparison(undefined); setSemanticQuery(""); pendingTrip.current=undefined;
     localStorage.setItem("travel-group-id",String(id)); setNotice(`Группа №${id} загружена`);
   }
+  function changeCosts(value:CostDraft) {
+    setCostDraft(value);
+    if(selectedQuote?.choice.apply_base_estimate) {
+      let typed:number|null=null;
+      try {typed=amount(value.lodging,"жильё",true);} catch {}
+      if(typed!==selectedQuote.rate.estimated_base_total)setSelectedQuote({...selectedQuote,choice:{...selectedQuote.choice,apply_base_estimate:false}});
+    }
+  }
+  function chooseQuote(picked:PickedQuote|undefined,estimate?:number) {
+    setSelectedQuote(picked);
+    if(!picked&&selectedQuote?.choice.apply_base_estimate)setCostDraft(old=>({...old,lodging:""}));
+    if(picked) {
+      setSelectedLodging(undefined);
+      setCostDraft(old=>({...old,budgetEnabled:true,...(estimate!==undefined?{lodging:(estimate/100).toFixed(2)}:{})}));
+    }
+  }
+  function chooseDirectory(value:SelectedLodging|undefined) {
+    setSelectedLodging(value);
+    if(value) {
+      setSelectedQuote(undefined);
+      setCostDraft(old=>({...old,budgetEnabled:true,...(selectedQuote?.choice.apply_base_estimate?{lodging:""}:{})}));
+    }
+  }
   async function calculate() {
     if (!members.length) throw new Error("Добавьте хотя бы одного участника.");
     if (algorithm==="cp-sat" && (!solverLimit.trim() || !Number.isFinite(Number(solverLimit)) || Number(solverLimit)<0.05 || Number(solverLimit)>30)) throw new Error("Лимит CP-SAT должен быть от 0,05 до 30 секунд.");
@@ -141,9 +167,10 @@ export default function Home() {
     if (!Number.isFinite(Number(budget)) || Number(budget)<0 || Number(budget)>10000000 || !budget.trim()) throw new Error("Проверьте общий бюджет.");
     if (!start || !end || minutes(start)>=minutes(end)) throw new Error("Окончание дня должно быть позже начала.");
     if (endDate && (!date || endDate<date || (Date.parse(endDate)-Date.parse(date))/86400000>13)) throw new Error("Период должен содержать от 1 до 14 дней.");
-    if (selectedLodging && !costDraft.budgetEnabled) throw new Error("Для выбранного проживания включите бюджет всей поездки.");
+    if ((selectedLodging || selectedQuote) && !costDraft.budgetEnabled) throw new Error("Для выбранного проживания включите бюджет всей поездки.");
+    if(selectedQuote && Date.parse(selectedQuote.observation.expires_at)<=Date.now())throw new Error("Предложение Xotelo истекло. Загрузите цены снова или выберите ручной каталог.");
     const id = await saveGroup();
-    const payload={...costPayload(costDraft,destination),lodging_plan:selectedLodging?.plan || null,destination, purpose, pace, travel_date:date || null, end_date:endDate || null, semantic_query:destination!=="Demo City" && semanticQuery?semanticQuery:null, budget:Math.round(Number(budget)*100), start:minutes(start), end:minutes(end),
+    const payload={...costPayload(costDraft,destination),lodging_quote:selectedQuote?.choice || null,lodging_plan:selectedLodging?.plan || null,destination, purpose, pace, travel_date:date || null, end_date:endDate || null, semantic_query:destination!=="Demo City" && semanticQuery?semanticQuery:null, budget:Math.round(Number(budget)*100), start:minutes(start), end:minutes(end),
       mandatory:Object.keys(choices).filter(k=>choices[k]==="mandatory"), excluded:Object.keys(choices).filter(k=>choices[k]==="excluded")};
     const signature=JSON.stringify({id,payload,members:members.map(m=>({interests:m.interests,profile:m.travel_profile || emptyProfile,age_profile:ageProfile(m.age_profile)}))});
     let trip = pendingTrip.current?.signature===signature ? pendingTrip.current.trip : undefined;
@@ -227,8 +254,9 @@ export default function Home() {
           {paceProfiles[pace] && <p className="hint">До {paceProfiles[pace]!.max_visits} {costDraft.mealsEnabled && destination!=="Demo City"?"достопримечательностей":"мест"} и {paceProfiles[pace]!.max_active_minutes} мин нагрузки в день; между посещениями минимум {paceProfiles[pace]!.break_minutes} мин перерыва. Ожидание открытия считается отдельно.</p>}
           {algorithm==="cp-sat" && <><label>Лимит CP-SAT на набор, с<input type="number" min="0.05" max="30" step="0.05" value={solverLimit} onChange={e=>setSolverLimit(e.target.value)}/></label><p className="hint">Общий бюджет времени поиска вариантов. Загрузка данных и подготовка могут добавить время. На сложной задаче оптимум может остаться недоказанным.</p></>}
           <div className="two"><label>Начало дня<input type="time" value={start} onChange={e=>setStart(e.target.value)}/></label><label>Окончание дня<input type="time" value={end} onChange={e=>setEnd(e.target.value)}/></label></div>
-          <TripCostForm value={costDraft} onChange={setCostDraft} destination={destination} budget={budget}/>
-          <LodgingSearch key={lodgingContext} destination={destination} first={date} last={endDate || date} guestCount={members.length} value={selectedLodging} disabled={!!busy} onChange={value=>{setSelectedLodging(value);if(value)setCostDraft(old=>({...old,budgetEnabled:true}));}}/>
+          <TripCostForm value={costDraft} onChange={changeCosts} destination={destination} budget={budget}/>
+          <XoteloSearch key={`xotelo:${lodgingContext}`} destination={destination} first={date} last={endDate || date} agesKnown={members.length>0&&members.every(m=>m.age_profile?.age_on_start!=null || !!m.age_profile?.birth_date)} disabled={!!busy} ensureGroup={saveGroup} value={selectedQuote} onBusy={setBusy} onChoose={chooseQuote}/>
+          <LodgingSearch key={lodgingContext} destination={destination} first={date} last={endDate || date} guestCount={members.length} value={selectedLodging} disabled={!!busy} onChange={chooseDirectory}/>
           {destination!=="Demo City" && <div className="visa-preview"><label>Цель въезда<select value={purpose} onChange={e=>setPurpose(e.target.value)}><option value="tourism">Туризм</option><option value="other">Иная цель</option><option value="unknown">Не уточнена</option></select></label><p className="hint">Визовый справочник: семь гражданств, краткосрочный туризм в Португалии. Документы заполняются у каждого участника.</p><button className="secondary" disabled={!members.length} onClick={()=>task("Проверяем визовые условия…",async()=>{if(members.some(m=>!m.name.trim())) throw new Error("Введите имена участников.");const report=await api<VisaData>("/visa-check","POST",visaInput);setVisaPreview({signature:visaSignature,report});})}>Проверить визовые условия</button>{visaPreview?.signature===visaSignature && <VisaReport report={visaPreview.report}/>}</div>}
           <p className="hint">{destination!=="Demo City"?`Португалия · ${destinationName(destination)}. Старт — ${destinationInfo?.origin?.name || "точка города"}. Автомобильные переезды по доступным дорогам. Один город на поездку. Билеты рассчитываются по возрасту каждого участника; при непроверенной льготе используется обычный тариф. Питание — указанные заказы. Оценки жилья и транспорта учитываются отдельно, если заданы. Прочее питание, дополнения и неподтверждённые скидки не включены в стоимость остановок. Бронирование и доступность билетов не подтверждаются. Время — местное.`:"Синтетические музей, рынок и парк для проверки сценария. Бюджет учитывает входные билеты на всех участников."}</p>
           {destination!=="Demo City" && <button className="secondary" disabled={!date} onClick={()=>task("Загружаем каталог…",async()=>{const c=await api<CatalogResponse>(`/destinations/${destination}/pois?travel_date=${date}${endDate?`&end_date=${endDate}`:""}`);setPois(c.pois);setCatalogSnapshot(c.catalog_snapshot);setCatalogKey(`${destination}:${date}:${endDate || date}`);setNotice(`Найдено ${c.pois.length} мест, подходят для расчёта: ${c.pois.filter(p=>p.eligible).length}`);})}>Загрузить места на период</button>}
