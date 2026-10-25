@@ -1,0 +1,756 @@
+{
+  "version": "hotel-provider-pilot-v1",
+  "collected_at": "2026-10-25T11:39:42.123446+00:00",
+  "currency": "EUR",
+  "requests": [
+    {
+      "provider": "xotelo",
+      "hotel": "Hotel Da Baixa",
+      "party_id": "two-adults",
+      "adults": 2,
+      "child_ages": [],
+      "rooms": 1,
+      "checkin": "2026-11-02",
+      "checkout": "2026-11-03",
+      "nights": 1,
+      "parameters": {
+        "hotel_key": "g189158-d13402042",
+        "chk_in": "2026-11-02",
+        "chk_out": "2026-11-03",
+        "currency": "EUR",
+        "rooms": 1,
+        "adults": 2
+      },
+      "http_status": 200,
+      "elapsed_ms": 3452,
+      "request_sent": true,
+      "status": "quotes",
+      "quotes": [
+        {
+          "source": "Trip.com",
+          "code": "CtripTA",
+          "reported_rate_cents": 38500,
+          "reported_tax_cents": null
+        },
+        {
+          "source": "Booking.com",
+          "code": "BookingCom",
+          "reported_rate_cents": 35400,
+          "reported_tax_cents": null
+        },
+        {
+          "source": "Agoda.com",
+          "code": "Agoda",
+          "reported_rate_cents": 31800,
+          "reported_tax_cents": null
+        }
+      ],
+      "source_timestamp": 1792928382741,
+      "occupancy_echo_confirmed": false,
+      "unit_in_documentation": "per_room_per_night",
+      "verified_stay_total_cents": null,
+      "limitations": [
+        "Response does not echo adults, child ages or rooms",
+        "Tax null means unknown; other charges and rate conditions unverified",
+        "Nightly/room price semantics require verification before budgeting"
+      ]
+    },
+    {
+      "provider": "serpapi",
+      "hotel": "Hotel Da Baixa",
+      "party_id": "two-adults",
+      "adults": 2,
+      "child_ages": [],
+      "rooms": 1,
+      "checkin": "2026-11-02",
+      "checkout": "2026-11-03",
+      "nights": 1,
+      "status": "missing_api_key",
+      "request_sent": false
+    },
+    {
+      "provider": "xotelo",
+      "hotel": "Hotel Da Baixa",
+      "party_id": "family-child8",
+      "adults": 2,
+      "child_ages": [
+        8
+      ],
+      "rooms": 1,
+      "checkin": "2026-11-02",
+      "checkout": "2026-11-03",
+      "nights": 1,
+      "parameters": {
+        "hotel_key": "g189158-d13402042",
+        "chk_in": "2026-11-02",
+        "chk_out": "2026-11-03",
+        "currency": "EUR",
+        "rooms": 1,
+        "adults": 2,
+        "age_of_children": "8"
+      },
+      "http_status": 200,
+      "elapsed_ms": 7149,
+      "request_sent": true,
+      "status": "empty",
+      "quotes": [],
+      "source_timestamp": 1792928386702,
+      "occupancy_echo_confirmed": false,
+      "unit_in_documentation": "per_room_per_night",
+      "verified_stay_total_cents": null,
+      "limitations": [
+        "Response does not echo adults, child ages or rooms",
+        "Tax null means unknown; other charges and rate conditions unverified",
+        "Nightly/room price semantics require verification before budgeting"
+      ]
+    },
+    {
+      "provider": "serpapi",
+      "hotel": "Hotel Da Baixa",
+      "party_id": "family-child8",
+      "adults": 2,
+      "child_ages": [
+        8
+      ],
+      "rooms": 1,
+      "checkin": "2026-11-02",
+      "checkout": "2026-11-03",
+      "nights": 1,
+      "status": "missing_api_key",
+      "request_sent": false
+    },
+    {
+      "provider": "xotelo",
+      "hotel": "Hotel Da Baixa",
+      "party_id": "four-adults-two-rooms",
+      "adults": 4,
+      "child_ages": [],
+      "rooms": 2,
+      "checkin": "2026-11-02",
+      "checkout": "2026-11-03",
+      "nights": 1,
+      "parameters": {
+        "hotel_key": "g189158-d13402042",
+        "chk_in": "2026-11-02",
+        "chk_out": "2026-11-03",
+        "currency": "EUR",
+        "rooms": 2,
+        "adults": 4
+      },
+      "http_status": 200,
+      "elapsed_ms": 5108,
+      "request_sent": true,
+      "status": "quotes",
+      "quotes": [
+        {
+          "source": "Booking.com",
+          "code": "BookingCom",
+          "reported_rate_cents": 50600,
+          "reported_tax_cents": null
+        },
+        {
+          "source": "Trip.com",
+          "code": "CtripTA",
+          "reported_rate_cents": 38500,
+          "reported_tax_cents": null
+        },
+        {
+          "source": "Vio.com",
+          "code": "Vio",
+          "reported_rate_cents": 36100,
+          "reported_tax_cents": null
+        }
+      ],
+      "source_timestamp": 1792928394936,
+      "occupancy_echo_confirmed": false,
+      "unit_in_documentation": "per_room_per_night",
+      "verified_stay_total_cents": null,
+      "limitations": [
+        "Response does not echo adults, child ages or rooms",
+        "Tax null means unknown; other charges and rate conditions unverified",
+        "Nightly/room price semantics require verification before budgeting"
+      ]
+    },
+    {
+      "provider": "serpapi",
+      "hotel": "Hotel Da Baixa",
+      "party_id": "four-adults-two-rooms",
+      "adults": 4,
+      "child_ages": [],
+      "rooms": 2,
+      "checkin": "2026-11-02",
+      "checkout": "2026-11-03",
+      "nights": 1,
+      "status": "unsupported_room_count",
+      "request_sent": false
+    },
+    {
+      "provider": "xotelo",
+      "hotel": "Hotel Da Baixa",
+      "party_id": "two-adults",
+      "adults": 2,
+      "child_ages": [],
+      "rooms": 1,
+      "checkin": "2026-11-02",
+      "checkout": "2026-11-04",
+      "nights": 2,
+      "parameters": {
+        "hotel_key": "g189158-d13402042",
+        "chk_in": "2026-11-02",
+        "chk_out": "2026-11-04",
+        "currency": "EUR",
+        "rooms": 1,
+        "adults": 2
+      },
+      "http_status": 200,
+      "elapsed_ms": 246,
+      "request_sent": true,
+      "status": "quotes",
+      "quotes": [
+        {
+          "source": "Booking.com",
+          "code": "BookingCom",
+          "reported_rate_cents": 50300,
+          "reported_tax_cents": null
+        },
+        {
+          "source": "Agoda.com",
+          "code": "Agoda",
+          "reported_rate_cents": 44700,
+          "reported_tax_cents": null
+        },
+        {
+          "source": "Trip.com",
+          "code": "CtripTA",
+          "reported_rate_cents": 54400,
+          "reported_tax_cents": null
+        }
+      ],
+      "source_timestamp": 1792928401160,
+      "occupancy_echo_confirmed": false,
+      "unit_in_documentation": "per_room_per_night",
+      "verified_stay_total_cents": null,
+      "limitations": [
+        "Response does not echo adults, child ages or rooms",
+        "Tax null means unknown; other charges and rate conditions unverified",
+        "Nightly/room price semantics require verification before budgeting"
+      ]
+    },
+    {
+      "provider": "serpapi",
+      "hotel": "Hotel Da Baixa",
+      "party_id": "two-adults",
+      "adults": 2,
+      "child_ages": [],
+      "rooms": 1,
+      "checkin": "2026-11-02",
+      "checkout": "2026-11-04",
+      "nights": 2,
+      "status": "missing_api_key",
+      "request_sent": false
+    },
+    {
+      "provider": "xotelo",
+      "hotel": "Hotel Da Baixa",
+      "party_id": "family-child8",
+      "adults": 2,
+      "child_ages": [
+        8
+      ],
+      "rooms": 1,
+      "checkin": "2026-11-02",
+      "checkout": "2026-11-04",
+      "nights": 2,
+      "parameters": {
+        "hotel_key": "g189158-d13402042",
+        "chk_in": "2026-11-02",
+        "chk_out": "2026-11-04",
+        "currency": "EUR",
+        "rooms": 1,
+        "adults": 2,
+        "age_of_children": "8"
+      },
+      "http_status": 200,
+      "elapsed_ms": 7267,
+      "request_sent": true,
+      "status": "empty",
+      "quotes": [],
+      "source_timestamp": 1792928402519,
+      "occupancy_echo_confirmed": false,
+      "unit_in_documentation": "per_room_per_night",
+      "verified_stay_total_cents": null,
+      "limitations": [
+        "Response does not echo adults, child ages or rooms",
+        "Tax null means unknown; other charges and rate conditions unverified",
+        "Nightly/room price semantics require verification before budgeting"
+      ]
+    },
+    {
+      "provider": "serpapi",
+      "hotel": "Hotel Da Baixa",
+      "party_id": "family-child8",
+      "adults": 2,
+      "child_ages": [
+        8
+      ],
+      "rooms": 1,
+      "checkin": "2026-11-02",
+      "checkout": "2026-11-04",
+      "nights": 2,
+      "status": "missing_api_key",
+      "request_sent": false
+    },
+    {
+      "provider": "xotelo",
+      "hotel": "Hotel Da Baixa",
+      "party_id": "four-adults-two-rooms",
+      "adults": 4,
+      "child_ages": [],
+      "rooms": 2,
+      "checkin": "2026-11-02",
+      "checkout": "2026-11-04",
+      "nights": 2,
+      "parameters": {
+        "hotel_key": "g189158-d13402042",
+        "chk_in": "2026-11-02",
+        "chk_out": "2026-11-04",
+        "currency": "EUR",
+        "rooms": 2,
+        "adults": 4
+      },
+      "http_status": 200,
+      "elapsed_ms": 7653,
+      "request_sent": true,
+      "status": "quotes",
+      "quotes": [
+        {
+          "source": "Trip.com",
+          "code": "CtripTA",
+          "reported_rate_cents": 54400,
+          "reported_tax_cents": null
+        }
+      ],
+      "source_timestamp": 1792928410871,
+      "occupancy_echo_confirmed": false,
+      "unit_in_documentation": "per_room_per_night",
+      "verified_stay_total_cents": null,
+      "limitations": [
+        "Response does not echo adults, child ages or rooms",
+        "Tax null means unknown; other charges and rate conditions unverified",
+        "Nightly/room price semantics require verification before budgeting"
+      ]
+    },
+    {
+      "provider": "serpapi",
+      "hotel": "Hotel Da Baixa",
+      "party_id": "four-adults-two-rooms",
+      "adults": 4,
+      "child_ages": [],
+      "rooms": 2,
+      "checkin": "2026-11-02",
+      "checkout": "2026-11-04",
+      "nights": 2,
+      "status": "unsupported_room_count",
+      "request_sent": false
+    },
+    {
+      "provider": "xotelo",
+      "hotel": "Jupiter Lisboa Hotel - Rooftop & Spa",
+      "party_id": "two-adults",
+      "adults": 2,
+      "child_ages": [],
+      "rooms": 1,
+      "checkin": "2026-11-02",
+      "checkout": "2026-11-03",
+      "nights": 1,
+      "parameters": {
+        "hotel_key": "g189158-d7363512",
+        "chk_in": "2026-11-02",
+        "chk_out": "2026-11-03",
+        "currency": "EUR",
+        "rooms": 1,
+        "adults": 2
+      },
+      "http_status": 200,
+      "elapsed_ms": 2957,
+      "request_sent": true,
+      "status": "quotes",
+      "quotes": [
+        {
+          "source": "Trip.com",
+          "code": "CtripTA",
+          "reported_rate_cents": 21500,
+          "reported_tax_cents": null
+        },
+        {
+          "source": "Booking.com",
+          "code": "BookingCom",
+          "reported_rate_cents": 22600,
+          "reported_tax_cents": null
+        },
+        {
+          "source": "Agoda.com",
+          "code": "Agoda",
+          "reported_rate_cents": 20400,
+          "reported_tax_cents": null
+        },
+        {
+          "source": "Hotel Website",
+          "code": "FastbookingDL",
+          "reported_rate_cents": 23300,
+          "reported_tax_cents": null
+        },
+        {
+          "source": "Vio.com",
+          "code": "Vio",
+          "reported_rate_cents": 20700,
+          "reported_tax_cents": null
+        }
+      ],
+      "source_timestamp": 1792928419625,
+      "occupancy_echo_confirmed": false,
+      "unit_in_documentation": "per_room_per_night",
+      "verified_stay_total_cents": null,
+      "limitations": [
+        "Response does not echo adults, child ages or rooms",
+        "Tax null means unknown; other charges and rate conditions unverified",
+        "Nightly/room price semantics require verification before budgeting"
+      ]
+    },
+    {
+      "provider": "serpapi",
+      "hotel": "Jupiter Lisboa Hotel - Rooftop & Spa",
+      "party_id": "two-adults",
+      "adults": 2,
+      "child_ages": [],
+      "rooms": 1,
+      "checkin": "2026-11-02",
+      "checkout": "2026-11-03",
+      "nights": 1,
+      "status": "missing_api_key",
+      "request_sent": false
+    },
+    {
+      "provider": "xotelo",
+      "hotel": "Jupiter Lisboa Hotel - Rooftop & Spa",
+      "party_id": "family-child8",
+      "adults": 2,
+      "child_ages": [
+        8
+      ],
+      "rooms": 1,
+      "checkin": "2026-11-02",
+      "checkout": "2026-11-03",
+      "nights": 1,
+      "parameters": {
+        "hotel_key": "g189158-d7363512",
+        "chk_in": "2026-11-02",
+        "chk_out": "2026-11-03",
+        "currency": "EUR",
+        "rooms": 1,
+        "adults": 2,
+        "age_of_children": "8"
+      },
+      "http_status": 200,
+      "elapsed_ms": 7091,
+      "request_sent": true,
+      "status": "empty",
+      "quotes": [],
+      "source_timestamp": 1792928423696,
+      "occupancy_echo_confirmed": false,
+      "unit_in_documentation": "per_room_per_night",
+      "verified_stay_total_cents": null,
+      "limitations": [
+        "Response does not echo adults, child ages or rooms",
+        "Tax null means unknown; other charges and rate conditions unverified",
+        "Nightly/room price semantics require verification before budgeting"
+      ]
+    },
+    {
+      "provider": "serpapi",
+      "hotel": "Jupiter Lisboa Hotel - Rooftop & Spa",
+      "party_id": "family-child8",
+      "adults": 2,
+      "child_ages": [
+        8
+      ],
+      "rooms": 1,
+      "checkin": "2026-11-02",
+      "checkout": "2026-11-03",
+      "nights": 1,
+      "status": "missing_api_key",
+      "request_sent": false
+    },
+    {
+      "provider": "xotelo",
+      "hotel": "Jupiter Lisboa Hotel - Rooftop & Spa",
+      "party_id": "four-adults-two-rooms",
+      "adults": 4,
+      "child_ages": [],
+      "rooms": 2,
+      "checkin": "2026-11-02",
+      "checkout": "2026-11-03",
+      "nights": 1,
+      "parameters": {
+        "hotel_key": "g189158-d7363512",
+        "chk_in": "2026-11-02",
+        "chk_out": "2026-11-03",
+        "currency": "EUR",
+        "rooms": 2,
+        "adults": 4
+      },
+      "http_status": 200,
+      "elapsed_ms": 2813,
+      "request_sent": true,
+      "status": "quotes",
+      "quotes": [
+        {
+          "source": "Booking.com",
+          "code": "BookingCom",
+          "reported_rate_cents": 23100,
+          "reported_tax_cents": null
+        },
+        {
+          "source": "Trip.com",
+          "code": "CtripTA",
+          "reported_rate_cents": 21500,
+          "reported_tax_cents": null
+        },
+        {
+          "source": "Agoda.com",
+          "code": "Agoda",
+          "reported_rate_cents": 20400,
+          "reported_tax_cents": null
+        }
+      ],
+      "source_timestamp": 1792928431883,
+      "occupancy_echo_confirmed": false,
+      "unit_in_documentation": "per_room_per_night",
+      "verified_stay_total_cents": null,
+      "limitations": [
+        "Response does not echo adults, child ages or rooms",
+        "Tax null means unknown; other charges and rate conditions unverified",
+        "Nightly/room price semantics require verification before budgeting"
+      ]
+    },
+    {
+      "provider": "serpapi",
+      "hotel": "Jupiter Lisboa Hotel - Rooftop & Spa",
+      "party_id": "four-adults-two-rooms",
+      "adults": 4,
+      "child_ages": [],
+      "rooms": 2,
+      "checkin": "2026-11-02",
+      "checkout": "2026-11-03",
+      "nights": 1,
+      "status": "unsupported_room_count",
+      "request_sent": false
+    },
+    {
+      "provider": "xotelo",
+      "hotel": "Jupiter Lisboa Hotel - Rooftop & Spa",
+      "party_id": "two-adults",
+      "adults": 2,
+      "child_ages": [],
+      "rooms": 1,
+      "checkin": "2026-11-02",
+      "checkout": "2026-11-04",
+      "nights": 2,
+      "parameters": {
+        "hotel_key": "g189158-d7363512",
+        "chk_in": "2026-11-02",
+        "chk_out": "2026-11-04",
+        "currency": "EUR",
+        "rooms": 1,
+        "adults": 2
+      },
+      "http_status": 200,
+      "elapsed_ms": 2887,
+      "request_sent": true,
+      "status": "quotes",
+      "quotes": [
+        {
+          "source": "Booking.com",
+          "code": "BookingCom",
+          "reported_rate_cents": 23100,
+          "reported_tax_cents": null
+        },
+        {
+          "source": "Agoda.com",
+          "code": "Agoda",
+          "reported_rate_cents": 23100,
+          "reported_tax_cents": null
+        },
+        {
+          "source": "Hotel Website",
+          "code": "FastbookingDL",
+          "reported_rate_cents": 23300,
+          "reported_tax_cents": null
+        }
+      ],
+      "source_timestamp": 1792928435814,
+      "occupancy_echo_confirmed": false,
+      "unit_in_documentation": "per_room_per_night",
+      "verified_stay_total_cents": null,
+      "limitations": [
+        "Response does not echo adults, child ages or rooms",
+        "Tax null means unknown; other charges and rate conditions unverified",
+        "Nightly/room price semantics require verification before budgeting"
+      ]
+    },
+    {
+      "provider": "serpapi",
+      "hotel": "Jupiter Lisboa Hotel - Rooftop & Spa",
+      "party_id": "two-adults",
+      "adults": 2,
+      "child_ages": [],
+      "rooms": 1,
+      "checkin": "2026-11-02",
+      "checkout": "2026-11-04",
+      "nights": 2,
+      "status": "missing_api_key",
+      "request_sent": false
+    },
+    {
+      "provider": "xotelo",
+      "hotel": "Jupiter Lisboa Hotel - Rooftop & Spa",
+      "party_id": "family-child8",
+      "adults": 2,
+      "child_ages": [
+        8
+      ],
+      "rooms": 1,
+      "checkin": "2026-11-02",
+      "checkout": "2026-11-04",
+      "nights": 2,
+      "parameters": {
+        "hotel_key": "g189158-d7363512",
+        "chk_in": "2026-11-02",
+        "chk_out": "2026-11-04",
+        "currency": "EUR",
+        "rooms": 1,
+        "adults": 2,
+        "age_of_children": "8"
+      },
+      "http_status": 200,
+      "elapsed_ms": 7086,
+      "request_sent": true,
+      "status": "empty",
+      "quotes": [],
+      "source_timestamp": 1792928439807,
+      "occupancy_echo_confirmed": false,
+      "unit_in_documentation": "per_room_per_night",
+      "verified_stay_total_cents": null,
+      "limitations": [
+        "Response does not echo adults, child ages or rooms",
+        "Tax null means unknown; other charges and rate conditions unverified",
+        "Nightly/room price semantics require verification before budgeting"
+      ]
+    },
+    {
+      "provider": "serpapi",
+      "hotel": "Jupiter Lisboa Hotel - Rooftop & Spa",
+      "party_id": "family-child8",
+      "adults": 2,
+      "child_ages": [
+        8
+      ],
+      "rooms": 1,
+      "checkin": "2026-11-02",
+      "checkout": "2026-11-04",
+      "nights": 2,
+      "status": "missing_api_key",
+      "request_sent": false
+    },
+    {
+      "provider": "xotelo",
+      "hotel": "Jupiter Lisboa Hotel - Rooftop & Spa",
+      "party_id": "four-adults-two-rooms",
+      "adults": 4,
+      "child_ages": [],
+      "rooms": 2,
+      "checkin": "2026-11-02",
+      "checkout": "2026-11-04",
+      "nights": 2,
+      "parameters": {
+        "hotel_key": "g189158-d7363512",
+        "chk_in": "2026-11-02",
+        "chk_out": "2026-11-04",
+        "currency": "EUR",
+        "rooms": 2,
+        "adults": 4
+      },
+      "http_status": 200,
+      "elapsed_ms": 7137,
+      "request_sent": true,
+      "status": "quotes",
+      "quotes": [
+        {
+          "source": "Booking.com",
+          "code": "BookingCom",
+          "reported_rate_cents": 23100,
+          "reported_tax_cents": null
+        },
+        {
+          "source": "Agoda.com",
+          "code": "Agoda",
+          "reported_rate_cents": 23100,
+          "reported_tax_cents": null
+        }
+      ],
+      "source_timestamp": 1792928447986,
+      "occupancy_echo_confirmed": false,
+      "unit_in_documentation": "per_room_per_night",
+      "verified_stay_total_cents": null,
+      "limitations": [
+        "Response does not echo adults, child ages or rooms",
+        "Tax null means unknown; other charges and rate conditions unverified",
+        "Nightly/room price semantics require verification before budgeting"
+      ]
+    },
+    {
+      "provider": "serpapi",
+      "hotel": "Jupiter Lisboa Hotel - Rooftop & Spa",
+      "party_id": "four-adults-two-rooms",
+      "adults": 4,
+      "child_ages": [],
+      "rooms": 2,
+      "checkin": "2026-11-02",
+      "checkout": "2026-11-04",
+      "nights": 2,
+      "status": "unsupported_room_count",
+      "request_sent": false
+    }
+  ],
+  "application_changed": false,
+  "booking_performed": false,
+  "serpapi_access": {
+    "status": "missing_api_key"
+  },
+  "summary": {
+    "xotelo": {
+      "quotes": 8,
+      "empty": 4
+    },
+    "serpapi": {
+      "missing_api_key": 8,
+      "unsupported_room_count": 4
+    }
+  },
+  "serpapi_searches_sent": 0,
+  "limitations": [
+    "Two hotels in Lisbon are a pilot, not representative quality evidence",
+    "Lowest rates may represent different rooms/conditions; ranking by price is not justified",
+    "Missing credentials or unsupported cases are skips, not failures or empty results",
+    "No verified complete stay total; do not automatically replace the manual lodging estimate"
+  ],
+  "scope": "partial_live_pilot_not_a_completed_head_to_head_comparison",
+  "base_branch": "feature/lodging-search-and-selection",
+  "core_checkpoint": "5bc9a20",
+  "checks": {
+    "new_pilot_tests": 14,
+    "existing_lodging_contract_tests": 15,
+    "total_focused_tests": 29,
+    "ruff": "passed"
+  }
+}

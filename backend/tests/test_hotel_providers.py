@@ -72,6 +72,9 @@ def test_matching_requires_nearby_coordinates_and_unique_identity():
     assert result["status"] == "quotes"
     assert result["quotes"][0]["total_after_taxes_cents"] is None
     assert result["verified_stay_total_cents"] is None
+    for patch in [{"children_ages": "9"}, {"adults": 3}, {"check_out_date": "2026-11-05"}]:
+        changed = {**body, "search_parameters": {**case, **patch}}
+        assert pilot.serp_result(changed, HOTEL, case)["status"] == "query_mismatch"
 
 
 @pytest.mark.parametrize(
@@ -129,8 +132,8 @@ def test_missing_key_skips_serpapi_without_sending_authenticated_requests(tmp_pa
             json={
                 "error": None,
                 "result": {
-                    "chk_in": str(FIRST),
-                    "chk_out": str(LAST),
+                    "chk_in": request.url.params["chk_in"],
+                    "chk_out": request.url.params["chk_out"],
                     "currency": "EUR",
                     "rates": [],
                 },
@@ -152,7 +155,8 @@ def test_missing_key_skips_serpapi_without_sending_authenticated_requests(tmp_pa
         "nights": [2],
         "parties": [ADULTS, GROUP],
     }
-    report = pilot.run(cases, tmp_path / "report.json", FIRST, secret="")
+    future = pilot.datetime.now(pilot.timezone.utc).date() + pilot.timedelta(days=10)
+    report = pilot.run(cases, tmp_path / "report.json", future, secret="")
     assert len(requests) == 2 and all("data.xotelo.com" in url for url in requests)
     assert report["serpapi_searches_sent"] == 0
     assert report["summary"]["serpapi"] == {"missing_api_key": 1, "unsupported_room_count": 1}
