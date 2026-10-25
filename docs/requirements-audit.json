@@ -1,0 +1,729 @@
+{
+  "checked_on": "2026-10-25",
+  "implementation_commit": "76eca23b8e97f7b380eea1ca13e643bec031774e",
+  "branch": "docs/mvp-requirements-audit",
+  "parent_branch": "feature/flight-search-and-selection",
+  "source": {
+    "name": "Интеллектуальная система группового планирования путешествий — техническая документация.pdf",
+    "version": "1.0, September 2026, draft",
+    "sha256": "823d67b9662fc610ce6cb6ff79dd3b3d0245d3edf31e7f8979f4cf476f224ea2",
+    "pages": 28,
+    "mvp_page": 4,
+    "minimal_defense_mvp_page": 26
+  },
+  "status_definitions": {
+    "covered": "Реализовано в указанных границах",
+    "partial": "Частично",
+    "missing": "Не реализовано",
+    "unverified": "Не подтверждено измерением"
+  },
+  "mvp": [
+    {
+      "id": "MVP-1",
+      "requirement": "Одиночный и групповой запрос до 6 участников",
+      "status": "covered",
+      "finding": "1–6 участников, индивидуальные интересы и снимок группы. Приглашения не входят в формулировку §3.3, но требуются отдельно FR-2.",
+      "evidence": [
+        "E1"
+      ]
+    },
+    {
+      "id": "MVP-2",
+      "requirement": "Один город/направление на поездку",
+      "status": "covered",
+      "finding": "Lisbon, Porto, Sintra с окрестностями; один город на запрос, EUR. Полного покрытия Португалии не требуется пунктом §3.3.",
+      "evidence": [
+        "E1",
+        "E10"
+      ]
+    },
+    {
+      "id": "MVP-3",
+      "requirement": "Форма предпочтений + LLM-парсинг свободного текста",
+      "status": "covered",
+      "finding": "Qwen3-4B через llama.cpp, проверка подтверждений, предварительный просмотр и вопросы. Четыре категории; неизвестные условия требуют уточнения. Не универсальное понимание текста.",
+      "evidence": [
+        "E2",
+        "E6"
+      ]
+    },
+    {
+      "id": "MVP-4",
+      "requirement": "Маршрут по дням: часы работы, бюджет, транспортная доступность",
+      "status": "covered",
+      "finding": "1–14 дней; проверенные POI, временные окна, автомобильная матрица OSRM, темп и перерывы, групповой бюджет. Только driving; перелёты и трансферы не меняют дневные окна.",
+      "evidence": [
+        "E3",
+        "E10"
+      ]
+    },
+    {
+      "id": "MVP-5",
+      "requirement": "Feasibility: бюджет, время, mandatory, статические визы",
+      "status": "covered",
+      "finding": "Числовые ограничения проверяются независимо. Португалия/7 гражданств: статические правила и сроки-предупреждения. Warning-режим виз прямо разрешён §13.2; is_feasible не означает разрешение на въезд. См. отдельный пробел G1 для прошлых дат.",
+      "evidence": [
+        "E3",
+        "E5"
+      ]
+    },
+    {
+      "id": "MVP-6",
+      "requirement": "1 рекомендованный маршрут + 1–2 альтернативы",
+      "status": "partial",
+      "finding": "До трёх разных допустимых вариантов и сравнение; на приёмочном случае найдены три. Ограниченный поиск (13 попыток, Jaccard ≥0.25) может вернуть меньше; полнота нахождения альтернатив не гарантирована.",
+      "evidence": [
+        "E4",
+        "E6"
+      ]
+    },
+    {
+      "id": "MVP-7",
+      "requirement": "LLM-объяснение по вычисленным фактам",
+      "status": "covered",
+      "finding": "LLM выбирает/упорядочивает проверенные сохранённые факты; неподтверждённый ответ заменяется шаблоном. Качество текущей версии не оценивается одним наличием fallback.",
+      "evidence": [
+        "E2",
+        "E6"
+      ]
+    },
+    {
+      "id": "MVP-8",
+      "requirement": "Веб-интерфейс React/Next.js + REST FastAPI",
+      "status": "covered",
+      "finding": "Форма, карта, сравнение, история, REST/OpenAPI, запросы проживания и перелётов; HTTP локально 3001/8001. Публичная эксплуатация требует отдельной защиты.",
+      "evidence": [
+        "E1",
+        "E6",
+        "E8"
+      ]
+    }
+  ],
+  "fr": [
+    {
+      "id": "FR-1",
+      "requirement": "Извлечение параметров из естественного языка",
+      "status": "partial",
+      "finding": "Работает на ограниченном словаре с уточнениями. Архивные живые корпуса: 30/30 после правок, 11/12 дополнительных; это авторская оценка, не гарантия произвольного ввода.",
+      "evidence": [
+        "E2",
+        "E11"
+      ]
+    },
+    {
+      "id": "FR-2",
+      "requirement": "Группа и добавление по email/приглашению",
+      "status": "partial",
+      "finding": "Группы и участники создаются по ID; email и ссылки-приглашения отсутствуют.",
+      "evidence": [
+        "E1"
+      ]
+    },
+    {
+      "id": "FR-3",
+      "requirement": "Независимые интересы, бюджет и ограничения каждого участника",
+      "status": "partial",
+      "finding": "Индивидуальные веса, возраст и документы есть; персональных бюджетов, полного набора ограничений и защищённого личного кабинета нет.",
+      "evidence": [
+        "E1",
+        "E5"
+      ]
+    },
+    {
+      "id": "FR-4",
+      "requirement": "Агрегация профилей в групповой профиль",
+      "status": "covered",
+      "finding": "Реализована принятая модель равноправных участников: агрегирование полезности и fairness в общей F; отдельные веса важности участников не задаются.",
+      "evidence": [
+        "E4"
+      ]
+    },
+    {
+      "id": "FR-5",
+      "requirement": "Выявление и отображение конфликтов интересов",
+      "status": "partial",
+      "finding": "Показаны индивидуальная полезность и разрыв интересов; отдельного детектора конфликтов, порога консенсуса и механизма их разрешения нет.",
+      "evidence": [
+        "E4",
+        "E6"
+      ]
+    },
+    {
+      "id": "FR-6",
+      "requirement": "Личные и групповые mandatory/veto",
+      "status": "partial",
+      "finding": "Обязательные и запрещённые POI задаются для группы; личных veto и полного запрета категории нет.",
+      "evidence": [
+        "E1",
+        "E3"
+      ]
+    },
+    {
+      "id": "FR-7",
+      "requirement": "Внешние POI: координаты, категория, часы, цена",
+      "status": "partial",
+      "finding": "OSM/PBF + ручная проверка фактов. Неизвестные цена/часы исключают место из расчёта; покрытие ограничено тремя городскими областями.",
+      "evidence": [
+        "E3",
+        "E10"
+      ]
+    },
+    {
+      "id": "FR-8",
+      "requirement": "Единая схема нормализации POI",
+      "status": "covered",
+      "finding": "Общая схема каталога, нормализация OSM и curated, происхождение и сроки проверки.",
+      "evidence": [
+        "E3",
+        "E10"
+      ]
+    },
+    {
+      "id": "FR-9",
+      "requirement": "Матрица времени и расстояний с выбором транспорта",
+      "status": "partial",
+      "finding": "Направленная матрица времени driving; пользователь не выбирает способ перемещения, отдельная матрица расстояний не используется.",
+      "evidence": [
+        "E3"
+      ]
+    },
+    {
+      "id": "FR-10",
+      "requirement": "Часы работы на конкретную дату",
+      "status": "covered",
+      "finding": "Проверяются день недели, временное окно и явные календарные исключения; неизвестное/неподдержанное расписание не считается открытым. Общий календарь праздников — FR-15.",
+      "evidence": [
+        "E3",
+        "E10"
+      ]
+    },
+    {
+      "id": "FR-11",
+      "requirement": "Затраты в пределах бюджета группы/участника",
+      "status": "partial",
+      "finding": "Групповой бюджет, билеты по возрастам, выбранные заказы, оценки жилья/перелётов/наземного транспорта, резерв. Персональных бюджетов нет; неизвестные суммы не подтверждают полную цену поездки.",
+      "evidence": [
+        "E3",
+        "E8"
+      ]
+    },
+    {
+      "id": "FR-12",
+      "requirement": "Физическая достижимость в дневном окне",
+      "status": "covered",
+      "finding": "Независимая проверка посещений, длительности, направленных переездов и дневного окна в принятом режиме driving.",
+      "evidence": [
+        "E3"
+      ]
+    },
+    {
+      "id": "FR-13",
+      "requirement": "Визовые ограничения участников",
+      "status": "partial",
+      "finding": "Португалия, семь гражданств, ограниченный профиль документов и предупреждения о сроках. Нет полного визового/транзитного движка; визовый отчёт не блокирует числовой маршрут.",
+      "evidence": [
+        "E5"
+      ]
+    },
+    {
+      "id": "FR-14",
+      "requirement": "Погода при планировании открытых активностей",
+      "status": "missing",
+      "finding": "Погодного адаптера и изменения score/маршрута по погоде нет.",
+      "evidence": [
+        "E3",
+        "E10"
+      ]
+    },
+    {
+      "id": "FR-15",
+      "requirement": "Национальные и религиозные праздники",
+      "status": "partial",
+      "finding": "Часть закрытий явно записана в opening_hours отдельных POI. Общей базы праздников и автоматической проверки локальных/религиозных дат нет.",
+      "evidence": [
+        "E10",
+        "E3"
+      ]
+    },
+    {
+      "id": "FR-16",
+      "requirement": "Фестивали и разовые события как кандидаты",
+      "status": "missing",
+      "finding": "Событийного каталога и кандидатов с ограниченными датами нет.",
+      "evidence": [
+        "E3",
+        "E10"
+      ]
+    },
+    {
+      "id": "FR-17",
+      "requirement": "Распределение POI по дням с временными окнами",
+      "status": "covered",
+      "finding": "1–14 дней, без повторных достопримечательностей; питание может повторяться. Темп и лимиты кандидатов явно ограничивают заполнение.",
+      "evidence": [
+        "E3",
+        "E4"
+      ]
+    },
+    {
+      "id": "FR-18",
+      "requirement": "Многокритериальная оптимизация",
+      "status": "covered",
+      "finding": "Общая F, Greedy, Beam, CP-SAT, разбор вкладов и fairness. Коэффициенты экспериментальные, глобальная оптимальность не обещается.",
+      "evidence": [
+        "E4"
+      ]
+    },
+    {
+      "id": "FR-19",
+      "requirement": "Не менее двух альтернатив при наличии решений",
+      "status": "partial",
+      "finding": "Ограниченный поиск до трёх различных маршрутов; не доказывает отсутствие других решений и может вернуть меньше двух альтернатив.",
+      "evidence": [
+        "E4"
+      ]
+    },
+    {
+      "id": "FR-20",
+      "requirement": "Объяснение на фактах алгоритма",
+      "status": "covered",
+      "finding": "Проверяемая композиция фактов и происхождения, шаблон при отказе/невалидном LLM-ответе.",
+      "evidence": [
+        "E2"
+      ]
+    },
+    {
+      "id": "FR-21",
+      "requirement": "Причина отсутствия выполнимого решения",
+      "status": "partial",
+      "finding": "Есть причины нарушений и честный статус UNKNOWN. Нет полного минимального набора противоречий и общей системы предлагаемых смягчений.",
+      "evidence": [
+        "E3",
+        "E4"
+      ]
+    },
+    {
+      "id": "FR-22",
+      "requirement": "Ручное добавление/удаление/перестановка точек готового маршрута",
+      "status": "missing",
+      "finding": "Редактора готового маршрута нет; изменение входных условий и новый расчёт не заменяют его.",
+      "evidence": [
+        "E1",
+        "E6"
+      ]
+    },
+    {
+      "id": "FR-23",
+      "requirement": "Повторная проверка после ручного редактирования",
+      "status": "missing",
+      "finding": "Валидатор реализован, но пользовательского потока редактирования с повторной проверкой нет.",
+      "evidence": [
+        "E3",
+        "E6"
+      ]
+    },
+    {
+      "id": "FR-24",
+      "requirement": "Настраиваемый TTL-кэш внешних данных",
+      "status": "covered",
+      "finding": "Redis для OSM/OSRM/Xotelo/Aviasales, исходные времена, валидация кэша и тесты отказов.",
+      "evidence": [
+        "E7"
+      ]
+    },
+    {
+      "id": "FR-25",
+      "requirement": "Ограниченный режим при отказе API",
+      "status": "partial",
+      "finding": "История, текущий каталог, шаблон объяснения и свежий Redis помогают; без пригодного каталога/матрицы новый реальный маршрут может вернуть 503. Полной автономности нет.",
+      "evidence": [
+        "E3",
+        "E7",
+        "E8"
+      ]
+    },
+    {
+      "id": "FR-26",
+      "requirement": "Аудит действий пользователя и решений",
+      "status": "partial",
+      "finding": "JSON-логи, request_id, снимки и общий score есть; отдельной таблицы audit_log и авторства действий пользователя нет.",
+      "evidence": [
+        "E9",
+        "E8"
+      ]
+    },
+    {
+      "id": "FR-27",
+      "requirement": "Аутентификация и авторизация JWT/OAuth2",
+      "status": "missing",
+      "finding": "Нет входа, токенов пользователей, проверки владельца/ролей; ID группы не является авторизацией.",
+      "evidence": [
+        "E1",
+        "E8"
+      ]
+    },
+    {
+      "id": "FR-28",
+      "requirement": "REST создания, чтения и изменения маршрутов/профилей",
+      "status": "partial",
+      "finding": "CRUD профилей группы, создание/чтение запросов и результатов есть; редактирование готового маршрута отсутствует.",
+      "evidence": [
+        "E1"
+      ]
+    },
+    {
+      "id": "FR-29",
+      "requirement": "Карта дневных сегментов",
+      "status": "covered",
+      "finding": "MapLibre, дни, альтернативы, маркеры и список при отсутствии географии. Линии показывают порядок POI, а не дорожную навигацию.",
+      "evidence": [
+        "E6"
+      ]
+    },
+    {
+      "id": "FR-30",
+      "requirement": "Русская и английская локализация интерфейса",
+      "status": "missing",
+      "finding": "Русский интерфейс; переключателя английской локали нет.",
+      "evidence": [
+        "E6"
+      ]
+    }
+  ],
+  "nfr": [
+    {
+      "id": "NFR-1",
+      "requirement": "Построение 5–7 дней/6 участников за 15–30 секунд",
+      "status": "unverified",
+      "finding": "Есть живые семидневные случаи и offline-тайминги алгоритмов, но нет репрезентативного end-to-end прогона с p50/p95 и заявленной конфигурацией тёплого кэша.",
+      "evidence": [
+        "E4",
+        "E11"
+      ]
+    },
+    {
+      "id": "NFR-2",
+      "requirement": "Чтение сохранённого маршрута p95 ≤300 мс",
+      "status": "unverified",
+      "finding": "Одиночные успешные чтения не заменяют серию замеров p95 под определённой нагрузкой.",
+      "evidence": [
+        "E1"
+      ]
+    },
+    {
+      "id": "NFR-3",
+      "requirement": "Контейнеризация и горизонтальное масштабирование backend",
+      "status": "partial",
+      "finding": "Compose содержит PostgreSQL, Qdrant, Redis. Backend/frontend запускаются локально; готового контейнерного развёртывания stateless API нет.",
+      "evidence": [
+        "E9"
+      ]
+    },
+    {
+      "id": "NFR-4",
+      "requirement": "Очередь тяжёлых вычислений",
+      "status": "missing",
+      "finding": "Синхронные API-обработчики; Celery/очередь/статус фоновой задачи отсутствуют. Threadpool FastAPI не заменяет очередь.",
+      "evidence": [
+        "E1"
+      ]
+    },
+    {
+      "id": "NFR-5",
+      "requirement": "Продолжение работы при отказе любого одного источника",
+      "status": "partial",
+      "finding": "Некоторые отказы переживаются, но без подходящих POI/матрицы новый расчёт завершается 503; полностью сохранить планирование нельзя.",
+      "evidence": [
+        "E3",
+        "E7"
+      ]
+    },
+    {
+      "id": "NFR-6",
+      "requirement": "Ограниченные retries с exponential backoff",
+      "status": "partial",
+      "finding": "Таймауты, ограниченные попытки и repair LLM есть. Общего exponential backoff нет; Xotelo/Aviasales намеренно делают одну попытку и не повторяют 429.",
+      "evidence": [
+        "E2",
+        "E7"
+      ]
+    },
+    {
+      "id": "NFR-7",
+      "requirement": "Новый источник через адаптер/маппер",
+      "status": "covered",
+      "finding": "POI-адаптеры отделены от алгоритмов, ядро planning не импортирует HTTP/ORM-адаптеры. Новые типы ограничений, например события, всё равно потребуют отдельной модели.",
+      "evidence": [
+        "E3",
+        "E7"
+      ]
+    },
+    {
+      "id": "NFR-8",
+      "requirement": "Замена Greedy/Beam/CP-SAT без смены API-контракта",
+      "status": "covered",
+      "finding": "Один контракт расчёта, параметр algorithm; общий результат и валидатор.",
+      "evidence": [
+        "E1",
+        "E4"
+      ]
+    },
+    {
+      "id": "NFR-9",
+      "requirement": "Причина каждого включения/исключения POI",
+      "status": "partial",
+      "finding": "Разбор общей F, нарушения и причины непригодности исходных POI есть; полного trace каждого шага/исключения поиска нет.",
+      "evidence": [
+        "E3",
+        "E4"
+      ]
+    },
+    {
+      "id": "NFR-10",
+      "requirement": "Секреты вне кода и без логирования",
+      "status": "covered",
+      "finding": "Локальный .env игнорируется, токен серверный SecretStr, в заголовке; проверяется отсутствие утечки в ответах. Это ограниченная проверка кода, не независимый аудит всей истории Git/окружения.",
+      "evidence": [
+        "E7",
+        "E9"
+      ]
+    },
+    {
+      "id": "NFR-11",
+      "requirement": "Роли доступа к персональным данным и HTTPS",
+      "status": "missing",
+      "finding": "Локальный HTTP, нет ролей/аутентификации и TLS-развёртывания. Не подходит для публичного сервиса с персональными данными.",
+      "evidence": [
+        "E1",
+        "E9"
+      ]
+    },
+    {
+      "id": "NFR-12",
+      "requirement": "JSON INFO/WARN/ERROR с корреляционным ID",
+      "status": "covered",
+      "finding": "Backend JSON-логи, request_id через Next.js, диагностика источников и ротация. Не заменяет FR-26 аудит пользователя.",
+      "evidence": [
+        "E9"
+      ]
+    },
+    {
+      "id": "NFR-13",
+      "requirement": "Основной сценарий не более четырёх экранов/шагов",
+      "status": "partial",
+      "finding": "Основные формы на одной странице; фактические шаги и понятность сценария не проверены пользовательским тестированием.",
+      "evidence": [
+        "E6"
+      ]
+    },
+    {
+      "id": "NFR-14",
+      "requirement": "Даты, валюты и единицы под локаль",
+      "status": "partial",
+      "finding": "Русский формат, EUR и Europe/Lisbon. Нет полноценной смены локали, единиц и валюты.",
+      "evidence": [
+        "E6",
+        "E10"
+      ]
+    },
+    {
+      "id": "NFR-15",
+      "requirement": "Бесплатные API при ~500 запросах/день",
+      "status": "unverified",
+      "finding": "Текущие вызовы без платных операций и локальные модели; профиль 500 запросов/день, квоты и стоимость под ним не измерялись.",
+      "evidence": [
+        "E7",
+        "E11"
+      ]
+    }
+  ],
+  "evidence": {
+    "E1": [
+      "backend/app/api/groups.py",
+      "backend/app/schemas/groups.py",
+      "backend/tests/test_mvp_acceptance.py"
+    ],
+    "E2": [
+      "backend/app/nlp/parser.py",
+      "backend/app/nlp/grounding.py",
+      "backend/app/nlp/explanations.py",
+      "backend/tests/test_parser_grounding.py",
+      "docs/llm-parser-grounding.md"
+    ],
+    "E3": [
+      "backend/app/planning/validator.py",
+      "backend/app/planning/period.py",
+      "backend/app/planning/budget.py",
+      "backend/app/integrations/city.py",
+      "backend/app/catalog/reader.py",
+      "backend/tests/test_period.py",
+      "backend/tests/test_meals_budget.py"
+    ],
+    "E4": [
+      "backend/app/planning/objective.py",
+      "backend/app/planning/alternatives.py",
+      "backend/app/planning/cp_sat.py",
+      "backend/app/planning/candidates.py",
+      "backend/tests/test_alternatives.py",
+      "docs/cp-sat-experiments.json"
+    ],
+    "E5": [
+      "backend/app/visa.py",
+      "data/visa-rules.json",
+      "backend/tests/test_visa.py",
+      "backend/tests/test_mvp_acceptance.py"
+    ],
+    "E6": [
+      "frontend/app/page.tsx",
+      "frontend/app/components/route-map.tsx",
+      "frontend/app/components/route-comparison.tsx",
+      "frontend/app/components/route-explanation.tsx"
+    ],
+    "E7": [
+      "backend/app/integrations/http_cache.py",
+      "backend/app/integrations/xotelo.py",
+      "backend/app/integrations/aviasales.py",
+      "backend/app/core/config.py",
+      "backend/tests/test_http_cache.py",
+      "backend/tests/test_aviasales.py"
+    ],
+    "E8": [
+      "backend/app/db/models.py",
+      "backend/app/catalog/flights.py",
+      "backend/app/catalog/lodging_quotes.py",
+      "backend/tests/test_flights_db.py",
+      "backend/tests/test_xotelo_db.py",
+      "docs/flights.json"
+    ],
+    "E9": [
+      "backend/app/core/logging.py",
+      "backend/app/core/request_logging.py",
+      "backend/tests/test_logging.py",
+      "compose.yaml"
+    ],
+    "E10": [
+      "data/lisbon-curated.json",
+      "data/porto-curated.json",
+      "data/sintra-curated.json",
+      "backend/app/integrations/curated.py",
+      "backend/app/core/destinations.py"
+    ],
+    "E11": [
+      "docs/llm-quality-parsing-v2.json",
+      "docs/llm-quality-parsing-additional-final.json",
+      "docs/ragas-evaluation.json",
+      "docs/portugal-catalogs.json",
+      "docs/flights.md"
+    ]
+  },
+  "counts": {
+    "mvp": {
+      "covered": 7,
+      "partial": 1
+    },
+    "fr": {
+      "partial": 15,
+      "covered": 9,
+      "missing": 6
+    },
+    "nfr": {
+      "unverified": 3,
+      "partial": 6,
+      "missing": 2,
+      "covered": 4
+    }
+  },
+  "current_checks": {
+    "acceptance_tests_passed": 26,
+    "acceptance_adapters": "controlled POI and LLM fixtures; not live model/source accuracy",
+    "health": {
+      "status": "ok"
+    },
+    "openapi_path_count": 30,
+    "catalog_period": [
+      "2026-10-26",
+      "2026-11-01"
+    ],
+    "catalogs": {
+      "Lisbon": {
+        "http_status": 200,
+        "records": 913,
+        "eligible": 45,
+        "snapshot": {
+          "version_id": 426,
+          "content_sha256": "d18d01b1c0fee86c6a86a40634d644d03b668a27ec1704fb34114aed0395aab2",
+          "published_at": "2026-10-24T23:56:17.572556+00:00",
+          "fetched_at": "2026-10-24T15:33:48.961648+00:00",
+          "fresh_until": "2026-10-30T20:20:51+00:00",
+          "curated_version": "lisbon-curated-2026-10-25-age-v1",
+          "curated_review_until": "2026-11-22",
+          "status": "ready",
+          "source_upstream_asof": "2026-10-23T20:20:51+00:00"
+        },
+        "detail": null
+      },
+      "Porto": {
+        "http_status": 200,
+        "records": 514,
+        "eligible": 26,
+        "snapshot": {
+          "version_id": 427,
+          "content_sha256": "bb2c5583008e7b6729e73d92491554c4fa4aefa6eb00cb8b4206dabf034996bb",
+          "published_at": "2026-10-24T23:56:29.958221+00:00",
+          "fetched_at": "2026-10-24T15:33:48.961648+00:00",
+          "fresh_until": "2026-10-30T20:20:51+00:00",
+          "curated_version": "porto-curated-2026-10-25-age-v1",
+          "curated_review_until": "2026-11-22",
+          "status": "ready",
+          "source_upstream_asof": "2026-10-23T20:20:51+00:00"
+        },
+        "detail": null
+      },
+      "Sintra": {
+        "http_status": 200,
+        "records": 208,
+        "eligible": 14,
+        "snapshot": {
+          "version_id": 428,
+          "content_sha256": "4a80bd07a2aaac00ec7aebdb03b9b5ddc13e9ad941995cb93bf0dbd6b7cb9811",
+          "published_at": "2026-10-24T23:56:30.819293+00:00",
+          "fetched_at": "2026-10-24T15:33:48.961648+00:00",
+          "fresh_until": "2026-10-30T20:20:51+00:00",
+          "curated_version": "sintra-curated-2026-10-25-age-v1",
+          "curated_review_until": "2026-11-22",
+          "status": "ready",
+          "source_upstream_asof": "2026-10-23T20:20:51+00:00"
+        },
+        "detail": null
+      }
+    }
+  },
+  "previous_stage_checks": {
+    "backend_tests_passed": 709,
+    "frontend_tests_passed": 30,
+    "production_build": "passed",
+    "source": "docs/flights.json",
+    "rerun_in_this_audit": false
+  },
+  "new_gap": {
+    "id": "G1",
+    "source": "§13.2, PDF p.20, DateRangeValidator",
+    "finding": "TripInput accepts travel_date=2020-01-01 for a new Lisbon request; calendar range is checked but future date is not. Flight/provider searches have their own date checks.",
+    "fix_scope": "Reject past dates in new trip requests while retaining historical trip reads/recalculations."
+  },
+  "not_in_mvp": [
+    "real booking and payments",
+    "multi-city/country planning",
+    "mobile app",
+    "real-time replanning",
+    "legally complete visa engine",
+    "guaranteed live group ticket/hotel availability"
+  ],
+  "evaluation_gaps": [
+    "reproducible end-to-end p50/p95 for 5–7 days and 6 people",
+    "p95 saved-route reads under stated load",
+    "independent user evaluation with 5–10 people",
+    "current parser/explanation quality beyond author-designed corpora",
+    "full §17 rate limiting/audit/deletion and CI/container deployment"
+  ]
+}
