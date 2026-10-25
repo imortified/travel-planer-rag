@@ -11,6 +11,7 @@ from app.core.config import settings
 from app.core.logging import emit, error_kind, request_id
 
 logger = logging.getLogger(__name__)
+EXPLANATION_MAX_TOKENS = 256
 
 
 class LlmUnavailable(Exception):
@@ -27,9 +28,7 @@ class LlamaCpp:
 
     def structured(self, system: str, data: dict, schema: type[BaseModel], verify=None):
         if self.client is None:
-            with httpx.Client(
-                timeout=httpx.Timeout(settings.llm_timeout_seconds, connect=3)
-            ) as client:
+            with httpx.Client() as client:
                 return LlamaCpp(client).structured(system, data, schema, verify)
         messages = [
             {
@@ -44,18 +43,30 @@ class LlamaCpp:
         operation = {"ExtractedTrip": "parse", "ExplanationDraft": "explain"}.get(
             schema.__name__, "structured"
         )
+        is_explanation = operation == "explain"
+        timeout_seconds = (
+            settings.llm_explanation_timeout_seconds
+            if is_explanation
+            else settings.llm_timeout_seconds
+        )
+        # Share the explanation wait budget with its one possible repair request.
+        deadline = perf_counter() + timeout_seconds
         for attempt in range(2):
             started = perf_counter()
             try:
+                remaining = deadline - started if is_explanation else timeout_seconds
+                if remaining <= 0:
+                    raise httpx.ReadTimeout("Explanation wait budget exhausted")
                 response = self.client.post(
                     f"{settings.llm_base_url.rstrip('/')}/v1/chat/completions",
+                    timeout=httpx.Timeout(remaining, connect=min(3, remaining)),
                     headers={"X-Request-ID": request_id.get()} if request_id.get() else {},
                     json={
                         "model": settings.llm_model,
                         "messages": messages,
                         "temperature": 0,
                         "seed": 42,
-                        "max_tokens": 1400,
+                        "max_tokens": EXPLANATION_MAX_TOKENS if is_explanation else 1400,
                         "stream": False,
                         "chat_template_kwargs": {"enable_thinking": False},
                         "response_format": {
@@ -124,7 +135,8 @@ class LlamaCpp:
                     {
                         "role": "user",
                         "content": "Previous output was invalid. Return a complete JSON object "
-                        "matching the schema. Copy supplied facts exactly when explaining. "
+                        "matching the schema. For explanations select only known fact IDs "
+                        "and include every required_ids entry exactly once. "
                         "No prose, markdown or reasoning.",
                     }
                 )

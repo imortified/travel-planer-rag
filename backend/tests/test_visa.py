@@ -6,7 +6,7 @@ from fastapi.testclient import TestClient
 
 from app.main import app
 from app.nlp.explanations import explain
-from app.schemas.assistant import ExplanationClaim, ExplanationDraft
+from app.schemas.assistant import ExplanationDraft
 from app.visa import assess_visas, rules_catalog
 
 TODAY = date(2026, 10, 23)
@@ -175,10 +175,9 @@ def test_explanation_requires_saved_visa_fact(fault):
             keys = ["summary", "budget", "limitations", "visa"]
             if fault == "omitted":
                 keys.remove("visa")
-            claims = [ExplanationClaim(fact_id=k, sentence=data["facts"][k]) for k in keys]
             if fault == "invented":
-                claims[-1].sentence = "Всем разрешён въезд."
-            return ExplanationDraft(claims=claims), "test-model"
+                keys[-1] = "Всем разрешён въезд."
+            return ExplanationDraft(selected_ids=keys), "test-model"
 
     output = explain(route, trip, llm=Model())
     assert output.mode == ("llm" if fault is None else "template")

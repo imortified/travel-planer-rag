@@ -18,6 +18,7 @@ from app.evaluation.controls import run_controls
 from app.evaluation.explanations import evaluate_fixture, fixtures
 from app.evaluation.observer import ObservedLlama
 from app.evaluation.scoring import grade, latency, summarize
+from app.integrations.llama_cpp import EXPLANATION_MAX_TOKENS
 from app.nlp import explanations, parser
 from app.schemas.assistant import ExtractedTrip, ParseInput
 
@@ -94,6 +95,10 @@ def metadata(corpus_path):
         "runtime_manifest": json.loads((ROOT / "data/llm-runtime.json").read_text("utf-8")),
         "generation": {"temperature": 0, "seed": 42, "max_tokens": 1400, "enable_thinking": False},
         "timeout_seconds_per_http_operation": settings.llm_timeout_seconds,
+        "explanation_generation": {
+            "max_tokens": EXPLANATION_MAX_TOKENS,
+            "timeout_seconds_including_repair": settings.llm_explanation_timeout_seconds,
+        },
         "parser_prompt_version": parser.PROMPT_VERSION,
         "explanation_prompt_version": explanations.PROMPT_VERSION,
     }

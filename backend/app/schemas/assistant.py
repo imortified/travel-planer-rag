@@ -87,10 +87,5 @@ class ExplanationOutput(StrictModel):
     sources: dict[str, dict] = Field(default_factory=dict)
 
 
-class ExplanationClaim(StrictModel):
-    fact_id: str
-    sentence: str
-
-
 class ExplanationDraft(StrictModel):
-    claims: list[ExplanationClaim] = Field(min_length=3, max_length=8)
+    selected_ids: list[ShortText] = Field(min_length=3, max_length=14)

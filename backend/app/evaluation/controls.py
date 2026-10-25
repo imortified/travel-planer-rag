@@ -68,12 +68,9 @@ def run_controls():
             def structured(self, system, data, schema, verify=None):
                 if kind == "unavailable":
                     raise LlmUnavailable("Synthetic unavailable model")
-                claims = [
-                    {"fact_id": key, "sentence": data["facts"][key]}
-                    for key in ("summary", "budget", "limitations")
-                ]
-                claims[0]["sentence"] += " Виза гарантирована."
-                return ExplanationDraft.model_validate({"claims": claims}), "synthetic-fault"
+                return ExplanationDraft(
+                    selected_ids=[*data["required_ids"], "Виза гарантирована."]
+                ), "synthetic-fault"
 
         _, route, trip, primary = fixtures()[0]
         output = explain(route, trip, primary, 2, FaultModel())

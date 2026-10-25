@@ -16,7 +16,7 @@ from app.db.session import engine, get_session
 from app.integrations.demo import load_demo
 from app.integrations.llama_cpp import LlmUnavailable
 from app.main import app
-from app.schemas.assistant import Evidence, ExplanationClaim, ExplanationDraft, ExtractedTrip
+from app.schemas.assistant import Evidence, ExplanationDraft, ExtractedTrip
 
 pytestmark = [
     pytest.mark.acceptance,
@@ -186,9 +186,7 @@ def test_a08_llm_preview_does_not_create_a_trip_and_explanations_use_only_saved_
                 for k in ("summary", "budget", "limitations", "choice", "objective", "visa")
                 if k in data["facts"]
             ]
-            draft = ExplanationDraft(
-                claims=[ExplanationClaim(fact_id=k, sentence=data["facts"][k]) for k in required]
-            )
+            draft = ExplanationDraft(selected_ids=required)
         return draft, "controlled-fixture"
 
     monkeypatch.setattr("app.integrations.llama_cpp.LlamaCpp.structured", structured)

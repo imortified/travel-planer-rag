@@ -2,7 +2,6 @@
 
 import httpx
 
-from app.core.config import settings
 from app.integrations.llama_cpp import LlamaCpp
 
 
@@ -26,7 +25,6 @@ class ObservedLlama:
             self.attempts.append(record)
 
         with httpx.Client(
-            timeout=httpx.Timeout(settings.llm_timeout_seconds, connect=3),
             event_hooks={"response": [observe]},
         ) as client:
             return LlamaCpp(client).structured(system, data, schema, verify)

@@ -630,7 +630,7 @@ def test_comparison_uses_one_source_snapshot_per_day_and_keeps_sets_on_source_fa
 
 
 def test_verified_explanation_is_saved_with_option_and_cached(client, monkeypatch):
-    from app.schemas.assistant import ExplanationClaim, ExplanationDraft
+    from app.schemas.assistant import ExplanationDraft
 
     gid, _ = create_group(client)
     trip = client.post(f"/api/v1/groups/{gid}/trips", json={"budget": 10000}).json()
@@ -641,10 +641,7 @@ def test_verified_explanation_is_saved_with_option_and_cached(client, monkeypatc
     def structured(self, system, data, schema, verify=None):
         calls.append(data)
         draft = ExplanationDraft(
-            claims=[
-                ExplanationClaim(fact_id=key, sentence=data["facts"][key])
-                for key in ("summary", "budget", "choice", "limitations", "objective")
-            ]
+            selected_ids=["summary", "budget", "choice", "limitations", "objective"]
         )
         verify(draft)
         return draft, "test-qwen"

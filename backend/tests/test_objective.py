@@ -11,7 +11,7 @@ from app.planning.models import DayInput, Participant, Place, Request, Visit
 from app.planning.objective import VERSION, Objective, Weights
 from app.planning.period import plan_period
 from app.planning.service import checked_plan
-from app.schemas.assistant import ExplanationClaim, ExplanationDraft
+from app.schemas.assistant import ExplanationDraft
 
 
 def matrix(places, duration=0):
@@ -209,9 +209,7 @@ def test_explanation_fits_objective_visa_choice_and_two_retrieved_sources():
                 "source_1",
                 "source_2",
             ]
-            return ExplanationDraft(
-                claims=[ExplanationClaim(fact_id=k, sentence=data["facts"][k]) for k in keys]
-            ), "test-model"
+            return ExplanationDraft(selected_ids=keys), "test-model"
 
     output = explain(route, trip, llm=Model())
     assert output.mode == "llm"
@@ -238,10 +236,9 @@ def test_explanation_requires_the_exact_saved_objective(fault):
             keys = ["summary", "budget", "limitations", "objective"]
             if fault == "missing":
                 keys.remove("objective")
-            claims = [ExplanationClaim(fact_id=k, sentence=data["facts"][k]) for k in keys]
             if fault == "modified":
-                claims[-1].sentence += " Найден глобальный оптимум."
-            return ExplanationDraft(claims=claims), "test-model"
+                keys[-1] = "Найден глобальный оптимум."
+            return ExplanationDraft(selected_ids=keys), "test-model"
 
     output = explain(route, trip, llm=Model())
     assert output.mode == ("llm" if fault is None else "template")

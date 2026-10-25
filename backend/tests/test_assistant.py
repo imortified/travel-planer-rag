@@ -1,17 +1,18 @@
+import json
 from datetime import date
 from types import SimpleNamespace
 
+import httpx
 import pytest
 from fastapi.testclient import TestClient
 from pydantic import ValidationError
 
-from app.integrations.llama_cpp import LlmUnavailable
+from app.integrations.llama_cpp import LlamaCpp, LlmUnavailable
 from app.main import app
 from app.nlp.explanations import explain
 from app.nlp.parser import parse_request
 from app.schemas.assistant import (
     Evidence,
-    ExplanationClaim,
     ExplanationDraft,
     ExtractedTrip,
     ParseInput,
@@ -167,17 +168,18 @@ class NarrativeModel:
         self.fault = fault
 
     def structured(self, system, data, schema, verify=None):
-        claims = [
-            ExplanationClaim(fact_id=k, sentence=data["facts"][k])
-            for k in ("summary", "budget", "limitations", "interests", "choice")
-        ]
+        ids = ["summary", "budget", "limitations", "interests", "choice"]
         if self.fault == "fabrication":
-            claims[0].sentence += " Виза гарантирована."
+            return schema.model_validate(
+                {"selected_ids": ids, "sentence": "Виза гарантирована."}
+            ), "test-qwen"
         elif self.fault == "unknown":
-            claims[0].fact_id = "unknown"
+            ids.append("unknown")
         elif self.fault == "missing":
-            claims[1] = claims[0].model_copy()
-        return ExplanationDraft(claims=claims), "test-qwen"
+            ids.remove("budget")
+        elif self.fault == "duplicate":
+            ids.append("summary")
+        return ExplanationDraft(selected_ids=ids), "test-qwen"
 
 
 def test_grounded_explanation_contains_only_verified_saved_facts():
@@ -190,12 +192,63 @@ def test_grounded_explanation_contains_only_verified_saved_facts():
     assert route.result["total_cost"] == 1500
 
 
-@pytest.mark.parametrize("fault", ["fabrication", "unknown", "missing"])
-def test_changed_claims_are_replaced_by_verified_template(fault):
+def test_id_only_selection_preserves_order_and_complete_server_sentences():
+    route, trip = fixture_route()
+
+    class Selector:
+        def structured(self, system, data, schema, verify=None):
+            assert set(schema.model_fields) == {"selected_ids"}
+            assert set(data["required_ids"]) == {"summary", "budget", "limitations", "choice"}
+            return schema(
+                selected_ids=["summary", "interests", "choice", "budget", "limitations"]
+            ), "test-qwen"
+
+    output = explain(route, trip, route, 3, Selector())
+    assert output.mode == "llm"
+    assert output.selected_ids == ["summary", "interests", "choice", "budget", "limitations"]
+    assert output.paragraphs == [output.facts[key] for key in output.selected_ids]
+    assert output.paragraphs[3] == output.facts["budget"]
+
+
+@pytest.mark.parametrize("fault", ["fabrication", "unknown", "missing", "duplicate"])
+def test_invalid_selections_are_replaced_by_verified_template(fault):
     route, trip = fixture_route()
     output = explain(route, trip, route, 3, NarrativeModel(fault))
     assert output.mode == "template" and output.fallback_reason == "unverified_output"
     assert not any("Виза гарантирована" in text for text in output.paragraphs)
+
+
+@pytest.mark.parametrize("fault", ["unknown", "duplicate", "missing", "extra_text", "old_format"])
+def test_invalid_id_selection_gets_one_real_adapter_repair(fault):
+    route, trip = fixture_route()
+    ids = ["summary", "choice", "budget", "limitations"]
+    invalid = {"selected_ids": ids.copy()}
+    if fault == "unknown":
+        invalid["selected_ids"].append("Виза гарантирована.")
+    elif fault == "duplicate":
+        invalid["selected_ids"].append("summary")
+    elif fault == "missing":
+        invalid["selected_ids"].remove("choice")
+    elif fault == "extra_text":
+        invalid["sentence"] = "Виза гарантирована."
+    else:
+        invalid = {"claims": [{"fact_id": key, "sentence": "fabricated"} for key in ids]}
+    calls = []
+
+    def handler(request):
+        calls.append(request)
+        body = invalid if len(calls) == 1 else {"selected_ids": ids}
+        return httpx.Response(
+            200,
+            json={"choices": [{"finish_reason": "stop", "message": {"content": json.dumps(body)}}]},
+        )
+
+    with httpx.Client(transport=httpx.MockTransport(handler)) as client:
+        output = explain(route, trip, route, 3, LlamaCpp(client))
+    assert len(calls) == 2
+    assert output.mode == "llm" and output.selected_ids == ids
+    assert output.paragraphs == [output.facts[key] for key in ids]
+    assert all("Виза гарантирована" not in paragraph for paragraph in output.paragraphs)
 
 
 def test_unavailable_model_uses_template_and_parse_api_keeps_manual_planner_available(monkeypatch):
@@ -260,12 +313,9 @@ def test_rag_requires_exact_saved_description_and_server_attaches_citation(fault
             keys = ["summary", "budget", "limitations", "choice", "source_1"]
             if fault == "omitted":
                 keys.remove("source_1")
-            draft = ExplanationDraft(
-                claims=[ExplanationClaim(fact_id=key, sentence=data["facts"][key]) for key in keys]
-            )
             if fault == "modified":
-                draft.claims[-1].sentence += " Билет бесплатный."
-            return draft, "test-model"
+                keys[-1] = "Билет бесплатный."
+            return ExplanationDraft(selected_ids=keys), "test-model"
 
     output = explain(route, trip, route, 3, Model())
     assert output.mode == ("llm" if fault is None else "template")
