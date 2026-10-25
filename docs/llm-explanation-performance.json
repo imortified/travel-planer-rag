@@ -1,0 +1,701 @@
+{
+  "checked_on": "2026-10-25",
+  "implementation_commit": "0a38b97",
+  "branch": "perf/compact-llm-explanations",
+  "parent_branch": "fix/future-trip-dates-and-mvp-verification",
+  "hardware": {
+    "cpu": "12th Gen Intel(R) Core(TM) i5-12500H",
+    "gpu_names": [
+      "NVIDIA GeForce RTX 3050 Laptop GPU",
+      "Intel(R) Iris(R) Xe Graphics"
+    ],
+    "logical_processors": 16,
+    "ram_gib": 31.7,
+    "physical_cores": 12
+  },
+  "generation": {
+    "model": "Qwen3-4B-Q4_K_M",
+    "runtime": "llama.cpp b11840",
+    "ctx_size": 4096,
+    "gpu_layers": 24,
+    "parallel": 1,
+    "temperature": 0,
+    "seed": 42,
+    "enable_thinking": false,
+    "old_max_tokens": 1400,
+    "new_max_tokens": 256,
+    "old_timeout_seconds_per_attempt": 120,
+    "new_explanation_wait_budget_seconds_including_repair": 120,
+    "parser_timeout_seconds_per_attempt": 60
+  },
+  "protocol": {
+    "original_source_revision": "64e10e0",
+    "before_changes_started_at": "2026-10-25T16:17:22.681067+00:00",
+    "after_changes_started_at": "2026-10-25T16:20:42.841838+00:00",
+    "same_facts_asserted_before_each_series": true,
+    "rounds_old": 1,
+    "rounds_new_per_case": 3,
+    "sequential": true,
+    "warmups_excluded": false,
+    "parallel_cpu_tests_or_llm_calls": false,
+    "scope": "Direct composition from frozen database route facts; API persistence checks listed separately; not parser, whole trip planning, concurrency or independent quality evaluation"
+  },
+  "scenarios": [
+    {
+      "case": "solo",
+      "route_id": 4768,
+      "frozen_facts": {
+        "summary": "Маршрут включает 9 посещений; повторных мест нет.",
+        "budget": "Посещения для 1 участников — 8,00 EUR; выбранные заказы питания — 0,00 EUR. Учтённая сумма с оценками жилья и транспорта, включая отдельно заданные перелёты — 368,00 EUR при общем бюджете 2000,00 EUR. Резерв — 200,00 EUR; свободно после резерва — 1432,00 EUR. Неуказанные расходы не считаются подтверждёнными.",
+        "limitations": "Билеты и выбранные заказы учтены по сохранённым данным. Жильё и транспорт — пользовательские оценки, не предложения бронирования; неуказанные расходы и дополнительные заказы не включены. Визовый отчёт справочный; погода и наличие мест не подтверждены. Билеты рассчитаны по сохранённому возрасту на дату посещения; для 9 билетов применён обычный тариф без подтверждённой возрастной льготы. Документы для льгот не проверены. Детские порции питания не моделируются.",
+        "objective": "Общая оценка маршрута — 0,4519. Вклад интересов: 0,3371; стоимости: -0,0008; переездов: -0,0044; неравенства покрытия интересов: 0,0000. Шкалы и коэффициенты сохранены в отчёте оценки. Вклад распределения посещений по дням: 0,1200.",
+        "visa": "По сохранённому визовому справочнику: требуется виза — 0, освобождение по указанным условиям — 1, ручная проверка — 0. Сроки и предупреждения приведены в отдельном визовом отчёте; действительность документов и право въезда не подтверждены.",
+        "dates": "Даты поездки: 2026-11-02 — 2026-11-04; расписание дано по местному времени.",
+        "interests": "Накопленная полезность по интересам участников: Demo member 1 — 9,00 балла. Это сумма весов категорий посещений, а не оценка впечатлений.",
+        "balance": "Разрыв между максимальной и минимальной полезностью участника — 0,00 балла; меньше означает более равный баланс.",
+        "categories": "Посещения по категориям: история — 9.",
+        "choice": "Это основной вариант среди 3 сохранённых: выбор по общей оценке интересов, стоимости, переездов и баланса участников. Поиск ограничен и не гарантирует глобального оптимума."
+      },
+      "facts_sha256": "0c7eaff24625d5e42dd8bb2d029672f833789ffa562bd4bb8add815766e4ea18"
+    },
+    {
+      "case": "group",
+      "route_id": 4705,
+      "frozen_facts": {
+        "summary": "Маршрут включает 20 посещений; повторных мест нет.",
+        "budget": "Посещения для 6 участников — 196,20 EUR; выбранные заказы питания — 16,80 EUR. Учтённая сумма с оценками жилья и транспорта, включая отдельно заданные перелёты — 573,00 EUR при общем бюджете 2000,00 EUR. Резерв — 200,00 EUR; свободно после резерва — 1227,00 EUR. Неуказанные расходы не считаются подтверждёнными.",
+        "limitations": "Билеты и выбранные заказы учтены по сохранённым данным. Жильё и транспорт — пользовательские оценки, не предложения бронирования; неуказанные расходы и дополнительные заказы не включены. Визовый отчёт справочный; погода и наличие мест не подтверждены. Билеты рассчитаны по сохранённому возрасту на дату посещения; для 108 билетов применён обычный тариф без подтверждённой возрастной льготы. Документы для льгот не проверены. Детские порции питания не моделируются.",
+        "objective": "Общая оценка маршрута — 0,5991. Вклад интересов: 0,5173; стоимости: -0,0222; переездов: -0,0063; неравенства покрытия интересов: -0,0098. Шкалы и коэффициенты сохранены в отчёте оценки. Вклад распределения посещений по дням: 0,1200.",
+        "visa": "По сохранённому визовому справочнику: требуется виза — 0, освобождение по указанным условиям — 6, ручная проверка — 0. Сроки и предупреждения приведены в отдельном визовом отчёте; действительность документов и право въезда не подтверждены.",
+        "dates": "Даты поездки: 2026-11-02 — 2026-11-08; расписание дано по местному времени.",
+        "interests": "Накопленная полезность по интересам участников: Demo member 1 — 16,10; Demo member 2 — 9,30; Demo member 3 — 16,10; Demo member 4 — 9,30; Demo member 5 — 16,10; Demo member 6 — 9,30 балла. Это сумма весов категорий посещений, а не оценка впечатлений.",
+        "balance": "Разрыв между максимальной и минимальной полезностью участника — 6,80 балла; меньше означает более равный баланс.",
+        "categories": "Посещения по категориям: искусство — 2, еда — 1, история — 13, природа — 4.",
+        "choice": "Это основной вариант среди 3 сохранённых: выбор по общей оценке интересов, стоимости, переездов и баланса участников. Поиск ограничен и не гарантирует глобального оптимума."
+      },
+      "facts_sha256": "0200cd5359f8c245be3385595240550bdce433127261c1555beedd17da5c41da"
+    }
+  ],
+  "before_v9_timeout120": [
+    {
+      "case": "solo",
+      "route_id": 4768,
+      "mode": "llm",
+      "model": "Qwen3-4B-Q4_K_M",
+      "selected_ids": [
+        "summary",
+        "budget",
+        "limitations",
+        "objective",
+        "visa",
+        "interests",
+        "balance",
+        "choice"
+      ],
+      "seconds": 65.41187880001962,
+      "facts_sha256": "0c7eaff24625d5e42dd8bb2d029672f833789ffa562bd4bb8add815766e4ea18",
+      "attempts": [
+        {
+          "status_code": 200,
+          "schema_valid": true,
+          "finish_reason": "stop",
+          "usage": {
+            "completion_tokens": 794,
+            "prompt_tokens": 1030,
+            "total_tokens": 1824,
+            "prompt_tokens_details": {
+              "cached_tokens": 1029
+            }
+          },
+          "selected_ids": [
+            "summary",
+            "budget",
+            "limitations",
+            "objective",
+            "visa",
+            "interests",
+            "balance",
+            "choice"
+          ],
+          "semantic_valid": true,
+          "semantic_errors": []
+        }
+      ]
+    },
+    {
+      "case": "group",
+      "route_id": 4705,
+      "mode": "template",
+      "error_type": "InvalidLlmOutput",
+      "seconds": 124.3475582000101,
+      "facts_sha256": "0200cd5359f8c245be3385595240550bdce433127261c1555beedd17da5c41da",
+      "attempts": [
+        {
+          "status_code": 200,
+          "schema_valid": true,
+          "finish_reason": "stop",
+          "usage": {
+            "completion_tokens": 573,
+            "prompt_tokens": 1114,
+            "total_tokens": 1687,
+            "prompt_tokens_details": {
+              "cached_tokens": 1113
+            }
+          },
+          "selected_ids": [
+            "summary",
+            "budget",
+            "limitations",
+            "objective",
+            "choice"
+          ],
+          "semantic_valid": false,
+          "semantic_errors": [
+            "missing_required_ids:visa",
+            "changed_fact_sentence"
+          ]
+        },
+        {
+          "status_code": 200,
+          "schema_valid": true,
+          "finish_reason": "stop",
+          "usage": {
+            "completion_tokens": 857,
+            "prompt_tokens": 1147,
+            "total_tokens": 2004,
+            "prompt_tokens_details": {
+              "cached_tokens": 1108
+            }
+          },
+          "selected_ids": [
+            "summary",
+            "budget",
+            "limitations",
+            "objective",
+            "visa",
+            "interests",
+            "balance",
+            "choice"
+          ],
+          "semantic_valid": false,
+          "semantic_errors": [
+            "changed_fact_sentence"
+          ]
+        }
+      ]
+    }
+  ],
+  "after_v10": [
+    {
+      "case": "solo",
+      "route_id": 4768,
+      "run": 1,
+      "seconds": 4.821123500005342,
+      "mode": "llm",
+      "verified": true,
+      "fallback_reason": null,
+      "selected_ids": [
+        "summary",
+        "dates",
+        "objective",
+        "budget",
+        "limitations",
+        "visa",
+        "choice",
+        "interests",
+        "balance",
+        "categories"
+      ],
+      "facts_sha256": "0c7eaff24625d5e42dd8bb2d029672f833789ffa562bd4bb8add815766e4ea18",
+      "exact_fact_rendering": true,
+      "attempts": [
+        {
+          "status_code": 200,
+          "schema_valid": true,
+          "finish_reason": "stop",
+          "usage": {
+            "completion_tokens": 36,
+            "prompt_tokens": 969,
+            "total_tokens": 1005,
+            "prompt_tokens_details": {
+              "cached_tokens": 3
+            }
+          },
+          "selected_ids": [
+            "summary",
+            "dates",
+            "objective",
+            "budget",
+            "limitations",
+            "visa",
+            "choice",
+            "interests",
+            "balance",
+            "categories"
+          ],
+          "semantic_valid": true,
+          "semantic_errors": []
+        }
+      ]
+    },
+    {
+      "case": "solo",
+      "route_id": 4768,
+      "run": 2,
+      "seconds": 2.4935124000767246,
+      "mode": "llm",
+      "verified": true,
+      "fallback_reason": null,
+      "selected_ids": [
+        "summary",
+        "dates",
+        "objective",
+        "budget",
+        "limitations",
+        "visa",
+        "choice",
+        "interests",
+        "balance",
+        "categories"
+      ],
+      "facts_sha256": "0c7eaff24625d5e42dd8bb2d029672f833789ffa562bd4bb8add815766e4ea18",
+      "exact_fact_rendering": true,
+      "attempts": [
+        {
+          "status_code": 200,
+          "schema_valid": true,
+          "finish_reason": "stop",
+          "usage": {
+            "completion_tokens": 36,
+            "prompt_tokens": 969,
+            "total_tokens": 1005,
+            "prompt_tokens_details": {
+              "cached_tokens": 968
+            }
+          },
+          "selected_ids": [
+            "summary",
+            "dates",
+            "objective",
+            "budget",
+            "limitations",
+            "visa",
+            "choice",
+            "interests",
+            "balance",
+            "categories"
+          ],
+          "semantic_valid": true,
+          "semantic_errors": []
+        }
+      ]
+    },
+    {
+      "case": "solo",
+      "route_id": 4768,
+      "run": 3,
+      "seconds": 2.7721161000663415,
+      "mode": "llm",
+      "verified": true,
+      "fallback_reason": null,
+      "selected_ids": [
+        "summary",
+        "dates",
+        "objective",
+        "budget",
+        "limitations",
+        "visa",
+        "choice",
+        "interests",
+        "balance",
+        "categories"
+      ],
+      "facts_sha256": "0c7eaff24625d5e42dd8bb2d029672f833789ffa562bd4bb8add815766e4ea18",
+      "exact_fact_rendering": true,
+      "attempts": [
+        {
+          "status_code": 200,
+          "schema_valid": true,
+          "finish_reason": "stop",
+          "usage": {
+            "completion_tokens": 36,
+            "prompt_tokens": 969,
+            "total_tokens": 1005,
+            "prompt_tokens_details": {
+              "cached_tokens": 968
+            }
+          },
+          "selected_ids": [
+            "summary",
+            "dates",
+            "objective",
+            "budget",
+            "limitations",
+            "visa",
+            "choice",
+            "interests",
+            "balance",
+            "categories"
+          ],
+          "semantic_valid": true,
+          "semantic_errors": []
+        }
+      ]
+    },
+    {
+      "case": "group",
+      "route_id": 4705,
+      "run": 1,
+      "seconds": 4.22407880006358,
+      "mode": "llm",
+      "verified": true,
+      "fallback_reason": null,
+      "selected_ids": [
+        "summary",
+        "dates",
+        "objective",
+        "budget",
+        "limitations",
+        "visa",
+        "choice",
+        "balance",
+        "interests",
+        "categories"
+      ],
+      "facts_sha256": "0200cd5359f8c245be3385595240550bdce433127261c1555beedd17da5c41da",
+      "exact_fact_rendering": true,
+      "attempts": [
+        {
+          "status_code": 200,
+          "schema_valid": true,
+          "finish_reason": "stop",
+          "usage": {
+            "completion_tokens": 36,
+            "prompt_tokens": 1053,
+            "total_tokens": 1089,
+            "prompt_tokens_details": {
+              "cached_tokens": 207
+            }
+          },
+          "selected_ids": [
+            "summary",
+            "dates",
+            "objective",
+            "budget",
+            "limitations",
+            "visa",
+            "choice",
+            "balance",
+            "interests",
+            "categories"
+          ],
+          "semantic_valid": true,
+          "semantic_errors": []
+        }
+      ]
+    },
+    {
+      "case": "group",
+      "route_id": 4705,
+      "run": 2,
+      "seconds": 2.533181000035256,
+      "mode": "llm",
+      "verified": true,
+      "fallback_reason": null,
+      "selected_ids": [
+        "summary",
+        "dates",
+        "objective",
+        "budget",
+        "limitations",
+        "visa",
+        "choice",
+        "balance",
+        "interests",
+        "categories"
+      ],
+      "facts_sha256": "0200cd5359f8c245be3385595240550bdce433127261c1555beedd17da5c41da",
+      "exact_fact_rendering": true,
+      "attempts": [
+        {
+          "status_code": 200,
+          "schema_valid": true,
+          "finish_reason": "stop",
+          "usage": {
+            "completion_tokens": 36,
+            "prompt_tokens": 1053,
+            "total_tokens": 1089,
+            "prompt_tokens_details": {
+              "cached_tokens": 1052
+            }
+          },
+          "selected_ids": [
+            "summary",
+            "dates",
+            "objective",
+            "budget",
+            "limitations",
+            "visa",
+            "choice",
+            "balance",
+            "interests",
+            "categories"
+          ],
+          "semantic_valid": true,
+          "semantic_errors": []
+        }
+      ]
+    },
+    {
+      "case": "group",
+      "route_id": 4705,
+      "run": 3,
+      "seconds": 2.7811568001052365,
+      "mode": "llm",
+      "verified": true,
+      "fallback_reason": null,
+      "selected_ids": [
+        "summary",
+        "dates",
+        "objective",
+        "budget",
+        "limitations",
+        "visa",
+        "choice",
+        "balance",
+        "interests",
+        "categories"
+      ],
+      "facts_sha256": "0200cd5359f8c245be3385595240550bdce433127261c1555beedd17da5c41da",
+      "exact_fact_rendering": true,
+      "attempts": [
+        {
+          "status_code": 200,
+          "schema_valid": true,
+          "finish_reason": "stop",
+          "usage": {
+            "completion_tokens": 36,
+            "prompt_tokens": 1053,
+            "total_tokens": 1089,
+            "prompt_tokens_details": {
+              "cached_tokens": 1052
+            }
+          },
+          "selected_ids": [
+            "summary",
+            "dates",
+            "objective",
+            "budget",
+            "limitations",
+            "visa",
+            "choice",
+            "balance",
+            "interests",
+            "categories"
+          ],
+          "semantic_valid": true,
+          "semantic_errors": []
+        }
+      ]
+    }
+  ],
+  "http_after_reload": [
+    {
+      "case": "solo",
+      "route_id": 4768,
+      "previous_prompt_version": "grounded-explanation-v9-flights",
+      "previous_explanation_reused": true,
+      "seconds": 3.048678799998015,
+      "mode": "llm",
+      "verified": true,
+      "prompt_version": "grounded-explanation-v10-fact-ids",
+      "exact_fact_rendering": true,
+      "facts_unchanged": true,
+      "route_result_unchanged": true,
+      "saved_and_reused": true,
+      "reused_seconds": 0.014924699906259775
+    },
+    {
+      "case": "group",
+      "route_id": 4705,
+      "previous_prompt_version": "grounded-explanation-v10-fact-ids",
+      "previous_explanation_reused": true,
+      "seconds": 3.1395795000717044,
+      "mode": "llm",
+      "verified": true,
+      "prompt_version": "grounded-explanation-v10-fact-ids",
+      "exact_fact_rendering": true,
+      "facts_unchanged": true,
+      "route_result_unchanged": true,
+      "saved_and_reused": true,
+      "reused_seconds": 0.03527069999836385
+    }
+  ],
+  "http_reload_transition_excluded_from_v10_latency": [
+    {
+      "case": "solo",
+      "route_id": 4768,
+      "previous_prompt_version": "grounded-explanation-v9-flights",
+      "previous_explanation_reused": true,
+      "seconds": 60.272260800004005,
+      "mode": "template",
+      "verified": true,
+      "prompt_version": "grounded-explanation-v9-flights",
+      "exact_fact_rendering": true,
+      "facts_unchanged": true,
+      "route_result_unchanged": true,
+      "saved_and_reused": true,
+      "reused_seconds": 0.023364399909041822
+    },
+    {
+      "case": "group",
+      "route_id": 4705,
+      "previous_prompt_version": "grounded-explanation-v9-flights",
+      "previous_explanation_reused": true,
+      "seconds": 3.456464600050822,
+      "mode": "llm",
+      "verified": true,
+      "prompt_version": "grounded-explanation-v10-fact-ids",
+      "exact_fact_rendering": true,
+      "facts_unchanged": true,
+      "route_result_unchanged": true,
+      "saved_and_reused": true,
+      "reused_seconds": 0.03350789996329695
+    }
+  ],
+  "known_public_fixtures_live": [
+    {
+      "id": "single",
+      "seconds": 2.976393699995242,
+      "checks": {
+        "verified": true,
+        "required_facts": true,
+        "exact_fact_copy": true,
+        "visited_sources_only": true
+      },
+      "passed": true,
+      "mode": "llm",
+      "verified": true,
+      "selected_ids": [
+        "summary",
+        "dates",
+        "categories",
+        "budget",
+        "limitations",
+        "choice",
+        "interests",
+        "balance",
+        "mandatory"
+      ],
+      "source_count": 0,
+      "attempt_count": 1,
+      "completion_tokens": [
+        33
+      ]
+    },
+    {
+      "id": "food-rag",
+      "seconds": 3.999988800031133,
+      "checks": {
+        "verified": true,
+        "required_facts": true,
+        "exact_fact_copy": true,
+        "visited_sources_only": true
+      },
+      "passed": true,
+      "mode": "llm",
+      "verified": true,
+      "selected_ids": [
+        "summary",
+        "dates",
+        "source_1",
+        "source_2",
+        "budget",
+        "limitations",
+        "choice",
+        "categories",
+        "interests",
+        "balance"
+      ],
+      "source_count": 2,
+      "attempt_count": 1,
+      "completion_tokens": [
+        40
+      ]
+    },
+    {
+      "id": "objective-visa-rag",
+      "seconds": 3.709698499995284,
+      "checks": {
+        "verified": true,
+        "required_facts": true,
+        "exact_fact_copy": true,
+        "visited_sources_only": true
+      },
+      "passed": true,
+      "mode": "llm",
+      "verified": true,
+      "selected_ids": [
+        "summary",
+        "objective",
+        "budget",
+        "choice",
+        "limitations",
+        "source_1",
+        "source_2",
+        "visa"
+      ],
+      "source_count": 2,
+      "attempt_count": 1,
+      "completion_tokens": [
+        33
+      ]
+    },
+    {
+      "id": "alternative",
+      "seconds": 2.5546136000193655,
+      "checks": {
+        "verified": true,
+        "required_facts": true,
+        "exact_fact_copy": true,
+        "visited_sources_only": true
+      },
+      "passed": true,
+      "mode": "llm",
+      "verified": true,
+      "selected_ids": [
+        "summary",
+        "dates",
+        "source_1",
+        "choice",
+        "budget",
+        "limitations"
+      ],
+      "source_count": 1,
+      "attempt_count": 1,
+      "completion_tokens": [
+        25
+      ]
+    }
+  ],
+  "validation": {
+    "pytest": {
+      "passed": 737,
+      "seconds": 32.42,
+      "postgresql": true,
+      "redis": true,
+      "qdrant": true
+    },
+    "ruff": "passed",
+    "frontend_changed": false,
+    "ragas_recomputed": false
+  },
+  "limitations": [
+    "Only two saved route contexts and three new repetitions each; no p95/SLA claim.",
+    "KV cache reuse differs by call; usage.cached_tokens retained, first runs not excluded.",
+    "Baseline group v9 had two semantic failures, not a 120-second timeout.",
+    "Existing public fixtures are regression checks, not an independent quality dataset.",
+    "Text parsing quality and its existing failures were not improved or remeasured.",
+    "One API probe during reload hit old v9 worker; retained separately, not counted as v10 latency."
+  ]
+}
