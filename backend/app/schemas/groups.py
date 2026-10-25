@@ -39,6 +39,7 @@ class PreferencesInput(BaseModel):
 class MemberOutput(BaseModel):
     user_id: int
     name: str
+    saved_traveller_id: int | None = None
     interests: dict[str, float]
     travel_profile: TravelProfile = Field(default_factory=TravelProfile)
     age_profile: AgeProfile = Field(default_factory=AgeProfile)

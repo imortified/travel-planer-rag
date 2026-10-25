@@ -8,6 +8,7 @@ from uuid import uuid4
 
 import httpx
 import pytest
+from auth_helpers import authenticate
 from cache_helpers import MemoryRedis
 from catalog_helpers import NOW, snapshot
 from fastapi.testclient import TestClient
@@ -169,6 +170,7 @@ def test_api_reads_offline_catalog_and_freezes_version_in_saved_results(db, monk
             monkeypatch.setattr("app.api.destinations.CityProvider", lambda **kwargs: provider)
             monkeypatch.setattr("app.api.groups.CityProvider", lambda **kwargs: provider)
             with TestClient(app) as client:
+                authenticate(client)
                 catalog = client.get(
                     f"/api/v1/destinations/{city}/pois?travel_date=2026-10-27&end_date=2026-10-28"
                 )

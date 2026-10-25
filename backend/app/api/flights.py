@@ -4,11 +4,12 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app.catalog.flights import fetch_observation, passengers_for, save_observation
+from app.core.auth import current_account
 from app.db.session import get_session
 from app.integrations.http_cache import SourceUnavailable
 from app.schemas.flights import FlightSearch
 
-router = APIRouter(prefix="/api/v1", tags=["flights"])
+router = APIRouter(prefix="/api/v1", tags=["flights"], dependencies=[Depends(current_account)])
 
 
 @router.post("/groups/{group_id}/flight-searches", status_code=201)

@@ -4,6 +4,7 @@ import os
 from datetime import date
 
 import pytest
+from auth_helpers import authenticate
 from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
 
@@ -29,6 +30,7 @@ def client(monkeypatch):
         app.dependency_overrides[get_session] = test_session
         try:
             with TestClient(app) as http:
+                authenticate(http)
                 yield http
         finally:
             app.dependency_overrides.pop(get_session, None)

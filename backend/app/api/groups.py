@@ -7,9 +7,18 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from app.core.auth import current_account, require_owned
 from app.core.destinations import CITIES
 from app.core.logging import emit, span
-from app.db.models import Group, Membership, RouteOption, RouteSet, TripRequest, User
+from app.db.models import (
+    Group,
+    Membership,
+    RouteOption,
+    RouteSet,
+    SavedTraveller,
+    TripRequest,
+    User,
+)
 from app.db.session import get_session
 from app.integrations.city import CityProvider, IncompleteData, SourceUnavailable
 from app.integrations.demo import load_demo
@@ -21,6 +30,7 @@ from app.planning.pace import PROFILES, planning_summary, profile_snapshot
 from app.planning.period import plan_period
 from app.planning.pricing import with_visit_prices
 from app.planning.service import checked_plan
+from app.schemas.accounts import SavedProfileLink
 from app.schemas.ages import AgeProfile
 from app.schemas.groups import (
     GroupOutput,
@@ -37,7 +47,9 @@ from app.schemas.groups import (
 from app.schemas.visa import TravelProfile
 from app.visa import assess_visas
 
-router = APIRouter(prefix="/api/v1", tags=["Groups and trips"])
+router = APIRouter(
+    prefix="/api/v1", tags=["Groups and trips"], dependencies=[Depends(current_account)]
+)
 DB = Annotated[Session, Depends(get_session)]
 logger = logging.getLogger(__name__)
 
@@ -48,10 +60,7 @@ def pace_profiles():
 
 
 def require(session, model, identifier):
-    obj = session.get(model, identifier)
-    if obj is None:
-        raise HTTPException(404, f"{model.__name__} not found")
-    return obj
+    return require_owned(session, model, identifier)
 
 
 def members(session, group_id):
@@ -65,6 +74,7 @@ def members(session, group_id):
         MemberOutput(
             user_id=u.id,
             name=u.name,
+            saved_traveller_id=u.saved_traveller_id,
             interests=m.interests,
             travel_profile=TravelProfile.model_validate(m.travel_profile or {}),
             age_profile=AgeProfile.model_validate(m.age_profile or {}),
@@ -75,7 +85,7 @@ def members(session, group_id):
 
 @router.post("/users", response_model=NamedOutput, status_code=201)
 def create_user(payload: NamedInput, session: DB):
-    user = User(name=payload.name.strip())
+    user = User(name=payload.name.strip(), owner_account_id=session.info["account_id"])
     session.add(user)
     session.commit()
     session.refresh(user)
@@ -87,9 +97,19 @@ def get_user(user_id: int, session: DB):
     return require(session, User, user_id)
 
 
+@router.put("/users/{user_id}/saved-profile", status_code=204)
+def link_saved_profile(user_id: int, payload: SavedProfileLink, session: DB):
+    user = require(session, User, user_id)
+    profile = session.get(SavedTraveller, payload.profile_id)
+    if profile is None or profile.owner_account_id != session.info["account_id"]:
+        raise HTTPException(404, "Профиль не найден")
+    user.saved_traveller_id = profile.id
+    session.commit()
+
+
 @router.post("/groups", response_model=GroupOutput, status_code=201)
 def create_group(payload: NamedInput, session: DB):
-    group = Group(name=payload.name.strip())
+    group = Group(name=payload.name.strip(), owner_account_id=session.info["account_id"])
     session.add(group)
     session.commit()
     session.refresh(group)
@@ -103,10 +123,33 @@ def get_group(group_id: int, session: DB):
 
 
 def lock_group(session, group_id):
+    require(session, Group, group_id)
     group = session.scalar(select(Group).where(Group.id == group_id).with_for_update())
     if group is None:
         raise HTTPException(404, "Group not found")
     return group
+
+
+@router.get("/groups", response_model=list[GroupOutput])
+def list_groups(session: DB):
+    rows = session.scalars(
+        select(Group)
+        .where(Group.owner_account_id == session.info["account_id"])
+        .order_by(Group.id.desc())
+    )
+    return [GroupOutput(id=g.id, name=g.name, members=members(session, g.id)) for g in rows]
+
+
+@router.get("/trips", response_model=list[TripOutput])
+def account_trips(session: DB):
+    rows = session.scalars(
+        select(TripRequest)
+        .join(Group)
+        .where(Group.owner_account_id == session.info["account_id"])
+        .order_by(TripRequest.id.desc())
+        .limit(200)
+    )
+    return [trip_output(trip) for trip in rows]
 
 
 @router.post("/groups/{group_id}/members", response_model=MemberOutput, status_code=201)

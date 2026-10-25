@@ -1,6 +1,7 @@
 """Opt-in sequential localhost MVP verification; persists explicitly named demo trips."""
 
 import argparse
+import getpass
 import json
 import math
 import platform
@@ -238,6 +239,9 @@ def run(client, start, samples, read_samples, report):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--base-url", default="http://127.0.0.1:8001")
+    parser.add_argument(
+        "--email", required=True, help="Existing account; password is prompted privately"
+    )
     parser.add_argument("--start", type=date.fromisoformat, required=True)
     parser.add_argument("--samples", type=int, default=20)
     parser.add_argument("--read-samples", type=int, default=100)
@@ -290,6 +294,14 @@ def main():
             base_url=args.base_url.rstrip("/"), timeout=120, trust_env=False
         ) as client:
             require(client, "GET", "/health")
+            client.headers["X-Auth-Request"] = "travel-planner"
+            signed_in = require(
+                client,
+                "POST",
+                "/api/v1/auth/login",
+                {"email": args.email, "password": getpass.getpass("Account password: ")},
+            )
+            client.headers["X-CSRF-Token"] = signed_in["csrf_token"]
             report.update(run(client, args.start, args.samples, args.read_samples, report))
         report["completed"] = True
     except Exception as exc:

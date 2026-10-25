@@ -19,6 +19,14 @@ class Settings(BaseSettings):
     llm_base_url: str = "http://127.0.0.1:8081"
     llm_model: str = "Qwen3-4B-Q4_K_M"
     llm_timeout_seconds: float = 60
+    auth_cookie_secure: bool = False
+    auth_session_days: int = Field(default=7, ge=1, le=30)
+    auth_allowed_origins: list[str] = [
+        "http://127.0.0.1:3001",
+        "http://localhost:3001",
+        "http://127.0.0.1:8001",
+        "http://localhost:8001",
+    ]
     llm_explanation_timeout_seconds: float = Field(default=120, gt=0, le=600)
     embedding_base_url: str = "http://127.0.0.1:8082"
     embedding_model: str = "Qwen3-Embedding-0.6B-Q8_0"

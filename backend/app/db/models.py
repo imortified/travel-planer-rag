@@ -19,11 +19,48 @@ class Base(DeclarativeBase):
     pass
 
 
+class Account(Base):
+    __tablename__ = "accounts"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    email: Mapped[str] = mapped_column(String(254), unique=True)
+    name: Mapped[str] = mapped_column(String(100))
+    password_hash: Mapped[str] = mapped_column(String(512))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class AuthSession(Base):
+    __tablename__ = "auth_sessions"
+    token_hash: Mapped[str] = mapped_column(String(64), primary_key=True)
+    account_id: Mapped[int] = mapped_column(ForeignKey("accounts.id"), index=True)
+    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), index=True)
+
+
+class AuthRateLimit(Base):
+    __tablename__ = "auth_rate_limits"
+    key: Mapped[str] = mapped_column(String(64), primary_key=True)
+    attempts: Mapped[int]
+    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), index=True)
+
+
+class SavedTraveller(Base):
+    __tablename__ = "saved_travellers"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    owner_account_id: Mapped[int] = mapped_column(ForeignKey("accounts.id"), index=True)
+    name: Mapped[str] = mapped_column(String(100))
+    interests: Mapped[dict] = mapped_column(JSON, default=dict)
+    travel_profile: Mapped[dict] = mapped_column(JSON, default=dict)
+    age_profile: Mapped[dict] = mapped_column(JSON, default=dict)
+
+
 class User(Base):
     __tablename__ = "users"
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(100))
+    owner_account_id: Mapped[int | None] = mapped_column(ForeignKey("accounts.id"), index=True)
+    saved_traveller_id: Mapped[int | None] = mapped_column(
+        ForeignKey("saved_travellers.id", ondelete="SET NULL")
+    )
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
 
@@ -31,6 +68,7 @@ class Group(Base):
     __tablename__ = "groups"
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(100))
+    owner_account_id: Mapped[int | None] = mapped_column(ForeignKey("accounts.id"), index=True)
 
 
 class Membership(Base):

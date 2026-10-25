@@ -1,10 +1,11 @@
 import logging
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select
 
 from app.api.destinations import city_pois, lisbon_pois
 from app.api.groups import DB, require
+from app.core.auth import current_account
 from app.core.logging import emit, span
 from app.db.models import RouteOption, TripRequest
 from app.integrations.embeddings import EmbeddingUnavailable
@@ -76,7 +77,11 @@ def parse_text(payload: ParseInput):
         ) from exc
 
 
-@router.post("/routes/{route_id}/explanation", response_model=ExplanationOutput)
+@router.post(
+    "/routes/{route_id}/explanation",
+    response_model=ExplanationOutput,
+    dependencies=[Depends(current_account)],
+)
 def route_explanation(route_id: int, session: DB, refresh: bool = False):
     route = require(session, RouteOption, route_id)
     if route.explanation and not refresh:

@@ -45,8 +45,13 @@ export type ParseOutput = {model:string;prompt_version:string;reference_date:str
     common_interests:Interests;mandatory_names:string[];excluded_names:string[]}};
 export type TravelProfile = {citizenship:string|null;passport_kind:"unknown"|"ordinary"|"special";biometric:boolean|null;special_entry_basis:boolean|null;visa_status:"unknown"|"held"|"not_held"};
 export type VisaReport = {version:string;assessed_on:string;checked_on:string;review_by:string;status:string;travel_date:string|null;end_date:string|null;limitations:string[];participants:{name:string;citizenship_name:string|null;requirement:string;status:string;summary:string;reasons:string[];sources:{title:string;url:string}[];timing:null|{days_until_trip:number;application_notice_days:number;recommended_apply_by:string;processing_days:number|null;extended_processing_days:number|null;source_url:string}}[]};
-export type Member = {user_id: number; name: string; interests: Interests;travel_profile?:TravelProfile;age_profile?:AgeProfile};
+export type Member = {user_id: number; name: string; saved_traveller_id?:number|null; interests: Interests;travel_profile?:TravelProfile;age_profile?:AgeProfile};
 export type Group = {id: number; name: string; members: Member[]};
+export type Account = {id:number;name:string;email:string};
+export type AuthSession = {account:Account;csrf_token:string};
+export type SavedTraveller = {id:number;name:string;interests:Interests;travel_profile:TravelProfile;age_profile:AgeProfile};
+let csrfToken:string|undefined;
+export function setAuthSession(session:AuthSession|null) {csrfToken=session?.csrf_token;}
 export type Trip = {id: number; group_id: number; destination: string; travel_date: string | null; end_date?: string | null;
   flight_plan?:FlightChoice|null;flight_snapshot?:FlightSnapshot|null;
   lodging_plan?:LodgingSelection|null;lodging_snapshot?:LodgingSnapshot|null;
@@ -88,11 +93,12 @@ export type RouteSet = {id: number; trip_request_id: number; algorithm: string; 
   search_info: {method: string; attempts: number; attempt_limit: number; min_jaccard_distance: number; note_codes: string[];objective_version?:string|null}};
 
 export async function api<T>(path: string, method = "GET", body?: unknown): Promise<T> {
-  const response = await fetch(`/api/v1${path}`, {method, headers: {"Content-Type": "application/json"},
+  const response = await fetch(`/api/v1${path}`, {method, credentials:"same-origin", headers: {"Content-Type": "application/json","X-Auth-Request":"travel-planner",...(csrfToken?{"X-CSRF-Token":csrfToken}:{})},
     body: body === undefined ? undefined : JSON.stringify(body), cache: "no-store"});
-  const data = await response.json();
+  const data = response.status===204?null:await response.json();
   if (!response.ok) {
     const detail = data.detail;
+    if(response.status===401&&(!path.startsWith("/auth/")||path==="/auth/logout"))window.dispatchEvent(new Event("travel-auth-expired"));
     const message=Array.isArray(detail) ? detail.map((d: {msg: string}) => d.msg).join("; ")
       : typeof detail === "string" ? detail : `Ошибка API (${response.status})`;
     const requestId=validRequestId(response.headers.get("X-Request-ID"));

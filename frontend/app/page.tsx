@@ -1,6 +1,9 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { AccountGate } from "./components/account-gate";
+import type { Account, SavedTraveller } from "../lib/api";
+import { reuseTraveller } from "../lib/travellers";
 import { RouteDays } from "./components/route-days";
 import { PoiFacts } from "./components/poi-facts";
 import { RouteComparison } from "./components/route-comparison";
@@ -31,7 +34,7 @@ import type { AgeProfile, PaceMode, PaceSettings } from "../lib/api";
 import type { CatalogSnapshot, CatalogResponse } from "../lib/api";
 import { api, clock, money, minutes, type Group, type Trip, type Route, type RouteSet, type Poi, type Interests, type ParseOutput, type TravelProfile, type VisaReport as VisaData } from "../lib/api";
 
-type Draft = {key: number; name: string; interests: Interests; userId?: number; joined?: boolean; travel_profile?:TravelProfile; age_profile?:AgeProfile};
+type Draft = {key: number; name: string; interests: Interests; userId?: number; joined?: boolean; profileId?:number; travel_profile?:TravelProfile; age_profile?:AgeProfile};
 type PendingConstraint = {key:string;name:string;kind:"mandatory"|"excluded"};
 const normalized=(text:string)=>text.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLocaleLowerCase().trim();
 const categories = [["history", "История"], ["nature", "Природа"], ["food", "Еда"], ["art", "Искусство"]];
@@ -47,6 +50,12 @@ reasonNames.daily_load_limit="Превышена дневная нагрузка
 reasonNames.insufficient_rest="Недостаточно времени на перерыв между посещениями";
 
 export default function Home() {
+  return <AccountGate>{(account,onLogout)=><Planner key={account.id} account={account} onLogout={onLogout}/>}</AccountGate>;
+}
+
+function Planner({account,onLogout}:{account:Account;onLogout:()=>Promise<void>}) {
+  const [savedGroups,setSavedGroups]=useState<Group[]>([]);
+  const [travellers,setTravellers]=useState<SavedTraveller[]>([]);
   const [name,setName] = useState("Наше путешествие");
   const [members,setMembers] = useState<Draft[]>([
     {key:1,name:"",interests:{history:1,nature:0.5,food:0.5,art:0.5}},
@@ -95,7 +104,8 @@ export default function Home() {
 
   useEffect(()=>{setSelectedLodging(undefined);setSelectedQuote(undefined);if(selectedQuote?.choice.apply_base_estimate)setCostDraft(old=>({...old,lodging:""}));},[lodgingContext]);
   useEffect(()=>{setSelectedFlight(undefined);},[lodgingContext]);
-  useEffect(() => { const stored = localStorage.getItem("travel-group-id"); if (stored) setLoadId(stored); }, []);
+  useEffect(() => { const stored = localStorage.getItem(`travel-group-${account.id}`); if (stored) setLoadId(stored); }, [account.id]);
+  useEffect(()=>{let active=true;Promise.all([api<Group[]>("/groups"),api<Trip[]>("/trips"),api<SavedTraveller[]>("/travellers")]).then(([groups,history,profiles])=>{if(active){setSavedGroups(groups);setTrips(history);setTravellers(profiles);}}).catch(e=>{if(active)setError(e instanceof Error?e.message:"Не удалось загрузить личный кабинет");});return ()=>{active=false;};},[account.id]);
   useEffect(() => {let active=true;api<Record<string,PaceSettings>>("/planning/pace-profiles").then(profiles=>{if(active)setPaceProfiles(profiles);}).catch(()=>{});return ()=>{active=false;};}, []);
   useEffect(() => {let active=true;api<DestinationInfo[]>("/destinations").then(cities=>{if(active)setDestinations(cities);}).catch(()=>{});return ()=>{active=false;};}, []);
   function changeMember(index: number, patch: Partial<Draft>) {setMembers(ms => ms.map((m,i) => i===index ? {...m,...patch} : m));}
@@ -119,7 +129,7 @@ export default function Home() {
     let id = gid;
     if (!id) {
       const group = await api<Group>("/groups","POST",{name:name.trim()});
-      id=group.id; setGid(id); setLoadId(String(id)); localStorage.setItem("travel-group-id",String(id));
+      id=group.id; setGid(id); setLoadId(String(id)); localStorage.setItem(`travel-group-${account.id}`,String(id));
     }
     for (let i=0;i<members.length;i++) {
       const m = {...members[i]};
@@ -128,16 +138,29 @@ export default function Home() {
       await api(`/groups/${id}/members/${m.userId}/preferences`,"PUT",{interests:m.interests});
       await api(`/groups/${id}/members/${m.userId}/travel-profile`,"PUT",m.travel_profile || emptyProfile);
       await api(`/groups/${id}/members/${m.userId}/age-profile`,"PUT",ages[i]);
+      const saved=await api<SavedTraveller>(m.profileId?`/travellers/${m.profileId}`:"/travellers",m.profileId?"PUT":"POST",{name:m.name,interests:m.interests,travel_profile:m.travel_profile||emptyProfile,age_profile:ages[i]});
+      changeMember(i,{profileId:saved.id});
+      await api(`/users/${m.userId}/saved-profile`,"PUT",{profile_id:saved.id});
     }
+    setTravellers(await api<SavedTraveller[]>("/travellers"));
+    setSavedGroups(await api<Group[]>("/groups"));
     return id;
   }
-  async function loadGroup() {
-    const id=Number(loadId); if (!Number.isInteger(id) || id<=0) throw new Error("Укажите положительный ID группы.");
+  async function loadGroup(targetId?:number) {
+    const id=targetId??Number(loadId); if (!Number.isInteger(id) || id<=0) throw new Error("Укажите положительный ID группы.");
     const group = await api<Group>(`/groups/${id}`);
-    const history = await api<Trip[]>(`/groups/${id}/trips`);
-    setGid(id); setName(group.name); setMembers(group.members.map(m=>({key:key.current++,name:m.name,userId:m.user_id,joined:true,interests:m.interests,travel_profile:m.travel_profile,age_profile:m.age_profile})));
-    setTrips(history); setShown(undefined); setComparison(undefined); setSemanticQuery(""); pendingTrip.current=undefined;
-    localStorage.setItem("travel-group-id",String(id)); setNotice(`Группа №${id} загружена`);
+    setGid(id); setName(group.name); setMembers(group.members.map(m=>({key:key.current++,name:m.name,userId:m.user_id,profileId:m.saved_traveller_id??undefined,joined:true,interests:m.interests,travel_profile:m.travel_profile,age_profile:m.age_profile})));
+    setLoadId(String(id)); setShown(undefined); setComparison(undefined); setSemanticQuery(""); pendingTrip.current=undefined;
+    localStorage.setItem(`travel-group-${account.id}`,String(id)); setNotice(`Группа №${id} загружена`);
+  }
+  function chooseTraveller(index:number,profile:SavedTraveller) {
+    changeMember(index,reuseTraveller(profile));
+    setNotice(profile.age_profile.age_on_start!==null?"Профиль заполнен. Возраст числом относится к прошлой поездке — укажите возраст на новую дату.":"Профиль заполнен. Проверьте данные участника перед расчётом.");
+  }
+  function newGroup() {
+    setGid(undefined);setLoadId("");setName("Наше путешествие");setMembers([{key:key.current++,name:"",interests:{history:0.5,nature:0.5,food:0.5,art:0.5}}]);
+    setShown(undefined);setComparison(undefined);setSemanticQuery("");setVisaPreview(undefined);pendingTrip.current=undefined;
+    setNotice("Новая группа. Можно выбрать участников из сохранённых профилей.");
   }
   function changeCosts(value:CostDraft) {
     setCostDraft(value);
@@ -239,7 +262,8 @@ export default function Home() {
 
   return <main className="shell">
     <aside className="sidebar"><a className="brand" href="/">попутно<span>↗</span></a><p className="brand-note">Хорошая поездка начинается<br/>с общего плана.</p>
-      <div className="nav-item active"><span>01</span> Планировщик</div><div className="nav-item"><span>02</span> Ваши поездки <b>{trips.length}</b></div>
+      <div className="nav-item active"><span>01</span> Планировщик</div><a className="nav-item" href="#my-trips"><span>02</span> Ваши поездки <b>{trips.length}</b></a>
+      <div className="account-info"><strong>{account.name}</strong><small>{account.email}</small><button className="text-button" disabled={!!busy} onClick={()=>task("Выходим…",onLogout)}>Выйти</button></div>
       <div className="sidebar-bottom"><span className="dot"/> Локальная версия MVP<p>Общие интересы. Несколько дней.<br/>Проверяемый маршрут.</p></div>
     </aside>
     <section className="workspace"><header><span className="eyebrow">ПУТЕШЕСТВУЙТЕ ВМЕСТЕ</span><span className="header-tag">План на 1–14 дней</span></header>
@@ -247,15 +271,19 @@ export default function Home() {
       <div className="columns"><div className="form-column">
         <TextRequest disabled={!!busy} memberNames={members.map(m=>m.name.trim()).filter(Boolean)} onBusy={setBusy} onApply={applyParsed}/>
         <fieldset disabled={!!busy} className="card"><legend><span className="step">1</span> Ваша компания</legend>
-          <div className="card-top"><label>Название группы<input value={name} maxLength={100} disabled={!!gid} onChange={e=>setName(e.target.value)} /></label>{gid && <span className="badge">Группа №{gid}</span>}</div>
+          <div className="card-top"><label>Название группы<input value={name} maxLength={100} disabled={!!gid} onChange={e=>setName(e.target.value)} /></label>{gid && <span className="badge">Группа №{gid}</span>}<button type="button" className="text-button" onClick={newGroup}>Новая группа</button></div>
           {members.map((m,i)=><div className="member" key={m.key}>
             <div className="member-heading"><span className="avatar">{i+1}</span><label className="member-name"><span className="sr-only">Имя участника {i+1}</span><input placeholder={`Имя участника ${i+1}`} value={m.name} disabled={!!m.userId} maxLength={100} onChange={e=>changeMember(i,{name:e.target.value})}/></label>{!m.userId && <button type="button" className="text-button" aria-label={`Удалить участника ${i+1}`} onClick={()=>setMembers(ms=>ms.filter(x=>x.key!==m.key))}>×</button>}</div>
+            {!m.userId&&!m.profileId&&m.name.trim()&&<div className="traveller-suggestions" aria-label={`Сохранённые участники ${i+1}`}>{travellers.filter(p=>normalized(p.name).includes(normalized(m.name))).slice(0,5).map(p=><button type="button" className="secondary" key={p.id} onClick={()=>chooseTraveller(i,p)}>{p.name} <small>Заполнить сохранённые данные</small></button>)}</div>}
+            {m.profileId&&!m.userId&&<p className="hint">Данные из сохранённого профиля. <button type="button" className="text-button" onClick={()=>changeMember(i,{profileId:undefined})}>Отвязать профиль</button></p>}
             <div className="interests">{categories.map(([id,label])=><label key={id}>{label}<output>{Math.round((m.interests[id] || 0)*100)}%</output><input type="range" aria-label={`${label}, участник ${i+1}`} min="0" max="1" step="0.1" value={m.interests[id] || 0} onChange={e=>changeMember(i,{interests:{...m.interests,[id]:Number(e.target.value)}})} /></label>)}</div>
             <TravelDocuments profile={m.travel_profile} index={i} onChange={travel_profile=>changeMember(i,{travel_profile})}/>
-            <MemberAge key={m.key} value={m.age_profile} index={i} onChange={age_profile=>changeMember(i,{age_profile})}/>
+            <MemberAge key={`${m.key}:${m.profileId??"new"}`} value={m.age_profile} index={i} onChange={age_profile=>changeMember(i,{age_profile})}/>
           </div>)}
           <div className="actions"><button type="button" className="secondary" disabled={members.length>=6} onClick={()=>setMembers(ms=>[...ms,{key:key.current++,name:"",interests:{history:0.5,nature:0.5,food:0.5,art:0.5}}])}>＋ Участник</button><button className="text-button" onClick={()=>task("Сохраняем группу…",async()=>{const id=await saveGroup();setNotice(`Группа №${id} и предпочтения сохранены`);})}>Сохранить группу</button><small>{members.length} / 6</small></div>
           <details className="load"><summary>Продолжить с существующей группой</summary><div className="actions"><label>ID группы<input type="number" min="1" value={loadId} onChange={e=>setLoadId(e.target.value)}/></label><button className="secondary" onClick={()=>task("Загружаем группу…",loadGroup)}>Загрузить</button></div></details>
+          {!!savedGroups.length&&<details className="load"><summary>Мои группы · {savedGroups.length}</summary><div className="saved-list">{savedGroups.map(g=><button type="button" className="secondary" key={g.id} onClick={()=>task("Загружаем группу…",()=>loadGroup(g.id))}>{g.name} <small>№{g.id} · участников: {g.members.length}</small></button>)}</div></details>}
+          {!!travellers.length&&<details className="load"><summary>Сохранённые участники · {travellers.length}</summary><p className="hint">Профили сохраняются вместе с группой. Обновление профиля не меняет прежние поездки.</p><div className="saved-list">{travellers.map(p=><div key={p.id}><span>{p.name}</span><button type="button" className="text-button" onClick={()=>task("Удаляем профиль…",async()=>{await api(`/travellers/${p.id}`,"DELETE");setTravellers(old=>old.filter(x=>x.id!==p.id));setMembers(old=>old.map(m=>m.profileId===p.id?{...m,profileId:undefined}:m));})}>Забыть</button></div>)}</div></details>}
         </fieldset>
         <fieldset disabled={!!busy} className="card"><legend><span className="step">2</span> Параметры поездки</legend>
           <div className="two"><label>Куда отправимся<select value={destination} onChange={e=>{setDestination(e.target.value);setSemanticQuery("");setPoiFilter("");setCatalogSnapshot(undefined);setChoices({});setPois(e.target.value==="Demo City"?demoPois:[]);setCatalogKey(e.target.value==="Demo City"?"Demo City":"");}}>{destinations.map(city=><option key={city.id} value={city.id}>{city.name} · {city.synthetic?"без сети":city.country_name || "Португалия"}</option>)}</select></label><label>Начало поездки<input type="date" value={date} onChange={e=>changeDate(e.target.value)} onInput={e=>changeDate(e.currentTarget.value)}/></label></div>
@@ -305,7 +333,7 @@ export default function Home() {
           <details className="checks"><summary>Проверки и происхождение данных</summary><p>{result!.validation?`${result!.validation.is_valid?"Пройдены":"Есть нарушения"} · пересчитанная стоимость ${money(result!.validation.computed_cost)}`:"Для старого результата отчёт отсутствует"}</p>{result!.validation?.violations.map((v,i)=><p key={i}>{reasonNames[v.code] || v.message}{v.place_id?` · ${resultPois[v.place_id]||v.place_id}`:""}</p>)}<p>{shown.route.data_source}</p><p>{result!.data_context?"Автомобильные переезды OSRM. Данные OSM могут быть неполными. Длительность посещений — правило планирования. Стоимость билетов рассчитана по сохранённым условиям; индивидуальные тарифы приведены у посещений. Питание — явно описанные заказы в кафе. Остальное питание, дополнительные заказы, неподтверждённые скидки и сборы не включены в стоимость остановок. Жильё и транспорт учитываются отдельно, если введены оценки; бронирование и наличие мест не подтверждены. Возвращение к жилью не моделируется.":"Демонстрационные места и время переездов."}</p>{result!.data_context && <p>{result!.data_context.attribution} · Данные получены {new Date(result!.data_context.fetched_at).toLocaleString("ru-RU")}</p>}{result!.data_context?.pois.filter(p=>p.provenance).map(p=><div key={p.id}><b>{p.name}</b><PoiFacts poi={p} sources/></div>)}</details>
         </>}
       </section>}
-      {!!trips.length && <section className="card history"><h3>Сохранённые запросы</h3><p className="hint">Открывается последний расчёт со всеми вариантами. Для старых запросов — одиночный маршрут.</p>{[...trips].reverse().map(t=><button key={t.id} disabled={!!busy} onClick={()=>task("Открываем маршрут…",()=>showTrip(t))}><span>№{t.id} · {destinationName(t.destination)}<small>{t.travel_date||"Без даты"}{t.end_date && t.end_date!==t.travel_date ? ` — ${t.end_date}` : ""} · {money(t.budget)}</small></span><span>↗</span></button>)}</section>}
+      <section id="my-trips" className="card history"><h3>Мои поездки</h3><p className="hint">{trips.length?"Последние 200 запросов вашего аккаунта. Открывается последний расчёт со всеми вариантами.":"Здесь появятся поездки после первого расчёта."}</p>{[...trips].sort((a,b)=>b.id-a.id).map(t=><button key={t.id} disabled={!!busy} onClick={()=>task("Открываем маршрут…",()=>showTrip(t))}><span>№{t.id} · {destinationName(t.destination)}<small>{t.travel_date||"Без даты"}{t.end_date && t.end_date!==t.travel_date ? ` — ${t.end_date}` : ""} · {money(t.budget)} · группа №{t.group_id}</small></span><span>↗</span></button>)}</section>
       </div></div><footer>попутно · Система группового планирования путешествий</footer>
     </section>
   </main>;

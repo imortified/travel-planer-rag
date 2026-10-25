@@ -5,6 +5,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 
 from app.catalog.lodging import search_lodgings
+from app.core.auth import current_account
 from app.core.destinations import RealDestination
 from app.db.session import get_session
 from app.integrations.http_cache import SourceUnavailable
@@ -26,7 +27,9 @@ def xotelo_hotels(destination: RealDestination, offset: int = Query(default=0, g
         ) from exc
 
 
-@router.post("/groups/{group_id}/lodging-quotes", status_code=201)
+@router.post(
+    "/groups/{group_id}/lodging-quotes", status_code=201, dependencies=[Depends(current_account)]
+)
 def lodging_quotes(
     group_id: int, payload: XoteloStay, session: Annotated[Session, Depends(get_session)]
 ):
