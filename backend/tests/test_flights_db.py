@@ -144,3 +144,19 @@ def test_unknown_group_total_is_not_the_observed_price_and_manual_flights_need_n
     data["flight_plan"] = None
     data["budget_settings"]["flights"] = 0
     assert client.post(f"/api/v1/groups/{gid}/trips", json=data).status_code == 201
+
+
+@pytest.mark.parametrize("status,expected", [(400, 422), (401, 503), (429, 503), (500, 503)])
+def test_provider_rejection_is_not_reported_as_an_outage(client, monkeypatch, status, expected):
+    gid, _ = create_group(client, 1)
+    with httpx.Client(transport=httpx.MockTransport(lambda _: httpx.Response(
+        status, json={"error": "invalid origin unit-fake-token"}
+    ))) as upstream:
+        provider = Aviasales(RedisHttpCache(MemoryRedis()), upstream, "unit-fake-token")
+        monkeypatch.setattr("app.catalog.flights.Aviasales", lambda: provider)
+        response = client.post(f"/api/v1/groups/{gid}/flight-searches",
+                               json=search().model_dump(mode="json"))
+    assert response.status_code == expected
+    assert "unit-fake-token" not in response.text
+    if status == 400:
+        assert "HTTP 400" in response.json()["detail"]

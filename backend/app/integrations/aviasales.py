@@ -16,6 +16,41 @@ from app.schemas.flights import AIRPORTS
 URL = "https://api.travelpayouts.com/aviasales/v3/prices_for_dates"
 
 
+class FlightQueryRejected(ValueError):
+    """A provider rejected search parameters, not a service/network outage."""
+
+
+class FlightProviderAccessError(SourceUnavailable):
+    pass
+
+
+class FlightProviderRateLimit(SourceUnavailable):
+    pass
+
+
+def query_error(response):
+    # Inspect only field names to select our own message. Never expose raw provider text,
+    # which can contain echoed credentials, URLs or unrelated request data.
+    try:
+        body = response.json()
+        raw = body.get("error") or body.get("message") or body.get("errors") or ""
+        text = json.dumps(raw).casefold()[:8000]
+    except (ValueError, AttributeError):
+        text = ""
+    if "origin" in text:
+        detail = "Проверьте IATA-код вылета: например MSQ, WAW или VNO."
+    elif "destination" in text:
+        detail = "Поставщик не принял аэропорт назначения. Повторите поиск для выбранного города."
+    elif "departure" in text or "return_at" in text:
+        detail = "Проверьте даты вылета и возврата."
+    else:
+        detail = "Проверьте IATA-код аэропорта и даты вылета/возврата."
+    return FlightQueryRejected(
+        f"Aviasales отклонил параметры поиска (HTTP {response.status_code}). {detail} "
+        "Это не сообщение об отсутствии билетов или недоступности API."
+    )
+
+
 def digest(value):
     return hashlib.sha256(
         json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode()
@@ -177,17 +212,27 @@ class Aviasales:
 
         def execute(client):
             ttl = settings.aviasales_cache_ttl_seconds
-            data, fetched, cache = cached_get(
-                client,
-                URL,
-                query,
-                ttl,
-                self.cache,
-                "aviasales",
-                validate,
-                attempts=1,
-                headers={"X-Access-Token": self.token},
-            )
+            try:
+                data, fetched, cache = cached_get(
+                    client, URL, query, ttl, self.cache, "aviasales", validate,
+                    attempts=1, headers={"X-Access-Token": self.token},
+                )
+            except SourceUnavailable as exc:
+                cause = exc.__cause__
+                if isinstance(cause, httpx.HTTPStatusError):
+                    status = cause.response.status_code
+                    if status in (400, 422):
+                        raise query_error(cause.response) from exc
+                    if status in (401, 403):
+                        raise FlightProviderAccessError(
+                            "Aviasales отклонил доступ к API. Проверьте настройку токена "
+                            "Travelpayouts на сервере."
+                        ) from exc
+                    if status == 429:
+                        raise FlightProviderRateLimit(
+                            "Достигнут лимит запросов Aviasales. Повторите поиск позже."
+                        ) from exc
+                raise
             expires = datetime.fromisoformat(fetched) + timedelta(seconds=ttl)
             for option in data["options"]:
                 if option["provider_expires_at"]:

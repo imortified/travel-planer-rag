@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 from app.catalog.flights import fetch_observation, passengers_for, save_observation
 from app.core.auth import current_account
 from app.db.session import get_session
+from app.integrations.aviasales import FlightProviderAccessError, FlightProviderRateLimit
 from app.integrations.http_cache import SourceUnavailable
 from app.schemas.flights import FlightSearch
 
@@ -31,6 +32,8 @@ def flight_searches(
         return result
     except ValueError as exc:
         raise HTTPException(422, str(exc)) from exc
+    except (FlightProviderAccessError, FlightProviderRateLimit) as exc:
+        raise HTTPException(503, str(exc)) from exc
     except SourceUnavailable as exc:
         raise HTTPException(
             503,

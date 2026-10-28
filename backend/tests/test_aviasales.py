@@ -5,7 +5,13 @@ import httpx
 import pytest
 from cache_helpers import MemoryRedis
 
-from app.integrations.aviasales import Aviasales, search_link
+from app.integrations.aviasales import (
+    Aviasales,
+    FlightProviderAccessError,
+    FlightProviderRateLimit,
+    FlightQueryRejected,
+    search_link,
+)
 from app.integrations.http_cache import RedisHttpCache, SourceUnavailable
 from app.schemas.flights import FlightSearch
 
@@ -184,3 +190,22 @@ def test_redis_outage_uses_fresh_source_and_missing_token_never_calls_source():
 def test_external_links_are_restricted_to_provider_search(value):
     with pytest.raises(ValueError):
         search_link(value)
+
+
+@pytest.mark.parametrize("status,exception", [
+    (400, FlightQueryRejected), (422, FlightQueryRejected),
+    (401, FlightProviderAccessError), (403, FlightProviderAccessError),
+    (429, FlightProviderRateLimit), (500, SourceUnavailable),
+])
+def test_provider_errors_are_distinct_and_never_cache_or_echo_secrets(status, exception):
+    store, calls = MemoryRedis(), []
+    def handle(request):
+        calls.append(request)
+        return httpx.Response(status, json={"error": "Invalid origin unit-fake-token"})
+    with httpx.Client(transport=httpx.MockTransport(handle)) as client:
+        with pytest.raises(exception) as caught:
+            Aviasales(RedisHttpCache(store), client, "unit-fake-token").search(search())
+    assert "unit-fake-token" not in str(caught.value)
+    assert len(calls) == 1 and not store.values
+    if status in (400, 422):
+        assert "IATA" in str(caught.value)
