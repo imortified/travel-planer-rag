@@ -328,3 +328,55 @@ def test_budget_scope_and_currency_are_recovered_when_model_omits_them(quote, sc
     assert result.draft.currency == "EUR"
     assert result.draft.budget_scope == scope
     assert result.group_budget == total
+
+
+@pytest.mark.parametrize("model_currency", ["EUR", "other", None])
+def test_unstated_currency_cannot_be_assumed_or_reported_as_another_currency(model_currency):
+    result = parse_request(
+        ParseInput(text="Бюджет 1800 на группу", member_names=["Аня"]),
+        RecordedModel({
+            "budget_eur": 1800, "currency": model_currency,
+            "evidence": {"budget": "Бюджет 1800 на группу"},
+        }),
+    )
+    assert result.draft.budget_eur == 1800
+    assert result.draft.budget_scope == "group"
+    assert result.draft.currency is None
+    assert result.group_budget is None
+    assert "currency" in {q.field for q in result.questions}
+
+
+@pytest.mark.parametrize(
+    "text,expected_currency,expected_total",
+    [
+        ("Общий бюджет 1800 евро.", "EUR", 180000),
+        ("Бюджет 1800 EUR на группу.", "EUR", 180000),
+        ("Бюджет 1800 рублей на группу. Отель 100 евро.", "other", None),
+        ("Бюджет 1800 на группу.", None, None),
+        ("Бюджет 1800 евро. Бюджет 1800 рублей.", None, None),
+    ],
+)
+def test_amount_only_evidence_recovers_only_its_unambiguous_budget_currency(
+    text, expected_currency, expected_total,
+):
+    result = parse_request(
+        ParseInput(text=text, member_names=["Аня"]),
+        RecordedModel({
+            "budget_eur": 1800, "currency": "other",
+            "evidence": {"budget": "1800"},
+        }),
+    )
+    assert result.draft.currency == expected_currency
+    assert result.group_budget == expected_total
+
+
+def test_fabricated_currency_quote_cannot_validate_a_budget():
+    result = parse_request(
+        ParseInput(text="Хочу в отпуск", member_names=["Аня"]),
+        RecordedModel({
+            "budget_eur": 1800, "currency": "EUR", "budget_scope": "group",
+            "evidence": {"budget": "Общий бюджет 1800 евро"},
+        }),
+    )
+    assert result.draft.budget_eur is None and result.draft.currency is None
+    assert result.draft.budget_scope is None and result.group_budget is None

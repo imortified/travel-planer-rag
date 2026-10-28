@@ -33,7 +33,10 @@ export function TextRequest({disabled, memberNames, onBusy, onApply}: {
       <dl><dt>Направление</dt><dd>{draft.destination?destinationName(draft.destination):"Не указано"}</dd>
       <dt>Даты</dt><dd>{draft.travel_date || "Нужна дата начала"}{draft.end_date?` — ${draft.end_date}`:""}</dd>
       {draft.duration_days!==null && <><dt>Длительность</dt><dd>{draft.duration_days} дн.</dd></>}
-      <dt>Бюджет</dt><dd>{parsed.group_budget!==null?`${money(parsed.group_budget)} на группу`:draft.budget_eur!==null?<>{new Intl.NumberFormat("ru-RU").format(draft.budget_eur)}{draft.currency==="EUR"?" €":draft.currency==="other"?" · нужна сумма в евро":" · уточните валюту"}{draft.budget_scope===null?" · уточните, на кого указан бюджет":draft.budget_scope==="per_person"?" на человека":" на группу"}</>:"Не указан"}</dd>
+      <dt>Сумма из текста</dt><dd>{draft.budget_eur===null?"Не указана":new Intl.NumberFormat("ru-RU").format(draft.budget_eur)}</dd>
+      <dt>Валюта</dt><dd>{draft.currency==="EUR"?"Евро (EUR)":draft.currency==="other"?"Другая валюта. Расчёт поддерживает только евро (EUR).":"Не подтверждена. Расчёт поддерживает только евро (EUR)."}</dd>
+      <dt>Бюджет указан</dt><dd>{draft.budget_scope==="group"?"На всю группу":draft.budget_scope==="per_person"?"На одного человека":"Уточните: на всю группу или на человека"}</dd>
+      {parsed.group_budget!==null && <><dt>Бюджет группы</dt><dd>{money(parsed.group_budget)}</dd></>}
       <dt>Участники</dt><dd>{draft.participants.map(m=>m.name).join(", ") || (draft.participant_count?`${draft.participant_count} чел.`:memberNames.join(", ") || "Не указаны")}</dd>
       <dt>Часы дня</dt><dd>{draft.start===null?"Из формы":clock(draft.start)} — {draft.end===null?"Из формы":clock(draft.end)}</dd>
       <dt>Обязательные места</dt><dd>{draft.mandatory_names.join(", ") || "Не указаны"}</dd>
@@ -41,7 +44,8 @@ export function TextRequest({disabled, memberNames, onBusy, onApply}: {
       <details><summary>Распознанные интересы</summary><p>Общие: {interestText(draft.common_interests)}</p>{draft.participants.map(m=><p key={m.name}>{m.name}: {interestText(m.interests)}</p>)}<p className="hint">Неуказанные веса остаются в форме; у новых участников — 50%.</p></details>
       {!!parsed.questions.length && <div className="message"><b>Нужно уточнить</b><ul>{parsed.questions.map((q,i)=><li key={i}>{q.text}</li>)}</ul><p>Дополните текст выше или имена участников в форме и повторите разбор.</p></div>}
       {parsed.warnings.map((warning,i)=><p className="hint" key={i}>{warning}</p>)}
-      <button className="secondary" disabled={disabled || working || !!parsed.questions.length || applied} onClick={()=>run("Заполняем форму…",async()=>{await onApply(parsed);setApplied(true);})}>{applied?"Параметры применены ✓":"Применить параметры к форме"}</button>
+      {!!parsed.questions.length && <p className="hint" id="trip-apply-blocked">Применение недоступно: ответьте на все вопросы из списка «Нужно уточнить» и повторите разбор текста. Одной распознанной суммы недостаточно.</p>}
+      <button className="secondary" aria-describedby={parsed.questions.length?"trip-apply-blocked":undefined} disabled={disabled || working || !!parsed.questions.length || applied} onClick={()=>run("Заполняем форму…",async()=>{await onApply(parsed);setApplied(true);})}>{applied?"Параметры применены ✓":"Применить параметры к форме"}</button>
       <p className="hint">{parsed.model} · После применения проверьте интересы и ограничения, затем нажмите «Построить маршрут».</p>
     </div>}</div>
   </section>;
