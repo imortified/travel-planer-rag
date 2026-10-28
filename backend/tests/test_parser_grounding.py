@@ -380,3 +380,57 @@ def test_fabricated_currency_quote_cannot_validate_a_budget():
     )
     assert result.draft.budget_eur is None and result.draft.currency is None
     assert result.draft.budget_scope is None and result.group_budget is None
+
+
+@pytest.mark.parametrize("quote", [None, "побывать в Лисабоне", "36 и 34 года", "2026-10-30"])
+@pytest.mark.parametrize("model_start", [None, "2026-10-30", "2027-10-30"])
+def test_literal_trip_date_survives_missing_or_incorrect_model_evidence(quote, model_start):
+    # Synthetic request reproduces the date-evidence failure without personal input data.
+    text = (
+        "Бюджет 1800 евро на двоих. Хотим побывать в Лисабоне. "
+        "Двое взрослых, 36 и 34 года. Хочется спокойно погулять недельку. "
+        "Виза есть. Поездка 30.10.2026"
+    )
+    result = parse_request(
+        ParseInput(text=text, member_names=["Аня", "Борис"]),
+        RecordedModel({
+            "travel_date": model_start, "end_date": "2027-11-10",
+            "evidence": {"dates": quote},
+        }),
+        date(2026, 10, 28),
+    )
+    assert result.draft.travel_date == date(2026, 10, 30)
+    assert result.draft.end_date == date(2026, 11, 5)
+    assert result.draft.evidence.dates == "30.10.2026"
+    assert not {"travel_date", "end_date"} & {q.field for q in result.questions}
+
+
+@pytest.mark.parametrize("literal", ["30.10.2026", "2026-10-30", "30 октября 2026"])
+def test_full_single_date_formats_are_parsed_without_model_evidence(literal):
+    draft = ExtractedTrip()
+    ground_dates(draft, f"Поездка {literal}", None, False, date(2026, 10, 28))
+    assert draft.travel_date == date(2026, 10, 30)
+    assert draft.end_date is None
+
+
+@pytest.mark.parametrize(
+    "text",
+    [
+        "Поездка 31.02.2026",
+        "Поездка 30.10",
+        "Поездка 30 октября, бюджет 2026 евро",
+        "Поездка не 30.10.2026",
+        "Поездка после 30.10.2026",
+        "Поездка 30.10.2026 или 31 октября",
+        "Поездка с 30.10.2026 по 05.11.2026",
+        "Дата рождения 30.10.2026",
+        "Родился 30.10.2026",
+        "Паспорт выдан 30.10.2026",
+        "Виза действует до 30.10.2026",
+        "Возвращаемся 30.10.2026",
+    ],
+)
+def test_date_recovery_does_not_invent_start_from_ambiguous_or_unrelated_dates(text):
+    draft = ExtractedTrip()
+    ground_dates(draft, text, None, False, date(2026, 10, 28))
+    assert draft.travel_date is None and draft.end_date is None

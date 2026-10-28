@@ -183,6 +183,35 @@ def single_calendar_date(quote):
     return next(iter(candidates)), invalid
 
 
+def single_travel_date(text):
+    """Recover a literal full date; reject ranges, alternatives and unrelated document dates."""
+    value, invalid = single_calendar_date(text)
+    if value is None or invalid:
+        return None
+    pattern = (
+        r"\b(?:\d{4}-\d{2}-\d{2}|\d{1,2}\.\d{1,2}\.\d{4}|\d{1,2}\s+(?:"
+        + "|".join(MONTH_NUMBERS) + r")\s+\d{4})\b"
+    )
+    for match in re.finditer(pattern, text, re.I):
+        # Keep dots inside numeric dates rather than splitting them as sentences.
+        separator = r"(?<!\d)[.!?;\n]|[.!?;\n](?!\d)"
+        before = re.split(separator, text[:match.start()])[-1]
+        after = re.split(separator, text[match.end():])[0]
+        context = before + " " + after
+        if re.search(
+            r"\b(?:или|либо|рожд\w*|родил\w*|паспорт\w*|виз[аыуе]|"
+            r"действ\w*|истека\w*|возвращ\w*|обратно|окончан\w*)\b", context, re.I
+        ):
+            continue
+        if re.search(
+            r"\b(?:не(?:\s+(?:с|на|в))?|вместо|кроме|до|по|после|раньше|позже|"
+            r"примерно|около)\s*[:—–-]?\s*$", before, re.I
+        ):
+            continue
+        return value, match.group()
+    return None
+
+
 def relative_date(text, today):
     matches = []
     for match in re.finditer(r"\b(?:послезавтра|завтра|сегодня)\b", text, re.I):
@@ -204,6 +233,12 @@ def ground_dates(draft, text, quote, evidence_valid, today):
     quote = quote if evidence_valid else ""
     draft.duration_days = explicit_duration(text)
     duration_stated = draft.duration_days is not None
+    recovered = single_travel_date(text)
+    if recovered:
+        draft.travel_date, draft.evidence.dates = recovered
+        # One date cannot justify a model-invented end date; the parser derives it from duration.
+        draft.end_date = None
+        return
     context = quote or text
     explicit_calendar = bool(
         re.search(
