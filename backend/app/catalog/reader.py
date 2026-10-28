@@ -74,10 +74,19 @@ class CatalogReader:
             if window is None:
                 issues.append("unknown_closed_or_unsupported_hours")
             if fact.provenance:
-                if not fact.provenance.checked_on <= travel_date <= fact.provenance.valid_until:
+                review_only = fact.provenance.validity_kind == "review_window"
+                if travel_date < fact.provenance.checked_on or (
+                    not review_only and travel_date > fact.provenance.valid_until
+                ):
                     issues.append("curation_outside_validity")
                 if not fact.provenance.checked_on <= assessed_date <= fact.provenance.valid_until:
                     issues.append("curation_review_expired")
+                if review_only and travel_date > assessed_date:
+                    poi["price_status"] = "reference_estimate"
+                    poi["price_notice"] = (
+                        "Справочная цена на дату проверки; цена и особые часы на дату поездки "
+                        "не подтверждены. Срок повторной проверки не ограничивает даты поездки."
+                    )
             if not fresh:
                 issues.append("catalog_expired")
             poi.update(window=window, issues=issues, eligible=not issues)
@@ -94,6 +103,8 @@ class CatalogReader:
         }
         if manifest.source_upstream_asof:
             metadata["source_upstream_asof"] = manifest.source_upstream_asof.isoformat()
+        if manifest.curated_validity_kind:
+            metadata["curated_validity_kind"] = manifest.curated_validity_kind
         return {
             "destination": manifest.destination,
             "currency": manifest.currency,

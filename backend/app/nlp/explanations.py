@@ -108,6 +108,23 @@ def facts_for(route, trip, primary=None, option_count=1):
             f"Маршрут включает {len(visits)} остановок с запланированным питанием. "
             "Достопримечательности не повторяются; заведения питания могут повторяться."
         )
+    if costs and (
+        costs.get("food_estimate")
+        or (getattr(trip, "meal_settings", None) or {}).get("mode") == "estimate"
+    ):
+        facts["budget"] += (
+            f" В питании {money(costs['food_estimate'])} — пользовательская оценка, "
+            "а не подтверждённая цена заказа."
+        )
+        facts["limitations"] += (
+            " Заведения для оценочного питания выбраны по картографическим данным "
+            "и обычным часам работы; меню, фактическая стоимость и столики не подтверждены."
+        )
+    if any(p.get("price_status") == "reference_estimate" for p in context.get("pois", [])):
+        facts["limitations"] += (
+            " Тарифы будущей поездки — справочные цены на дату проверки; "
+            "особые часы и окончательные цены на будущую дату не подтверждены."
+        )
     if context.get("pricing_policy"):
         rows = [row for visit in visits for row in (visit.get("participant_prices") or [])]
         fallback = sum(row["reason"].startswith("regular_fallback") for row in rows)

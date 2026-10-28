@@ -46,6 +46,7 @@ class MealSlot(BaseModel):
 class MealSettings(BaseModel):
     model_config = ConfigDict(extra="forbid")
     version: Literal["scheduled-meals-v1"] = "scheduled-meals-v1"
+    mode: Literal["reviewed", "estimate"] = "reviewed"
     breakfast: MealSlot | None = None
     lunch: MealSlot | None = None
     dinner: MealSlot | None = None

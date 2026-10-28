@@ -147,6 +147,7 @@ def test_concurrent_refresh_is_atomic_and_old_writer_cannot_replace_newer():
 
 @pytest.mark.parametrize("city", ["Lisbon", "Porto", "Sintra"])
 def test_api_reads_offline_catalog_and_freezes_version_in_saved_results(db, monkeypatch, city):
+    monkeypatch.setattr("app.schemas.groups.trip_today", lambda _: NOW.date())
     # This fixture transaction is always rolled back; a live catalog may be newer than NOW.
     db.execute(update(CatalogHead).where(CatalogHead.destination == city).values(version_id=None))
     saved, _ = publish(db, snapshot(city), NOW)

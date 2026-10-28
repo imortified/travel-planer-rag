@@ -40,6 +40,9 @@ class Provenance(FactModel):
     notes: str
     original_osm: dict | None = None
     coordinates_source: HttpUrl | None = None
+    validity_kind: Literal["source_period", "review_window"] | None = Field(
+        default=None, exclude_if=lambda value: value is None
+    )
 
     @model_validator(mode="after")
     def validity(self):
@@ -77,6 +80,9 @@ class PoiFact(FactModel):
     location_kind: Literal["mapped_node", "mapped_way_bbox_centre"] | None = Field(
         default=None, exclude_if=lambda value: value is None
     )
+    amenity: str | None = Field(default=None, exclude_if=lambda value: value is None)
+    website_url: HttpUrl | None = Field(default=None, exclude_if=lambda value: value is None)
+    menu_url: HttpUrl | None = Field(default=None, exclude_if=lambda value: value is None)
 
 
 class Manifest(FactModel):
@@ -92,6 +98,9 @@ class Manifest(FactModel):
     catalog_version: str
     curated_checked_on: date
     curated_valid_until: date
+    curated_validity_kind: Literal["source_period", "review_window"] | None = Field(
+        default=None, exclude_if=lambda value: value is None
+    )
     attribution: str
     source_upstream_asof: AwareDatetime | None = Field(
         default=None, exclude_if=lambda value: value is None

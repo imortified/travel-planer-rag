@@ -16,8 +16,8 @@ export type LodgingSnapshot = {version:string;mode:"directory"|"xotelo";selectio
 export type ParticipantPrice = {participant_id:string;age:number|null;cost:number;label:string;reason:string;source_url?:string|null};
 export type BudgetSettings = {version?:string;lodging:number|null;transport:number|null;flights?:number|null;transport_scope?:"all_transport"|"ground_only";reserve:number};
 export type MealSlot = {start:number;end:number;duration:number;max_cost_per_person:number};
-export type MealSettings = {version?:string;breakfast?:MealSlot|null;lunch?:MealSlot|null;dinner?:MealSlot|null};
-export type BudgetBreakdown = {version:string;scope:"trip_estimate"|"stops_only";budget:number;admissions:number;food:number;stops_total:number;lodging_estimate:number|null;lodging_price_basis?:string;transport_estimate:number|null;flights_estimate?:number|null;transport_scope?:"all_transport"|"ground_only";reserve:number;known_total:number;available_for_stops:number;unallocated_after_reserve:number;unknown_categories:string[];within_budget:boolean;meal_policy:MealSettings|null};
+export type MealSettings = {version?:string;mode?:"reviewed"|"estimate";breakfast?:MealSlot|null;lunch?:MealSlot|null;dinner?:MealSlot|null};
+export type BudgetBreakdown = {version:string;scope:"trip_estimate"|"stops_only";budget:number;admissions:number;food:number;food_estimate?:number;food_reference?:number;stops_total:number;lodging_estimate:number|null;lodging_price_basis?:string;transport_estimate:number|null;flights_estimate?:number|null;transport_scope?:"all_transport"|"ground_only";reserve:number;known_total:number;available_for_stops:number;unallocated_after_reserve:number;unknown_categories:string[];within_budget:boolean;meal_policy:MealSettings|null};
 export type PaceMode = "unrestricted" | "relaxed" | "balanced" | "intensive";
 export type PaceSettings = {mode:Exclude<PaceMode,"unrestricted">;max_visits:number;max_active_minutes:number;break_minutes:number;version:string};
 export type PlanningSummary = {pace:PaceSettings|null;total_days:number;active_days:number;attraction_days?:number;candidate_count:number;coverage_upper_bound:number;scheduled_count:number;cost_scope:string;warnings:string[];
@@ -61,13 +61,14 @@ export type Trip = {id: number; group_id: number; destination: string; travel_da
   pace?:PaceMode;pace_settings?:PaceSettings|null;
   budget: number; start: number; end: number; participants_snapshot: Member[];semantic_query?:string|null;purpose?:string};
 export type Poi = {id: string; name: string; eligible: boolean; issues: string[]; source_url?: string; available_dates?: string[];
+  price_status?:"reference_estimate"|"user_estimate";price_notice?:string;website_url?:string;menu_url?:string;
   meal_types?:string[];meal_type?:string;venue_id?:string;
   participant_prices?:ParticipantPrice[];group_cost?:number;
   prices_by_date?:Record<string,number>;
   latitude?:number|null; longitude?:number|null;
   cost_per_person?: number | null; category?: string; duration?: number;
-  provenance?: {checked_on: string; valid_until: string; price_source: string; hours_source: string; notes: string;price_policy?:string}};
-export type CatalogSnapshot = {version_id:number;content_sha256:string;published_at:string;fetched_at:string;fresh_until:string;curated_version:string;curated_review_until:string;source_upstream_asof?:string;status:"ready"|"expired"};
+  provenance?: {checked_on: string; valid_until: string;validity_kind?:"review_window"|"source_period"; price_source: string; hours_source: string; notes: string;price_policy?:string}};
+export type CatalogSnapshot = {version_id:number;content_sha256:string;published_at:string;fetched_at:string;fresh_until:string;curated_version:string;curated_review_until:string;curated_validity_kind?:"review_window"|"source_period";source_upstream_asof?:string;status:"ready"|"expired"};
 export type CatalogResponse = {pois:Poi[];catalog_snapshot:CatalogSnapshot};
 export type DataContext = {pois:Poi[];places_snapshot?:{id:string;cost_per_person?:number|null}[]; origin?:{id:string;name:string;latitude:number;longitude:number}; transport:string; fetched_at:string; attribution:string;catalog_snapshot?:CatalogSnapshot;
   pricing_policy?:string;pricing_assessed_on?:string;age_exclusions?:{id:string;name:string;reason:string;travel_date:string}[]};

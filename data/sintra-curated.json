@@ -2,6 +2,7 @@
   "version": "sintra-curated-2026-10-25-age-v1",
   "checked_on": "2026-10-24",
   "valid_until": "2026-11-22",
+  "validity_kind": "review_window",
   "price_policy": "Ordinary admission is the fallback. Verified individual age tariffs are applied separately for each visit date; missing age or an unverified band uses the ordinary tariff with an explicit warning. Food costs cover the same explicit order per participant, including children; child portions are not modeled. Proof-dependent, family, birthday and online promotions are excluded.",
   "pois": [
     {

@@ -103,6 +103,23 @@ def test_republishing_extract_cannot_reset_source_age(tmp_path):
         collect_snapshot(curated_path=curated, extract_path=extract, curated_only=True, now=NOW)
 
 
+def test_imported_cafe_is_not_free_just_because_entry_has_no_fee(tmp_path):
+    curated, extract = sources(tmp_path)
+    raw = json.loads(extract.read_text("utf-8"))
+    record = raw["pois"]["Porto"][0]
+    record["tags"] = {
+        "amenity": "cafe", "fee": "no", "opening_hours": "Mo-Su 09:00-18:00",
+        "website": "javascript:alert(1)", "website:menu": "https://example.org/menu",
+    }
+    extract.write_text(json.dumps(raw), encoding="utf-8")
+    data = collect_snapshot(
+        curated_path=curated, extract_path=extract, now=NOW, destination="Porto"
+    )
+    fact = data.pois[0]
+    assert fact.category == "food" and fact.cost_per_person is None
+    assert fact.website_url is None and str(fact.menu_url) == "https://example.org/menu"
+
+
 def test_reviewed_free_date_is_specific_and_historical_hash_shape_is_preserved():
     original = snapshot(curated=True)
     fact = original.pois[0].model_copy(

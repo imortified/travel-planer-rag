@@ -107,6 +107,8 @@ def collect_snapshot(
                 "catalog_version": curated.version,
                 "curated_checked_on": curated.checked_on,
                 "curated_valid_until": curated.valid_until,
+                **({"curated_validity_kind": "review_window"}
+                   if curated.validity_kind == "review_window" else {}),
                 "attribution": source["attribution"],
             },
             "pois": facts,

@@ -10,8 +10,9 @@ pytestmark = pytest.mark.skipif(os.getenv("RUN_DB_TESTS") != "1", reason="Requir
 
 @pytest.mark.parametrize("algorithm", ["greedy", "beam", "cp-sat"])
 @pytest.mark.parametrize("collection", ["routes", "route-sets"])
+@pytest.mark.parametrize("mode", ["reviewed", "estimate"])
 def test_api_freezes_meals_and_budget_and_restores_priced_results(
-    client, monkeypatch, algorithm, collection
+    client, monkeypatch, algorithm, collection, mode
 ):
     _, data = fixture(days=2)
 
@@ -27,7 +28,7 @@ def test_api_freezes_meals_and_budget_and_restores_priced_results(
         "end_date": "2026-10-27",
         "budget": 50000,
         "pace": "balanced",
-        "meal_settings": LUNCH,
+        "meal_settings": {**LUNCH, "mode": mode},
         "budget_settings": {"lodging": 10000, "transport": 2000, "reserve": 3000},
     }
     response = client.post(f"/api/v1/groups/{gid}/trips", json=payload)
@@ -46,7 +47,9 @@ def test_api_freezes_meals_and_budget_and_restores_priced_results(
     )
     assert all(v["group_cost"] == v["cost_per_person"] * 2 for v in result["visits"])
     report = result["budget_breakdown"]
-    assert report["food"] == 4000
+    assert report["food"] == (6000 if mode == "estimate" else 4000)
+    assert report["food_estimate"] == (6000 if mode == "estimate" else 0)
+    assert trip["meal_settings"]["mode"] == mode
     assert report["stops_total"] == result["total_cost"]
     assert report["known_total"] == result["total_cost"] + 12000
     assert report["available_for_stops"] == 35000

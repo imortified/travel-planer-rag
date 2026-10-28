@@ -140,6 +140,7 @@ class CityProvider:
         self.city = city_for(destination)
         self.preferences = preferences or {}
         self.selection_state = {}
+        self.meal_settings = None
         self.client = client
         self.cache = cache if cache is not None else RedisHttpCache()
         self.curated_path = curated_path or self.city.curated_path
@@ -161,6 +162,7 @@ class CityProvider:
             preferences=self.preferences,
         )
         provider.selection_state = self.selection_state
+        provider.meal_settings = self.meal_settings
         return provider
 
     def catalog(self, travel_date):
@@ -241,7 +243,9 @@ class CityProvider:
                 return self.with_client(client).dataset(
                     travel_date, mandatory, allow_empty, semantic_query, excluded
                 )
-        catalog = self.catalog(travel_date)
+        from app.catalog.meals import meal_candidates, with_meal_estimates
+
+        catalog = with_meal_estimates(self.catalog(travel_date), self.meal_settings)
         if len(mandatory) > CANDIDATE_LIMIT:
             raise IncompleteData(f"At most {CANDIDATE_LIMIT} mandatory POI are supported")
         if (catalog.get("catalog_snapshot") or {}).get("status") == "expired":
@@ -281,6 +285,11 @@ class CityProvider:
         relevance = {m["place_id"]: m["score"] for m in retrieval["matches"]} if retrieval else {}
         selected = select_candidates(
             usable, mandatory, self.preferences, relevance, offset=travel_date.toordinal()
+        )
+        selected_ids = {p["id"] for p in selected}
+        selected.extend(
+            p for p in meal_candidates(catalog, self.meal_settings, excluded)
+            if p["id"] not in selected_ids
         )
         if allow_empty and not selected:
             return (

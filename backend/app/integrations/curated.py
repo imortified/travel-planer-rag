@@ -27,6 +27,7 @@ class Entry(BaseModel):
     coordinates_source: HttpUrl | None = None
     checked_on: date | None = None
     valid_until: date | None = None
+    validity_kind: Literal["source_period", "review_window"] | None = None
     price_policy: str | None = Field(default=None, min_length=1, pattern=r"\S")
     free_weekdays: list[Literal[0, 1, 2, 3, 4, 5, 6]] | None = None
     free_dates: list[date] | None = None
@@ -56,6 +57,7 @@ class Catalog(BaseModel):
     version: str
     checked_on: date
     valid_until: date
+    validity_kind: Literal["source_period", "review_window"] = "source_period"
     price_policy: str
     pois: list[Entry]
 
@@ -101,6 +103,9 @@ def enrich(
             "hours_source": str(entry.hours_source),
             "notes": entry.notes,
         }
+        validity_kind = entry.validity_kind or catalog.validity_kind
+        if validity_kind == "review_window":
+            provenance["validity_kind"] = "review_window"
         if original:
             provenance["original_osm"] = {
                 k: original.get(k) for k in ("name", "fee", "opening_hours", "osm_timestamp")
@@ -129,7 +134,9 @@ def enrich(
                 "unknown_closed_or_unsupported_hours",
             )
         ]
-        if not checked_on <= travel_date <= valid_until:
+        if travel_date < checked_on or (
+            validity_kind == "source_period" and travel_date > valid_until
+        ):
             issues.append("curation_outside_validity")
         if window is None:
             issues.append("unknown_closed_or_unsupported_hours")

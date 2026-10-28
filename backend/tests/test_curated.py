@@ -1,9 +1,11 @@
+import json
 from datetime import date
 
 import pytest
 
+from app.core.config import ROOT
 from app.integrations.city import opening_window
-from app.integrations.curated import enrich
+from app.integrations.curated import Catalog, enrich
 from app.planning.models import Participant, Place, Request
 from app.planning.service import checked_plan
 
@@ -54,9 +56,20 @@ def test_official_schedule_overrides_osm_and_preserves_original():
 
 
 def test_expired_facts_are_not_used_as_osm_fallback():
-    pois, _ = enrich(mapped_pois(), date(2026, 11, 23), opening_window)
+    catalog = Catalog.model_validate_json((ROOT / "data/lisbon-curated.json").read_text("utf-8"))
+    catalog = catalog.model_copy(update={"validity_kind": "source_period"})
+    pois, _ = enrich(mapped_pois(), date(2026, 11, 23), opening_window, catalog=catalog)
     assert all(not p["eligible"] for p in pois)
     assert all("curation_outside_validity" in p["issues"] for p in pois)
+
+
+def test_official_tariff_period_overrides_catalog_review_policy():
+    catalog = Catalog.model_validate_json((ROOT / "data/lisbon-curated.json").read_text("utf-8"))
+    fact = catalog.pois[1].model_copy(update={"validity_kind": "source_period"})
+    catalog = catalog.model_copy(update={"pois": [fact]})
+    pois, _ = enrich(mapped_pois(), date(2026, 11, 30), opening_window, catalog=catalog)
+    carmo = next(p for p in pois if p["id"] == fact.id)
+    assert "curation_outside_validity" in carmo["issues"] and not carmo["eligible"]
 
 
 def test_missing_osm_node_does_not_get_invented_coordinates():
@@ -138,7 +151,6 @@ def test_food_and_garden_schedule_boundaries_and_sources():
 
 
 def test_food_requires_priced_order_and_entry_review_bounds():
-    import json
 
     from app.core.config import ROOT
     from app.integrations.curated import Catalog, Entry

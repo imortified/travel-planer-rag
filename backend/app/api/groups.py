@@ -372,6 +372,7 @@ def planning_inputs(trip, request):
         else None
     )
     if provider is not None:
+        provider.meal_settings = getattr(trip, "meal_settings", None)
         provider.preferences = {
             category: sum(p.interests.get(category, 0) for p in request.participants)
             / len(request.participants)

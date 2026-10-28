@@ -17,16 +17,23 @@ def activity_budget(trip):
 def breakdown(trip, result, inputs):
     settings = settings_for(trip)
     schedule = [day.visits for day in result.days] if result.days else [result.visits]
-    food = 0
+    food = food_estimate = 0
     participants = [
         str(row.get("user_id", index)) for index, row in enumerate(trip.participants_snapshot)
     ]
     for visits, data in zip(schedule, inputs, strict=True):
         by_id = {p.id: p for p in data.places}
+        metadata = {p["id"]: p for p in (data.data_context or {}).get("pois", [])}
         food += sum(
             group_cost(by_id[v.place_id], participants)
             for v in visits
             if v.place_id in by_id and by_id[v.place_id].category == "food"
+        )
+        food_estimate += sum(
+            group_cost(by_id[v.place_id], participants) for v in visits
+            if v.place_id in by_id
+            and by_id[v.place_id].category == "food"
+            and metadata.get(v.place_id, {}).get("price_status") == "user_estimate"
         )
     lodging = settings.lodging if settings else None
     transport = settings.transport if settings else None
@@ -43,6 +50,8 @@ def breakdown(trip, result, inputs):
         "budget": trip.budget,
         "admissions": result.total_cost - food,
         "food": food,
+        "food_estimate": food_estimate,
+        "food_reference": food - food_estimate,
         "stops_total": result.total_cost,
         "lodging_estimate": lodging,
         "lodging_price_basis": "xotelo_base_estimate" if provider_estimate else "user_estimate",

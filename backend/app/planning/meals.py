@@ -19,6 +19,7 @@ def prepare_meals(request, inputs, settings):
     if settings is None:
         return request, inputs
     settings = MealSettings.model_validate(settings)
+    estimated = settings.mode == "estimate"
     slots = []
     food_ids = {p.id for data in inputs for p in data.places if p.category == "food"}
     required_food = request.mandatory & food_ids
@@ -36,13 +37,21 @@ def prepare_meals(request, inputs, settings):
                 if (
                     place.category == "food"
                     and place.id not in request.excluded
-                    and poi.get("provenance")
+                    and (poi.get("provenance") or (estimated and poi.get("source_url")))
                     and kind in (poi.get("meal_types") or [])
-                    and place.cost_per_person <= slot.max_cost_per_person
+                    and (estimated or place.cost_per_person <= slot.max_cost_per_person)
                     and opens + duration <= closes
                     and ("start", place.id) in data.travel
                 ):
-                    choices.append(replace(place, opens=opens, closes=closes, duration=duration))
+                    cost = slot.max_cost_per_person if estimated else place.cost_per_person
+                    choices.append(replace(
+                        place, opens=opens, closes=closes, duration=duration,
+                        cost_per_person=cost,
+                        participant_costs=(
+                            {p.id: cost for p in request.participants}
+                            if estimated else place.participant_costs
+                        ),
+                    ))
             if not choices:
                 raise ValueError(
                     f"{data.travel_date}: для «{LABELS[kind]}» нет проверенного заведения "
@@ -123,11 +132,29 @@ def prepare_meals(request, inputs, settings):
         for kind, chosen, identifier in selected.get(index, []):
             places.append(replace(chosen, id=identifier))
             mapping[identifier] = chosen.id
+            meal_metadata = dict(metadata[chosen.id])
+            if estimated:
+                meal_metadata.update(
+                    price_status="user_estimate",
+                    price_notice=(
+                        "Ваша оценка расходов; цена меню и наличие столиков не подтверждены."
+                    ),
+                    group_cost=group_cost(chosen, request.participants),
+                    participant_prices=[{
+                        "participant_id": p.id,
+                        "age": next((r.get("age") for r in meal_metadata.get(
+                            "participant_prices", []
+                        ) if r["participant_id"] == p.id), None),
+                        "cost": chosen.cost_per_person, "label": "Ваша оценка на приём пищи",
+                        "reason": "user_meal_estimate", "source_url": None,
+                    } for p in request.participants],
+                )
             pois.append(
                 {
-                    **metadata[chosen.id],
+                    **meal_metadata,
                     "id": identifier,
-                    "name": f"{LABELS[kind]} · {metadata[chosen.id]['name']}",
+                    "name": f"{LABELS[kind]} · {metadata[chosen.id]['name']}"
+                    + (" · оценка" if estimated else ""),
                     "venue_id": chosen.id,
                     "meal_type": kind,
                     "cost_per_person": chosen.cost_per_person,

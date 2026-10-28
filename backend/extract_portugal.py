@@ -17,6 +17,8 @@ from app.core.destinations import EXTRACT_REGIONS as REGIONS
 
 def interesting(tags):
     return tags.get("name") and (
+        tags.get("amenity") in ("restaurant", "cafe", "fast_food", "food_court")
+        or
         tags.get("tourism") in ("museum", "aquarium", "zoo", "attraction", "gallery")
         or tags.get("leisure") in ("garden", "park")
         or tags.get("historic") in ("castle", "monastery", "palace")

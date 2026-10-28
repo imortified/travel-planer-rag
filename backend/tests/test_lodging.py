@@ -102,7 +102,8 @@ def test_selection_rejects_invalid_dates_rooms_and_client_quotes(patch):
         LodgingSelection.model_validate(selection(**patch))
 
 
-def test_trip_requires_real_city_full_budget_and_covered_dates():
+def test_trip_requires_real_city_full_budget_and_covered_dates(monkeypatch):
+    monkeypatch.setattr("app.schemas.groups.trip_today", lambda _: date(2026, 10, 23))
     payload = {
         "destination": "Lisbon",
         "travel_date": "2026-10-26",
