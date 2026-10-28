@@ -35,3 +35,12 @@ Thumbs.db
 *.key
 *.p12
 *.pfx
+
+# Private academic documents stay local and must never be published.
+/docs/latex-note/
+*.tex
+*.pdf
+*.doc
+*.docx
+*.odt
+/Пояснительная записка*

@@ -9,3 +9,5 @@
   Track example configuration and dependency lock files.
 - Run checks appropriate to the change; integration tests require migrated PostgreSQL and RUN_DB_TESTS=1.
 - Frontend-specific Next.js instructions are in frontend/AGENTS.md.
+- Academic notes, course/thesis documents, personal title pages and their source archives must stay local. Never track, force-add, commit or push them, even when editing them for the user. Keep docs/latex-note/ and academic file formats ignored.
+- Before any push, verify the branch history contains no docs/latex-note/ commits. Old local documentation branches are private recovery history and must never be pushed. Do not use git push --all or --mirror.
