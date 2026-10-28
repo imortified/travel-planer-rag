@@ -5,6 +5,7 @@ import { AccountGate } from "./components/account-gate";
 import { ThemeSwitcher } from "./components/theme-switcher";
 import type { Account, SavedTraveller } from "../lib/api";
 import { reuseTraveller } from "../lib/travellers";
+import { ensurePeriodCatalog, periodCatalogKey } from "../lib/period-catalog";
 import { RouteDays } from "./components/route-days";
 import { PoiFacts } from "./components/poi-facts";
 import { RouteComparison } from "./components/route-comparison";
@@ -124,6 +125,13 @@ function Planner({account,onLogout}:{account:Account;onLogout:()=>Promise<void>}
     if (busy) return; setBusy(label); setError(""); setNotice("");
     try {await action();} catch(e) {setError(e instanceof Error ? e.message : "Не удалось выполнить запрос");} finally {setBusy("");}
   }
+  async function loadPeriodCatalog(force=false) {
+    const context={destination,date,endDate};
+    const loaded=await ensurePeriodCatalog(context,{key:catalogKey,pois,snapshot:catalogSnapshot},
+      path=>api<CatalogResponse>(path),force);
+    setPois(loaded.pois);setCatalogSnapshot(loaded.snapshot);setCatalogKey(loaded.key);
+    return loaded;
+  }
   async function saveGroup() {
     if (!name.trim() || members.some(m=>!m.name.trim())) throw new Error("Введите название группы и имена всех участников.");
     const ages=members.map(m=>ageProfile(m.age_profile));
@@ -193,9 +201,7 @@ function Planner({account,onLogout}:{account:Account;onLogout:()=>Promise<void>}
   async function calculate() {
     if (!members.length) throw new Error("Добавьте хотя бы одного участника.");
     if (algorithm==="cp-sat" && (!solverLimit.trim() || !Number.isFinite(Number(solverLimit)) || Number(solverLimit)<0.05 || Number(solverLimit)>30)) throw new Error("Лимит CP-SAT должен быть от 0,05 до 30 секунд.");
-    if (destination!=="Demo City" && !date) throw new Error("Выберите дату поездки.");
-    if (destination!=="Demo City" && catalogKey!==`${destination}:${date}:${endDate || date}`) throw new Error("Сначала загрузите места для выбранной даты.");
-    if (destination!=="Demo City" && catalogSnapshot && (catalogSnapshot.status==="expired" || Date.parse(catalogSnapshot.fresh_until)<=Date.now())) throw new Error("Срок свежести каталога истёк. Требуется обновление данных.");
+    periodCatalogKey({destination,date,endDate});
     if (pendingConstraints.length) throw new Error("Сначала сопоставьте обязательные и исключённые места из текста с каталогом или явно уберите условие.");
     if (!Number.isFinite(Number(budget)) || Number(budget)<0 || Number(budget)>10000000 || !budget.trim()) throw new Error("Проверьте общий бюджет.");
     if (!start || !end || minutes(start)>=minutes(end)) throw new Error("Окончание дня должно быть позже начала.");
@@ -204,6 +210,7 @@ function Planner({account,onLogout}:{account:Account;onLogout:()=>Promise<void>}
     if(selectedQuote && Date.parse(selectedQuote.observation.expires_at)<=Date.now())throw new Error("Предложение Xotelo истекло. Загрузите цены снова или выберите ручной каталог.");
     if(selectedFlight)requireSelectedFlightBudget(costDraft);
     if(selectedFlight&&Date.parse(selectedFlight.observation.expires_at)<=Date.now())throw new Error("Срок выбора перелёта истёк. Повторите поиск.");
+    if(destination!=="Demo City")await loadPeriodCatalog();
     const id = await saveGroup();
     const payload={...costPayload(costDraft,destination),flight_plan:selectedFlight?.choice||null,lodging_quote:selectedQuote?.choice || null,lodging_plan:selectedLodging?.plan || null,destination, purpose, pace, travel_date:date || null, end_date:endDate || null, semantic_query:destination!=="Demo City" && semanticQuery?semanticQuery:null, budget:Math.round(Number(budget)*100), start:minutes(start), end:minutes(end),
       mandatory:Object.keys(choices).filter(k=>choices[k]==="mandatory"), excluded:Object.keys(choices).filter(k=>choices[k]==="excluded")};
@@ -300,7 +307,7 @@ function Planner({account,onLogout}:{account:Account;onLogout:()=>Promise<void>}
           <LodgingSearch key={lodgingContext} destination={destination} first={date} last={endDate || date} guestCount={members.length} value={selectedLodging} disabled={!!busy} onChange={chooseDirectory}/>
           {destination!=="Demo City" && <div className="visa-preview"><label>Цель въезда<select value={purpose} onChange={e=>setPurpose(e.target.value)}><option value="tourism">Туризм</option><option value="other">Иная цель</option><option value="unknown">Не уточнена</option></select></label><p className="hint">Визовый справочник: семь гражданств, краткосрочный туризм в Португалии. Документы заполняются у каждого участника.</p><button className="secondary" disabled={!members.length} onClick={()=>task("Проверяем визовые условия…",async()=>{if(members.some(m=>!m.name.trim())) throw new Error("Введите имена участников.");const report=await api<VisaData>("/visa-check","POST",visaInput);setVisaPreview({signature:visaSignature,report});})}>Проверить визовые условия</button>{visaPreview?.signature===visaSignature && <VisaReport report={visaPreview.report}/>}</div>}
           <p className="hint">{destination!=="Demo City"?`Португалия · ${destinationName(destination)}. Старт — ${destinationInfo?.origin?.name || "точка города"}. Автомобильные переезды по доступным дорогам. Один город на поездку. Билеты рассчитываются по возрасту каждого участника; при непроверенной льготе используется обычный тариф. Питание — указанные заказы. Оценки жилья и транспорта учитываются отдельно, если заданы. Прочее питание, дополнения и неподтверждённые скидки не включены в стоимость остановок. Бронирование и доступность билетов не подтверждаются. Время — местное.`:"Синтетические музей, рынок и парк для проверки сценария. Бюджет учитывает входные билеты на всех участников."}</p>
-          {destination!=="Demo City" && <button className="secondary" disabled={!date} onClick={()=>task("Загружаем каталог…",async()=>{const c=await api<CatalogResponse>(`/destinations/${destination}/pois?travel_date=${date}${endDate?`&end_date=${endDate}`:""}`);setPois(c.pois);setCatalogSnapshot(c.catalog_snapshot);setCatalogKey(`${destination}:${date}:${endDate || date}`);setNotice(`Найдено ${c.pois.length} мест, подходят для расчёта: ${c.pois.filter(p=>p.eligible).length}`);})}>Загрузить места на период</button>}
+          {destination!=="Demo City" && <><button type="button" className="secondary" onClick={()=>task("Загружаем каталог…",async()=>{const c=await loadPeriodCatalog(true);setNotice(`Найдено ${c.pois.length} мест, подходят для расчёта: ${c.pois.filter(p=>p.eligible).length}`);})}>Загрузить места на период</button><p className="hint">Можно посмотреть места заранее. При построении маршрута каталог для выбранных дат загрузится автоматически.</p></>}
           {destination!=="Demo City" && <CatalogStatus snapshot={catalogSnapshot}/>}
           {!!pois.length && <details className="places"><summary>Места и ограничения <span>{pois.filter(p=>p.eligible).length} доступны</span></summary><label>Поиск места<input value={poiFilter} onChange={e=>setPoiFilter(e.target.value)} placeholder="Название музея или парка"/></label><label><input type="checkbox" checked={onlyEligible} onChange={e=>setOnlyEligible(e.target.checked)}/> Только доступные на выбранные даты</label><p className="hint">Показано {visiblePois.length} из {pois.length}. Неизвестные цены и часы исключают место из расчёта.</p>{visiblePois.map(p=><div className="poi" key={p.id}><div><b>{p.name}</b><PoiFacts poi={p} sources/>{p.eligible && p.available_dates && <small>Открыто: {p.available_dates.join(", ")}</small>}{!p.eligible && <small>{p.issues.map(x=>issueNames[x]||x).join(" · ")}</small>}</div><select aria-label={`Ограничение: ${p.name}`} value={choices[p.id]||"optional"} onChange={e=>setChoices(c=>({...c,[p.id]:e.target.value}))}><option value="optional">По желанию</option><option value="mandatory" disabled={!p.eligible}>Обязательно</option><option value="excluded">Исключить</option></select></div>)}</details>}
           {!!pendingConstraints.length && <div className="message"><b>Уточните места из текста</b>{pendingConstraints.map(item=><div className="pending-place" key={item.key}><label>{item.kind==="mandatory"?"Обязательно":"Исключить"}: {item.name}<select aria-label={`Сопоставить: ${item.name}`} value="" onChange={e=>{const id=e.target.value;if (!id) return;if(choices[id] && choices[id]!==item.kind){setError("Место уже имеет противоположное ограничение. Сначала измените его в каталоге.");return;}setChoices(c=>({...c,[id]:item.kind}));setPendingConstraints(old=>old.filter(p=>p.key!==item.key));}}><option value="">Выберите место из каталога</option>{pois.filter(p=>item.kind==="excluded" || p.eligible).map(p=><option key={p.id} value={p.id}>{p.name}</option>)}</select></label><button className="text-button" type="button" onClick={()=>setPendingConstraints(old=>old.filter(p=>p.key!==item.key))}>Убрать условие</button></div>)}</div>}
@@ -308,7 +315,7 @@ function Planner({account,onLogout}:{account:Account;onLogout:()=>Promise<void>}
         {destination!=="Demo City" && <SemanticInterests key={destination} destination={destination} date={date} endDate={endDate} disabled={!!busy} members={members} selected={semanticQuery} onBusy={setBusy} onClear={()=>setSemanticQuery("")} onApply={(query,category,target)=>{setSemanticQuery(query);setMembers(ms=>ms.map(m=>target==="all" || String(m.key)===target?{...m,interests:{...m.interests,[category]:1}}:m));setNotice("Интерес применён. Проверьте веса участников перед расчётом.");}}/>}
         <div aria-live="polite">{error && <div role="alert" className="message error">{error}</div>}{notice && <div className="message">{notice}</div>}</div>
         <button className="primary" disabled={!!busy || !members.length} onClick={()=>task("Собираем маршрут…",calculate)}>{busy||"Построить маршрут"}<span aria-hidden="true">↗</span></button>
-        <p className="under-button">До трёх разных вариантов. Запрос и все результаты сохраняются в группе.</p>
+        <p className="under-button">Места на выбранные даты загружаются автоматически. До трёх разных вариантов. Запрос и все результаты сохраняются в группе.</p>
       </div>
       <div className="result-column">{comparison && <RouteComparison data={comparison.data} trip={comparison.trip} selectedId={shown?.route.id} names={Object.fromEntries(demoPois.map(p=>[p.id,p.name]))} reasonLabels={reasonNames} disabled={!!busy} onSelect={route=>setShown({route,trip:comparison.trip})}/>}
       {(!comparison || !!shown) && <section className="result card" aria-live="polite"><div className="result-header"><span className="eyebrow">ВАШ ПЛАН</span><span className="badge">{shown?`Маршрут №${shown.route.id}`:"Всё впереди"}</span></div>
