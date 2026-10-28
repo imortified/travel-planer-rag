@@ -2,6 +2,7 @@ import { useId,useState } from "react";
 import { api,money } from "../../lib/api";
 import { airportFor,departureLabel,pickFlight,validateFlightSearch,type FlightObservation,type FlightOption,type PickedFlight } from "../../lib/flights";
 import { requireSelectedFlightBudget } from "../../lib/trip-costs";
+import { FlightOrigin } from "./flight-origin";
 
 export function FlightSearch({destination,first,last,disabled,ensureGroup,value,estimate,budgetEnabled,participantCount,onEstimateChange,onBusy,onChoose}:{destination:string;first:string;last:string;disabled:boolean;ensureGroup:()=>Promise<number>;value?:PickedFlight;estimate:string;budgetEnabled:boolean;participantCount:number;onEstimateChange:(value:string)=>void;onBusy:(value:string)=>void;onChoose:(value:PickedFlight|undefined)=>void}) {
   const estimateHelp=useId();
@@ -25,17 +26,19 @@ export function FlightSearch({destination,first,last,disabled,ensureGroup,value,
   if(destination==="Demo City")return null;
   return <section className="flight-search" aria-label="Поиск перелётов"><h3>Как доберёмся · перелёты</h3>
     <p className="hint">Aviasales Data API показывает цены из предыдущих поисков. Они не подтверждают наличие билетов и стоимость для вашей группы. При покупке нужно проверить пассажиров, багаж и условия тарифа.</p>
-    <div className="two"><label>IATA-код аэропорта вылета<input maxLength={3} placeholder="Например, WAW" value={origin} disabled={disabled} onChange={e=>{setOrigin(e.target.value.toUpperCase());invalidate();}}/></label><label>Аэропорт назначения<input value={airportFor(destination)} readOnly/></label></div>
+    <FlightOrigin disabled={disabled} onChange={code=>{setOrigin(code);invalidate();}}/>
+    <label>Аэропорт назначения<input value={`${destination==="Porto"?"Порту":"Лиссабон"} (${airportFor(destination)})`} readOnly/></label>
     {destination==="Sintra"&&<p className="hint">Для Синтры ищем перелёт в Лиссабон (LIS). Трансфер до Синтры укажите в наземном транспорте.</p>}
     <label>Дата вылета<input type="date" value={departure} disabled={disabled} onChange={e=>{setDeparture(e.target.value);invalidate();}}/></label>
     <label className="cost-toggle"><input type="checkbox" checked={returning} disabled={disabled} onChange={e=>{setReturning(e.target.checked);invalidate();}}/> Туда и обратно</label>
     {returning&&<label>Дата обратного вылета<input type="date" value={back} disabled={disabled} onChange={e=>{setBack(e.target.value);invalidate();}}/></label>}
     <label className="cost-toggle"><input type="checkbox" checked={direct} disabled={disabled} onChange={e=>{setDirect(e.target.checked);invalidate();}}/> Только без пересадок</label>
+    <p className="hint">Без этой галочки поиск включает варианты с пересадками. Города пересадок и полные сегменты этот API не сообщает. Перелёт из Москвы и перелёт из Минска с пересадкой в Москве — разные запросы; вылет из другого города автоматически не подставляется.</p>
     <label>Регион выдачи Aviasales<select value={market} disabled={disabled} onChange={e=>{setMarket(e.target.value as "ru"|"us");invalidate();}}><option value="ru">Россия (RU)</option><option value="us">США (US)</option></select></label>
     <button type="button" className="secondary" disabled={disabled||!first} onClick={search}>Найти перелёты</button>
     {error&&<p className="message error" role="alert">{error}</p>}
     {result&&<><p className="hint">Получено из API {new Date(result.fetched_at).toLocaleString("ru-RU")} · срок выбора до {new Date(result.expires_at).toLocaleString("ru-RU")}. Дата первоначального нахождения цены неизвестна. Состав группы не передаётся в этот метод.</p>
-      {result.status==="empty"?<p className="message">В кэше нет подходящих записей. Это не означает, что рейсов нет. Попробуйте другие даты, аэропорт или рынок; общую оценку перелётов можно указать вручную.</p>:<div className="lodging-results">{result.options.map(option=><article className="lodging-item" key={option.option_id}>
+      {result.status==="empty"?<p className="message">В кэше нет подходящих записей. Это не означает, что рейсов нет. Попробуйте другие даты, город вылета или рынок; общую оценку перелётов можно указать вручную.</p>:<div className="lodging-results">{result.options.map(option=><article className="lodging-item" key={option.option_id}>
         <h4>{option.origin_airport} → {option.destination_airport} · {option.airline} {option.flight_number}</h4>
         <p><b>{money(option.observed_price)} · наблюдение цены {option.return_at?"туда-обратно":"в одну сторону"}</b></p>
         <p>Вылет: {departureLabel(option.departure_at)}. Пересадок: {option.transfers}.</p>

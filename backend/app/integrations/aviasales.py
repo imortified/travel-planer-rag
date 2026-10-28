@@ -101,7 +101,10 @@ def code(value):
 def normalize(row, query):
     if not isinstance(row, dict):
         raise ValueError("Invalid flight observation")
-    if row.get("origin") != query["origin"] or row.get("destination") != query["destination"]:
+    if (
+        query["origin"] not in (row.get("origin"), row.get("origin_airport"))
+        or row.get("destination") != query["destination"]
+    ):
         raise ValueError("Flight direction mismatch")
     departure = aware(row.get("departure_at"))
     returning = aware(row["return_at"]) if row.get("return_at") else None
@@ -133,8 +136,8 @@ def normalize(row, query):
     ):
         raise ValueError("Invalid carrier identity")
     item = {
-        "origin": row["origin"],
-        "destination": row["destination"],
+        "origin": code(row["origin"]),
+        "destination": code(row["destination"]),
         "origin_airport": code(row.get("origin_airport")),
         "destination_airport": code(row.get("destination_airport")),
         "departure_at": departure.isoformat(),
@@ -188,6 +191,7 @@ class Aviasales:
             "limit": 10,
             "page": 1,
             "sorting": "price",
+            "unique": "false",
         }
         if search.return_date:
             query["return_at"] = str(search.return_date)

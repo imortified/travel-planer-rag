@@ -1,16 +1,30 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 
 from app.catalog.flights import fetch_observation, passengers_for, save_observation
 from app.core.auth import current_account
 from app.db.session import get_session
 from app.integrations.aviasales import FlightProviderAccessError, FlightProviderRateLimit
+from app.integrations.flight_places import FlightPlaces
 from app.integrations.http_cache import SourceUnavailable
 from app.schemas.flights import FlightSearch
 
 router = APIRouter(prefix="/api/v1", tags=["flights"], dependencies=[Depends(current_account)])
+
+
+@router.get("/flight-places")
+def flight_places(term: Annotated[str, Query(min_length=2, max_length=80)]):
+    try:
+        return FlightPlaces().search(term)
+    except ValueError as exc:
+        raise HTTPException(422, str(exc)) from exc
+    except SourceUnavailable as exc:
+        raise HTTPException(
+            503,
+            "Подсказки городов недоступны. Повторите поиск или введите IATA-код вручную.",
+        ) from exc
 
 
 @router.post("/groups/{group_id}/flight-searches", status_code=201)

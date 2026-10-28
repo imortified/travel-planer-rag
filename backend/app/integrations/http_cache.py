@@ -60,7 +60,7 @@ class RedisHttpCache:
             raise ValueError("Invalid Redis cache prefix")
 
     def key(self, provider, url, params, ttl):
-        if provider not in ("osm", "osrm", "xotelo", "aviasales"):
+        if provider not in ("osm", "osrm", "xotelo", "aviasales", "flight_places"):
             raise ValueError("Unknown cache provider")
         # The full URL includes OSRM profile and ordered coordinates. Canonical query
         # parameters include annotations/options. TTL changes get a separate key.

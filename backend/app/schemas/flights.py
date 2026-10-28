@@ -22,7 +22,7 @@ class FlightSearch(BaseModel):
     @model_validator(mode="after")
     def check_dates(self):
         if self.origin == AIRPORTS[self.destination]:
-            raise ValueError("Аэропорты вылета и назначения должны различаться")
+            raise ValueError("Города или аэропорты вылета и назначения должны различаться")
         if self.return_date and not 0 <= (self.return_date - self.departure).days <= 365:
             raise ValueError("Обратный вылет должен быть не раньше первого, в пределах года")
         return self

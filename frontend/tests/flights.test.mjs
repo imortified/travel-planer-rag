@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { airportFor,pickFlight,validateFlightSearch } from "../lib/flights.ts";
+import { airportFor,flightPlaceLabel,pickFlight,validateFlightSearch } from "../lib/flights.ts";
 import { costPayload,defaultCostDraft,requireSelectedFlightBudget } from "../lib/trip-costs.ts";
 
 test("flight observations never become an automatic total for the group",()=>{
@@ -24,6 +24,14 @@ test("airport and flight dates cover the trip; Sintra uses Lisbon airport",()=>{
   assert.ok(validateFlightSearch({...input,origin:"LIS"},"2026-11-15","2026-11-22"));
   assert.ok(validateFlightSearch({...input,departure:"2026-11-16"},"2026-11-15","2026-11-22"));
   assert.ok(validateFlightSearch({...input,return_date:"2026-11-21"},"2026-11-15","2026-11-22"));
+});
+
+test("city-wide and individual airport selections have distinct labels and accept city codes",()=>{
+  assert.equal(flightPlaceLabel({type:"city",name:"Москва",code:"MOW"}),"Москва · все аэропорты (MOW)");
+  assert.equal(flightPlaceLabel({type:"airport",name:"Шереметьево",code:"SVO",city_name:"Москва"}),"Шереметьево (SVO) · Москва");
+  const input={destination:"Lisbon",origin:"MOW",departure:"2026-11-05",return_date:null,market:"ru",direct:false};
+  assert.equal(validateFlightSearch(input,"2026-11-05","2026-11-05"),null);
+  assert.match(validateFlightSearch({...input,origin:"Москва"},"2026-11-05","2026-11-05"),/Выберите город/);
 });
 
 test("a selected flight needs an explicit group estimate before calculating",()=>{

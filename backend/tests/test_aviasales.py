@@ -75,6 +75,43 @@ def test_header_only_cache_keeps_retrieval_time_and_does_not_invent_source_age()
     assert all("unit-fake-token" not in key for key in store.values)
 
 
+def test_city_search_uses_one_query_for_multiple_airports_and_includes_connections():
+    calls = []
+
+    def handle(request):
+        calls.append(request)
+        assert request.url.params["origin"] == "MOW"
+        assert request.url.params["unique"] == "false"
+        response = body(request)
+        first = response["data"][0]
+        first.update(origin_airport="SVO", transfers=1)
+        response["data"].append({**first, "origin_airport": "VKO", "flight_number": "42"})
+        return httpx.Response(200, json=response)
+
+    with httpx.Client(transport=httpx.MockTransport(handle)) as client:
+        provider = Aviasales(RedisHttpCache(MemoryRedis()), client, "unit-fake-token")
+        result = provider.search(search().model_copy(update={"origin": "MOW"}))
+        assert {o["origin_airport"] for o in result["options"]} == {"SVO", "VKO"}
+        assert all(o["transfers"] == 1 for o in result["options"])
+        assert len(calls) == 1
+        with pytest.raises(SourceUnavailable):
+            provider.search(search().model_copy(update={"origin": "MOW", "direct": True}))
+
+
+def test_airport_search_accepts_provider_city_code_but_rejects_other_airports():
+    def handle(request):
+        response = body(request)
+        response["data"][0].update(origin="MOW", origin_airport="SVO")
+        return httpx.Response(200, json=response)
+
+    with httpx.Client(transport=httpx.MockTransport(handle)) as client:
+        provider = Aviasales(RedisHttpCache(MemoryRedis()), client, "unit-fake-token")
+        result = provider.search(search().model_copy(update={"origin": "SVO"}))
+        assert result["options"][0]["origin"] == "MOW"
+        with pytest.raises(SourceUnavailable):
+            provider.search(search().model_copy(update={"origin": "VKO"}))
+
+
 @pytest.mark.parametrize(
     "damage",
     [
