@@ -31,8 +31,9 @@ export function TextRequest({disabled, memberNames, onBusy, onApply}: {
     <div aria-live="polite">{error && <div role="alert" className="message error">{error} Форма остаётся доступной.</div>}
     {parsed && draft && <div className="draft-preview"><h3>Распознанные параметры</h3>
       <dl><dt>Направление</dt><dd>{draft.destination?destinationName(draft.destination):"Не указано"}</dd>
-      <dt>Даты</dt><dd>{draft.travel_date || "Не указаны"}{draft.end_date?` — ${draft.end_date}`:""}</dd>
-      <dt>Бюджет группы</dt><dd>{parsed.group_budget===null?"Требует уточнения":money(parsed.group_budget)}</dd>
+      <dt>Даты</dt><dd>{draft.travel_date || "Нужна дата начала"}{draft.end_date?` — ${draft.end_date}`:""}</dd>
+      {draft.duration_days!==null && <><dt>Длительность</dt><dd>{draft.duration_days} дн.</dd></>}
+      <dt>Бюджет</dt><dd>{parsed.group_budget!==null?`${money(parsed.group_budget)} на группу`:draft.budget_eur!==null?<>{new Intl.NumberFormat("ru-RU").format(draft.budget_eur)}{draft.currency==="EUR"?" €":draft.currency==="other"?" · нужна сумма в евро":" · уточните валюту"}{draft.budget_scope===null?" · уточните, на кого указан бюджет":draft.budget_scope==="per_person"?" на человека":" на группу"}</>:"Не указан"}</dd>
       <dt>Участники</dt><dd>{draft.participants.map(m=>m.name).join(", ") || (draft.participant_count?`${draft.participant_count} чел.`:memberNames.join(", ") || "Не указаны")}</dd>
       <dt>Часы дня</dt><dd>{draft.start===null?"Из формы":clock(draft.start)} — {draft.end===null?"Из формы":clock(draft.end)}</dd>
       <dt>Обязательные места</dt><dd>{draft.mandatory_names.join(", ") || "Не указаны"}</dd>

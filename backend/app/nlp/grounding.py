@@ -4,7 +4,7 @@ import re
 from datetime import date, timedelta
 
 DESTINATIONS = {
-    "Lisbon": r"\b(?:лиссабон(?:а|е|у|ом)?|lisbon|lisboa)\b",
+    "Lisbon": r"\b(?:лис{1,2}абон(?:а|е|у|ом)?|lisbon|lisboa)\b",
     "Porto": r"\b(?:порту|porto)\b",
     "Sintra": r"\b(?:синтр(?:а|е|у|ы|ой)|sintra)\b",
     "Demo City": r"\b(?:демо[-\s]*город(?:а|е|у|ом)?|demo\s+city)\b",
@@ -109,6 +109,55 @@ def destination_supported(destination, quote, text):
     )
 
 
+def ground_destination(draft, text):
+    """Recover one literal city without relying on the model's enum or copied evidence."""
+    cities = {}
+    for city, pattern in DESTINATIONS.items():
+        for match in re.finditer(pattern, text, re.I):
+            if destination_supported(city, match.group(), text):
+                # An alternative unknown city must not silently disappear from the request.
+                before = re.split(r"[.!?;\n]", text[:match.start()])[-1]
+                after = re.split(r"[.!?;\n]", text[match.end():])[0]
+                if re.search(r"\b(?:или|либо)\b", before + " " + after, re.I):
+                    return False
+                cities[city] = match.group()
+    if len(cities) != 1:
+        return False
+    draft.destination, draft.evidence.destination = next(iter(cities.items()))
+    return True
+
+
+def explicit_duration(text):
+    """Recover a stated stay length independently of a missing departure date."""
+    numbers = {
+        "один": 1, "одну": 1, "два": 2, "две": 2, "три": 3, "четыре": 4,
+        "пять": 5, "шесть": 6, "семь": 7, "восемь": 8, "девять": 9,
+        "десять": 10, "одиннадцать": 11, "двенадцать": 12,
+        "тринадцать": 13, "четырнадцать": 14,
+    }
+    number = r"(?:\d{1,3}|" + "|".join(numbers) + r")"
+    patterns = [
+        (r"\b(?:на|длительностью|в\s+течение)\s+(" + number
+         + r")\s+(?:день|дня|дней|сутки|суток)\b", 1),
+        (r"\b(?:на|длительностью|в\s+течение)\s+(" + number
+         + r")\s+недел(?:ю|и|ь|ьку)\b", 7),
+        (r"\b(?:на|длительностью|в\s+течение)\s+(неделю|недельку)\b", 7),
+        (r"\b(?:погулять|путешествовать|отдыхать|провести|побыть|пробыть)\s+"
+         r"(неделю|недельку)\b", 7),
+    ]
+    durations = set()
+    for pattern, multiplier in patterns:
+        for match in re.finditer(pattern, text, re.I):
+            if re.search(r"\b(?:не|вместо)\s*$", text[:match.start()], re.I):
+                continue
+            token = match[1].casefold()
+            value = int(token) if token.isdecimal() else numbers.get(token, 1)
+            days = value * multiplier
+            if 1 <= days <= 365:
+                durations.add(days)
+    return next(iter(durations)) if len(durations) == 1 else None
+
+
 def single_calendar_date(quote):
     """Recover an explicit single date, never fabricate a range or repair invalid calendar days."""
     candidates, invalid = set(), False
@@ -153,17 +202,8 @@ def relative_date(text, today):
 def ground_dates(draft, text, quote, evidence_valid, today):
     """Keep explicit years; resolve one relative phrase. Never borrow a year from the budget."""
     quote = quote if evidence_valid else ""
-    duration_stated = bool(
-        re.search(
-            r"\b(?:на|длительностью|в\s+течение)\s+(?:\d+|один|одну|два|две|три|четыре|пять|"
-            r"шесть|семь|восемь|девять|десять|одиннадцать|двенадцать|тринадцать|четырнадцать)"
-            r"\s+(?:день|дня|дней|сутки|суток)\b",
-            text,
-            re.I,
-        )
-    )
-    if not duration_stated:
-        draft.duration_days = None
+    draft.duration_days = explicit_duration(text)
+    duration_stated = draft.duration_days is not None
     context = quote or text
     explicit_calendar = bool(
         re.search(
@@ -173,9 +213,6 @@ def ground_dates(draft, text, quote, evidence_valid, today):
     resolved = relative_date(context, today) if not explicit_calendar else None
     if resolved:
         draft.travel_date = resolved
-        # A duration remains usable only with the model's valid date evidence.
-        if not evidence_valid:
-            draft.duration_days = None
         draft.end_date = None
         return
     years = {int(y) for y in re.findall(r"\b\d{4}\b", quote)}
@@ -188,8 +225,6 @@ def ground_dates(draft, text, quote, evidence_valid, today):
         or (draft.travel_date and draft.travel_date.year not in years)
     ):
         draft.travel_date = draft.end_date = None
-        if not evidence_valid:
-            draft.duration_days = None
         return
     if single:
         draft.travel_date = single

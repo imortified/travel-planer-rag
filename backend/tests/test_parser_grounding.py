@@ -215,3 +215,116 @@ def test_participant_names_cannot_silently_become_place_constraints(field):
     )
     assert getattr(result.draft, field) == ["Oceanário"]
     assert field in {question.field for question in result.questions}
+
+
+def test_incomplete_request_keeps_city_duration_amount_and_count():
+    text = (
+        "Бюджет 1800. Хотим побывать в Лисабоне. Двое взрослых, муж и жена. "
+        "36 и 34 соответственно. Хочется спокойно погулять недельку по Португалии."
+    )
+    # Actual local model error: a correct quote accompanied by the wrong city enum,
+    # ages treated as date evidence, and an omitted duration.
+    result = parse_request(
+        ParseInput(text=text),
+        RecordedModel({
+            "destination": "Porto", "budget_eur": 1800, "participant_count": 2,
+            "evidence": {
+                "destination": "Лисабон", "dates": "36 и 34",
+                "budget": "1800", "participants": "муж и жена",
+            },
+        }),
+        date(2026, 10, 28),
+    )
+    assert result.draft.destination == "Lisbon"
+    assert result.draft.duration_days == 7
+    assert result.draft.budget_eur == 1800
+    assert result.draft.participant_count == 2
+    assert result.draft.travel_date is None and result.draft.end_date is None
+    assert result.draft.currency is None and result.group_budget is None
+    assert result.draft.participants == []
+    assert {q.field for q in result.questions} == {
+        "travel_date", "participants", "currency", "budget_scope",
+    }
+
+
+@pytest.mark.parametrize("city", ["Лисабоне", "Лиссабоне", "Lisboa"])
+def test_city_is_recovered_from_literal_evidence_without_guessing_from_country(city):
+    result = parse_request(
+        ParseInput(text=f"Хотим побывать в {city}, Португалия"),
+        RecordedModel({"evidence": {"destination": city}}),
+    )
+    assert result.draft.destination == "Lisbon"
+
+
+@pytest.mark.parametrize(
+    "text", ["Хотим в Португалию", "Не в Лисабон", "Лисабон и Порту", "Лисабон или Париж"],
+)
+def test_country_negation_and_multiple_cities_do_not_select_lisbon(text):
+    result = parse_request(
+        ParseInput(text=text), RecordedModel({"evidence": {"destination": text}}),
+    )
+    assert result.draft.destination is None
+
+
+def test_literal_city_is_preserved_even_when_model_omits_its_evidence():
+    result = parse_request(
+        ParseInput(text="Хотим побывать в Лисабоне. По Португалии."), RecordedModel({}),
+    )
+    assert result.draft.destination == "Lisbon"
+    assert result.draft.evidence.destination == "Лисабоне"
+
+
+@pytest.mark.parametrize(
+    "text,days",
+    [
+        ("Хотим на неделю", 7),
+        ("Хочется погулять недельку по Португалии", 7),
+        ("Едем на две недели", 14),
+        ("Едем на 3 дня", 3),
+        ("Погулять не неделю, а на две недели", 14),
+        ("Через неделю хотим в отпуск", None),
+        ("Неделю назад планировали отпуск", None),
+        ("Не на неделю", None),
+        ("На 3 дня или на неделю", None),
+        ("Муж и жена. 25 и 23 соответственно", None),
+    ],
+)
+def test_stay_duration_does_not_require_or_invent_departure_date(text, days):
+    draft = ExtractedTrip(duration_days=5)
+    ground_dates(draft, text, None, False, date(2026, 10, 28))
+    assert draft.duration_days == days
+    assert draft.travel_date is None and draft.end_date is None
+
+
+def test_week_with_explicit_start_gets_inclusive_end_date():
+    result = parse_request(
+        ParseInput(text="Едем в Лисабон 10 ноября 2026 на неделю"),
+        RecordedModel({
+            "travel_date": "2026-11-10",
+            "evidence": {"destination": "Лисабон", "dates": "10 ноября 2026"},
+        }),
+    )
+    assert result.draft.travel_date == date(2026, 11, 10)
+    assert result.draft.end_date == date(2026, 11, 16)
+
+
+@pytest.mark.parametrize(
+    "quote,scope,total",
+    [
+        ("Общий бюджет на двоих 1800 евро", "group", 180000),
+        ("Бюджет 900 евро на человека", "per_person", 180000),
+        ("Бюджет 1800 евро", None, None),
+        ("Общий бюджет 900 евро на человека", None, None),
+    ],
+)
+def test_budget_scope_and_currency_are_recovered_when_model_omits_them(quote, scope, total):
+    result = parse_request(
+        ParseInput(text=quote, member_names=["Аня", "Борис"]),
+        RecordedModel({
+            "budget_eur": 900 if "900" in quote else 1800,
+            "evidence": {"budget": quote},
+        }),
+    )
+    assert result.draft.currency == "EUR"
+    assert result.draft.budget_scope == scope
+    assert result.group_budget == total
